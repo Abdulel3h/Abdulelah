@@ -232,9 +232,9 @@ export function AgentPanel() {
                     </p>
                     <p className="mt-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-sky-200/80">
                       {mode === "deepseek"
-                        ? "DeepSeek connected"
+                        ? "AI-assisted portfolio mode"
                         : mode === "fallback"
-                          ? "Local demo mode"
+                          ? "Portfolio-grounded mode"
                           : "Recruiter assistant"}
                     </p>
                   </div>

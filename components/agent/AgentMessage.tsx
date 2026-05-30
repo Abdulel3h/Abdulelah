@@ -36,7 +36,9 @@ export function AgentMessage({
 
         {message.mode ? (
           <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-            {message.mode === "deepseek" ? "DeepSeek response" : "Local demo response"}
+            {message.mode === "deepseek"
+              ? "AI-assisted portfolio mode"
+              : "Portfolio-grounded mode"}
           </p>
         ) : null}
 

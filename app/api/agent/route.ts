@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import { getAgentActions, getPortfolioRedirectActions } from "@/lib/agent/actions";
 import { buildPortfolioContext } from "@/lib/agent/context";
-import { askDeepSeek, hasDeepSeekApiKey } from "@/lib/agent/deepseek";
+import {
+  askDeepSeek,
+  getDeepSeekErrorCode,
+  hasDeepSeekApiKey
+} from "@/lib/agent/deepseek";
 import {
   evaluateAgentAnswer,
   MIN_AGENT_QUALITY_SCORE
@@ -14,12 +18,37 @@ import {
   type AgentSafetyResult
 } from "@/lib/agent/safety";
 import { applyRuntimeRateLimit } from "@/lib/rate-limit";
-import type { AgentApiResponse } from "@/types/agent";
+import type {
+  AgentApiResponse,
+  AgentDebugCode
+} from "@/types/agent";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const MAX_MESSAGE_LENGTH = 1_200;
+const IS_DEVELOPMENT = process.env.NODE_ENV === "development";
+
+function jsonAgentResponse(
+  response: Omit<AgentApiResponse, "debugCode">,
+  init?: ResponseInit,
+  debugCode?: AgentDebugCode
+) {
+  if (IS_DEVELOPMENT) {
+    console.info("[agent]", {
+      mode: response.mode,
+      errorCode: debugCode
+    });
+  }
+
+  return NextResponse.json<AgentApiResponse>(
+    {
+      ...response,
+      ...(IS_DEVELOPMENT && debugCode ? { debugCode } : {})
+    },
+    init
+  );
+}
 
 function createSafeResponse(
   answer: string,
@@ -27,22 +56,31 @@ function createSafeResponse(
   safety: AgentSafetyResult,
   actions = safety.allowed
     ? getAgentActions(message)
-    : getPortfolioRedirectActions()
+    : getPortfolioRedirectActions(),
+  debugCode?: AgentDebugCode
 ) {
   const evaluation = evaluateAgentAnswer({ actions, answer, safety });
 
-  return NextResponse.json<AgentApiResponse>({
-    answer,
-    actions,
-    mode: "fallback",
-    quality: {
-      score: evaluation.score,
-      passed: evaluation.passed
-    }
-  });
+  return jsonAgentResponse(
+    {
+      answer,
+      actions,
+      mode: "fallback",
+      quality: {
+        score: evaluation.score,
+        passed: evaluation.passed
+      }
+    },
+    undefined,
+    debugCode
+  );
 }
 
-function fallbackResponse(message: string, safety: AgentSafetyResult) {
+function fallbackResponse(
+  message: string,
+  safety: AgentSafetyResult,
+  debugCode?: AgentDebugCode
+) {
   const actions = safety.allowed
     ? getAgentActions(message)
     : getPortfolioRedirectActions();
@@ -52,22 +90,27 @@ function fallbackResponse(message: string, safety: AgentSafetyResult) {
   const evaluation = evaluateAgentAnswer({ actions, answer, safety });
 
   if (evaluation.passed) {
-    return NextResponse.json<AgentApiResponse>({
-      answer,
-      actions,
-      mode: "fallback",
-      quality: {
-        score: evaluation.score,
-        passed: true
-      }
-    });
+    return jsonAgentResponse(
+      {
+        answer,
+        actions,
+        mode: "fallback",
+        quality: {
+          score: evaluation.score,
+          passed: true
+        }
+      },
+      undefined,
+      debugCode
+    );
   }
 
   return createSafeResponse(
     getPortfolioScopeResponse(),
     message,
     { allowed: false, category: "out-of-scope" },
-    getPortfolioRedirectActions()
+    getPortfolioRedirectActions(),
+    debugCode
   );
 }
 
@@ -77,7 +120,7 @@ export async function POST(request: Request) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json<AgentApiResponse>(
+    return jsonAgentResponse(
       {
         answer: "Please send a valid message so I can help you explore the portfolio.",
         actions: [],
@@ -97,7 +140,7 @@ export async function POST(request: Request) {
       : "";
 
   if (!message) {
-    return NextResponse.json<AgentApiResponse>(
+    return jsonAgentResponse(
       {
         answer: "Please enter a question about Abdulelah's projects, skills, resume, or hiring fit.",
         actions: [],
@@ -109,7 +152,7 @@ export async function POST(request: Request) {
   }
 
   if (message.length > MAX_MESSAGE_LENGTH) {
-    return NextResponse.json<AgentApiResponse>(
+    return jsonAgentResponse(
       {
         answer: "Please shorten your question so I can give you a focused answer.",
         actions: [],
@@ -127,7 +170,7 @@ export async function POST(request: Request) {
   });
 
   if (!rateLimit.allowed) {
-    return NextResponse.json<AgentApiResponse>(
+    return jsonAgentResponse(
       {
         answer:
           "You've sent several questions in a short time. Please wait a moment, then ask about Abdulelah's portfolio, projects, skills, or resume.",
@@ -151,7 +194,7 @@ export async function POST(request: Request) {
   }
 
   if (!hasDeepSeekApiKey()) {
-    return fallbackResponse(message, safety);
+    return fallbackResponse(message, safety, "missing_key");
   }
 
   try {
@@ -160,10 +203,10 @@ export async function POST(request: Request) {
     const evaluation = evaluateAgentAnswer({ actions, answer, safety });
 
     if (!evaluation.passed) {
-      return fallbackResponse(message, safety);
+      return fallbackResponse(message, safety, "model_error");
     }
 
-    return NextResponse.json<AgentApiResponse>({
+    return jsonAgentResponse({
       answer,
       actions,
       mode: "deepseek",
@@ -172,7 +215,7 @@ export async function POST(request: Request) {
         passed: true
       }
     });
-  } catch {
-    return fallbackResponse(message, safety);
+  } catch (error) {
+    return fallbackResponse(message, safety, getDeepSeekErrorCode(error));
   }
 }

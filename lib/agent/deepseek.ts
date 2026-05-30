@@ -1,4 +1,8 @@
+import "server-only";
+import type { AgentDebugCode } from "@/types/agent";
+
 const DEEPSEEK_API_URL = "https://api.deepseek.com/chat/completions";
+const DEFAULT_DEEPSEEK_MODEL = "deepseek-chat";
 const REQUEST_TIMEOUT_MS = 12_000;
 
 type DeepSeekCompletion = {
@@ -10,9 +14,12 @@ type DeepSeekCompletion = {
 };
 
 export class DeepSeekRequestError extends Error {
-  constructor() {
+  readonly code: AgentDebugCode;
+
+  constructor(code: AgentDebugCode) {
     super("DeepSeek request failed");
     this.name = "DeepSeekRequestError";
+    this.code = code;
   }
 }
 
@@ -20,11 +27,15 @@ export function hasDeepSeekApiKey() {
   return Boolean(process.env.DEEPSEEK_API_KEY?.trim());
 }
 
+export function getDeepSeekErrorCode(error: unknown): AgentDebugCode {
+  return error instanceof DeepSeekRequestError ? error.code : "request_failed";
+}
+
 export async function askDeepSeek(userMessage: string, portfolioContext: string) {
   const apiKey = process.env.DEEPSEEK_API_KEY?.trim();
 
   if (!apiKey) {
-    throw new DeepSeekRequestError();
+    throw new DeepSeekRequestError("missing_key");
   }
 
   const controller = new AbortController();
@@ -50,46 +61,57 @@ export async function askDeepSeek(userMessage: string, portfolioContext: string)
   ].join("\n");
 
   try {
-    const response = await fetch(DEEPSEEK_API_URL, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: process.env.DEEPSEEK_MODEL?.trim() || "deepseek-v4-flash",
-        messages: [
-          {
-            role: "system",
-            content: systemPrompt
-          },
-          {
-            role: "user",
-            content: userMessage
-          }
-        ],
-        max_tokens: 500,
-        temperature: 0.2,
-        stream: false
-      }),
-      cache: "no-store",
-      signal: controller.signal
-    });
+    let response: Response;
 
-    if (!response.ok) {
-      throw new DeepSeekRequestError();
+    try {
+      response = await fetch(DEEPSEEK_API_URL, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: process.env.DEEPSEEK_MODEL?.trim() || DEFAULT_DEEPSEEK_MODEL,
+          messages: [
+            {
+              role: "system",
+              content: systemPrompt
+            },
+            {
+              role: "user",
+              content: userMessage
+            }
+          ],
+          max_tokens: 500,
+          temperature: 0.2,
+          stream: false
+        }),
+        cache: "no-store",
+        signal: controller.signal
+      });
+    } catch {
+      throw new DeepSeekRequestError("request_failed");
     }
 
-    const completion = (await response.json()) as DeepSeekCompletion;
+    if (!response.ok) {
+      throw new DeepSeekRequestError("model_error");
+    }
+
+    let completion: DeepSeekCompletion;
+
+    try {
+      completion = (await response.json()) as DeepSeekCompletion;
+    } catch {
+      throw new DeepSeekRequestError("invalid_response");
+    }
+
     const answer = completion.choices?.[0]?.message?.content?.trim();
 
     if (!answer) {
-      throw new DeepSeekRequestError();
+      throw new DeepSeekRequestError("invalid_response");
     }
 
     return answer;
-  } catch {
-    throw new DeepSeekRequestError();
   } finally {
     clearTimeout(timeout);
   }

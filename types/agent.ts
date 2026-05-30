@@ -8,6 +8,12 @@ export type AgentAction = {
 
 export type AgentMode = "deepseek" | "fallback";
 
+export type AgentDebugCode =
+  | "missing_key"
+  | "invalid_response"
+  | "request_failed"
+  | "model_error";
+
 export type AgentQuality = {
   score: number;
   passed: boolean;
@@ -18,6 +24,7 @@ export type AgentApiResponse = {
   actions: AgentAction[];
   mode: AgentMode;
   quality: AgentQuality;
+  debugCode?: AgentDebugCode;
 };
 
 export type AgentChatMessage = {
