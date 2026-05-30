@@ -37,6 +37,11 @@ const actions = {
     href: "/contact",
     type: "internal"
   },
+  navigatorContact: {
+    label: "Send Abdulelah a message",
+    href: "#agent-contact",
+    type: "contact"
+  },
   engineerResume: {
     label: "Download AI Engineer CV",
     href: siteConfig.resumes.engineer,
@@ -117,7 +122,7 @@ export function getAgentActions(message: string): AgentAction[] {
   }
 
   if (includesAny(normalized, ["contact", "email", "reach", "connect"])) {
-    add(actions.contact, actions.linkedin);
+    add(actions.navigatorContact, actions.contact, actions.linkedin);
   }
 
   if (
@@ -140,4 +145,8 @@ export function getAgentActions(message: string): AgentAction[] {
   }
 
   return results.slice(0, 4);
+}
+
+export function getPortfolioRedirectActions(): AgentAction[] {
+  return [actions.projects, actions.resume, actions.navigatorContact];
 }

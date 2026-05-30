@@ -32,6 +32,19 @@ export function AgentActions({
           </>
         );
 
+        if (action.type === "contact") {
+          return (
+            <button
+              key={action.href}
+              type="button"
+              className={className}
+              onClick={() => onAction?.(action)}
+            >
+              {content}
+            </button>
+          );
+        }
+
         if (action.type === "internal") {
           return (
             <Link

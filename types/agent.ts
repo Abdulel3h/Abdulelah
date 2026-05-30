@@ -1,4 +1,4 @@
-export type AgentActionType = "internal" | "external" | "download";
+export type AgentActionType = "internal" | "external" | "download" | "contact";
 
 export type AgentAction = {
   label: string;
@@ -8,10 +8,16 @@ export type AgentAction = {
 
 export type AgentMode = "deepseek" | "fallback";
 
+export type AgentQuality = {
+  score: number;
+  passed: boolean;
+};
+
 export type AgentApiResponse = {
   answer: string;
   actions: AgentAction[];
   mode: AgentMode;
+  quality: AgentQuality;
 };
 
 export type AgentChatMessage = {

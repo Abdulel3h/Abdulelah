@@ -1,5 +1,6 @@
 import { getProjectBySlug } from "@/data/projects";
 import { siteConfig } from "@/data/site";
+import { classifyAgentMessage, getSafetyRefusal } from "@/lib/agent/safety";
 
 function includesAny(message: string, terms: string[]) {
   return terms.some((term) => message.includes(term));
@@ -16,6 +17,12 @@ function projectSummary(slug: string) {
 }
 
 export function getFallbackAgentResponse(message: string) {
+  const safety = classifyAgentMessage(message);
+
+  if (!safety.allowed) {
+    return getSafetyRefusal(safety);
+  }
+
   const normalized = message.toLowerCase();
 
   if (includesAny(normalized, ["chatub", "academic", "university"])) {

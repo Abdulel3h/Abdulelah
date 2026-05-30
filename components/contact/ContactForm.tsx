@@ -43,7 +43,8 @@ export function ContactForm() {
           company: formData.get("company"),
           interestType: interest,
           message: formData.get("message"),
-          website: formData.get("website")
+          website: formData.get("website"),
+          source: "contact-page"
         })
       });
 

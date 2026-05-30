@@ -57,6 +57,7 @@ export const navLinks = [
 export const quickLinks = [
   ...navLinks,
   contactLink,
+  { label: "Privacy", href: "/privacy" },
   { label: "Insights", href: "/blog" },
   { label: "AI Journey", href: "/journey" }
 ];

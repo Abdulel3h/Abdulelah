@@ -1,8 +1,9 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Bot, RotateCcw, Send, Sparkles, X } from "lucide-react";
+import { Bot, MessageCircle, RotateCcw, Send, Sparkles, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { AgentContactForm } from "@/components/agent/AgentContactForm";
 import { AgentLauncher } from "@/components/agent/AgentLauncher";
 import { AgentMessage } from "@/components/agent/AgentMessage";
 import { AgentSuggestion } from "@/components/agent/AgentSuggestion";
@@ -44,6 +45,7 @@ export function AgentPanel() {
   const inputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isContactFormOpen, setIsContactFormOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [input, setInput] = useState("");
   const [mode, setMode] = useState<AgentMode>();
@@ -62,6 +64,7 @@ export function AgentPanel() {
     setMessages([INITIAL_MESSAGE]);
     setMode(undefined);
     setInput("");
+    setIsContactFormOpen(false);
     inputRef.current?.focus();
   }
 
@@ -166,6 +169,11 @@ export function AgentPanel() {
   }
 
   function handleAction(action: AgentAction) {
+    if (action.type === "contact") {
+      setIsContactFormOpen(true);
+      return;
+    }
+
     if (action.type === "internal") {
       closePanel();
     }
@@ -278,6 +286,19 @@ export function AgentPanel() {
                     </div>
                   </section>
                 ) : null}
+
+                {isContactFormOpen ? (
+                  <AgentContactForm onClose={() => setIsContactFormOpen(false)} />
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setIsContactFormOpen(true)}
+                    className="focus-ring flex w-full items-center justify-between gap-3 rounded-2xl border border-gold/20 bg-gold/[0.055] px-4 py-3 text-left text-xs font-semibold text-amber-100 transition hover:border-gold/45 hover:bg-gold/[0.09]"
+                  >
+                    <span>Send Abdulelah a message</span>
+                    <MessageCircle className="h-4 w-4 shrink-0" aria-hidden="true" />
+                  </button>
+                )}
 
                 {isLoading ? (
                   <div className="flex items-start gap-3" role="status">
