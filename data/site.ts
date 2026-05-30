@@ -29,8 +29,7 @@ export const siteConfig = {
     github: "https://github.com/Abdulel3h"
   },
   assets: {
-    ogImage: "/images/og/abdulelah-ai-og.svg",
-    // Reserved for a real profile photo. Keep the clean placeholder until one is supplied.
+    ogImage: "/images/og/abdulelah-ai-og.png",
     profileImage: "/images/profile/abdulelah-profile.png"
   },
   resumes: {

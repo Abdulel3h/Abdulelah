@@ -161,63 +161,68 @@ export function Navbar() {
               <Menu className="h-5 w-5" aria-hidden="true" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="right">
-            <SheetHeader>
-              <SheetTitle>{siteConfig.brand}</SheetTitle>
-              <SheetDescription>
-                Navigate Abdulelah&apos;s AI projects, skills, resume, and contact details.
-              </SheetDescription>
-            </SheetHeader>
+          <SheetContent
+            side="right"
+            className="h-screen max-h-screen overflow-hidden p-0 supports-[height:100dvh]:h-dvh supports-[height:100dvh]:max-h-dvh"
+          >
+            <div className="h-full touch-pan-y overflow-x-hidden overflow-y-auto overscroll-contain px-6 pb-[calc(env(safe-area-inset-bottom)+2rem)] pt-6 [-webkit-overflow-scrolling:touch]">
+              <SheetHeader className="pr-12">
+                <SheetTitle>{siteConfig.brand}</SheetTitle>
+                <SheetDescription>
+                  Navigate Abdulelah&apos;s AI projects, skills, resume, and contact details.
+                </SheetDescription>
+              </SheetHeader>
 
-            <div className="mt-8 grid gap-2">
-              {[...navLinks, ...moreLinks].map((link) => (
-                <SheetClose key={link.href} asChild>
+              <div className="mt-8 grid gap-2">
+                {[...navLinks, ...moreLinks].map((link) => (
+                  <SheetClose key={link.href} asChild>
+                    <Link
+                      href={link.href}
+                      className={cn(
+                        "focus-ring rounded-xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white",
+                        isActive(link.href) && "bg-white/10 text-white"
+                      )}
+                    >
+                      {link.label}
+                    </Link>
+                  </SheetClose>
+                ))}
+                <SheetClose asChild>
                   <Link
-                    href={link.href}
-                    className={cn(
-                      "focus-ring rounded-xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white",
-                      isActive(link.href) && "bg-white/10 text-white"
-                    )}
+                    href={contactLink.href}
+                    className={buttonVariants({
+                      variant: "gold",
+                      className: "mt-3 w-full"
+                    })}
                   >
-                    {link.label}
+                    {contactLink.label}
                   </Link>
                 </SheetClose>
-              ))}
-              <SheetClose asChild>
-                <Link
-                  href={contactLink.href}
-                  className={buttonVariants({
-                    variant: "gold",
-                    className: "mt-3 w-full"
-                  })}
-                >
-                  {contactLink.label}
-                </Link>
-              </SheetClose>
-            </div>
+              </div>
 
-            <Separator className="my-6" />
+              <Separator className="my-6" />
 
-            <div className="grid gap-3">
-              {profileLinks.map((profile) => {
-                const Icon = profile.icon;
+              <div className="grid gap-3">
+                {profileLinks.map((profile) => {
+                  const Icon = profile.icon;
 
-                return (
-                  <a
-                    key={profile.href}
-                    href={profile.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="focus-ring inline-flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-medium text-slate-200 transition hover:border-sky-300/35 hover:text-white"
-                  >
-                    <span className="inline-flex items-center gap-2">
-                      <Icon className="h-4 w-4 text-sky-200" aria-hidden="true" />
-                      {profile.label}
-                    </span>
-                    <ExternalLink className="h-4 w-4 text-slate-500" aria-hidden="true" />
-                  </a>
-                );
-              })}
+                  return (
+                    <a
+                      key={profile.href}
+                      href={profile.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="focus-ring inline-flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-medium text-slate-200 transition hover:border-sky-300/35 hover:text-white"
+                    >
+                      <span className="inline-flex items-center gap-2">
+                        <Icon className="h-4 w-4 text-sky-200" aria-hidden="true" />
+                        {profile.label}
+                      </span>
+                      <ExternalLink className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                    </a>
+                  );
+                })}
+              </div>
             </div>
           </SheetContent>
         </Sheet>

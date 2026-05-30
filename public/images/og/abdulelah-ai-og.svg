@@ -1,28 +1,159 @@
 <svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
-  <title id="title">Abdulelah AI portfolio preview</title>
-  <desc id="desc">Dark premium AI portfolio Open Graph image for Abdulelah Alkhathami.</desc>
-  <rect width="1200" height="630" fill="#030712"/>
-  <g opacity="0.38">
-    <path d="M0 96H1200M0 192H1200M0 288H1200M0 384H1200M0 480H1200M0 576H1200" stroke="#1E293B"/>
-    <path d="M96 0V630M192 0V630M288 0V630M384 0V630M480 0V630M576 0V630M672 0V630M768 0V630M864 0V630M960 0V630M1056 0V630" stroke="#1E293B"/>
-  </g>
-  <circle cx="910" cy="140" r="260" fill="#38BDF8" fill-opacity="0.13"/>
-  <circle cx="240" cy="520" r="260" fill="#7C3AED" fill-opacity="0.12"/>
-  <circle cx="1010" cy="540" r="180" fill="#C9A84C" fill-opacity="0.1"/>
-  <path d="M214 330C300 246 388 246 474 330C560 414 648 414 734 330C820 246 908 246 994 330" stroke="url(#line)" stroke-width="3" stroke-linecap="round"/>
-  <circle cx="214" cy="330" r="10" fill="#38BDF8"/>
-  <circle cx="474" cy="330" r="10" fill="#7DD3FC"/>
-  <circle cx="734" cy="330" r="10" fill="#A78BFA"/>
-  <circle cx="994" cy="330" r="10" fill="#C9A84C"/>
-  <text x="110" y="182" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="64" font-weight="700">Abdulelah AI</text>
-  <text x="112" y="248" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="500">Junior AI Engineer | AI Solutions Specialist</text>
-  <text x="112" y="430" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="46" font-weight="700">Practical, context-aware AI systems</text>
-  <text x="114" y="482" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="500">NLP · LLMs · Cloud AI · Applied AI Solutions</text>
+  <title id="title">Abdulelah Alkhathami AI portfolio preview</title>
+  <desc id="desc">Premium dark AI portfolio Open Graph image for Abdulelah Alkhathami, Junior AI Engineer and AI Solutions Specialist.</desc>
   <defs>
-    <linearGradient id="line" x1="214" y1="330" x2="994" y2="330" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#38BDF8"/>
-      <stop offset="0.52" stop-color="#7C3AED"/>
+    <linearGradient id="background" x1="60" y1="30" x2="1110" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#071426"/>
+      <stop offset="0.52" stop-color="#030712"/>
+      <stop offset="1" stop-color="#050816"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="82" y1="48" x2="1118" y2="590" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F213A" stop-opacity="0.66"/>
+      <stop offset="0.5" stop-color="#071224" stop-opacity="0.58"/>
+      <stop offset="1" stop-color="#07101E" stop-opacity="0.72"/>
+    </linearGradient>
+    <linearGradient id="glassStroke" x1="68" y1="38" x2="1130" y2="594" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7DD3FC" stop-opacity="0.55"/>
+      <stop offset="0.36" stop-color="#38BDF8" stop-opacity="0.16"/>
+      <stop offset="0.72" stop-color="#8B5CF6" stop-opacity="0.26"/>
+      <stop offset="1" stop-color="#C9A84C" stop-opacity="0.45"/>
+    </linearGradient>
+    <linearGradient id="nameGradient" x1="94" y1="180" x2="640" y2="292" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="0.48" stop-color="#E2F5FF"/>
+      <stop offset="0.78" stop-color="#A8E5FF"/>
+      <stop offset="1" stop-color="#C4B5FD"/>
+    </linearGradient>
+    <linearGradient id="portraitFrame" x1="810" y1="134" x2="1135" y2="470" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7DD3FC"/>
+      <stop offset="0.46" stop-color="#38BDF8" stop-opacity="0.72"/>
+      <stop offset="0.78" stop-color="#8B5CF6" stop-opacity="0.82"/>
       <stop offset="1" stop-color="#C9A84C"/>
     </linearGradient>
+    <linearGradient id="portraitShade" x1="972" y1="140" x2="972" y2="462" gradientUnits="userSpaceOnUse">
+      <stop offset="0.58" stop-color="#030712" stop-opacity="0"/>
+      <stop offset="1" stop-color="#030712" stop-opacity="0.28"/>
+    </linearGradient>
+    <radialGradient id="blueGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(962 286) rotate(90) scale(320)">
+      <stop stop-color="#38BDF8" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#38BDF8" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="violetGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(280 564) rotate(90) scale(276)">
+      <stop stop-color="#7C3AED" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#7C3AED" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="goldGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1080 560) rotate(90) scale(176)">
+      <stop stop-color="#C9A84C" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#C9A84C" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" stroke="#94A3B8" stroke-opacity="0.075"/>
+      <circle cx="0" cy="0" r="1.35" fill="#7DD3FC" fill-opacity="0.2"/>
+    </pattern>
+    <filter id="blur24" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="24"/>
+    </filter>
+    <filter id="blur12" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="12"/>
+    </filter>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#020617" flood-opacity="0.72"/>
+    </filter>
+    <clipPath id="portraitClip">
+      <circle cx="972" cy="302" r="156"/>
+    </clipPath>
   </defs>
+
+  <rect width="1200" height="630" fill="url(#background)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <circle cx="962" cy="286" r="320" fill="url(#blueGlow)"/>
+  <circle cx="280" cy="564" r="276" fill="url(#violetGlow)"/>
+  <circle cx="1080" cy="560" r="176" fill="url(#goldGlow)"/>
+
+  <g opacity="0.7">
+    <path d="M0 104C176 60 288 180 466 128C644 76 784 22 1200 82" stroke="#38BDF8" stroke-opacity="0.13"/>
+    <path d="M0 544C214 482 306 612 528 552C748 492 934 438 1200 512" stroke="#8B5CF6" stroke-opacity="0.14"/>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="40" y="34" width="1120" height="562" rx="36" fill="url(#glass)"/>
+    <rect x="40.75" y="34.75" width="1118.5" height="560.5" rx="35.25" stroke="url(#glassStroke)" stroke-width="1.5"/>
+  </g>
+
+  <rect x="68" y="66" width="174" height="34" rx="17" fill="#38BDF8" fill-opacity="0.09" stroke="#7DD3FC" stroke-opacity="0.28"/>
+  <circle cx="89" cy="83" r="5" fill="#7DD3FC"/>
+  <circle cx="89" cy="83" r="11" fill="#38BDF8" fill-opacity="0.26" filter="url(#blur12)"/>
+  <text x="105" y="88" fill="#BAE6FD" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="2">AI PORTFOLIO</text>
+
+  <text x="88" y="198" fill="url(#nameGradient)" font-family="Inter, Arial, sans-serif" font-size="66" font-weight="700" letter-spacing="-2">Abdulelah</text>
+  <text x="88" y="266" fill="url(#nameGradient)" font-family="Inter, Arial, sans-serif" font-size="66" font-weight="700" letter-spacing="-2">Alkhathami</text>
+  <text x="92" y="318" fill="#BAE6FD" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="600">Junior AI Engineer | AI Solutions Specialist</text>
+
+  <rect x="92" y="348" width="544" height="1" fill="#7DD3FC" fill-opacity="0.2"/>
+  <rect x="92" y="348" width="112" height="1" fill="#7DD3FC" fill-opacity="0.85"/>
+
+  <text x="92" y="389" fill="#E2E8F0" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500">Building practical, context-aware AI systems</text>
+  <text x="92" y="419" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500">for real-world impact.</text>
+
+  <g font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">
+    <rect x="92" y="451" width="66" height="34" rx="17" fill="#38BDF8" fill-opacity="0.09" stroke="#7DD3FC" stroke-opacity="0.28"/>
+    <text x="114" y="473" fill="#D9F3FF">NLP</text>
+    <rect x="168" y="451" width="72" height="34" rx="17" fill="#38BDF8" fill-opacity="0.09" stroke="#7DD3FC" stroke-opacity="0.28"/>
+    <text x="188" y="473" fill="#D9F3FF">LLMs</text>
+    <rect x="250" y="451" width="100" height="34" rx="17" fill="#38BDF8" fill-opacity="0.09" stroke="#7DD3FC" stroke-opacity="0.28"/>
+    <text x="271" y="473" fill="#D9F3FF">Cloud AI</text>
+    <rect x="360" y="451" width="110" height="34" rx="17" fill="#8B5CF6" fill-opacity="0.1" stroke="#C4B5FD" stroke-opacity="0.28"/>
+    <text x="383" y="473" fill="#EDE9FE">AI Agents</text>
+    <rect x="480" y="451" width="126" height="34" rx="17" fill="#8B5CF6" fill-opacity="0.1" stroke="#C4B5FD" stroke-opacity="0.28"/>
+    <text x="502" y="473" fill="#EDE9FE">Google Cloud</text>
+    <rect x="616" y="451" width="104" height="34" rx="17" fill="#C9A84C" fill-opacity="0.1" stroke="#FDE68A" stroke-opacity="0.28"/>
+    <text x="638" y="473" fill="#FEF3C7">Azure AI</text>
+  </g>
+
+  <text x="92" y="526" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="600" letter-spacing="0.8">ChatUB  &#183;  Althil  &#183;  Absher Insight AI</text>
+  <circle cx="92" cy="565" r="4" fill="#C9A84C"/>
+  <text x="108" y="571" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="600" letter-spacing="0.5">Riyadh, Saudi Arabia  &#183;  github.com/Abdulel3h</text>
+
+  <g opacity="0.95">
+    <circle cx="972" cy="302" r="222" stroke="#7DD3FC" stroke-opacity="0.14"/>
+    <circle cx="972" cy="302" r="192" stroke="#8B5CF6" stroke-opacity="0.2" stroke-dasharray="3 12"/>
+    <circle cx="972" cy="302" r="176" stroke="#7DD3FC" stroke-opacity="0.2"/>
+    <path d="M972 80A222 222 0 0 1 1166 194" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" stroke-dasharray="54 340"/>
+    <path d="M972 524A222 222 0 0 1 778 410" stroke="#7DD3FC" stroke-width="2" stroke-linecap="round" stroke-dasharray="72 340"/>
+  </g>
+
+  <g stroke="#7DD3FC" stroke-opacity="0.24">
+    <path d="M786 182L846 218L821 282"/>
+    <path d="M1140 188L1091 231L1128 291"/>
+    <path d="M1124 396L1082 382L1054 445"/>
+    <path d="M810 409L852 380L880 448"/>
+  </g>
+  <g fill="#7DD3FC">
+    <circle cx="786" cy="182" r="4"/>
+    <circle cx="821" cy="282" r="4"/>
+    <circle cx="1140" cy="188" r="4"/>
+    <circle cx="1128" cy="291" r="4"/>
+    <circle cx="1124" cy="396" r="4"/>
+    <circle cx="1054" cy="445" r="4"/>
+    <circle cx="810" cy="409" r="4"/>
+    <circle cx="880" cy="448" r="4"/>
+  </g>
+  <g fill="#38BDF8" opacity="0.55" filter="url(#blur12)">
+    <circle cx="786" cy="182" r="11"/>
+    <circle cx="1128" cy="291" r="11"/>
+    <circle cx="1054" cy="445" r="11"/>
+    <circle cx="880" cy="448" r="11"/>
+  </g>
+
+  <circle cx="972" cy="302" r="166" fill="#071426" stroke="#7DD3FC" stroke-opacity="0.24" stroke-width="2"/>
+  <circle cx="972" cy="302" r="166" fill="#38BDF8" fill-opacity="0.12" filter="url(#blur24)"/>
+  <image x="816" y="146" width="312" height="312" href="../profile/abdulelah-profile.png" preserveAspectRatio="xMidYMid slice" clip-path="url(#portraitClip)"/>
+  <circle cx="972" cy="302" r="156" fill="url(#portraitShade)"/>
+  <circle cx="972" cy="302" r="160" stroke="url(#portraitFrame)" stroke-width="4"/>
+
+  <rect x="838" y="488" width="268" height="54" rx="27" fill="#08172A" fill-opacity="0.92" stroke="#7DD3FC" stroke-opacity="0.28"/>
+  <circle cx="870" cy="515" r="8" fill="#38BDF8"/>
+  <circle cx="870" cy="515" r="15" fill="#38BDF8" fill-opacity="0.24" filter="url(#blur12)"/>
+  <text x="892" y="511" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="1.2">APPLIED AI</text>
+  <text x="892" y="530" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" letter-spacing="0.8">NLP  &#183;  CLOUD  &#183;  AGENTS</text>
 </svg>
