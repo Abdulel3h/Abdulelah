@@ -114,33 +114,35 @@ export function Navbar() {
           </DropdownMenu>
         </div>
 
-        <div className="hidden items-center gap-3 xl:flex">
-          <CommandMenu />
-          <div className="flex items-center gap-2">
-            {profileLinks.map((profile) => {
-              const Icon = profile.icon;
+        <div className="hidden items-center gap-3 lg:flex">
+          <div className="hidden items-center gap-3 xl:flex">
+            <CommandMenu />
+            <div className="flex items-center gap-2">
+              {profileLinks.map((profile) => {
+                const Icon = profile.icon;
 
-              return (
-                <Tooltip key={profile.href}>
-                  <TooltipTrigger asChild>
-                    <a
-                      href={profile.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={buttonVariants({
-                        variant: "outline",
-                        size: "icon",
-                        className: "text-slate-300"
-                      })}
-                      aria-label={`${profile.label} profile`}
-                    >
-                      <Icon className="h-4 w-4" aria-hidden="true" />
-                    </a>
-                  </TooltipTrigger>
-                  <TooltipContent>{profile.label}</TooltipContent>
-                </Tooltip>
-              );
-            })}
+                return (
+                  <Tooltip key={profile.href}>
+                    <TooltipTrigger asChild>
+                      <a
+                        href={profile.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={buttonVariants({
+                          variant: "outline",
+                          size: "icon",
+                          className: "text-slate-300"
+                        })}
+                        aria-label={`${profile.label} profile`}
+                      >
+                        <Icon className="h-4 w-4" aria-hidden="true" />
+                      </a>
+                    </TooltipTrigger>
+                    <TooltipContent>{profile.label}</TooltipContent>
+                  </Tooltip>
+                );
+              })}
+            </div>
           </div>
           <Button asChild variant="gold">
             <Link href={contactLink.href}>{contactLink.label}</Link>
