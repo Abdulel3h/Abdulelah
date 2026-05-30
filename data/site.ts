@@ -1,3 +1,8 @@
+const fallbackSiteUrl = "https://abdulelah-ai.vercel.app";
+
+export const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "") || fallbackSiteUrl;
+
 export const siteConfig = {
   name: "Abdulelah Alkhathami",
   brand: "Abdulelah AI",
@@ -5,7 +10,7 @@ export const siteConfig = {
   location: "Riyadh, Saudi Arabia",
   email: "Abdul0l0h.0@gmail.com",
   phone: "+966 550 746 952",
-  url: "https://abdulelah-ai.vercel.app",
+  url: siteUrl,
   description:
     "Portfolio of Abdulelah Alkhathami, a Junior AI Engineer and AI Solutions Specialist building practical, context-aware AI systems for real-world impact across NLP, LLMs, cloud AI, education, security, sustainability, fintech, and legal tech.",
   keywords: [

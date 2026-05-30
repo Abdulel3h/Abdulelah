@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/data/site";
+import { absoluteUrl } from "@/lib/utils";
 
 export const ogImage = siteConfig.assets.ogImage;
 
@@ -22,23 +23,25 @@ export function createPageMetadata({
     title.includes(siteConfig.name) || title.includes(siteConfig.brand)
       ? title
       : `${title} | ${siteConfig.brand}`;
+  const pageUrl = absoluteUrl(path);
+  const socialImage = absoluteUrl(ogImage);
 
   return {
     title,
     description,
     keywords,
     alternates: {
-      canonical: path
+      canonical: pageUrl
     },
     openGraph: {
       type,
-      url: path,
+      url: pageUrl,
       title: fullTitle,
       description,
       siteName: siteConfig.brand,
       images: [
         {
-          url: ogImage,
+          url: socialImage,
           width: 1200,
           height: 630,
           alt: "Abdulelah AI portfolio preview"
@@ -49,7 +52,7 @@ export function createPageMetadata({
       card: "summary_large_image",
       title: fullTitle,
       description,
-      images: [ogImage]
+      images: [socialImage]
     }
   };
 }

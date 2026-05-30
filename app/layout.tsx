@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { AgentPanel } from "@/components/agent/AgentPanel";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { BackToTopButton } from "@/components/layout/BackToTopButton";
@@ -9,7 +10,10 @@ import { ScrollProgress } from "@/components/layout/ScrollProgress";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { siteConfig } from "@/data/site";
 import { ogImage } from "@/lib/metadata";
+import { absoluteUrl } from "@/lib/utils";
 import "./globals.css";
+
+const socialImage = absoluteUrl(ogImage);
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -22,7 +26,7 @@ export const metadata: Metadata = {
   authors: [{ name: siteConfig.name }],
   creator: siteConfig.name,
   alternates: {
-    canonical: "/"
+    canonical: siteConfig.url
   },
   openGraph: {
     type: "website",
@@ -33,7 +37,7 @@ export const metadata: Metadata = {
     siteName: "Abdulelah AI",
     images: [
       {
-        url: ogImage,
+        url: socialImage,
         width: 1200,
         height: 630,
         alt: "Abdulelah AI portfolio preview"
@@ -44,7 +48,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Abdulelah Alkhathami | Junior AI Engineer & AI Solutions Specialist",
     description: siteConfig.description,
-    images: [ogImage]
+    images: [socialImage]
   }
 };
 
@@ -62,6 +66,7 @@ export default function RootLayout({
           <Navbar />
           <PageTransitionWrapper>{children}</PageTransitionWrapper>
           <BackToTopButton />
+          <AgentPanel />
           <Footer />
         </TooltipProvider>
       </body>
