@@ -1,0 +1,28 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Abdulelah AI portfolio preview</title>
+  <desc id="desc">Dark premium AI portfolio Open Graph image for Abdulelah Alkhathami.</desc>
+  <rect width="1200" height="630" fill="#030712"/>
+  <g opacity="0.38">
+    <path d="M0 96H1200M0 192H1200M0 288H1200M0 384H1200M0 480H1200M0 576H1200" stroke="#1E293B"/>
+    <path d="M96 0V630M192 0V630M288 0V630M384 0V630M480 0V630M576 0V630M672 0V630M768 0V630M864 0V630M960 0V630M1056 0V630" stroke="#1E293B"/>
+  </g>
+  <circle cx="910" cy="140" r="260" fill="#38BDF8" fill-opacity="0.13"/>
+  <circle cx="240" cy="520" r="260" fill="#7C3AED" fill-opacity="0.12"/>
+  <circle cx="1010" cy="540" r="180" fill="#C9A84C" fill-opacity="0.1"/>
+  <path d="M214 330C300 246 388 246 474 330C560 414 648 414 734 330C820 246 908 246 994 330" stroke="url(#line)" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="214" cy="330" r="10" fill="#38BDF8"/>
+  <circle cx="474" cy="330" r="10" fill="#7DD3FC"/>
+  <circle cx="734" cy="330" r="10" fill="#A78BFA"/>
+  <circle cx="994" cy="330" r="10" fill="#C9A84C"/>
+  <text x="110" y="182" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="64" font-weight="700">Abdulelah AI</text>
+  <text x="112" y="248" fill="#CBD5E1" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="500">Junior AI Engineer | AI Solutions Specialist</text>
+  <text x="112" y="430" fill="#F8FAFC" font-family="Inter, Arial, sans-serif" font-size="46" font-weight="700">Practical, context-aware AI systems</text>
+  <text x="114" y="482" fill="#94A3B8" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="500">NLP · LLMs · Cloud AI · Applied AI Solutions</text>
+  <defs>
+    <linearGradient id="line" x1="214" y1="330" x2="994" y2="330" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38BDF8"/>
+      <stop offset="0.52" stop-color="#7C3AED"/>
+      <stop offset="1" stop-color="#C9A84C"/>
+    </linearGradient>
+  </defs>
+</svg>
