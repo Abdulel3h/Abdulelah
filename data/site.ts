@@ -9,7 +9,7 @@ export const siteConfig = {
   role: "Junior AI Engineer | AI Solutions Specialist",
   location: "Riyadh, Saudi Arabia",
   email: "Abdul0l0h.0@gmail.com",
-  phone: "+966 550 746 952",
+  phone: "+966 53 764 8807",
   url: siteUrl,
   description:
     "Portfolio of Abdulelah Alkhathami, a Junior AI Engineer and AI Solutions Specialist building practical, context-aware AI systems for real-world impact across NLP, LLMs, cloud AI, education, security, sustainability, fintech, and legal tech.",
