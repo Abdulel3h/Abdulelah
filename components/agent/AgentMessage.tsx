@@ -56,7 +56,9 @@ export function AgentMessage({
 
         {message.runtime && showRuntimeProof ? (
           <p className="mt-2 border-t border-white/[0.07] pt-2 text-[10px] leading-4 text-slate-500">
-            Mode: {message.runtime.mode} | Model: {message.runtime.model} | Provider attempted:{" "}
+            Mode: {message.runtime.mode} | Model: {message.runtime.model} | Scope judge:{" "}
+            {message.runtime.scopeJudgeAttempted ? "yes" : "no"} | Scope allowed:{" "}
+            {message.runtime.scopeJudgeAllowed ? "yes" : "no"} | Provider attempted:{" "}
             {message.runtime.providerAttempted ? "yes" : "no"} | Provider succeeded:{" "}
             {message.runtime.providerSucceeded ? "yes" : "no"} | Duration:{" "}
             {message.runtime.durationMs} ms | Code: {message.runtime.debugCode}

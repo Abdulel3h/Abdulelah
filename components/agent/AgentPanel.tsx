@@ -159,6 +159,9 @@ export function AgentPanel() {
             model: payload.model,
             providerAttempted: payload.providerAttempted,
             providerSucceeded: payload.providerSucceeded,
+            scopeJudgeAttempted: payload.scopeJudgeAttempted,
+            scopeJudgeAllowed: payload.scopeJudgeAllowed,
+            scopeJudgeReason: payload.scopeJudgeReason,
             durationMs: payload.durationMs
           }
         }

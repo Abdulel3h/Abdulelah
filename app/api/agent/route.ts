@@ -12,6 +12,7 @@ import {
   MIN_AGENT_QUALITY_SCORE
 } from "@/lib/agent/evaluate";
 import { getFallbackAgentResponse } from "@/lib/agent/fallback";
+import { judgePortfolioScope } from "@/lib/agent/scope-judge";
 import {
   classifyAgentMessage,
   getPortfolioScopeResponse,
@@ -56,17 +57,15 @@ function jsonAgentResponse(
   );
 }
 
-function createSafeResponse(
+function createEvaluatedResponse(
   answer: string,
-  message: string,
-  safety: AgentSafetyResult,
-  actions = safety.allowed
-    ? getAgentActions(message)
-    : getPortfolioRedirectActions(),
+  actions: AgentApiResponse["actions"],
+  responseKind: "portfolio" | "refusal",
   proof: AgentResponseProof,
-  startedAt: number
+  startedAt: number,
+  init?: ResponseInit
 ) {
-  const evaluation = evaluateAgentAnswer({ actions, answer, safety });
+  const evaluation = evaluateAgentAnswer({ actions, answer, responseKind });
 
   return jsonAgentResponse(
     {
@@ -78,59 +77,59 @@ function createSafeResponse(
       }
     },
     proof,
+    startedAt,
+    init
+  );
+}
+
+function getNoScopeJudgeProof(
+  debugCode: AgentDebugCode,
+  mode: AgentRuntimeProof["mode"]
+): AgentResponseProof {
+  return {
+    mode,
+    debugCode,
+    providerAttempted: false,
+    providerSucceeded: false,
+    scopeJudgeAttempted: false,
+    scopeJudgeAllowed: false,
+    scopeJudgeReason: "not_attempted"
+  };
+}
+
+function evaluationFailureResponse(
+  proof: Omit<AgentResponseProof, "debugCode" | "mode">,
+  startedAt: number
+) {
+  return createEvaluatedResponse(
+    getPortfolioScopeResponse(),
+    getPortfolioRedirectActions(),
+    "refusal",
+    {
+      mode: "fallback",
+      debugCode: "evaluation_failed",
+      ...proof
+    },
     startedAt
   );
 }
 
 function fallbackResponse(
   message: string,
-  safety: AgentSafetyResult,
   proof: Omit<AgentResponseProof, "mode">,
   startedAt: number
 ) {
-  const actions = safety.allowed
-    ? getAgentActions(message)
-    : getPortfolioRedirectActions();
-  const answer = safety.allowed
-    ? getFallbackAgentResponse(message)
-    : getSafetyRefusal(safety);
-  const evaluation = evaluateAgentAnswer({ actions, answer, safety });
+  const actions = getAgentActions(message);
+  const answer = getFallbackAgentResponse(message);
+  const evaluation = evaluateAgentAnswer({
+    actions,
+    answer,
+    responseKind: "portfolio"
+  });
 
-  if (evaluation.passed) {
-    return jsonAgentResponse(
-      {
-        answer,
-        actions,
-        quality: {
-          score: evaluation.score,
-          passed: true
-        }
-      },
-      { mode: "fallback", ...proof },
-      startedAt
-    );
+  if (!evaluation.passed) {
+    return evaluationFailureResponse(proof, startedAt);
   }
-
-  return createSafeResponse(
-    getPortfolioScopeResponse(),
-    message,
-    { allowed: false, category: "out-of-scope" },
-    getPortfolioRedirectActions(),
-    { mode: "fallback", ...proof },
-    startedAt
-  );
-}
-
-function blockedResponse(safety: AgentSafetyResult, startedAt: number) {
-  const actions = getPortfolioRedirectActions();
-  const answer = getSafetyRefusal(safety);
-  const evaluation = evaluateAgentAnswer({ actions, answer, safety });
-  const debugCode: AgentDebugCode =
-    safety.category === "out-of-scope"
-      ? "blocked_out_of_scope"
-      : safety.category === "sensitive-request"
-        ? "blocked_sensitive_request"
-        : "blocked_prompt_injection";
 
   return jsonAgentResponse(
     {
@@ -138,14 +137,29 @@ function blockedResponse(safety: AgentSafetyResult, startedAt: number) {
       actions,
       quality: {
         score: evaluation.score,
-        passed: evaluation.passed
+        passed: true
       }
     },
+    { mode: "fallback", ...proof },
+    startedAt
+  );
+}
+
+function blockedResponse(safety: AgentSafetyResult, startedAt: number) {
+  const debugCode: AgentDebugCode =
+    safety.category === "secret-request"
+      ? "blocked_secret_request"
+      : safety.category === "unrelated-task"
+        ? "blocked_unrelated_task"
+        : "blocked_prompt_injection";
+
+  return createEvaluatedResponse(
+    getSafetyRefusal(safety),
+    getPortfolioRedirectActions(),
+    "refusal",
     {
-      mode: "blocked",
-      debugCode,
-      providerAttempted: false,
-      providerSucceeded: false
+      ...getNoScopeJudgeProof(debugCode, "blocked"),
+      scopeJudgeReason: "hard_blocked"
     },
     startedAt
   );
@@ -164,12 +178,7 @@ export async function POST(request: Request) {
         actions: [],
         quality: { score: MIN_AGENT_QUALITY_SCORE, passed: true }
       },
-      {
-        mode: "fallback",
-        debugCode: "invalid_request",
-        providerAttempted: false,
-        providerSucceeded: false
-      },
+      getNoScopeJudgeProof("invalid_request", "fallback"),
       startedAt,
       { status: 400 }
     );
@@ -190,12 +199,7 @@ export async function POST(request: Request) {
         actions: [],
         quality: { score: MIN_AGENT_QUALITY_SCORE, passed: true }
       },
-      {
-        mode: "fallback",
-        debugCode: "invalid_request",
-        providerAttempted: false,
-        providerSucceeded: false
-      },
+      getNoScopeJudgeProof("invalid_request", "fallback"),
       startedAt,
       { status: 400 }
     );
@@ -208,12 +212,7 @@ export async function POST(request: Request) {
         actions: [],
         quality: { score: MIN_AGENT_QUALITY_SCORE, passed: true }
       },
-      {
-        mode: "fallback",
-        debugCode: "invalid_request",
-        providerAttempted: false,
-        providerSucceeded: false
-      },
+      getNoScopeJudgeProof("invalid_request", "fallback"),
       startedAt,
       { status: 400 }
     );
@@ -233,12 +232,7 @@ export async function POST(request: Request) {
         actions: getPortfolioRedirectActions(),
         quality: { score: 100, passed: true }
       },
-      {
-        mode: "fallback",
-        debugCode: "rate_limited",
-        providerAttempted: false,
-        providerSucceeded: false
-      },
+      getNoScopeJudgeProof("rate_limited", "fallback"),
       startedAt,
       {
         status: 429,
@@ -255,14 +249,37 @@ export async function POST(request: Request) {
     return blockedResponse(safety, startedAt);
   }
 
+  const scope = await judgePortfolioScope(message);
+  const scopeProof = {
+    scopeJudgeAttempted: scope.attempted,
+    scopeJudgeAllowed: scope.allowed,
+    scopeJudgeReason: scope.reason
+  };
+
+  if (!scope.allowed) {
+    return createEvaluatedResponse(
+      getPortfolioScopeResponse(),
+      getPortfolioRedirectActions(),
+      "refusal",
+      {
+        mode: "fallback",
+        debugCode: "scope_rejected",
+        providerAttempted: false,
+        providerSucceeded: false,
+        ...scopeProof
+      },
+      startedAt
+    );
+  }
+
   if (!hasDeepSeekApiKey()) {
     return fallbackResponse(
       message,
-      safety,
       {
         debugCode: "missing_key",
         providerAttempted: false,
-        providerSucceeded: false
+        providerSucceeded: false,
+        ...scopeProof
       },
       startedAt
     );
@@ -271,16 +288,18 @@ export async function POST(request: Request) {
   try {
     const actions = getAgentActions(message);
     const answer = await askDeepSeek(message, buildPortfolioContext());
-    const evaluation = evaluateAgentAnswer({ actions, answer, safety });
+    const evaluation = evaluateAgentAnswer({
+      actions,
+      answer,
+      responseKind: "portfolio"
+    });
 
     if (!evaluation.passed) {
-      return fallbackResponse(
-        message,
-        safety,
+      return evaluationFailureResponse(
         {
-          debugCode: "evaluation_failed",
           providerAttempted: true,
-          providerSucceeded: true
+          providerSucceeded: true,
+          ...scopeProof
         },
         startedAt
       );
@@ -299,18 +318,19 @@ export async function POST(request: Request) {
         mode: "deepseek",
         debugCode: "sent_to_deepseek",
         providerAttempted: true,
-        providerSucceeded: true
+        providerSucceeded: true,
+        ...scopeProof
       },
       startedAt
     );
   } catch (error) {
     return fallbackResponse(
       message,
-      safety,
       {
         debugCode: getDeepSeekErrorCode(error),
         providerAttempted: true,
-        providerSucceeded: false
+        providerSucceeded: false,
+        ...scopeProof
       },
       startedAt
     );

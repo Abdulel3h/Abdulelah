@@ -3,6 +3,7 @@ import {
   getDeepSeekModel,
   hasDeepSeekApiKey
 } from "@/lib/agent/deepseek";
+import { judgePortfolioScope } from "@/lib/agent/scope-judge";
 import { classifyAgentMessage } from "@/lib/agent/safety";
 
 export const runtime = "nodejs";
@@ -10,22 +11,10 @@ export const dynamic = "force-dynamic";
 
 const MAX_MESSAGE_LENGTH = 1_200;
 
-function getBlockedReason(
+function getHardBlockReason(
   category: ReturnType<typeof classifyAgentMessage>["category"]
 ) {
-  if (category === "allowed") {
-    return null;
-  }
-
-  if (category === "prompt-injection") {
-    return "prompt_injection";
-  }
-
-  if (category === "sensitive-request") {
-    return "sensitive_request";
-  }
-
-  return "out_of_scope";
+  return category === "allowed" ? null : category;
 }
 
 export async function POST(request: Request) {
@@ -58,13 +47,38 @@ export async function POST(request: Request) {
   const safety = classifyAgentMessage(message);
   const hasDeepSeekKey = hasDeepSeekApiKey();
 
+  if (!safety.allowed) {
+    return NextResponse.json(
+      {
+        hardBlocked: true,
+        hardBlockReason: getHardBlockReason(safety.category),
+        scopeJudgeAttempted: false,
+        scopeJudgeAllowed: false,
+        scopeJudgeReason: "hard_blocked",
+        wouldCallAnswerGenerator: false,
+        model: getDeepSeekModel(),
+        hasDeepSeekKey
+      },
+      {
+        headers: {
+          "Cache-Control": "no-store"
+        }
+      }
+    );
+  }
+
+  const scope = await judgePortfolioScope(message);
+
   return NextResponse.json(
     {
-      hasDeepSeekKey,
+      hardBlocked: false,
+      hardBlockReason: null,
+      scopeJudgeAttempted: scope.attempted,
+      scopeJudgeAllowed: scope.allowed,
+      scopeJudgeReason: scope.reason,
+      wouldCallAnswerGenerator: scope.allowed && hasDeepSeekKey,
       model: getDeepSeekModel(),
-      allowedBySafety: safety.allowed,
-      wouldCallDeepSeek: safety.allowed && hasDeepSeekKey,
-      blockedReason: getBlockedReason(safety.category)
+      hasDeepSeekKey
     },
     {
       headers: {

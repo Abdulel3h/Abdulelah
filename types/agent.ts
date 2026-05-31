@@ -10,9 +10,10 @@ export type AgentMode = "deepseek" | "fallback" | "blocked";
 
 export type AgentDebugCode =
   | "sent_to_deepseek"
-  | "blocked_out_of_scope"
   | "blocked_prompt_injection"
-  | "blocked_sensitive_request"
+  | "blocked_secret_request"
+  | "blocked_unrelated_task"
+  | "scope_rejected"
   | "invalid_request"
   | "rate_limited"
   | "missing_key"
@@ -31,6 +32,9 @@ export type AgentRuntimeProof = {
   model: string;
   providerAttempted: boolean;
   providerSucceeded: boolean;
+  scopeJudgeAttempted: boolean;
+  scopeJudgeAllowed: boolean;
+  scopeJudgeReason: string;
   durationMs: number;
 };
 
