@@ -2,7 +2,7 @@ import "server-only";
 import type { AgentDebugCode } from "@/types/agent";
 
 const DEEPSEEK_API_URL = "https://api.deepseek.com/chat/completions";
-const DEFAULT_DEEPSEEK_MODEL = "deepseek-chat";
+const DEFAULT_DEEPSEEK_MODEL = "deepseek-v4-flash";
 const REQUEST_TIMEOUT_MS = 12_000;
 
 type DeepSeekCompletion = {
