@@ -34,10 +34,14 @@ function jsonAgentResponse(
   init?: ResponseInit,
   debugCode?: AgentDebugCode
 ) {
-  if (IS_DEVELOPMENT) {
-    console.info("[agent]", {
+  if (debugCode) {
+    console.warn("[agent]", {
       mode: response.mode,
       errorCode: debugCode
+    });
+  } else if (IS_DEVELOPMENT) {
+    console.info("[agent]", {
+      mode: response.mode
     });
   }
 

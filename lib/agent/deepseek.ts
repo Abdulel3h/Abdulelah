@@ -27,6 +27,10 @@ export function hasDeepSeekApiKey() {
   return Boolean(process.env.DEEPSEEK_API_KEY?.trim());
 }
 
+export function getDeepSeekModel() {
+  return process.env.DEEPSEEK_MODEL?.trim() || DEFAULT_DEEPSEEK_MODEL;
+}
+
 export function getDeepSeekErrorCode(error: unknown): AgentDebugCode {
   return error instanceof DeepSeekRequestError ? error.code : "request_failed";
 }
@@ -71,7 +75,7 @@ export async function askDeepSeek(userMessage: string, portfolioContext: string)
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: process.env.DEEPSEEK_MODEL?.trim() || DEFAULT_DEEPSEEK_MODEL,
+          model: getDeepSeekModel(),
           messages: [
             {
               role: "system",
