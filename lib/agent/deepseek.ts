@@ -106,13 +106,13 @@ export async function askDeepSeek(userMessage: string, portfolioContext: string)
     try {
       completion = (await response.json()) as DeepSeekCompletion;
     } catch {
-      throw new DeepSeekRequestError("invalid_response");
+      throw new DeepSeekRequestError("model_error");
     }
 
     const answer = completion.choices?.[0]?.message?.content?.trim();
 
     if (!answer) {
-      throw new DeepSeekRequestError("invalid_response");
+      throw new DeepSeekRequestError("model_error");
     }
 
     return answer;

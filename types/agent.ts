@@ -12,8 +12,10 @@ export type AgentDebugCode =
   | "sent_to_deepseek"
   | "blocked_out_of_scope"
   | "blocked_prompt_injection"
+  | "blocked_sensitive_request"
+  | "invalid_request"
+  | "rate_limited"
   | "missing_key"
-  | "invalid_response"
   | "request_failed"
   | "model_error"
   | "evaluation_failed";
@@ -23,12 +25,19 @@ export type AgentQuality = {
   passed: boolean;
 };
 
-export type AgentApiResponse = {
+export type AgentRuntimeProof = {
+  mode: AgentMode;
+  debugCode: AgentDebugCode;
+  model: string;
+  providerAttempted: boolean;
+  providerSucceeded: boolean;
+  durationMs: number;
+};
+
+export type AgentApiResponse = AgentRuntimeProof & {
   answer: string;
   actions: AgentAction[];
-  mode: AgentMode;
   quality: AgentQuality;
-  debugCode?: AgentDebugCode;
 };
 
 export type AgentChatMessage = {
@@ -37,5 +46,6 @@ export type AgentChatMessage = {
   content: string;
   actions?: AgentAction[];
   mode?: AgentMode;
+  runtime?: AgentRuntimeProof;
   isError?: boolean;
 };

@@ -11,6 +11,20 @@ export function AgentMessage({
   onAction?: (action: AgentAction) => void;
 }) {
   const isAssistant = message.role === "assistant";
+  const showRuntimeProof =
+    process.env.NODE_ENV !== "production" || Boolean(message.runtime?.debugCode);
+
+  function getModeLabel() {
+    if (message.mode === "deepseek") {
+      return "AI-assisted portfolio mode";
+    }
+
+    if (message.mode === "blocked") {
+      return "Portfolio scope only";
+    }
+
+    return "Portfolio-grounded mode";
+  }
 
   return (
     <article
@@ -36,9 +50,16 @@ export function AgentMessage({
 
         {message.mode ? (
           <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-            {message.mode === "deepseek"
-              ? "AI-assisted portfolio mode"
-              : "Portfolio-grounded mode"}
+            {getModeLabel()}
+          </p>
+        ) : null}
+
+        {message.runtime && showRuntimeProof ? (
+          <p className="mt-2 border-t border-white/[0.07] pt-2 text-[10px] leading-4 text-slate-500">
+            Mode: {message.runtime.mode} | Model: {message.runtime.model} | Provider attempted:{" "}
+            {message.runtime.providerAttempted ? "yes" : "no"} | Provider succeeded:{" "}
+            {message.runtime.providerSucceeded ? "yes" : "no"} | Duration:{" "}
+            {message.runtime.durationMs} ms | Code: {message.runtime.debugCode}
           </p>
         ) : null}
 

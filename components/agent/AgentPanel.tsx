@@ -39,6 +39,18 @@ function createMessageId(role: AgentChatMessage["role"]) {
   return `${role}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
+function getModeLabel(mode?: AgentMode) {
+  if (mode === "deepseek") {
+    return "AI-assisted portfolio mode";
+  }
+
+  if (mode === "blocked") {
+    return "Portfolio scope only";
+  }
+
+  return mode ? "Portfolio-grounded mode" : "Recruiter assistant";
+}
+
 export function AgentPanel() {
   const reduceMotion = useReducedMotion();
   const launcherRef = useRef<HTMLButtonElement>(null);
@@ -140,7 +152,15 @@ export function AgentPanel() {
           role: "assistant",
           content: payload.answer,
           actions: payload.actions,
-          mode: payload.mode
+          mode: payload.mode,
+          runtime: {
+            mode: payload.mode,
+            debugCode: payload.debugCode,
+            model: payload.model,
+            providerAttempted: payload.providerAttempted,
+            providerSucceeded: payload.providerSucceeded,
+            durationMs: payload.durationMs
+          }
         }
       ]);
     } catch (error) {
@@ -231,11 +251,7 @@ export function AgentPanel() {
                       Ask about projects, skills, resume, or hiring fit.
                     </p>
                     <p className="mt-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-sky-200/80">
-                      {mode === "deepseek"
-                        ? "AI-assisted portfolio mode"
-                        : mode
-                          ? "Portfolio-grounded mode"
-                          : "Recruiter assistant"}
+                      {getModeLabel(mode)}
                     </p>
                   </div>
                 </div>
