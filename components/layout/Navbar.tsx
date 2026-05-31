@@ -46,7 +46,7 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 px-3 pt-3 sm:px-4 sm:pt-4">
-      <nav className="relative mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-3 rounded-2xl border border-white/10 bg-[#030712]/78 px-4 shadow-[0_18px_48px_rgba(2,6,23,0.38),0_0_30px_rgba(56,189,248,0.08)] backdrop-blur-2xl sm:px-5 md:px-6 lg:gap-4 lg:rounded-3xl">
+      <nav className="relative mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-3 rounded-2xl border border-white/10 bg-[#030712]/[0.78] px-4 shadow-[0_18px_48px_rgba(2,6,23,0.38),0_0_30px_rgba(56,189,248,0.08)] backdrop-blur-2xl sm:px-5 md:px-6 lg:gap-4 lg:rounded-3xl">
         <div className="pointer-events-none absolute inset-x-5 bottom-0 h-px bg-gradient-to-r from-transparent via-sky-300/40 to-transparent" />
         <Link
           href="/"
