@@ -49,7 +49,18 @@ export function buildPortfolioContext() {
     .join("\n");
 
   const blogContext = blogPosts
-    .map((post) => `- ${post.title} (${post.category}): ${post.excerpt}`)
+    .map(
+      (post) =>
+        [
+          `- ${post.title}`,
+          `  Article URL: /blog/${post.slug}`,
+          `  Category: ${post.category}`,
+          `  Audience: ${list(post.audience)}`,
+          `  Tags: ${list(post.tags)}`,
+          `  Summary: ${post.excerpt}`,
+          `  Key takeaway: ${post.content.takeaway}`
+        ].join("\n")
+    )
     .join("\n");
 
   return [
@@ -79,7 +90,8 @@ export function buildPortfolioContext() {
     "TIMELINE",
     timelineContext,
     "",
-    "PORTFOLIO INSIGHTS",
+    "ABDULELAH AI INSIGHTS BLOG",
+    "Positioning: A practical public AI knowledge hub covering AI agents, LLMs, cloud AI, privacy-first systems, applied AI, and the impact of AI across education, business, government, and daily work.",
     blogContext
   ].join("\n");
 }

@@ -37,6 +37,36 @@ const actions = {
     href: "/contact",
     type: "internal"
   },
+  blog: {
+    label: "Explore AI Insights",
+    href: "/blog",
+    type: "internal"
+  },
+  contextArticle: {
+    label: "Read Context Engineering Article",
+    href: "/blog/why-context-matters-more-than-prompts-in-ai-agents",
+    type: "internal"
+  },
+  studentArticle: {
+    label: "Read Student AI Guide",
+    href: "/blog/what-every-student-should-know-about-ai-in-2026",
+    type: "internal"
+  },
+  chatubArticle: {
+    label: "Read Local AI Article",
+    href: "/blog/local-ai-systems-and-the-future-of-university-services",
+    type: "internal"
+  },
+  althilArticle: {
+    label: "Read Urban Planning Article",
+    href: "/blog/how-ai-can-support-smarter-urban-planning",
+    type: "internal"
+  },
+  securityArticle: {
+    label: "Read Predictive Security Article",
+    href: "/blog/from-reactive-security-to-predictive-ai-security",
+    type: "internal"
+  },
   navigatorContact: {
     label: "Send Abdulelah a message",
     href: "#agent-contact",
@@ -71,6 +101,16 @@ function includesAny(message: string, terms: string[]) {
 export function getAgentActions(message: string): AgentAction[] {
   const normalized = message.toLowerCase();
   const results: AgentAction[] = [];
+  const wantsBlog = includesAny(normalized, [
+    "article",
+    "articles",
+    "blog",
+    "insight",
+    "read",
+    "context engineering",
+    "context matters",
+    "prompts"
+  ]);
 
   function add(...nextActions: AgentAction[]) {
     for (const action of nextActions) {
@@ -78,6 +118,39 @@ export function getAgentActions(message: string): AgentAction[] {
         results.push(action);
       }
     }
+  }
+
+  if (
+    includesAny(normalized, ["context engineering", "context matters", "prompts"]) ||
+    (wantsBlog && includesAny(normalized, ["ai agent", "agents"]))
+  ) {
+    add(actions.contextArticle, actions.blog);
+  }
+
+  if (wantsBlog && includesAny(normalized, ["student", "students"])) {
+    add(actions.studentArticle, actions.blog);
+  }
+
+  if (wantsBlog && includesAny(normalized, ["chatub", "academic", "university"])) {
+    add(actions.chatubArticle, actions.blog);
+  }
+
+  if (
+    wantsBlog &&
+    includesAny(normalized, ["althil", "thermal", "shade", "sustainability", "urban"])
+  ) {
+    add(actions.althilArticle, actions.blog);
+  }
+
+  if (wantsBlog && includesAny(normalized, ["absher", "security", "ueba", "risk"])) {
+    add(actions.securityArticle, actions.blog);
+  }
+
+  if (
+    wantsBlog ||
+    includesAny(normalized, ["what should i read first", "where should i start"])
+  ) {
+    add(actions.blog);
   }
 
   if (includesAny(normalized, ["chatub", "academic", "university"])) {

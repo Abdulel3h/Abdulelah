@@ -1,43 +1,67 @@
 import type { Metadata } from "next";
-import { BookOpen } from "lucide-react";
+import { BlogCTA } from "@/components/blog/BlogCTA";
+import { BlogFilters } from "@/components/blog/BlogFilters";
+import { FeaturedPost } from "@/components/blog/FeaturedPost";
+import { GlobalPulse } from "@/components/blog/GlobalPulse";
 import { PageHero } from "@/components/ui/PageHero";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { blogPosts } from "@/data/blog";
+import { blogCategories, blogPosts, featuredBlogPost } from "@/data/blog";
 import { createPageMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "Insights",
+  title: "Abdulelah AI Insights",
   description:
-    "Placeholder AI insights and article structure for future MDX content by Abdulelah Alkhathami.",
-  path: "/blog"
+    "Practical AI insights about agents, LLMs, cloud AI, privacy-first systems, and applied artificial intelligence for students, builders, and decision-makers.",
+  path: "/blog",
+  keywords: [
+    "Abdulelah AI Insights",
+    "AI Agents",
+    "LLMs",
+    "Cloud AI",
+    "Privacy-first AI",
+    "Applied AI",
+    "AI Education"
+  ]
 });
 
 export default function BlogPage() {
   return (
     <>
       <PageHero
-        eyebrow="Insights"
-        title="AI thinking, product context, and applied lessons."
-        subtitle="A clean structure for future MDX articles that can show how Abdulelah thinks about AI systems, not only how he builds them."
+        eyebrow="AI Knowledge Hub"
+        title="Abdulelah AI Insights"
+        subtitle="Practical ideas about AI agents, LLMs, cloud AI, privacy-first systems, and applied AI for students, builders, and decision-makers."
+        stats={[
+          { value: String(blogPosts.length), label: "Original articles" },
+          { value: String(blogCategories.length - 1), label: "AI topic areas" },
+          { value: "Static-first", label: "Credible knowledge, no fake live data" },
+          { value: "Global", label: "Useful across backgrounds and specialties" }
+        ]}
       />
+
+      <section className="container-shell pt-16 sm:pt-20 lg:pt-24">
+        <p className="badge mb-5">Start here</p>
+        <FeaturedPost post={featuredBlogPost} />
+      </section>
+
       <section className="container-shell section-space">
-        <div className="grid gap-5 md:grid-cols-2">
-          {blogPosts.map((post) => (
-            <article key={post.title} className="glass-card group rounded-2xl p-6 transition hover:-translate-y-1 hover:border-sky-300/30">
-              <span className="grid h-12 w-12 place-items-center rounded-full border border-sky-300/20 bg-sky-300/10 text-sky-200">
-                <BookOpen className="h-5 w-5" aria-hidden="true" />
-              </span>
-              <Badge className="mt-6">{post.category}</Badge>
-              <h2 className="mt-4 text-xl font-semibold text-white">{post.title}</h2>
-              <p className="mt-3 text-sm leading-7 text-slate-300">{post.excerpt}</p>
-              <Button type="button" variant="outline" className="mt-6 cursor-not-allowed text-slate-400" disabled>
-                Coming soon
-              </Button>
-            </article>
-          ))}
+        <div className="max-w-3xl">
+          <p className="badge mb-4">Knowledge library</p>
+          <h2 className="text-3xl font-semibold text-white sm:text-4xl">
+            Explore practical AI ideas
+          </h2>
+          <p className="mt-5 text-base leading-8 text-slate-300">
+            Search by topic or choose the audience closest to your goals. Each
+            article is written to be useful without flattening the technical
+            details that matter.
+          </p>
+        </div>
+        <div className="mt-9">
+          <BlogFilters posts={blogPosts} />
         </div>
       </section>
+
+      <GlobalPulse />
+      <BlogCTA />
     </>
   );
 }

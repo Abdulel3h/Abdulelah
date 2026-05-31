@@ -10,6 +10,7 @@ type PageMetadataOptions = {
   path: string;
   type?: "website" | "article";
   keywords?: string[];
+  publishedTime?: string;
 };
 
 export function createPageMetadata({
@@ -17,7 +18,8 @@ export function createPageMetadata({
   description,
   path,
   type = "website",
-  keywords = siteConfig.keywords
+  keywords = siteConfig.keywords,
+  publishedTime
 }: PageMetadataOptions): Metadata {
   const fullTitle =
     title.includes(siteConfig.name) || title.includes(siteConfig.brand)
@@ -30,6 +32,7 @@ export function createPageMetadata({
     title,
     description,
     keywords,
+    authors: [{ name: siteConfig.name }],
     alternates: {
       canonical: pageUrl
     },
@@ -39,6 +42,12 @@ export function createPageMetadata({
       title: fullTitle,
       description,
       siteName: siteConfig.brand,
+      ...(type === "article"
+        ? {
+            authors: [siteConfig.name],
+            publishedTime
+          }
+        : {}),
       images: [
         {
           url: socialImage,

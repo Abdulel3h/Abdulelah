@@ -10,10 +10,10 @@ export type AgentSafetyResult = {
 };
 
 const PORTFOLIO_SCOPE_RESPONSE =
-  "I can only help with Abdulelah Alkhathami's portfolio, projects, skills, resume, and contact information.";
+  "I can only help with Abdulelah Alkhathami's portfolio, projects, blog insights, skills, resume, and contact information.";
 
 const PROTECTED_INFORMATION_RESPONSE =
-  "I can't reveal or override private instructions, secrets, or system details. I'm Abdulelah AI Navigator, so I can only help with Abdulelah Alkhathami's public portfolio, projects, skills, resume, and contact information.";
+  "I can't reveal or override private instructions, secrets, or system details. I'm Abdulelah AI Navigator, so I can only help with Abdulelah Alkhathami's public portfolio, projects, blog insights, skills, resume, and contact information.";
 
 const PROMPT_INJECTION_PATTERNS = [
   /\bignore\b.{0,40}\b(previous|prior|above|system|developer)\b.{0,30}\binstructions?\b/i,

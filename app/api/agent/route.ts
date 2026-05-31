@@ -195,7 +195,7 @@ export async function POST(request: Request) {
   if (!message) {
     return jsonAgentResponse(
       {
-        answer: "Please enter a question about Abdulelah's projects, skills, resume, or hiring fit.",
+        answer: "Please enter a question about Abdulelah's projects, blog insights, skills, resume, or hiring fit.",
         actions: [],
         quality: { score: MIN_AGENT_QUALITY_SCORE, passed: true }
       },
@@ -228,7 +228,7 @@ export async function POST(request: Request) {
     return jsonAgentResponse(
       {
         answer:
-          "You've sent several questions in a short time. Please wait a moment, then ask about Abdulelah's portfolio, projects, skills, or resume.",
+          "You've sent several questions in a short time. Please wait a moment, then ask about Abdulelah's portfolio, projects, blog insights, skills, or resume.",
         actions: getPortfolioRedirectActions(),
         quality: { score: 100, passed: true }
       },

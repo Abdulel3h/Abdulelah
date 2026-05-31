@@ -7,6 +7,7 @@ import { AgentContactForm } from "@/components/agent/AgentContactForm";
 import { AgentLauncher } from "@/components/agent/AgentLauncher";
 import { AgentMessage } from "@/components/agent/AgentMessage";
 import { AgentSuggestion } from "@/components/agent/AgentSuggestion";
+import { OPEN_AGENT_EVENT } from "@/components/blog/AgentAskButton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type {
@@ -20,7 +21,7 @@ const INITIAL_MESSAGE: AgentChatMessage = {
   id: "welcome",
   role: "assistant",
   content:
-    "Hi, I'm Abdulelah AI Navigator. I can help you explore Abdulelah's projects, skills, achievements, and the best resume version for your hiring needs."
+    "Hi, I'm Abdulelah AI Navigator. I can help you explore Abdulelah's projects, AI insights, skills, achievements, and the best resume version for your hiring needs."
 };
 
 const suggestions = [
@@ -29,6 +30,7 @@ const suggestions = [
   "Explain ChatUB",
   "Cloud AI experience",
   "Security AI experience",
+  "What should I read first?",
   "Which CV should I download?",
   "Contact Abdulelah"
 ];
@@ -62,6 +64,24 @@ export function AgentPanel() {
   const [input, setInput] = useState("");
   const [mode, setMode] = useState<AgentMode>();
   const [messages, setMessages] = useState<AgentChatMessage[]>([INITIAL_MESSAGE]);
+
+  useEffect(() => {
+    function onOpenAgent(event: Event) {
+      const prompt = (event as CustomEvent<{ prompt?: string }>).detail?.prompt;
+
+      if (prompt) {
+        setInput(prompt);
+      }
+
+      setIsOpen(true);
+    }
+
+    window.addEventListener(OPEN_AGENT_EVENT, onOpenAgent);
+
+    return () => {
+      window.removeEventListener(OPEN_AGENT_EVENT, onOpenAgent);
+    };
+  }, []);
 
   function openPanel() {
     setIsOpen(true);
@@ -251,7 +271,7 @@ export function AgentPanel() {
                       Abdulelah AI Navigator
                     </h2>
                     <p id="agent-panel-description" className="mt-1 text-xs leading-5 text-slate-400">
-                      Ask about projects, skills, resume, or hiring fit.
+                      Ask about projects, insights, skills, resume, or hiring fit.
                     </p>
                     <p className="mt-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-sky-200/80">
                       {getModeLabel(mode)}

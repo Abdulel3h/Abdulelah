@@ -1,3 +1,4 @@
+import { getBlogPostBySlug } from "@/data/blog";
 import { getProjectBySlug } from "@/data/projects";
 import { siteConfig } from "@/data/site";
 import { classifyAgentMessage, getSafetyRefusal } from "@/lib/agent/safety";
@@ -16,6 +17,16 @@ function projectSummary(slug: string) {
   return `${project.title}. ${project.shortDescription} Abdulelah's role: ${project.role}. Key technologies and methods: ${project.technologies.join(", ")}.`;
 }
 
+function blogPostSummary(slug: string) {
+  const post = getBlogPostBySlug(slug);
+
+  if (!post) {
+    return "";
+  }
+
+  return `Read "${post.title}" in Abdulelah AI Insights. ${post.excerpt} Key takeaway: ${post.content.takeaway} Article: /blog/${post.slug}`;
+}
+
 export function getFallbackAgentResponse(message: string) {
   const safety = classifyAgentMessage(message);
 
@@ -24,6 +35,52 @@ export function getFallbackAgentResponse(message: string) {
   }
 
   const normalized = message.toLowerCase();
+  const wantsBlog = includesAny(normalized, [
+    "article",
+    "articles",
+    "blog",
+    "insight",
+    "read",
+    "context engineering",
+    "context matters",
+    "prompts"
+  ]);
+
+  if (
+    includesAny(normalized, ["context engineering", "context matters", "prompts"]) ||
+    (wantsBlog && includesAny(normalized, ["ai agent", "agents"]))
+  ) {
+    return `${blogPostSummary("why-context-matters-more-than-prompts-in-ai-agents")} It explains that agent quality depends on the full environment around the model: trusted knowledge, memory, tools, policies, user history, and evaluation, not prompt wording alone.`;
+  }
+
+  if (wantsBlog && includesAny(normalized, ["chatub", "academic", "university"])) {
+    return `${blogPostSummary("local-ai-systems-and-the-future-of-university-services")} It relates directly to ChatUB, Abdulelah's local AI academic assistant concept for University of Bisha students.`;
+  }
+
+  if (
+    wantsBlog &&
+    includesAny(normalized, ["althil", "thermal", "shade", "sustainability", "urban"])
+  ) {
+    return `${blogPostSummary("how-ai-can-support-smarter-urban-planning")} It connects to Althil and its cloud-supported approach to urban thermal comfort decisions.`;
+  }
+
+  if (
+    wantsBlog &&
+    includesAny(normalized, ["absher", "security", "ueba", "risk"])
+  ) {
+    return `${blogPostSummary("from-reactive-security-to-predictive-ai-security")} It connects to Absher Insight AI and its privacy-conscious behavioral analytics concept.`;
+  }
+
+  if (wantsBlog && includesAny(normalized, ["student", "students"])) {
+    return `${blogPostSummary("what-every-student-should-know-about-ai-in-2026")} Students may also find "From Chatbots to AI Agents: What Actually Changed?" useful as an accessible foundation.`;
+  }
+
+  if (
+    wantsBlog ||
+    includesAny(normalized, ["what should i read first", "where should i start"])
+  ) {
+    return `Start with ${blogPostSummary("why-context-matters-more-than-prompts-in-ai-agents")} For a simpler foundation, continue with "From Chatbots to AI Agents: What Actually Changed?" Non-technical readers can begin with "AI for Non-Technical People: A Simple Mental Model."`;
+  }
 
   if (includesAny(normalized, ["chatub", "academic", "university"])) {
     return `${projectSummary("chatub")} ChatUB uses official university academic content to provide context-aware guidance while emphasizing privacy, reliability, and a local AI architecture. It was Abdulelah's graduation project.`;

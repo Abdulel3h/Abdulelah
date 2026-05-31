@@ -17,6 +17,8 @@ type EvaluateAgentAnswerOptions = {
 const PORTFOLIO_ANCHORS =
   /\b(abdulelah|portfolio|chatub|althil|absher|qanouni|medad|virtual astronauts?|resume|cv|github|linkedin|university of bisha|ai engineer|ai solutions specialist|projects?|skills?|contact)\b|عبد\s?ال[اإ]له|مشاريع?|مهارات?|السيرة|التواصل/i;
 
+const BLOG_ANCHORS = /\b(blog|article|insights?|context engineering)\b/i;
+
 const REFUSAL_ANCHORS =
   /\b(only help|can only help|can't reveal|cannot reveal|public portfolio|portfolio context)\b|لا أستطيع|لا يمكنني|فقط/i;
 
@@ -94,7 +96,9 @@ export function evaluateAgentAnswer({
     evaluation,
     35,
     "missing-portfolio-grounding",
-    responseKind === "portfolio" && !PORTFOLIO_ANCHORS.test(trimmedAnswer)
+    responseKind === "portfolio" &&
+      !PORTFOLIO_ANCHORS.test(trimmedAnswer) &&
+      !BLOG_ANCHORS.test(trimmedAnswer)
   );
   deduct(
     evaluation,
