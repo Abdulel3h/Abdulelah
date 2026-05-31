@@ -233,7 +233,7 @@ export function AgentPanel() {
                     <p className="mt-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-sky-200/80">
                       {mode === "deepseek"
                         ? "AI-assisted portfolio mode"
-                        : mode === "fallback"
+                        : mode
                           ? "Portfolio-grounded mode"
                           : "Recruiter assistant"}
                     </p>

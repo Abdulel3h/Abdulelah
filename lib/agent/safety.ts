@@ -17,6 +17,7 @@ const PROTECTED_INFORMATION_RESPONSE =
 
 const PROMPT_INJECTION_PATTERNS = [
   /\bignore\b.{0,40}\b(previous|prior|above|system|developer)\b.{0,30}\binstructions?\b/i,
+  /\bignore\b.{0,30}\b(your|all|the)?\s*(instructions?|rules?|prompt|scope)\b/i,
   /\b(reveal|show|print|display|repeat|return|dump)\b.{0,45}\b(system prompt|hidden prompt|developer prompt|internal prompt|hidden instructions?)\b/i,
   /\b(act as|pretend to be|become)\b.{0,35}\b(another|different|unrestricted|general)\b.{0,20}\b(assistant|bot|ai)\b/i,
   /\b(bypass|override|disable|remove|break|evade)\b.{0,35}\b(restrictions?|rules?|guardrails?|safety|scope|instructions?)\b/i,
@@ -32,8 +33,11 @@ const SENSITIVE_REQUEST_PATTERNS = [
   /\b(disclose|reveal|show|print|dump)\b.{0,30}\b(secrets?|private|internal)\b/i
 ];
 
+const CODE_REQUEST_PATTERNS = [
+  /\b(write|generate|create|debug|fix|review|teach|show|give|help)\b.{0,45}\b(code|script|function|component|program)\b/i
+];
+
 const CLEARLY_UNRELATED_PATTERNS = [
-  /\b(write|generate|create|debug|fix|review|teach|show|give|help)\b.{0,45}\b(code|script|function|component|program|python|javascript|typescript|react|sql|html|css)\b/i,
   /\b(what is|explain|teach me|how (?:do|does|can|should|to))\b.{0,40}\b(react|next\.?js|python|javascript|typescript|programming|coding|algorithm|database|api)\b/i,
   /\b(politics?|election|president|religion|religious|medical|diagnosis|treatment|legal advice|financial advice|investment|stock|crypto|homework|current news|latest news|weather|random fact|capital of)\b/i,
   /\b(hack|exploit|malware|phishing|ransomware|ddos|sql injection|credential stuffing)\b/i
@@ -89,7 +93,7 @@ export function classifyAgentMessage(message: string): AgentSafetyResult {
     return { allowed: false, category: "sensitive-request" };
   }
 
-  if (matchesAny(message, CLEARLY_UNRELATED_PATTERNS)) {
+  if (matchesAny(message, CODE_REQUEST_PATTERNS)) {
     return { allowed: false, category: "out-of-scope" };
   }
 
@@ -113,6 +117,10 @@ export function classifyAgentMessage(message: string): AgentSafetyResult {
     matchesAny(message, PORTFOLIO_CONTEXT_PATTERNS)
   ) {
     return { allowed: true, category: "allowed" };
+  }
+
+  if (matchesAny(message, CLEARLY_UNRELATED_PATTERNS)) {
+    return { allowed: false, category: "out-of-scope" };
   }
 
   return { allowed: false, category: "out-of-scope" };

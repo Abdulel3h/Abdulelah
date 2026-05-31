@@ -6,13 +6,17 @@ export type AgentAction = {
   type: AgentActionType;
 };
 
-export type AgentMode = "deepseek" | "fallback";
+export type AgentMode = "deepseek" | "fallback" | "blocked";
 
 export type AgentDebugCode =
+  | "sent_to_deepseek"
+  | "blocked_out_of_scope"
+  | "blocked_prompt_injection"
   | "missing_key"
   | "invalid_response"
   | "request_failed"
-  | "model_error";
+  | "model_error"
+  | "evaluation_failed";
 
 export type AgentQuality = {
   score: number;

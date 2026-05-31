@@ -4,6 +4,7 @@ import { buildPortfolioContext } from "@/lib/agent/context";
 import {
   askDeepSeek,
   getDeepSeekErrorCode,
+  getDeepSeekModel,
   hasDeepSeekApiKey
 } from "@/lib/agent/deepseek";
 import {
@@ -27,28 +28,29 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const MAX_MESSAGE_LENGTH = 1_200;
-const IS_DEVELOPMENT = process.env.NODE_ENV === "development";
-
 function jsonAgentResponse(
   response: Omit<AgentApiResponse, "debugCode">,
   init?: ResponseInit,
   debugCode?: AgentDebugCode
 ) {
   if (debugCode) {
-    console.warn("[agent]", {
+    const logDetails = {
       mode: response.mode,
-      errorCode: debugCode
-    });
-  } else if (IS_DEVELOPMENT) {
-    console.info("[agent]", {
-      mode: response.mode
-    });
+      debugCode,
+      model: getDeepSeekModel()
+    };
+
+    if (response.mode === "deepseek") {
+      console.info("[agent]", logDetails);
+    } else {
+      console.warn("[agent]", logDetails);
+    }
   }
 
   return NextResponse.json<AgentApiResponse>(
     {
       ...response,
-      ...(IS_DEVELOPMENT && debugCode ? { debugCode } : {})
+      ...(debugCode ? { debugCode } : {})
     },
     init
   );
@@ -114,6 +116,30 @@ function fallbackResponse(
     message,
     { allowed: false, category: "out-of-scope" },
     getPortfolioRedirectActions(),
+    debugCode
+  );
+}
+
+function blockedResponse(safety: AgentSafetyResult) {
+  const actions = getPortfolioRedirectActions();
+  const answer = getSafetyRefusal(safety);
+  const evaluation = evaluateAgentAnswer({ actions, answer, safety });
+  const debugCode =
+    safety.category === "out-of-scope"
+      ? "blocked_out_of_scope"
+      : "blocked_prompt_injection";
+
+  return jsonAgentResponse(
+    {
+      answer,
+      actions,
+      mode: "blocked",
+      quality: {
+        score: evaluation.score,
+        passed: evaluation.passed
+      }
+    },
+    undefined,
     debugCode
   );
 }
@@ -194,7 +220,7 @@ export async function POST(request: Request) {
   const safety = classifyAgentMessage(message);
 
   if (!safety.allowed) {
-    return fallbackResponse(message, safety);
+    return blockedResponse(safety);
   }
 
   if (!hasDeepSeekApiKey()) {
@@ -207,7 +233,7 @@ export async function POST(request: Request) {
     const evaluation = evaluateAgentAnswer({ actions, answer, safety });
 
     if (!evaluation.passed) {
-      return fallbackResponse(message, safety, "model_error");
+      return fallbackResponse(message, safety, "evaluation_failed");
     }
 
     return jsonAgentResponse({
@@ -218,7 +244,7 @@ export async function POST(request: Request) {
         score: evaluation.score,
         passed: true
       }
-    });
+    }, undefined, "sent_to_deepseek");
   } catch (error) {
     return fallbackResponse(message, safety, getDeepSeekErrorCode(error));
   }
