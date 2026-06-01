@@ -46,6 +46,19 @@ const EXAGGERATED_CLAIM_PATTERNS = [
   /\b\d+(?:\.\d+)?%\b/
 ];
 
+const PROJECT_EVIDENCE_REQUIREMENTS = [
+  { answerPattern: /\bchatub\b/i, href: "/projects/chatub" },
+  { answerPattern: /\balthil\b/i, href: "/projects/althil" },
+  { answerPattern: /\babsher(?: insight ai)?\b/i, href: "/projects/absher-insight-ai" },
+  { answerPattern: /\bqanouni\b/i, href: "/projects/qanouni" },
+  { answerPattern: /\bmedad\b/i, href: "/projects/medad" },
+  { answerPattern: /\bvirtual astronauts?\b/i, href: "/projects/virtual-astronauts" }
+];
+
+const CV_ACTION_PATTERN = /\b(cv|resume)\b/i;
+const CONTACT_ACTION_PATTERN =
+  /\b(contact abdulelah|contact page|reach out|send abdulelah a message)\b/i;
+
 function deduct(
   state: AgentEvaluation,
   amount: number,
@@ -71,6 +84,9 @@ export function evaluateAgentAnswer({
     reasons: []
   };
   const trimmedAnswer = answer.trim();
+  const mentionedProjectRequirements = PROJECT_EVIDENCE_REQUIREMENTS.filter(
+    ({ answerPattern }) => answerPattern.test(trimmedAnswer)
+  );
 
   deduct(evaluation, 100, "missing-answer", !trimmedAnswer);
   deduct(evaluation, 20, "answer-too-long", trimmedAnswer.length > 1_800);
@@ -107,6 +123,33 @@ export function evaluateAgentAnswer({
     responseKind === "refusal" && !REFUSAL_ANCHORS.test(trimmedAnswer)
   );
   deduct(evaluation, 10, "missing-actions", actions.length === 0);
+  deduct(
+    evaluation,
+    4,
+    "missing-project-evidence-action",
+    mentionedProjectRequirements.length > 0 &&
+      !mentionedProjectRequirements.some(({ href }) =>
+        actions.some((action) => action.href === href)
+      )
+  );
+  deduct(
+    evaluation,
+    4,
+    "missing-cv-action",
+    CV_ACTION_PATTERN.test(trimmedAnswer) &&
+      !actions.some(
+        (action) => action.type === "download" || action.href === "/resume"
+      )
+  );
+  deduct(
+    evaluation,
+    4,
+    "missing-contact-action",
+    CONTACT_ACTION_PATTERN.test(trimmedAnswer) &&
+      !actions.some(
+        (action) => action.type === "contact" || action.href === "/contact"
+      )
+  );
 
   evaluation.score = Math.max(0, evaluation.score);
   evaluation.passed = evaluation.score >= MIN_AGENT_QUALITY_SCORE;

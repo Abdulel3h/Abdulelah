@@ -4,6 +4,8 @@ import { projects } from "@/data/projects";
 import { siteConfig } from "@/data/site";
 import { skillGroups } from "@/data/skills";
 import { journeyTimeline } from "@/data/timeline";
+import { getProjectContextGuide } from "@/lib/agent/project-guide";
+import { recruiterRoleProfiles } from "@/lib/agent/recruiter";
 
 function list(values: string[]) {
   return values.join(", ");
@@ -63,6 +65,20 @@ export function buildPortfolioContext() {
     )
     .join("\n");
 
+  const recruiterContext = recruiterRoleProfiles
+    .map(
+      (profile) =>
+        [
+          `- ${profile.label}`,
+          `  Fit summary: ${profile.fitSummary}`,
+          `  Best matching projects: ${list(profile.projects)}`,
+          `  Matching skills: ${list(profile.skills)}`,
+          `  Recommended CV: ${profile.recommendedCv}`,
+          `  Suggested next action: ${profile.nextAction}`
+        ].join("\n")
+    )
+    .join("\n");
+
   return [
     "PROFILE",
     `Name: ${siteConfig.name}`,
@@ -77,6 +93,14 @@ export function buildPortfolioContext() {
     "RESUMES",
     `- AI Engineer CV: ${siteConfig.resumes.engineer}. Best for technical AI development, NLP, LLMs, cloud deployment, and intelligent systems engineering roles.`,
     `- AI Specialist CV: ${siteConfig.resumes.specialist}. Best for AI solutions, business use cases, adoption, analysis, dashboards, and cross-functional implementation roles.`,
+    "",
+    "RECRUITER GUIDE",
+    "Use this guide for recruiter mode, role-fit questions, and CV recommendations. Keep recruiter answers concise and structured with a fit summary, matching projects, matching skills, recommended CV, and next action.",
+    recruiterContext,
+    "",
+    "PROJECT EXPLAINER GUIDE",
+    "For individual project questions, explain the problem, solution, Abdulelah's role, technologies, why it matters, best related job fit, and recommended CV. Support simple explanations, technical explanations, recruiter summaries, a 60-second portfolio tour, and structured comparisons.",
+    getProjectContextGuide(),
     "",
     "PROJECTS",
     projectContext,

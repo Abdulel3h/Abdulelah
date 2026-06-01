@@ -7,17 +7,18 @@ import { createPageMetadata } from "@/lib/metadata";
 export const metadata: Metadata = createPageMetadata({
   title: "Privacy Notice",
   description:
-    "A concise privacy notice for the Abdulelah AI portfolio, contact form, and Abdulelah AI Navigator.",
+    "A concise privacy notice for the Abdulelah AI portfolio, contact form, and Agent Abdulelah.",
   path: "/privacy"
 });
 
 const privacyPoints = [
   "This portfolio collects contact form submissions only when a visitor chooses to send a message.",
-  "A contact message may include a name, email address, company, and message content.",
-  "The Abdulelah AI Navigator may process visitor questions to answer portfolio-related queries.",
+  "A contact message may include a name, email address, company, selected intent, and message content.",
+  "Agent contact intent and message text are evaluated deterministically to suggest a follow-up priority. Private contact messages are not sent to DeepSeek.",
+  "Agent Abdulelah may process visitor questions to answer portfolio-related queries.",
   "API keys and server-side credentials are never exposed to the browser.",
   "Contact messages are sent to Abdulelah's email using Resend.",
-  "The AI Navigator is limited to Abdulelah Alkhathami's public portfolio context.",
+  "Agent Abdulelah is limited to Abdulelah Alkhathami's public portfolio context.",
   "Please do not submit sensitive personal, financial, medical, legal, or confidential information."
 ];
 

@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import { getAgentActions, getPortfolioRedirectActions } from "@/lib/agent/actions";
+import {
+  enrichAgentActions,
+  getAgentActions,
+  getPortfolioRedirectActions
+} from "@/lib/agent/actions";
 import { buildPortfolioContext } from "@/lib/agent/context";
 import {
   askDeepSeek,
@@ -119,8 +123,8 @@ function fallbackResponse(
   proof: Omit<AgentResponseProof, "mode">,
   startedAt: number
 ) {
-  const actions = getAgentActions(message);
   const answer = getFallbackAgentResponse(message);
+  const actions = enrichAgentActions(answer, getAgentActions(message));
   const evaluation = evaluateAgentAnswer({
     actions,
     answer,
@@ -286,8 +290,8 @@ export async function POST(request: Request) {
   }
 
   try {
-    const actions = getAgentActions(message);
     const answer = await askDeepSeek(message, buildPortfolioContext());
+    const actions = enrichAgentActions(answer, getAgentActions(message));
     const evaluation = evaluateAgentAnswer({
       actions,
       answer,

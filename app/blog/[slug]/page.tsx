@@ -132,14 +132,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               Ask a question or view applied work
             </h2>
             <p className="mt-5 text-base leading-8 text-slate-300">
-              Use the portfolio Navigator to explore this topic in context, or
+              Use Agent Abdulelah to explore this topic in context, or
               move into project case studies that show applied AI thinking.
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <AgentAskButton
                 prompt={`Explain the "${post.title}" article and how it relates to Abdulelah's portfolio.`}
               >
-                Ask Abdulelah AI about this topic
+                Ask Agent Abdulelah about this topic
               </AgentAskButton>
               <ButtonLink href="/projects" variant="secondary" showArrow className="w-full sm:w-auto">
                 View related projects

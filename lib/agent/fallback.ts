@@ -1,6 +1,29 @@
 import { getBlogPostBySlug } from "@/data/blog";
 import { getProjectBySlug } from "@/data/projects";
 import { siteConfig } from "@/data/site";
+import {
+  getCvRecommendation,
+  getCvRecommendationResponse,
+  getRecruiterModeResponse,
+  getRecruiterRoleProfile,
+  getRecruiterRoleResponse,
+  isCvRecommendationRequest,
+  isGeneralHiringFitRequest,
+  isRecruiterModeRequest
+} from "@/lib/agent/recruiter";
+import {
+  getMentionedProjectProfiles,
+  getPortfolioTourResponse,
+  getProjectComparisonMenuResponse,
+  getProjectComparisonResponse,
+  getProjectExplainerMenuResponse,
+  getProjectExplanationResponse,
+  getRequestedProjectDepth,
+  isPortfolioTourRequest,
+  isProjectComparisonMenuRequest,
+  isProjectComparisonRequest,
+  isProjectExplainerRequest
+} from "@/lib/agent/project-guide";
 import { classifyAgentMessage, getSafetyRefusal } from "@/lib/agent/safety";
 
 function includesAny(message: string, terms: string[]) {
@@ -35,6 +58,8 @@ export function getFallbackAgentResponse(message: string) {
   }
 
   const normalized = message.toLowerCase();
+  const recruiterRole = getRecruiterRoleProfile(message);
+  const mentionedProjects = getMentionedProjectProfiles(message);
   const wantsBlog = includesAny(normalized, [
     "article",
     "articles",
@@ -45,6 +70,45 @@ export function getFallbackAgentResponse(message: string) {
     "context matters",
     "prompts"
   ]);
+
+  if (isPortfolioTourRequest(message)) {
+    return getPortfolioTourResponse();
+  }
+
+  if (isProjectComparisonRequest(message)) {
+    return isProjectComparisonMenuRequest(message)
+      ? getProjectComparisonMenuResponse()
+      : getProjectComparisonResponse(mentionedProjects);
+  }
+
+  if (isProjectExplainerRequest(message) && mentionedProjects.length === 0) {
+    return getProjectExplainerMenuResponse();
+  }
+
+  if (mentionedProjects.length > 0) {
+    return getProjectExplanationResponse(
+      mentionedProjects[0],
+      getRequestedProjectDepth(message)
+    );
+  }
+
+  if (isRecruiterModeRequest(message)) {
+    return getRecruiterModeResponse();
+  }
+
+  if (recruiterRole) {
+    return getRecruiterRoleResponse(recruiterRole);
+  }
+
+  if (isCvRecommendationRequest(message)) {
+    return getCvRecommendationResponse(getCvRecommendation(message));
+  }
+
+  if (isGeneralHiringFitRequest(message)) {
+    return getRecruiterRoleResponse(
+      getRecruiterRoleProfile("General Hiring Fit")!
+    );
+  }
 
   if (
     includesAny(normalized, ["context engineering", "context matters", "prompts"]) ||
@@ -107,7 +171,7 @@ export function getFallbackAgentResponse(message: string) {
     (normalized.includes("compare") &&
       includesAny(normalized, ["ai engineer", "ai specialist", "profile"]))
   ) {
-    return "Choose the AI Engineer CV for technical roles involving AI development, NLP, LLMs, cloud deployment, and intelligent systems. Choose the AI Specialist CV for roles centered on AI solutions, adoption, analysis, dashboards, and cross-functional implementation. Both versions are available from the resume page.";
+    return getCvRecommendationResponse(getCvRecommendation(message));
   }
 
   if (includesAny(normalized, ["cloud", "azure", "vertex", "bigquery", "cloud run"])) {
@@ -131,11 +195,13 @@ export function getFallbackAgentResponse(message: string) {
   }
 
   if (includesAny(normalized, ["contact", "email", "reach", "connect"])) {
-    return `You can contact Abdulelah at ${siteConfig.email}. He is based in ${siteConfig.location}. You can also review his LinkedIn profile at ${siteConfig.social.linkedin} or GitHub at ${siteConfig.social.github}.`;
+    return `You can send Abdulelah a private message through Agent Abdulelah or the contact page. He is based in ${siteConfig.location}. You can also review his LinkedIn profile at ${siteConfig.social.linkedin} or GitHub at ${siteConfig.social.github}.`;
   }
 
   if (includesAny(normalized, ["hire", "recruiter", "different", "fresh graduate"])) {
-    return "Abdulelah is an Information Systems graduate and Junior AI Engineer with a portfolio of applied AI systems across education, sustainability, security, legal tech, fintech, and immersive learning. His strongest differentiators are project leadership on ChatUB, hands-on cloud AI work on Althil, security AI thinking through Absher Insight AI, and delivery experience shaped by national hackathons and training programs.";
+    return getRecruiterRoleResponse(
+      getRecruiterRoleProfile("General Hiring Fit")!
+    );
   }
 
   if (includesAny(normalized, ["strongest", "best project", "projects", "portfolio"])) {

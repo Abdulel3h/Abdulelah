@@ -13,7 +13,7 @@ const PORTFOLIO_SCOPE_RESPONSE =
   "I can only help with Abdulelah Alkhathami's portfolio, projects, blog insights, skills, resume, and contact information.";
 
 const PROTECTED_INFORMATION_RESPONSE =
-  "I can't reveal or override private instructions, secrets, or system details. I'm Abdulelah AI Navigator, so I can only help with Abdulelah Alkhathami's public portfolio, projects, blog insights, skills, resume, and contact information.";
+  "I can't reveal or override private instructions, secrets, or system details. I'm Agent Abdulelah, so I can only help with Abdulelah Alkhathami's public portfolio, projects, blog insights, skills, resume, and contact information.";
 
 const PROMPT_INJECTION_PATTERNS = [
   /\bignore\b.{0,40}\b(previous|prior|above|system|developer)\b.{0,30}\binstructions?\b/i,
@@ -29,7 +29,7 @@ const PROMPT_INJECTION_PATTERNS = [
 ];
 
 const SENSITIVE_REQUEST_PATTERNS = [
-  /\b(show|reveal|print|display|return|dump|give|list|expose|tell me|what are)\b.{0,35}\b(api[-_\s]?keys?|secret keys?|tokens?|credentials?|passwords?)\b/i,
+  /\b(show|reveal|print|display|return|dump|give|list|expose|tell me|what (?:is|are))\b.{0,35}\b(api[-_\s]?keys?|secret keys?|tokens?|credentials?|passwords?)\b/i,
   /\b(show|reveal|print|display|return|dump|give|list|expose)\b.{0,35}\b(environment variables?|env vars?|process\.env)\b/i,
   /\b(show|reveal|print|display|return|dump|give|list|expose)\b.{0,35}\b(server logs?|stack traces?|raw errors?)\b/i,
   /\b(show|reveal|print|display|return|dump|give|list|expose)\b.{0,35}\b(system prompts?|hidden prompts?|internal prompts?|hidden instructions?)\b/i,

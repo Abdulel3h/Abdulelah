@@ -29,7 +29,7 @@ export function AgentMessage({
   return (
     <article
       className={cn("flex gap-3", isAssistant ? "items-start" : "justify-end")}
-      aria-label={`${isAssistant ? "Abdulelah AI Navigator" : "You"} message`}
+      aria-label={`${isAssistant ? "Agent Abdulelah" : "You"} message`}
     >
       {isAssistant ? (
         <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-sky-300/25 bg-sky-300/10 text-sky-100">
@@ -55,14 +55,19 @@ export function AgentMessage({
         ) : null}
 
         {message.runtime && showRuntimeProof ? (
-          <p className="mt-2 border-t border-white/[0.07] pt-2 text-[10px] leading-4 text-slate-500">
-            Mode: {message.runtime.mode} | Model: {message.runtime.model} | Scope judge:{" "}
-            {message.runtime.scopeJudgeAttempted ? "yes" : "no"} | Scope allowed:{" "}
-            {message.runtime.scopeJudgeAllowed ? "yes" : "no"} | Provider attempted:{" "}
-            {message.runtime.providerAttempted ? "yes" : "no"} | Provider succeeded:{" "}
-            {message.runtime.providerSucceeded ? "yes" : "no"} | Duration:{" "}
-            {message.runtime.durationMs} ms | Code: {message.runtime.debugCode}
-          </p>
+          <details className="mt-2 border-t border-white/[0.07] pt-2 text-[10px] leading-4 text-slate-500">
+            <summary className="cursor-pointer text-slate-500/80 transition hover:text-slate-400">
+              Diagnostics: {message.runtime.mode} | {message.runtime.debugCode} |{" "}
+              {message.runtime.durationMs} ms
+            </summary>
+            <p className="mt-1 [overflow-wrap:anywhere]">
+              Model: {message.runtime.model} | Scope judge:{" "}
+              {message.runtime.scopeJudgeAttempted ? "yes" : "no"} | Scope allowed:{" "}
+              {message.runtime.scopeJudgeAllowed ? "yes" : "no"} | Provider attempted:{" "}
+              {message.runtime.providerAttempted ? "yes" : "no"} | Provider succeeded:{" "}
+              {message.runtime.providerSucceeded ? "yes" : "no"}
+            </p>
+          </details>
         ) : null}
 
         {message.actions?.length ? (

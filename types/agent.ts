@@ -1,10 +1,24 @@
-export type AgentActionType = "internal" | "external" | "download" | "contact";
+export type AgentActionType =
+  | "internal"
+  | "external"
+  | "download"
+  | "contact"
+  | "prompt";
 
-export type AgentAction = {
+type AgentLinkAction = {
   label: string;
   href: string;
-  type: AgentActionType;
+  type: Exclude<AgentActionType, "prompt">;
 };
+
+type AgentPromptAction = {
+  label: string;
+  href: string;
+  prompt: string;
+  type: "prompt";
+};
+
+export type AgentAction = AgentLinkAction | AgentPromptAction;
 
 export type AgentMode = "deepseek" | "fallback" | "blocked";
 

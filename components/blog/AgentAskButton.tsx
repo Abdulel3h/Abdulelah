@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 export const OPEN_AGENT_EVENT = "open-abdulelah-ai";
 
 export function AgentAskButton({
-  children = "Ask Abdulelah AI",
+  children = "Ask Agent Abdulelah",
   className,
   prompt,
   variant = "gold"

@@ -21,18 +21,18 @@ const INITIAL_MESSAGE: AgentChatMessage = {
   id: "welcome",
   role: "assistant",
   content:
-    "Hi, I'm Abdulelah AI Navigator. I can help you explore Abdulelah's projects, AI insights, skills, achievements, and the best resume version for your hiring needs."
+    "Hi, I\u2019m Agent Abdulelah. I can help you explore Abdulelah Alkhathami\u2019s projects, skills, achievements, resume, and hiring fit."
 };
 
 const suggestions = [
-  "Why hire Abdulelah?",
-  "Show strongest projects",
-  "Explain ChatUB",
-  "Cloud AI experience",
-  "Security AI experience",
-  "What should I read first?",
+  "Recruiter Mode",
   "Which CV should I download?",
-  "Contact Abdulelah"
+  "Start portfolio tour",
+  "Explain a project",
+  "Compare projects",
+  "Explain ChatUB",
+  "Explain Althil",
+  "Explain Absher Insight AI"
 ];
 
 class AgentRequestError extends Error {}
@@ -212,6 +212,11 @@ export function AgentPanel() {
   }
 
   function handleAction(action: AgentAction) {
+    if (action.type === "prompt") {
+      void sendMessage(action.prompt);
+      return;
+    }
+
     if (action.type === "contact") {
       setIsContactFormOpen(true);
       return;
@@ -241,7 +246,7 @@ export function AgentPanel() {
           <>
             <motion.button
               type="button"
-              aria-label="Close Abdulelah AI Navigator"
+              aria-label="Close Agent Abdulelah"
               className="fixed inset-0 z-[39] bg-slate-950/55 backdrop-blur-sm"
               initial={reduceMotion ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -268,10 +273,10 @@ export function AgentPanel() {
                   </span>
                   <div className="min-w-0">
                     <h2 id="agent-panel-title" className="text-base font-semibold text-white">
-                      Abdulelah AI Navigator
+                      Agent Abdulelah
                     </h2>
                     <p id="agent-panel-description" className="mt-1 text-xs leading-5 text-slate-400">
-                      Ask about projects, insights, skills, resume, or hiring fit.
+                      Ask about Abdulelah&rsquo;s projects, skills, resume, and hiring fit.
                     </p>
                     <p className="mt-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-sky-200/80">
                       {getModeLabel(mode)}
@@ -292,7 +297,7 @@ export function AgentPanel() {
                     type="button"
                     onClick={closePanel}
                     className="focus-ring grid h-9 w-9 place-items-center rounded-full border border-white/10 text-slate-400 transition hover:border-sky-300/35 hover:text-white"
-                    aria-label="Close Abdulelah AI Navigator"
+                    aria-label="Close Agent Abdulelah"
                   >
                     <X className="h-4 w-4" aria-hidden="true" />
                   </button>
@@ -348,7 +353,7 @@ export function AgentPanel() {
                       <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-sky-200" />
                       <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-violet-300 [animation-delay:160ms]" />
                       <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-200 [animation-delay:320ms]" />
-                      <span className="sr-only">Abdulelah AI Navigator is preparing a response.</span>
+                      <span className="sr-only">Agent Abdulelah is preparing a response.</span>
                     </span>
                   </div>
                 ) : null}
@@ -368,7 +373,7 @@ export function AgentPanel() {
                     value={input}
                     onChange={(event) => setInput(event.target.value)}
                     placeholder="Ask about Abdulelah's portfolio..."
-                    aria-label="Ask Abdulelah AI Navigator a question"
+                    aria-label="Ask Agent Abdulelah a question"
                     maxLength={1_200}
                     disabled={isLoading}
                     className="min-w-0 flex-1"

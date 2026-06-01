@@ -18,14 +18,14 @@ export function BlogCTA({
               Want to explore my applied AI work?
             </h2>
             <p className="mt-5 text-base leading-8 text-slate-300">
-              Continue from practical ideas into project case studies, ask the AI
-              Navigator about a topic, or download a role-focused resume.
+              Continue from practical ideas into project case studies, ask Agent
+              Abdulelah about a topic, or download a role-focused resume.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <ButtonLink href="/projects" showArrow className="w-full sm:w-auto">
                 View Projects
               </ButtonLink>
-              <AgentAskButton prompt={prompt}>Ask Abdulelah AI</AgentAskButton>
+              <AgentAskButton prompt={prompt}>Ask Agent Abdulelah</AgentAskButton>
               <ButtonLink
                 href={siteConfig.resumes.engineer}
                 variant="secondary"

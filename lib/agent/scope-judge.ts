@@ -24,7 +24,7 @@ export type ScopeJudgeDecision = ScopeJudgeResult & {
 };
 
 const SCOPE_JUDGE_PROMPT =
-  'You are a strict scope classifier for Abdulelah AI Navigator. Decide if the user\'s question is about Abdulelah Alkhathami\'s public portfolio, projects, blog articles, AI insights, skills, achievements, resume, contact information, hiring fit, or website navigation. Allow related Arabic, English, and Saudi/Najdi phrasing. If unclear but reasonably portfolio-related, allow it. Return JSON only: {"allowed":boolean,"reason":"portfolio_related|recruiter_related|contact_related|resume_related|project_related|unrelated|unclear","confidence":number}. Do not answer the question.';
+  'You are a strict scope classifier for Agent Abdulelah. Decide if the user\'s question is about Abdulelah Alkhathami\'s public portfolio, projects, project explanations, project comparisons, portfolio tour, blog articles, AI insights, skills, achievements, resume, contact information, hiring fit, recruiter mode, role matching, CV selection, or website navigation. Allow related Arabic, English, and Saudi/Najdi phrasing. If unclear but reasonably portfolio-related, allow it. Return JSON only: {"allowed":boolean,"reason":"portfolio_related|recruiter_related|contact_related|resume_related|project_related|unrelated|unclear","confidence":number}. Do not answer the question.';
 
 const VALID_REASONS = new Set<ScopeJudgeReason>([
   "portfolio_related",
@@ -69,6 +69,12 @@ const PORTFOLIO_TERMS = [
   "github",
   "hire",
   "recruiter",
+  "hiring",
+  "role",
+  "position",
+  "match him",
+  "ai engineer",
+  "ai specialist",
   "cloud",
   "nlp",
   "llm",
@@ -81,6 +87,11 @@ const PORTFOLIO_TERMS = [
   "context engineering",
   "education ai",
   "ai product thinking",
+  "portfolio tour",
+  "project explainer",
+  "compare projects",
+  "difference between",
+  "explain",
   "website",
   "مشروع",
   "مشاريع",
@@ -99,6 +110,11 @@ const PORTFOLIO_TERMS = [
   "الكلاود",
   "السحابة",
   "الذكاء الاصطناعي",
+  "اشرح",
+  "جولة",
+  "قارن",
+  "الفرق",
+  "وش مشروع",
   "الموقع"
 ];
 
@@ -108,11 +124,25 @@ const RECRUITER_TERMS = [
   "hiring fit",
   "compare him",
   "his experience",
+  "recruiter mode",
+  "match him to a role",
+  "match him to this role",
+  "ai engineer",
+  "ai specialist",
+  "junior ai engineer",
+  "ai solutions specialist",
+  "ai solutions engineer",
+  "cloud ai / data role",
+  "internship",
+  "coop",
   "وش يميزه",
   "ليش نوظفه",
   "وش خبرته",
   "عطيني ملخص عنه",
-  "ملخص للريكروتر"
+  "ملخص للريكروتر",
+  "اي سيرة احمل",
+  "هل يناسب وظيفة ai engineer",
+  "هل يناسب وظيفة ai specialist"
 ];
 
 const UNRELATED_TERMS = [
@@ -205,7 +235,7 @@ export function judgePortfolioScopeLocally(message: string): ScopeJudgeResult {
   ) {
     return {
       allowed: true,
-      reason: includesAny(normalized, ["project", "projects", "مشروع", "مشاريع", "chatub", "althil", "الظل", "absher", "ابشر"])
+      reason: includesAny(normalized, ["project", "projects", "مشروع", "مشاريع", "chatub", "althil", "الظل", "absher", "ابشر", "qanouni", "قانوني", "medad", "مداد", "virtual astronauts", "compare", "قارن", "الفرق", "اشرح", "جولة"])
         ? "project_related"
         : "portfolio_related",
       confidence: 0.85

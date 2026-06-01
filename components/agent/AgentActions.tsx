@@ -1,4 +1,4 @@
-import { ArrowUpRight, Download } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Download } from "lucide-react";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -11,28 +11,39 @@ export function AgentActions({
   actions: AgentAction[];
   onAction?: (action: AgentAction) => void;
 }) {
+  const promptActions = actions.filter((action) => action.type === "prompt");
+  const evidenceActions = actions
+    .filter((action) => action.type !== "prompt")
+    .slice(0, 5);
+  const visibleActions = [...promptActions, ...evidenceActions];
+
   return (
     <div className="mt-3 flex flex-wrap gap-2">
-      {actions.map((action) => {
+      {visibleActions.map((action) => {
         const className = cn(
           buttonVariants({
             variant: action.type === "download" ? "gold" : "outline",
             size: "sm"
           }),
-          "h-auto min-h-9 whitespace-normal px-3 py-2 text-left text-xs"
+          "h-auto whitespace-normal text-left",
+          action.type === "prompt"
+            ? "min-h-8 rounded-full px-2.5 py-1.5 text-[11px]"
+            : "min-h-9 px-3 py-2 text-xs"
         );
         const content = (
           <>
             {action.label}
             {action.type === "download" ? (
               <Download className="h-3.5 w-3.5" aria-hidden="true" />
+            ) : action.type === "prompt" ? (
+              <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
             ) : (
               <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
             )}
           </>
         );
 
-        if (action.type === "contact") {
+        if (action.type === "contact" || action.type === "prompt") {
           return (
             <button
               key={action.href}
