@@ -18,14 +18,14 @@ export function AgentActions({
   const visibleActions = [...promptActions, ...evidenceActions];
 
   return (
-    <div className="mt-3 flex flex-wrap gap-2">
+    <div dir="ltr" className="mt-3 flex flex-wrap gap-2 text-left">
       {visibleActions.map((action) => {
         const className = cn(
           buttonVariants({
             variant: action.type === "download" ? "gold" : "outline",
             size: "sm"
           }),
-          "h-auto whitespace-normal text-left",
+          "h-auto max-w-full whitespace-normal text-left [overflow-wrap:anywhere]",
           action.type === "prompt"
             ? "min-h-8 rounded-full px-2.5 py-1.5 text-[11px]"
             : "min-h-9 px-3 py-2 text-xs"

@@ -231,6 +231,7 @@ function getProjectDepthActions(profile: ProjectGuideProfile) {
       `Explain ${profile.shortName} for a recruiter`
     ),
     projectViewActions[profile.slug],
+    actions.projects,
     actions.skills,
     getProjectCvAction(profile),
     actions.navigatorContact
@@ -299,6 +300,15 @@ function includesAny(message: string, terms: string[]) {
   return terms.some((term) => message.includes(term));
 }
 
+function normalizeActionText(message: string) {
+  return message
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u064B-\u065F\u0670]/g, "")
+    .replace(/[أإآ]/g, "ا")
+    .replace(/ى/g, "ي");
+}
+
 const MAX_EVIDENCE_ACTIONS = 5;
 const projectEvidenceMatchers = [
   {
@@ -331,7 +341,7 @@ export function enrichAgentActions(
   answer: string,
   initialActions: AgentAction[]
 ) {
-  const normalized = answer.toLowerCase();
+  const normalized = normalizeActionText(answer);
   const promptActions = initialActions.filter((action) => action.type === "prompt");
   const evidenceActions: AgentAction[] = initialActions.filter(
     (action) => action.type !== "prompt"
@@ -358,7 +368,13 @@ export function enrichAgentActions(
       "cloud",
       "security",
       "dashboard",
-      "analytics"
+      "analytics",
+      "مهارات",
+      "خبرة",
+      "كلاود",
+      "السحابة",
+      "الامن",
+      "لوحة معلومات"
     ])
   ) {
     add(actions.skills);
@@ -373,7 +389,7 @@ export function enrichAgentActions(
   }
 
   if (
-    includesAny(normalized, ["cv", "resume"]) &&
+    includesAny(normalized, ["cv", "resume", "سيرة"]) &&
     !evidenceActions.some((action) => action.type === "download")
   ) {
     add(actions.resume);
@@ -387,7 +403,11 @@ export function enrichAgentActions(
       "hiring",
       "hire",
       "recruiter",
-      "open role"
+      "open role",
+      "تواصل",
+      "التواصل",
+      "اتواصل",
+      "توظيف"
     ])
   ) {
     add(actions.navigatorContact);
@@ -397,7 +417,7 @@ export function enrichAgentActions(
 }
 
 export function getAgentActions(message: string): AgentAction[] {
-  const normalized = message.toLowerCase();
+  const normalized = normalizeActionText(message);
   const results: AgentAction[] = [];
   const recruiterRole = getRecruiterRoleProfile(message);
   const mentionedProjects = getMentionedProjectProfiles(message);
@@ -409,7 +429,10 @@ export function getAgentActions(message: string): AgentAction[] {
     "read",
     "context engineering",
     "context matters",
-    "prompts"
+    "prompts",
+    "مقال",
+    "مقالات",
+    "وش كتب"
   ]);
 
   function add(...nextActions: AgentAction[]) {
@@ -500,7 +523,9 @@ export function getAgentActions(message: string): AgentAction[] {
       "shade",
       "google cloud",
       "sustainability",
-      "cloud"
+      "cloud",
+      "الكلاود",
+      "السحابة"
     ])
   ) {
     add(actions.althil);
@@ -510,12 +535,25 @@ export function getAgentActions(message: string): AgentAction[] {
     add(actions.absher);
   }
 
-  if (includesAny(normalized, ["nlp", "llm", "agent", "skill", "cloud"])) {
+  if (
+    includesAny(normalized, [
+      "nlp",
+      "llm",
+      "agent",
+      "skill",
+      "cloud",
+      "مهارات",
+      "يعرف",
+      "خبرة",
+      "الكلاود",
+      "السحابة"
+    ])
+  ) {
     add(actions.skills);
   }
 
   if (
-    includesAny(normalized, ["cv", "resume"]) ||
+    includesAny(normalized, ["cv", "resume", "سيرة"]) ||
     (normalized.includes("compare") &&
       includesAny(normalized, ["ai engineer", "ai specialist", "profile"]))
   ) {
@@ -530,7 +568,17 @@ export function getAgentActions(message: string): AgentAction[] {
     add(actions.linkedin);
   }
 
-  if (includesAny(normalized, ["contact", "email", "reach", "connect"])) {
+  if (
+    includesAny(normalized, [
+      "contact",
+      "email",
+      "reach",
+      "connect",
+      "تواصل",
+      "اتواصل",
+      "ايميل"
+    ])
+  ) {
     add(actions.navigatorContact, actions.contact, actions.linkedin);
   }
 
@@ -543,7 +591,13 @@ export function getAgentActions(message: string): AgentAction[] {
       "projects",
       "strongest",
       "best",
-      "different"
+      "different",
+      "مشروع",
+      "مشاريع",
+      "اقوي",
+      "افضل",
+      "نوظف",
+      "توظيف"
     ])
   ) {
     add(actions.projects, actions.resume, actions.navigatorContact);

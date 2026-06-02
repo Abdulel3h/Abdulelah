@@ -25,6 +25,7 @@ import {
   isProjectExplainerRequest
 } from "@/lib/agent/project-guide";
 import { classifyAgentMessage, getSafetyRefusal } from "@/lib/agent/safety";
+import { containsArabic } from "@/lib/text-direction";
 
 function includesAny(message: string, terms: string[]) {
   return terms.some((term) => message.includes(term));
@@ -47,7 +48,136 @@ function blogPostSummary(slug: string) {
     return "";
   }
 
-  return `Read "${post.title}" in Abdulelah AI Insights. ${post.excerpt} Key takeaway: ${post.content.takeaway} Article: /blog/${post.slug}`;
+  return `Read "${post.title}" in Abdulelah AI Insights. ${post.excerpt} Key takeaway: ${post.content.takeaway}`;
+}
+
+function normalizeArabicMessage(message: string) {
+  return message
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u064B-\u065F\u0670]/g, "")
+    .replace(/[أإآ]/g, "ا")
+    .replace(/ى/g, "ي");
+}
+
+function getArabicFallbackAgentResponse(message: string) {
+  const normalized = normalizeArabicMessage(message);
+
+  if (includesAny(normalized, ["سيرة", "cv"])) {
+    return [
+      "لدى عبدالإله نسختان من السيرة الذاتية حسب نوع الدور:",
+      "",
+      "- AI Engineer CV: مناسب للأدوار التقنية التي تركز على NLP و LLMs و Cloud AI وتطوير الأنظمة الذكية.",
+      "- AI Specialist CV: مناسب لأدوار تبني حلول AI وتحليل حالات الاستخدام ولوحات المعلومات.",
+      "",
+      "يمكنك تنزيل السيرة المناسبة من أزرار الإجراءات بالأسفل."
+    ].join("\n");
+  }
+
+  if (includesAny(normalized, ["تواصل", "اتواصل", "ايميل", "لينكد", "github"])) {
+    return "يمكنك التواصل مع عبدالإله من خلال نموذج الرسائل الخاص أو صفحة التواصل. ستجد خيارات التواصل المناسبة في أزرار الإجراءات بالأسفل.";
+  }
+
+  if (includesAny(normalized, ["مقال", "مقالات", "كتب عن"])) {
+    return [
+      "كتب عبدالإله مقالات عن بناء أنظمة AI عملية، ومنها موضوعات مثل Context Engineering و AI Agents والأمن الرقمي الاستباقي والتخطيط الحضري الذكي.",
+      "",
+      "يمكنك استعراض المقالات من زر الإجراءات بالأسفل."
+    ].join("\n");
+  }
+
+  if (includesAny(normalized, ["chatub", "شات"])) {
+    return [
+      "ChatUB هو مشروع تخرج قاده عبدالإله لبناء مساعد أكاديمي محلي لطلاب جامعة بيشة.",
+      "",
+      "يركز المشروع على:",
+      "- استخدام المصادر الأكاديمية الرسمية",
+      "- تطبيقات NLP و LLMs",
+      "- البحث الذكي والإجابات المرتبطة بالسياق",
+      "- الخصوصية والموثوقية",
+      "",
+      "أهمية المشروع أنه يوضح قدرة عبدالإله على تحويل احتياج جامعي حقيقي إلى نظام AI عملي."
+    ].join("\n");
+  }
+
+  if (includesAny(normalized, ["althil", "الظل"])) {
+    return [
+      "Althil من أقوى أمثلة عبدالإله في Cloud AI والاستدامة.",
+      "",
+      "يستخدم المشروع خدمات Google Cloud مثل:",
+      "- Cloud Run",
+      "- BigQuery",
+      "- Cloud Storage",
+      "- Vertex AI",
+      "",
+      "الهدف هو دعم قرارات تحسين الراحة الحرارية في المدن باستخدام البيانات والتحليل الذكي."
+    ].join("\n");
+  }
+
+  if (includesAny(normalized, ["absher", "ابشر", "أبشر", "امن", "الأمن"])) {
+    return [
+      "Absher Insight AI هو مفهوم للأمن الرقمي الاستباقي شارك فيه عبدالإله.",
+      "",
+      "يركز على:",
+      "- UEBA وتحليل السلوك",
+      "- اكتشاف الأنماط غير المعتادة",
+      "- توقع المخاطر قبل وقوع الحوادث",
+      "- عرض النتائج في لوحة معلومات تساعد على اتخاذ القرار"
+    ].join("\n");
+  }
+
+  if (includesAny(normalized, ["كلاود", "سحابة", "cloud", "google cloud", "azure"])) {
+    return [
+      "لدى عبدالإله خبرة تطبيقية في Cloud AI من خلال مشاريع تستخدم Google Cloud و Azure AI Services.",
+      "",
+      "أبرز مثال هو Althil، ويشمل:",
+      "- Cloud Run",
+      "- BigQuery",
+      "- Cloud Storage",
+      "- Vertex AI",
+      "",
+      "كما يضيف مشروع Qanouni خبرة في Azure AI Services وتكامل النماذج."
+    ].join("\n");
+  }
+
+  if (includesAny(normalized, ["اقوي مشروع", "افضل مشروع", "مشاريعه", "مشاريع"])) {
+    return [
+      "أقوى نقطة بداية في مشاريع عبدالإله هي:",
+      "",
+      "- ChatUB: مساعد أكاديمي محلي يعتمد على NLP و LLMs",
+      "- Althil: منصة Cloud AI للاستدامة باستخدام Google Cloud",
+      "- Absher Insight AI: مفهوم للأمن الرقمي الاستباقي وتحليل السلوك",
+      "",
+      "هذه المشاريع توضح تنوع خبرته وقدرته على بناء حلول مرتبطة بسياق حقيقي."
+    ].join("\n");
+  }
+
+  if (includesAny(normalized, ["يعرف", "مهارات", "خبرته", "وش عنده", "وش يميز"])) {
+    return [
+      "يركز عبدالإله على بناء حلول AI تطبيقية مرتبطة بمشكلات حقيقية.",
+      "",
+      "من أبرز مهاراته:",
+      "- Python وتكامل واجهات API",
+      "- NLP و LLM Applications",
+      "- Cloud AI باستخدام Google Cloud و Azure AI Services",
+      "- AI Agents والبحث الذكي",
+      "- تحليل البيانات ولوحات المعلومات",
+      "",
+      "يمكنك استعراض المشاريع والسيرة من أزرار الإجراءات بالأسفل."
+    ].join("\n");
+  }
+
+  return [
+    "عبدالإله الخثعمي خريج نظم معلومات ومهتم ببناء حلول ذكاء اصطناعي تطبيقية.",
+    "",
+    "يركز عمله على:",
+    "- أنظمة AI تعليمية مثل ChatUB",
+    "- حلول Cloud AI مثل Althil باستخدام Google Cloud",
+    "- مفاهيم الأمن الرقمي الاستباقي مثل Absher Insight AI",
+    "- تطبيقات NLP و LLMs و AI Agents",
+    "",
+    "للتوظيف، أفضل نقطة قوة لديه هي أنه يبني نماذج عملية مرتبطة بسياق حقيقي."
+  ].join("\n");
 }
 
 export function getFallbackAgentResponse(message: string) {
@@ -55,6 +185,10 @@ export function getFallbackAgentResponse(message: string) {
 
   if (!safety.allowed) {
     return getSafetyRefusal(safety, message);
+  }
+
+  if (containsArabic(message)) {
+    return getArabicFallbackAgentResponse(message);
   }
 
   const normalized = message.toLowerCase();
@@ -195,7 +329,7 @@ export function getFallbackAgentResponse(message: string) {
   }
 
   if (includesAny(normalized, ["contact", "email", "reach", "connect"])) {
-    return `You can send Abdulelah a private message through Agent Abdulelah or the contact page. He is based in ${siteConfig.location}. You can also review his LinkedIn profile at ${siteConfig.social.linkedin} or GitHub at ${siteConfig.social.github}.`;
+    return `You can send Abdulelah a private message through Agent Abdulelah or the contact page. He is based in ${siteConfig.location}. Use the action buttons below to open his LinkedIn profile or GitHub.`;
   }
 
   if (includesAny(normalized, ["hire", "recruiter", "different", "fresh graduate"])) {

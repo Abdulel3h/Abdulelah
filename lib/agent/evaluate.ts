@@ -59,6 +59,9 @@ const CV_ACTION_PATTERN = /\b(cv|resume)\b/i;
 const CONTACT_ACTION_PATTERN =
   /\b(contact abdulelah|contact page|reach out|send abdulelah a message)\b/i;
 
+const RAW_NAVIGATION_PATTERN =
+  /https?:\/\/|\/(?:resume|projects|blog|skills|contact)(?:\/[a-z0-9-]+)*\/?/i;
+
 function deduct(
   state: AgentEvaluation,
   amount: number,
@@ -95,6 +98,12 @@ export function evaluateAgentAnswer({
     100,
     "protected-information-risk",
     SECRET_LEAK_PATTERNS.some((pattern) => pattern.test(trimmedAnswer))
+  );
+  deduct(
+    evaluation,
+    100,
+    "raw-navigation-risk",
+    RAW_NAVIGATION_PATTERN.test(trimmedAnswer)
   );
   deduct(
     evaluation,

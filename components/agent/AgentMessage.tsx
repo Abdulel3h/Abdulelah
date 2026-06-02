@@ -1,5 +1,6 @@
 import { Bot, UserRound } from "lucide-react";
 import { AgentActions } from "@/components/agent/AgentActions";
+import { AgentFormattedMessage } from "@/components/agent/AgentFormattedMessage";
 import { cn } from "@/lib/utils";
 import type { AgentAction, AgentChatMessage } from "@/types/agent";
 
@@ -37,23 +38,29 @@ export function AgentMessage({
 
       <div
         className={cn(
-          "max-w-[88%] rounded-2xl border px-4 py-3 text-sm leading-6",
+          "min-w-0 max-w-[92%] overflow-hidden rounded-2xl border px-4 py-3 text-sm sm:max-w-[90%]",
           isAssistant
             ? "border-white/10 bg-white/[0.045] text-slate-200"
             : "border-gold/25 bg-gold/[0.11] text-amber-50",
           message.isError && "border-rose-300/25 bg-rose-400/[0.08] text-rose-100"
         )}
       >
-        <p className="whitespace-pre-wrap">{message.content}</p>
+        <AgentFormattedMessage content={message.content} />
 
         {message.mode ? (
-          <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+          <p
+            dir="ltr"
+            className="mt-2 text-left text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500"
+          >
             {getModeLabel()}
           </p>
         ) : null}
 
         {message.runtime ? (
-          <details className="mt-2 border-t border-white/[0.07] pt-2 text-[10px] leading-4 text-slate-500">
+          <details
+            dir="ltr"
+            className="mt-2 border-t border-white/[0.07] pt-2 text-left text-[10px] leading-4 text-slate-500"
+          >
             <summary className="cursor-pointer text-slate-500/80 transition hover:text-slate-400">
               Runtime details
             </summary>
