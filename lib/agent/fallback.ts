@@ -2,6 +2,12 @@ import { getBlogPostBySlug } from "@/data/blog";
 import { getProjectBySlug } from "@/data/projects";
 import { siteConfig } from "@/data/site";
 import {
+  EMPTY_AGENT_SESSION_CONTEXT,
+  getProjectFollowUpKind,
+  isContinueAnswerRequest,
+  resolveAgentFollowUp
+} from "@/lib/agent/context";
+import {
   getCvRecommendation,
   getCvRecommendationResponse,
   getRecruiterModeResponse,
@@ -9,7 +15,8 @@ import {
   getRecruiterRoleResponse,
   isCvRecommendationRequest,
   isGeneralHiringFitRequest,
-  isRecruiterModeRequest
+  isRecruiterModeRequest,
+  type RecruiterCvRecommendation
 } from "@/lib/agent/recruiter";
 import {
   getMentionedProjectProfiles,
@@ -18,14 +25,17 @@ import {
   getProjectComparisonResponse,
   getProjectExplainerMenuResponse,
   getProjectExplanationResponse,
+  getProjectGuideProfiles,
   getRequestedProjectDepth,
   isPortfolioTourRequest,
   isProjectComparisonMenuRequest,
   isProjectComparisonRequest,
-  isProjectExplainerRequest
+  isProjectExplainerRequest,
+  type ProjectGuideProfile
 } from "@/lib/agent/project-guide";
 import { classifyAgentMessage, getSafetyRefusal } from "@/lib/agent/safety";
 import { containsArabic } from "@/lib/text-direction";
+import type { AgentSessionContext } from "@/types/agent";
 
 function includesAny(message: string, terms: string[]) {
   return terms.some((term) => message.includes(term));
@@ -58,6 +68,228 @@ function normalizeArabicMessage(message: string) {
     .replace(/[\u064B-\u065F\u0670]/g, "")
     .replace(/[أإآ]/g, "ا")
     .replace(/ى/g, "ي");
+}
+
+function getSessionProjectProfile(sessionContext: AgentSessionContext) {
+  return sessionContext.lastProject
+    ? getProjectGuideProfiles().find(
+        (profile) => profile.shortName === sessionContext.lastProject
+      )
+    : undefined;
+}
+
+function getProjectFollowUpResponse(
+  message: string,
+  sessionContext: AgentSessionContext
+) {
+  const kind = getProjectFollowUpKind(message);
+
+  if (!kind) {
+    return null;
+  }
+
+  const profile =
+    getMentionedProjectProfiles(message)[0] ??
+    getSessionProjectProfile(sessionContext);
+
+  if (!profile) {
+    if (kind === "recruiter-summary") {
+      return null;
+    }
+
+    return containsArabic(message)
+      ? "حدد اسم المشروع أولًا، مثل ChatUB أو Althil، وبعدها أشرح لك التفاصيل."
+      : "Please name a project first, such as ChatUB or Althil, and I will explain the details.";
+  }
+
+  const project = getProjectBySlug(profile.slug);
+
+  if (!project) {
+    return null;
+  }
+
+  if (containsArabic(message)) {
+    if (kind === "technologies") {
+      return [
+        `التقنيات المستخدمة في ${profile.shortName}:`,
+        ...project.technologies.map((technology) => `- ${technology}`)
+      ].join("\n");
+    }
+
+    if (kind === "role") {
+      return [
+        `دور عبدالإله في ${profile.shortName}: ${project.role}.`,
+        "",
+        ...project.responsibilities
+          .slice(0, 4)
+          .map((responsibility) => `- ${responsibility}`)
+      ].join("\n");
+    }
+
+    if (kind === "impact") {
+      return `أهمية ${profile.shortName}: ${project.impact}`;
+    }
+
+    if (kind === "technical") {
+      return [
+        `شرح تقني مختصر لمشروع ${profile.shortName}:`,
+        ...project.technicalApproach.map((step) => `- ${step}`)
+      ].join("\n");
+    }
+
+    return [
+      `ملخص ${profile.shortName} للريكروتر:`,
+      `- المجال: ${project.category}`,
+      `- دور عبدالإله: ${project.role}`,
+      `- أبرز التقنيات: ${project.technologies.join(", ")}`,
+      `- الأثر: ${project.impact}`,
+      `- أنسب مسار وظيفي: ${profile.bestJobFit}`
+    ].join("\n");
+  }
+
+  if (kind === "technologies") {
+    return [
+      `Technologies used in ${profile.shortName}:`,
+      ...project.technologies.map((technology) => `- ${technology}`)
+    ].join("\n");
+  }
+
+  if (kind === "role") {
+    return [
+      `Abdulelah's role in ${profile.shortName}: ${project.role}.`,
+      "",
+      ...project.responsibilities
+        .slice(0, 4)
+        .map((responsibility) => `- ${responsibility}`)
+    ].join("\n");
+  }
+
+  if (kind === "impact") {
+    return `Why ${profile.shortName} matters: ${project.impact}`;
+  }
+
+  if (kind === "technical") {
+    return [
+      `Technical explanation: ${profile.shortName}`,
+      ...project.technicalApproach.map((step) => `- ${step}`)
+    ].join("\n");
+  }
+
+  return [
+    `Recruiter summary: ${profile.shortName}`,
+    `- Domain: ${project.category}`,
+    `- Abdulelah's role: ${project.role}`,
+    `- Technologies: ${project.technologies.join(", ")}`,
+    `- Impact: ${project.impact}`,
+    `- Best related job fit: ${profile.bestJobFit}`
+  ].join("\n");
+}
+
+function getContinueFallbackResponse(
+  message: string,
+  sessionContext: AgentSessionContext
+) {
+  if (!isContinueAnswerRequest(message)) {
+    return null;
+  }
+
+  if (sessionContext.lastProject) {
+    const profile = getSessionProjectProfile(sessionContext);
+    const project = profile ? getProjectBySlug(profile.slug) : undefined;
+
+    if (profile && project) {
+      return containsArabic(message)
+        ? [
+            `تكملة تفاصيل ${profile.shortName}:`,
+            "- مسؤوليات إضافية:",
+            ...project.responsibilities
+              .slice(0, 4)
+              .map((responsibility) => `- ${responsibility}`),
+            "- خصائص مهمة:",
+            ...project.features
+              .slice(0, 3)
+              .map((feature) => `- ${feature}`),
+            `- الأثر: ${project.impact}`
+          ].join("\n")
+        : [
+            `More details about ${profile.shortName}:`,
+            "- Additional responsibilities:",
+            ...project.responsibilities
+              .slice(0, 4)
+              .map((responsibility) => `- ${responsibility}`),
+            "- Notable features:",
+            ...project.features
+              .slice(0, 3)
+              .map((feature) => `- ${feature}`),
+            `- Impact: ${project.impact}`
+          ].join("\n");
+    }
+  }
+
+  const recruiterRole = sessionContext.lastRoleInterest
+    ? getRecruiterRoleProfile(
+        `Hiring role context: ${sessionContext.lastRoleInterest}`
+      )
+    : undefined;
+
+  if (recruiterRole) {
+    return getRecruiterRoleResponse(recruiterRole);
+  }
+
+  return containsArabic(message)
+    ? "حدد المشروع أو مسار التوظيف الذي تريد إكماله، وسأتابع من النقطة المناسبة."
+    : "Please name the project or hiring track you want to continue, and I will pick up from the relevant point.";
+}
+
+function getArabicProjectComparisonResponse(profiles: ProjectGuideProfile[]) {
+  return [
+    `مقارنة المشاريع: ${profiles.map((profile) => profile.shortName).join(" مقابل ")}`,
+    "",
+    ...profiles.flatMap((profile, index) => {
+      const project = getProjectBySlug(profile.slug);
+
+      return project
+        ? [
+            profile.shortName,
+            `- المجال: ${project.category}`,
+            `- دور عبدالإله: ${project.role}`,
+            `- التركيز التقني: ${project.technologies.slice(0, 5).join(", ")}`,
+            `- الأثر: ${project.impact}`,
+            ...(index < profiles.length - 1 ? [""] : [])
+          ]
+        : [];
+    })
+  ].join("\n");
+}
+
+function getArabicCvRecommendationResponse(
+  recommendation: RecruiterCvRecommendation
+) {
+  if (recommendation === "engineer") {
+    return [
+      "السيرة الأنسب لهذا الدور هي AI Engineer CV.",
+      "",
+      "- مناسبة لأدوار تطوير AI التقنية و NLP و LLMs و Cloud AI.",
+      "- الخطوة التالية: نزّل AI Engineer CV ثم راجع المشاريع الأقرب للدور."
+    ].join("\n");
+  }
+
+  if (recommendation === "specialist") {
+    return [
+      "السيرة الأنسب لهذا الدور هي AI Specialist CV.",
+      "",
+      "- مناسبة لأدوار تبني حلول AI وحالات الاستخدام ولوحات المعلومات والتحليل.",
+      "- الخطوة التالية: نزّل AI Specialist CV ثم راجع المشاريع المرتبطة بالحلول."
+    ].join("\n");
+  }
+
+  return [
+    "إذا كان الدور عامًا، راجع النسختين:",
+    "",
+    "- AI Engineer CV للأدوار التقنية.",
+    "- AI Specialist CV لأدوار الحلول والتحليل.",
+    "- اختر النسخة الأقرب لمسار التوظيف."
+  ].join("\n");
 }
 
 function getArabicFallbackAgentResponse(message: string) {
@@ -180,20 +412,55 @@ function getArabicFallbackAgentResponse(message: string) {
   ].join("\n");
 }
 
-export function getFallbackAgentResponse(message: string) {
+export function getFallbackAgentResponse(
+  message: string,
+  sessionContext: AgentSessionContext = EMPTY_AGENT_SESSION_CONTEXT
+) {
   const safety = classifyAgentMessage(message);
 
   if (!safety.allowed) {
     return getSafetyRefusal(safety, message);
   }
 
-  if (containsArabic(message)) {
-    return getArabicFallbackAgentResponse(message);
+  const resolvedMessage = resolveAgentFollowUp(message, sessionContext);
+  const continueResponse = getContinueFallbackResponse(
+    message,
+    sessionContext
+  );
+  const projectFollowUpResponse = getProjectFollowUpResponse(
+    message,
+    sessionContext
+  );
+
+  if (continueResponse) {
+    return continueResponse;
   }
 
-  const normalized = message.toLowerCase();
-  const recruiterRole = getRecruiterRoleProfile(message);
-  const mentionedProjects = getMentionedProjectProfiles(message);
+  if (projectFollowUpResponse) {
+    return projectFollowUpResponse;
+  }
+
+  if (containsArabic(message)) {
+    if (isCvRecommendationRequest(resolvedMessage)) {
+      return getArabicCvRecommendationResponse(
+        getCvRecommendation(resolvedMessage)
+      );
+    }
+
+    const mentionedProjects = getMentionedProjectProfiles(resolvedMessage);
+
+    if (isProjectComparisonRequest(resolvedMessage)) {
+      return mentionedProjects.length >= 2
+        ? getArabicProjectComparisonResponse(mentionedProjects)
+        : getProjectComparisonMenuResponse();
+    }
+
+    return getArabicFallbackAgentResponse(resolvedMessage);
+  }
+
+  const normalized = resolvedMessage.toLowerCase();
+  const recruiterRole = getRecruiterRoleProfile(resolvedMessage);
+  const mentionedProjects = getMentionedProjectProfiles(resolvedMessage);
   const wantsBlog = includesAny(normalized, [
     "article",
     "articles",
@@ -205,28 +472,31 @@ export function getFallbackAgentResponse(message: string) {
     "prompts"
   ]);
 
-  if (isPortfolioTourRequest(message)) {
+  if (isPortfolioTourRequest(resolvedMessage)) {
     return getPortfolioTourResponse();
   }
 
-  if (isProjectComparisonRequest(message)) {
-    return isProjectComparisonMenuRequest(message)
+  if (isProjectComparisonRequest(resolvedMessage)) {
+    return isProjectComparisonMenuRequest(resolvedMessage)
       ? getProjectComparisonMenuResponse()
       : getProjectComparisonResponse(mentionedProjects);
   }
 
-  if (isProjectExplainerRequest(message) && mentionedProjects.length === 0) {
+  if (
+    isProjectExplainerRequest(resolvedMessage) &&
+    mentionedProjects.length === 0
+  ) {
     return getProjectExplainerMenuResponse();
   }
 
   if (mentionedProjects.length > 0) {
     return getProjectExplanationResponse(
       mentionedProjects[0],
-      getRequestedProjectDepth(message)
+      getRequestedProjectDepth(resolvedMessage)
     );
   }
 
-  if (isRecruiterModeRequest(message)) {
+  if (isRecruiterModeRequest(resolvedMessage)) {
     return getRecruiterModeResponse();
   }
 
@@ -234,11 +504,11 @@ export function getFallbackAgentResponse(message: string) {
     return getRecruiterRoleResponse(recruiterRole);
   }
 
-  if (isCvRecommendationRequest(message)) {
-    return getCvRecommendationResponse(getCvRecommendation(message));
+  if (isCvRecommendationRequest(resolvedMessage)) {
+    return getCvRecommendationResponse(getCvRecommendation(resolvedMessage));
   }
 
-  if (isGeneralHiringFitRequest(message)) {
+  if (isGeneralHiringFitRequest(resolvedMessage)) {
     return getRecruiterRoleResponse(
       getRecruiterRoleProfile("General Hiring Fit")!
     );
@@ -305,7 +575,7 @@ export function getFallbackAgentResponse(message: string) {
     (normalized.includes("compare") &&
       includesAny(normalized, ["ai engineer", "ai specialist", "profile"]))
   ) {
-    return getCvRecommendationResponse(getCvRecommendation(message));
+    return getCvRecommendationResponse(getCvRecommendation(resolvedMessage));
   }
 
   if (includesAny(normalized, ["cloud", "azure", "vertex", "bigquery", "cloud run"])) {

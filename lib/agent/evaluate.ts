@@ -1,6 +1,7 @@
 import type { AgentAction } from "@/types/agent";
 
 export const MIN_AGENT_QUALITY_SCORE = 85;
+const MAX_AGENT_ANSWER_LENGTH = 8_000;
 
 export type AgentEvaluation = {
   passed: boolean;
@@ -62,6 +63,23 @@ const CONTACT_ACTION_PATTERN =
 const RAW_NAVIGATION_PATTERN =
   /https?:\/\/|\/(?:resume|projects|blog|skills|contact)(?:\/[a-z0-9-]+)*\/?/i;
 
+const INCOMPLETE_ENDING_PATTERNS = [
+  /(?:^|\n)\s*-\s*$/,
+  /(?:^|\n)\s*\d+[.)]\s*$/,
+  /[,:،]\s*$/,
+  /(?:\*\*|`)\s*$/,
+  /(?:^|\s)و\s*$/
+];
+
+export function hasObviouslyIncompleteEnding(answer: string) {
+  const trimmedAnswer = answer.trim();
+
+  return (
+    Boolean(trimmedAnswer) &&
+    INCOMPLETE_ENDING_PATTERNS.some((pattern) => pattern.test(trimmedAnswer))
+  );
+}
+
 function deduct(
   state: AgentEvaluation,
   amount: number,
@@ -92,7 +110,18 @@ export function evaluateAgentAnswer({
   );
 
   deduct(evaluation, 100, "missing-answer", !trimmedAnswer);
-  deduct(evaluation, 20, "answer-too-long", trimmedAnswer.length > 1_800);
+  deduct(
+    evaluation,
+    20,
+    "answer-too-long",
+    trimmedAnswer.length > MAX_AGENT_ANSWER_LENGTH
+  );
+  deduct(
+    evaluation,
+    20,
+    "incomplete-ending-risk",
+    hasObviouslyIncompleteEnding(trimmedAnswer)
+  );
   deduct(
     evaluation,
     100,

@@ -108,7 +108,7 @@ export function AgentFormattedMessage({ content }: { content: string }) {
     <div
       dir={direction}
       className={cn(
-        "space-y-2.5 leading-relaxed [overflow-wrap:anywhere]",
+        "max-w-full space-y-2.5 overflow-visible leading-relaxed [overflow-wrap:anywhere]",
         direction === "rtl" ? "text-right" : "text-left"
       )}
     >
@@ -123,7 +123,7 @@ export function AgentFormattedMessage({ content }: { content: string }) {
           <List
             key={`${block.type}-${index}`}
             className={cn(
-              "list-outside space-y-1",
+              "max-w-full list-outside space-y-1 [overflow-wrap:anywhere]",
               block.type === "bullets" ? "list-disc" : "list-decimal",
               listPadding
             )}

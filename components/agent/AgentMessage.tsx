@@ -38,7 +38,7 @@ export function AgentMessage({
 
       <div
         className={cn(
-          "min-w-0 max-w-[92%] overflow-hidden rounded-2xl border px-4 py-3 text-sm sm:max-w-[90%]",
+          "min-w-0 max-w-[92%] overflow-visible rounded-2xl border px-4 py-3 text-sm sm:max-w-[90%]",
           isAssistant
             ? "border-white/10 bg-white/[0.045] text-slate-200"
             : "border-gold/25 bg-gold/[0.11] text-amber-50",
@@ -65,13 +65,17 @@ export function AgentMessage({
               Runtime details
             </summary>
             <p className="mt-1 [overflow-wrap:anywhere]">
-              Mode: {message.runtime.mode} | Debug code: {message.runtime.debugCode} |{" "}
-              Duration: {message.runtime.durationMs} ms | Model: {message.runtime.model} | Scope judge:{" "}
+              Mode: {message.runtime.mode} | Model: {message.runtime.model} | Provider attempted:{" "}
+              {message.runtime.providerAttempted ? "yes" : "no"} | Provider succeeded:{" "}
+              {message.runtime.providerSucceeded ? "yes" : "no"} | Duration:{" "}
+              {message.runtime.durationMs} ms
+              {message.runtime.finishReason
+                ? ` | Finish reason: ${message.runtime.finishReason}`
+                : ""}{" "}
+              | Code: {message.runtime.debugCode} | Scope judge:{" "}
               {message.runtime.scopeJudgeAttempted ? "yes" : "no"} | Scope allowed:{" "}
               {message.runtime.scopeJudgeAllowed ? "yes" : "no"} | Scope reason:{" "}
-              {message.runtime.scopeJudgeReason} | Provider attempted:{" "}
-              {message.runtime.providerAttempted ? "yes" : "no"} | Provider succeeded:{" "}
-              {message.runtime.providerSucceeded ? "yes" : "no"}
+              {message.runtime.scopeJudgeReason}
             </p>
           </details>
         ) : null}

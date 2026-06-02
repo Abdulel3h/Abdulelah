@@ -1,10 +1,19 @@
 import { NextResponse } from "next/server";
 import {
   enrichAgentActions,
+  getContinueAnswerAction,
   getAgentActions,
   getPortfolioRedirectActions
 } from "@/lib/agent/actions";
-import { buildPortfolioContext } from "@/lib/agent/context";
+import {
+  buildPortfolioContext,
+  EMPTY_AGENT_SESSION_CONTEXT,
+  resolveAgentFollowUp,
+  sanitizeAgentHistory,
+  sanitizeAgentSessionContext,
+  updateAgentSessionContext,
+  type AgentConversationMemory
+} from "@/lib/agent/context";
 import {
   askDeepSeek,
   getDeepSeekModel,
@@ -26,10 +35,12 @@ import {
   type AgentSafetyResult
 } from "@/lib/agent/safety";
 import { applyRuntimeRateLimit } from "@/lib/rate-limit";
+import { containsArabic } from "@/lib/text-direction";
 import type {
   AgentApiResponse,
   AgentDebugCode,
-  AgentRuntimeProof
+  AgentRuntimeProof,
+  AgentSessionContext
 } from "@/types/agent";
 
 export const runtime = "nodejs";
@@ -40,11 +51,20 @@ const MAX_MESSAGE_LENGTH = 1_200;
 type AgentResponseBody = Pick<AgentApiResponse, "actions" | "answer" | "quality">;
 type AgentResponseProof = Omit<AgentRuntimeProof, "durationMs" | "model">;
 
+function appendContinuationHint(answer: string, message: string) {
+  const hint = containsArabic(message)
+    ? "الجواب طويل، أقدر أكمل لك التفاصيل في رسالة ثانية."
+    : "The answer is long. I can continue with more details in the next message.";
+
+  return `${answer.trim()}\n\n${hint}`;
+}
+
 function jsonAgentResponse(
   response: AgentResponseBody,
   proof: AgentResponseProof,
   startedAt: number,
-  init?: ResponseInit
+  init?: ResponseInit,
+  sessionContext: AgentSessionContext = EMPTY_AGENT_SESSION_CONTEXT
 ) {
   const runtimeProof: AgentRuntimeProof = {
     ...proof,
@@ -57,7 +77,8 @@ function jsonAgentResponse(
   return NextResponse.json<AgentApiResponse>(
     {
       ...response,
-      ...runtimeProof
+      ...runtimeProof,
+      sessionContext: sanitizeAgentSessionContext(sessionContext)
     },
     init
   );
@@ -69,7 +90,8 @@ function createEvaluatedResponse(
   responseKind: "portfolio" | "refusal",
   proof: AgentResponseProof,
   startedAt: number,
-  init?: ResponseInit
+  init?: ResponseInit,
+  sessionContext: AgentSessionContext = EMPTY_AGENT_SESSION_CONTEXT
 ) {
   const evaluation = evaluateAgentAnswer({ actions, answer, responseKind });
 
@@ -84,7 +106,8 @@ function createEvaluatedResponse(
     },
     proof,
     startedAt,
-    init
+    init,
+    sessionContext
   );
 }
 
@@ -106,7 +129,8 @@ function getNoScopeJudgeProof(
 function evaluationFailureResponse(
   message: string,
   proof: Omit<AgentResponseProof, "debugCode" | "mode">,
-  startedAt: number
+  startedAt: number,
+  sessionContext: AgentSessionContext
 ) {
   return createEvaluatedResponse(
     getPortfolioScopeResponse(message),
@@ -117,17 +141,27 @@ function evaluationFailureResponse(
       debugCode: "evaluation_failed",
       ...proof
     },
-    startedAt
+    startedAt,
+    undefined,
+    sessionContext
   );
 }
 
 function fallbackResponse(
   message: string,
   proof: Omit<AgentResponseProof, "mode">,
-  startedAt: number
+  startedAt: number,
+  memory: AgentConversationMemory
 ) {
-  const answer = getFallbackAgentResponse(message);
-  const actions = enrichAgentActions(answer, getAgentActions(message));
+  const resolvedMessage = resolveAgentFollowUp(
+    message,
+    memory.sessionContext
+  );
+  const answer = getFallbackAgentResponse(message, memory.sessionContext);
+  const actions = enrichAgentActions(
+    answer,
+    getAgentActions(resolvedMessage)
+  );
   const evaluation = evaluateAgentAnswer({
     actions,
     answer,
@@ -135,8 +169,19 @@ function fallbackResponse(
   });
 
   if (!evaluation.passed) {
-    return evaluationFailureResponse(message, proof, startedAt);
+    return evaluationFailureResponse(
+      message,
+      proof,
+      startedAt,
+      memory.sessionContext
+    );
   }
+
+  const sessionContext = updateAgentSessionContext({
+    answer,
+    message,
+    sessionContext: memory.sessionContext
+  });
 
   return jsonAgentResponse(
     {
@@ -148,14 +193,17 @@ function fallbackResponse(
       }
     },
     { mode: "fallback", ...proof },
-    startedAt
+    startedAt,
+    undefined,
+    sessionContext
   );
 }
 
 function blockedResponse(
   message: string,
   safety: AgentSafetyResult,
-  startedAt: number
+  startedAt: number,
+  sessionContext: AgentSessionContext
 ) {
   const debugCode: AgentDebugCode =
     safety.category === "secret-request"
@@ -174,7 +222,9 @@ function blockedResponse(
       ...getNoScopeJudgeProof(debugCode, "blocked"),
       scopeJudgeReason: "hard_blocked"
     },
-    startedAt
+    startedAt,
+    undefined,
+    sessionContext
   );
 }
 
@@ -204,6 +254,18 @@ export async function POST(request: Request) {
     typeof body.message === "string"
       ? body.message.trim()
       : "";
+  const history =
+    typeof body === "object" && body !== null && "history" in body
+      ? sanitizeAgentHistory(body.history)
+      : [];
+  const sessionContext =
+    typeof body === "object" && body !== null && "sessionContext" in body
+      ? sanitizeAgentSessionContext(body.sessionContext)
+      : { ...EMPTY_AGENT_SESSION_CONTEXT };
+  const memory: AgentConversationMemory = {
+    history,
+    sessionContext
+  };
 
   if (!message) {
     return jsonAgentResponse(
@@ -214,7 +276,8 @@ export async function POST(request: Request) {
       },
       getNoScopeJudgeProof("invalid_request", "fallback"),
       startedAt,
-      { status: 400 }
+      { status: 400 },
+      sessionContext
     );
   }
 
@@ -227,7 +290,8 @@ export async function POST(request: Request) {
       },
       getNoScopeJudgeProof("invalid_request", "fallback"),
       startedAt,
-      { status: 400 }
+      { status: 400 },
+      sessionContext
     );
   }
 
@@ -252,18 +316,19 @@ export async function POST(request: Request) {
         headers: {
           "Retry-After": String(rateLimit.retryAfterSeconds)
         }
-      }
+      },
+      sessionContext
     );
   }
 
   const safety = classifyAgentMessage(message);
 
   if (!safety.allowed) {
-    return blockedResponse(message, safety, startedAt);
+    return blockedResponse(message, safety, startedAt, sessionContext);
   }
 
   if (!hasDeepSeekApiKey()) {
-    const scope = judgePortfolioScopeLocally(message);
+    const scope = judgePortfolioScopeLocally(message, sessionContext);
     const scopeProof = {
       scopeJudgeAttempted: false,
       scopeJudgeAllowed: scope.allowed,
@@ -282,7 +347,9 @@ export async function POST(request: Request) {
           providerSucceeded: false,
           ...scopeProof
         },
-        startedAt
+        startedAt,
+        undefined,
+        sessionContext
       );
     }
 
@@ -294,11 +361,12 @@ export async function POST(request: Request) {
         providerSucceeded: false,
         ...scopeProof
       },
-      startedAt
+      startedAt,
+      memory
     );
   }
 
-  const scope = await judgePortfolioScope(message);
+  const scope = await judgePortfolioScope(message, memory);
   const scopeProof = {
     scopeJudgeAttempted: scope.attempted,
     scopeJudgeAllowed: scope.allowed,
@@ -317,13 +385,31 @@ export async function POST(request: Request) {
         providerSucceeded: false,
         ...scopeProof
       },
-      startedAt
+      startedAt,
+      undefined,
+      sessionContext
     );
   }
 
   try {
-    const answer = await askDeepSeek(message, buildPortfolioContext());
-    const actions = enrichAgentActions(answer, getAgentActions(message));
+    const resolvedMessage = resolveAgentFollowUp(message, sessionContext);
+    const completion = await askDeepSeek(message, buildPortfolioContext(), {
+      ...memory,
+      resolvedMessage
+    });
+    const answer =
+      completion.finishReason === "length"
+        ? appendContinuationHint(completion.content, message)
+        : completion.content;
+    const actions = enrichAgentActions(
+      answer,
+      [
+        ...(completion.finishReason === "length"
+          ? [getContinueAnswerAction(message)]
+          : []),
+        ...getAgentActions(resolvedMessage)
+      ]
+    );
     const evaluation = evaluateAgentAnswer({
       actions,
       answer,
@@ -331,16 +417,45 @@ export async function POST(request: Request) {
     });
 
     if (!evaluation.passed) {
+      if (
+        evaluation.reasons.some(
+          (reason) =>
+            reason === "incomplete-ending-risk" ||
+            reason === "answer-too-long"
+        )
+      ) {
+        return fallbackResponse(
+          message,
+          {
+            debugCode: "evaluation_failed",
+            providerAttempted: true,
+            providerSucceeded: true,
+            finishReason: completion.finishReason,
+            ...scopeProof
+          },
+          startedAt,
+          memory
+        );
+      }
+
       return evaluationFailureResponse(
         message,
         {
           providerAttempted: true,
           providerSucceeded: true,
+          finishReason: completion.finishReason,
           ...scopeProof
         },
-        startedAt
+        startedAt,
+        sessionContext
       );
     }
+
+    const updatedSessionContext = updateAgentSessionContext({
+      answer,
+      message,
+      sessionContext
+    });
 
     return jsonAgentResponse(
       {
@@ -353,12 +468,18 @@ export async function POST(request: Request) {
       },
       {
         mode: "deepseek",
-        debugCode: "sent_to_deepseek",
+        debugCode:
+          completion.finishReason === "length"
+            ? "output_truncated"
+            : "sent_to_deepseek",
         providerAttempted: true,
         providerSucceeded: true,
+        finishReason: completion.finishReason,
         ...scopeProof
       },
-      startedAt
+      startedAt,
+      undefined,
+      updatedSessionContext
     );
   } catch {
     return fallbackResponse(
@@ -369,7 +490,8 @@ export async function POST(request: Request) {
         providerSucceeded: false,
         ...scopeProof
       },
-      startedAt
+      startedAt,
+      memory
     );
   }
 }

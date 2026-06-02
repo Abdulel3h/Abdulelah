@@ -53,6 +53,17 @@ export default function PrivacyPage() {
               ))}
             </ul>
 
+            <div className="mt-6 rounded-2xl border border-sky-300/20 bg-sky-300/[0.06] p-5">
+              <h2 className="text-base font-semibold text-white">Agent session memory</h2>
+              <p className="mt-2 text-sm leading-7 text-slate-300">
+                Agent Abdulelah may remember recent messages during the current browser
+                session to answer follow-up questions. This temporary memory is not
+                stored permanently by the site and can be cleared with the Clear chat
+                button. Contact form submissions are handled separately and are only
+                sent when you submit the form.
+              </p>
+            </div>
+
             <div className="mt-6 rounded-2xl border border-gold/25 bg-gold/10 p-5">
               <p className="text-sm leading-7 text-amber-100">
                 For privacy questions, contact Abdulelah directly.

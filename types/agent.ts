@@ -22,6 +22,42 @@ export type AgentAction = AgentLinkAction | AgentPromptAction;
 
 export type AgentMode = "deepseek" | "fallback" | "blocked";
 
+export type AgentFinishReason =
+  | "stop"
+  | "length"
+  | "content_filter"
+  | "unknown";
+
+export type AgentHistoryMessage = {
+  role: "assistant" | "user";
+  content: string;
+};
+
+export type AgentProjectName =
+  | "ChatUB"
+  | "Althil"
+  | "Absher Insight AI"
+  | "Qanouni"
+  | "Medad"
+  | "Virtual Astronauts";
+
+export type AgentIntent =
+  | "project_explanation"
+  | "technical_details"
+  | "recruiter_fit"
+  | "cv_recommendation"
+  | "contact"
+  | "portfolio_tour"
+  | "comparison";
+
+export type AgentSessionContext = {
+  lastProject: AgentProjectName | null;
+  lastIntent: AgentIntent | null;
+  lastRoleInterest: string | null;
+  lastLanguage: "ar" | "en" | null;
+  lastRecommendedCV: "ai-engineer" | "ai-specialist" | "both" | null;
+};
+
 export type AgentDebugCode =
   | "sent_to_deepseek"
   | "blocked_prompt_injection"
@@ -35,6 +71,7 @@ export type AgentDebugCode =
   | "request_failed"
   | "model_error"
   | "provider_failed"
+  | "output_truncated"
   | "evaluation_failed";
 
 export type AgentQuality = {
@@ -52,12 +89,14 @@ export type AgentRuntimeProof = {
   scopeJudgeAllowed: boolean;
   scopeJudgeReason: string;
   durationMs: number;
+  finishReason?: AgentFinishReason;
 };
 
 export type AgentApiResponse = AgentRuntimeProof & {
   answer: string;
   actions: AgentAction[];
   quality: AgentQuality;
+  sessionContext: AgentSessionContext;
 };
 
 export type AgentChatMessage = {

@@ -168,6 +168,10 @@ export function isCvRecommendationRequest(message: string) {
     "which resume",
     "what resume",
     "resume should",
+    "اي cv",
+    "أي cv",
+    "cv احمل",
+    "cv أحمل",
     "اي سيرة",
     "أي سيرة",
     "السيرة"
@@ -345,4 +349,3 @@ export function getCvRecommendationResponse(
     "- Recommendation: If the role is still broad, download both CVs and choose the version closest to the hiring track."
   ].join("\n");
 }
-

@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Bot, MessageCircle, RotateCcw, Send, Sparkles, X } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { AgentContactForm } from "@/components/agent/AgentContactForm";
 import { AgentLauncher } from "@/components/agent/AgentLauncher";
@@ -14,7 +15,9 @@ import type {
   AgentAction,
   AgentApiResponse,
   AgentChatMessage,
-  AgentMode
+  AgentHistoryMessage,
+  AgentMode,
+  AgentSessionContext
 } from "@/types/agent";
 
 const INITIAL_MESSAGE: AgentChatMessage = {
@@ -35,7 +38,44 @@ const suggestions = [
   "Explain Absher Insight AI"
 ];
 
+const MAX_HISTORY_TURNS = 8;
+const PROJECT_SLUGS: Record<
+  NonNullable<AgentSessionContext["lastProject"]>,
+  string
+> = {
+  ChatUB: "chatub",
+  Althil: "althil",
+  "Absher Insight AI": "absher-insight-ai",
+  Qanouni: "qanouni",
+  Medad: "medad",
+  "Virtual Astronauts": "virtual-astronauts"
+};
+const PROJECT_FOLLOW_UPS = {
+  ar: [
+    "وش التقنيات؟",
+    "وش دوري فيه؟",
+    "اشرحها تقنيًا",
+    "عطيني ملخص للريكروتر"
+  ],
+  en: [
+    "Technologies",
+    "My role",
+    "Technical explanation",
+    "Recruiter summary"
+  ]
+};
+
 class AgentRequestError extends Error {}
+
+function createEmptySessionContext(): AgentSessionContext {
+  return {
+    lastProject: null,
+    lastIntent: null,
+    lastRoleInterest: null,
+    lastLanguage: null,
+    lastRecommendedCV: null
+  };
+}
 
 function createMessageId(role: AgentChatMessage["role"]) {
   return `${role}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -64,6 +104,24 @@ export function AgentPanel() {
   const [input, setInput] = useState("");
   const [mode, setMode] = useState<AgentMode>();
   const [messages, setMessages] = useState<AgentChatMessage[]>([INITIAL_MESSAGE]);
+  const [chatHistory, setChatHistory] = useState<AgentHistoryMessage[]>([]);
+  const [sessionContext, setSessionContext] = useState<AgentSessionContext>(
+    createEmptySessionContext
+  );
+  const latestMessage = messages[messages.length - 1];
+  const projectSlug = sessionContext.lastProject
+    ? PROJECT_SLUGS[sessionContext.lastProject]
+    : null;
+  const showProjectFollowUps =
+    Boolean(projectSlug) &&
+    latestMessage?.role === "assistant" &&
+    !latestMessage.isError &&
+    !isLoading &&
+    (sessionContext.lastIntent === "project_explanation" ||
+      sessionContext.lastIntent === "technical_details" ||
+      sessionContext.lastIntent === "comparison");
+  const projectFollowUps =
+    PROJECT_FOLLOW_UPS[sessionContext.lastLanguage === "ar" ? "ar" : "en"];
 
   useEffect(() => {
     function onOpenAgent(event: Event) {
@@ -94,6 +152,8 @@ export function AgentPanel() {
 
   function clearConversation() {
     setMessages([INITIAL_MESSAGE]);
+    setChatHistory([]);
+    setSessionContext(createEmptySessionContext());
     setMode(undefined);
     setInput("");
     setIsContactFormOpen(false);
@@ -156,9 +216,15 @@ export function AgentPanel() {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ message })
+        body: JSON.stringify({
+          message,
+          history: chatHistory.slice(-MAX_HISTORY_TURNS),
+          sessionContext
+        })
       });
       const payload = (await response.json()) as AgentApiResponse;
+
+      setSessionContext(payload.sessionContext);
 
       if (!response.ok) {
         throw new AgentRequestError(payload.answer);
@@ -182,10 +248,23 @@ export function AgentPanel() {
             scopeJudgeAttempted: payload.scopeJudgeAttempted,
             scopeJudgeAllowed: payload.scopeJudgeAllowed,
             scopeJudgeReason: payload.scopeJudgeReason,
-            durationMs: payload.durationMs
+            durationMs: payload.durationMs,
+            finishReason: payload.finishReason
           }
         }
       ]);
+      if (payload.scopeJudgeAllowed) {
+        setChatHistory((current) =>
+          [
+            ...current,
+            { role: "user", content: message } satisfies AgentHistoryMessage,
+            {
+              role: "assistant",
+              content: payload.answer
+            } satisfies AgentHistoryMessage
+          ].slice(-MAX_HISTORY_TURNS)
+        );
+      }
     } catch (error) {
       setMessages((current) => [
         ...current,
@@ -290,6 +369,7 @@ export function AgentPanel() {
                     onClick={clearConversation}
                     className="focus-ring grid h-9 w-9 place-items-center rounded-full border border-white/10 text-slate-400 transition hover:border-sky-300/35 hover:text-white"
                     aria-label="Clear conversation"
+                    title="Clear chat"
                   >
                     <RotateCcw className="h-4 w-4" aria-hidden="true" />
                   </button>
@@ -327,6 +407,34 @@ export function AgentPanel() {
                           {suggestion}
                         </AgentSuggestion>
                       ))}
+                    </div>
+                  </section>
+                ) : null}
+
+                {showProjectFollowUps ? (
+                  <section aria-label="Project follow-up questions" className="pt-1">
+                    <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+                      Follow up on {sessionContext.lastProject}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {projectFollowUps.map((followUp) => (
+                        <AgentSuggestion
+                          key={followUp}
+                          disabled={isLoading}
+                          onSelect={sendMessage}
+                        >
+                          {followUp}
+                        </AgentSuggestion>
+                      ))}
+                      <Link
+                        href={`/projects/${projectSlug}`}
+                        onClick={closePanel}
+                        className="focus-ring inline-flex items-center rounded-full border border-white/10 bg-white/[0.045] px-3 py-2 text-left text-xs font-medium text-slate-300 transition hover:border-sky-300/35 hover:bg-sky-300/[0.08] hover:text-white"
+                      >
+                        {sessionContext.lastLanguage === "ar"
+                          ? "عرض دراسة الحالة"
+                          : "View case study"}
+                      </Link>
                     </div>
                   </section>
                 ) : null}
@@ -389,7 +497,8 @@ export function AgentPanel() {
                   </Button>
                 </div>
                 <p className="mt-2 text-[10px] leading-4 text-slate-500">
-                  Portfolio-grounded answers only. No private API key is sent to your browser.
+                  Portfolio-grounded answers only. Memory is temporary for this session only.
+                  No private API key is sent to your browser.
                 </p>
               </form>
             </motion.section>

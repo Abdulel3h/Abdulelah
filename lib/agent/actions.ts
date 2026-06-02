@@ -17,6 +17,7 @@ import {
   isProjectExplainerRequest,
   type ProjectGuideProfile
 } from "@/lib/agent/project-guide";
+import { containsArabic } from "@/lib/text-direction";
 import type { AgentAction } from "@/types/agent";
 
 const actions = {
@@ -192,6 +193,16 @@ function createPromptAction(
     prompt,
     type: "prompt"
   };
+}
+
+export function getContinueAnswerAction(message: string): AgentAction {
+  const isArabic = containsArabic(message);
+
+  return createPromptAction(
+    isArabic ? "كمل الإجابة" : "Continue answer",
+    "#continue-answer",
+    isArabic ? "كمل الإجابة" : "Continue answer"
+  );
 }
 
 function getProjectCvAction(profile: ProjectGuideProfile) {
