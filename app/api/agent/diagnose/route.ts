@@ -3,7 +3,10 @@ import {
   getDeepSeekModel,
   hasDeepSeekApiKey
 } from "@/lib/agent/deepseek";
-import { judgePortfolioScope } from "@/lib/agent/scope-judge";
+import {
+  judgePortfolioScope,
+  judgePortfolioScopeLocally
+} from "@/lib/agent/scope-judge";
 import { classifyAgentMessage } from "@/lib/agent/safety";
 
 export const runtime = "nodejs";
@@ -67,7 +70,12 @@ export async function POST(request: Request) {
     );
   }
 
-  const scope = await judgePortfolioScope(message);
+  const scope = hasDeepSeekKey
+    ? await judgePortfolioScope(message)
+    : {
+        ...judgePortfolioScopeLocally(message),
+        attempted: false
+      };
 
   return NextResponse.json(
     {

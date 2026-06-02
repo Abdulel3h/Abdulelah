@@ -7,11 +7,15 @@ import {
 export type ScopeJudgeReason =
   | "portfolio_related"
   | "recruiter_related"
-  | "contact_related"
-  | "resume_related"
   | "project_related"
-  | "unrelated"
-  | "unclear";
+  | "skills_related"
+  | "resume_related"
+  | "contact_related"
+  | "blog_related"
+  | "unclear_but_possible"
+  | "unrelated_general"
+  | "unrelated_task"
+  | "unsafe_request";
 
 export type ScopeJudgeResult = {
   allowed: boolean;
@@ -21,19 +25,35 @@ export type ScopeJudgeResult = {
 
 export type ScopeJudgeDecision = ScopeJudgeResult & {
   attempted: boolean;
+  failed: boolean;
 };
 
 const SCOPE_JUDGE_PROMPT =
-  'You are a strict scope classifier for Agent Abdulelah. Decide if the user\'s question is about Abdulelah Alkhathami\'s public portfolio, projects, project explanations, project comparisons, portfolio tour, blog articles, AI insights, skills, achievements, resume, contact information, hiring fit, recruiter mode, role matching, CV selection, or website navigation. Allow related Arabic, English, and Saudi/Najdi phrasing. If unclear but reasonably portfolio-related, allow it. Return JSON only: {"allowed":boolean,"reason":"portfolio_related|recruiter_related|contact_related|resume_related|project_related|unrelated|unclear","confidence":number}. Do not answer the question.';
+  'You are the scope classifier for Agent Abdulelah, a portfolio assistant. Allow questions about Abdulelah Alkhathami\'s public portfolio, projects, project explanations, comparisons, portfolio tour, articles, AI insights, skills, achievements, resume, contact information, hiring fit, recruiter mode, role matching, CV selection, and website navigation. Be permissive with short, vague, Arabic, English, and Saudi/Najdi questions when they could reasonably refer to Abdulelah, such as "What does he know?", "Why hire him?", "وش عنده؟", "وش يعرف؟", and "هل يناسبنا؟". For those, return allowed=true with unclear_but_possible or the closest allowed reason. Reject clearly unrelated general questions, unrelated work requests, and unsafe requests. Return JSON only: {"allowed":boolean,"reason":"portfolio_related|recruiter_related|project_related|skills_related|resume_related|contact_related|blog_related|unclear_but_possible|unrelated_general|unrelated_task|unsafe_request","confidence":number}. Do not answer the question.';
 
 const VALID_REASONS = new Set<ScopeJudgeReason>([
   "portfolio_related",
   "recruiter_related",
-  "contact_related",
-  "resume_related",
   "project_related",
-  "unrelated",
-  "unclear"
+  "skills_related",
+  "resume_related",
+  "contact_related",
+  "blog_related",
+  "unclear_but_possible",
+  "unrelated_general",
+  "unrelated_task",
+  "unsafe_request"
+]);
+
+const ALLOWED_REASONS = new Set<ScopeJudgeReason>([
+  "portfolio_related",
+  "recruiter_related",
+  "project_related",
+  "skills_related",
+  "resume_related",
+  "contact_related",
+  "blog_related",
+  "unclear_but_possible"
 ]);
 
 const PORTFOLIO_NAMES = [
@@ -91,7 +111,6 @@ const PORTFOLIO_TERMS = [
   "project explainer",
   "compare projects",
   "difference between",
-  "explain",
   "website",
   "مشروع",
   "مشاريع",
@@ -110,7 +129,6 @@ const PORTFOLIO_TERMS = [
   "الكلاود",
   "السحابة",
   "الذكاء الاصطناعي",
-  "اشرح",
   "جولة",
   "قارن",
   "الفرق",
@@ -149,17 +167,100 @@ const UNRELATED_TERMS = [
   "capital of",
   "medical advice",
   "legal advice",
+  "financial advice",
   "quantum physics",
   "what is react",
   "explain react",
+  "python loops",
   "weather",
   "current news",
+  "tell me a joke",
+  "give me a recipe",
+  "how to cook",
   "عاصمة فرنسا",
   "نصيحة طبية",
   "نصيحة قانونية",
+  "نصيحة مالية",
   "فيزياء الكم",
   "اشرح react",
-  "اشرح رياكت"
+  "اشرح رياكت",
+  "عطني نكتة",
+  "وصفة طبخ"
+];
+
+const UNRELATED_TASK_PATTERNS = [
+  /^\s*(?:please\s+)?(?:write|generate|create|make|draft|translate|summarize)\s+(?:me\s+)?(?:a\s+|an\s+|the\s+)?(?:poem|essay|story|email|recipe|cover letter)\b/i,
+  /(?:^|\s)(?:اكتب|سوي|سو|ترجم|لخص).{0,20}(?:قصيدة|مقال|قصة|ايميل|إيميل|وصفة|خطاب)/i
+];
+
+const CLEARLY_UNRELATED_GENERAL_PATTERNS = [
+  /^\s*(?:what|who|where|when)\s+(?:is|are|was|were)\b/i,
+  /^\s*(?:explain|teach me|tell me about|how (?:do|does|can|to))\b/i,
+  /(?:^|\s)(?:وش هو|وش هي|ما هو|ما هي|اشرح|علمني|كيف)\b/i
+];
+
+const POSSIBLE_PORTFOLIO_REFERENCE_PATTERN =
+  /\b(?:he|him|his)\b|(?:عنه|عنده|معه|خبرته|مهاراته|مشروعه|مقالاته|سيرته|نوظفه|يناسبنا)/i;
+
+const SKILLS_TERMS = [
+  "skill",
+  "skills",
+  "experience",
+  "python",
+  "cloud",
+  "nlp",
+  "llm",
+  "azure",
+  "google cloud",
+  "what does he know",
+  "does he know",
+  "مهارات",
+  "مهارته",
+  "خبرته",
+  "وش يعرف",
+  "وش عنده",
+  "الكلاود",
+  "السحابة",
+  "يعرف python"
+];
+
+const PROJECT_TERMS = [
+  "project",
+  "projects",
+  "strongest project",
+  "best project",
+  "chatub",
+  "althil",
+  "الظل",
+  "absher",
+  "ابشر",
+  "qanouni",
+  "قانوني",
+  "medad",
+  "مداد",
+  "virtual astronauts",
+  "compare",
+  "difference between",
+  "مشروع",
+  "مشاريع",
+  "اقوى مشروع",
+  "أقوى مشروع",
+  "قارن",
+  "الفرق",
+  "جولة"
+];
+
+const BLOG_TERMS = [
+  "blog",
+  "article",
+  "articles",
+  "insight",
+  "insights",
+  "written",
+  "مقال",
+  "مقالات",
+  "مقالاته",
+  "وش كتب"
 ];
 
 function normalizeMessage(message: string) {
@@ -173,6 +274,10 @@ function normalizeMessage(message: string) {
 
 function includesAny(message: string, terms: string[]) {
   return terms.some((term) => message.includes(normalizeMessage(term)));
+}
+
+function matchesAny(message: string, patterns: RegExp[]) {
+  return patterns.some((pattern) => pattern.test(message));
 }
 
 function clampConfidence(confidence: number) {
@@ -198,11 +303,13 @@ function parseScopeJudgeResult(content: string): ScopeJudgeResult | null {
       return null;
     }
 
-    return {
-      allowed: result.allowed,
-      reason: result.reason as ScopeJudgeReason,
-      confidence: clampConfidence(result.confidence)
-    };
+    const reason = result.reason as ScopeJudgeReason;
+
+    if (result.allowed !== ALLOWED_REASONS.has(reason)) {
+      return null;
+    }
+
+    return { allowed: result.allowed, reason, confidence: clampConfidence(result.confidence) };
   } catch {
     return null;
   }
@@ -212,7 +319,11 @@ export function judgePortfolioScopeLocally(message: string): ScopeJudgeResult {
   const normalized = normalizeMessage(message);
 
   if (includesAny(normalized, UNRELATED_TERMS)) {
-    return { allowed: false, reason: "unrelated", confidence: 0.95 };
+    return { allowed: false, reason: "unrelated_general", confidence: 0.95 };
+  }
+
+  if (matchesAny(normalized, UNRELATED_TASK_PATTERNS)) {
+    return { allowed: false, reason: "unrelated_task", confidence: 0.95 };
   }
 
   if (includesAny(normalized, RECRUITER_TERMS)) {
@@ -229,20 +340,34 @@ export function judgePortfolioScopeLocally(message: string): ScopeJudgeResult {
     return { allowed: true, reason: "resume_related", confidence: 0.9 };
   }
 
+  if (includesAny(normalized, BLOG_TERMS)) {
+    return { allowed: true, reason: "blog_related", confidence: 0.9 };
+  }
+
+  if (includesAny(normalized, PROJECT_TERMS)) {
+    return { allowed: true, reason: "project_related", confidence: 0.9 };
+  }
+
+  if (includesAny(normalized, SKILLS_TERMS)) {
+    return { allowed: true, reason: "skills_related", confidence: 0.9 };
+  }
+
   if (
     includesAny(normalized, PORTFOLIO_NAMES) ||
     includesAny(normalized, PORTFOLIO_TERMS)
   ) {
-    return {
-      allowed: true,
-      reason: includesAny(normalized, ["project", "projects", "مشروع", "مشاريع", "chatub", "althil", "الظل", "absher", "ابشر", "qanouni", "قانوني", "medad", "مداد", "virtual astronauts", "compare", "قارن", "الفرق", "اشرح", "جولة"])
-        ? "project_related"
-        : "portfolio_related",
-      confidence: 0.85
-    };
+    return { allowed: true, reason: "portfolio_related", confidence: 0.85 };
   }
 
-  return { allowed: false, reason: "unclear", confidence: 0.55 };
+  if (POSSIBLE_PORTFOLIO_REFERENCE_PATTERN.test(normalized)) {
+    return { allowed: true, reason: "unclear_but_possible", confidence: 0.65 };
+  }
+
+  if (matchesAny(normalized, CLEARLY_UNRELATED_GENERAL_PATTERNS)) {
+    return { allowed: false, reason: "unrelated_general", confidence: 0.85 };
+  }
+
+  return { allowed: true, reason: "unclear_but_possible", confidence: 0.55 };
 }
 
 export async function judgePortfolioScope(
@@ -251,7 +376,8 @@ export async function judgePortfolioScope(
   if (!hasDeepSeekApiKey()) {
     return {
       ...judgePortfolioScopeLocally(message),
-      attempted: false
+      attempted: false,
+      failed: false
     };
   }
 
@@ -274,12 +400,14 @@ export async function judgePortfolioScope(
 
     return {
       ...(result ?? judgePortfolioScopeLocally(message)),
-      attempted: true
+      attempted: true,
+      failed: !result
     };
   } catch {
     return {
       ...judgePortfolioScopeLocally(message),
-      attempted: true
+      attempted: true,
+      failed: true
     };
   }
 }

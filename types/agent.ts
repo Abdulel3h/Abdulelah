@@ -27,12 +27,14 @@ export type AgentDebugCode =
   | "blocked_prompt_injection"
   | "blocked_secret_request"
   | "blocked_unrelated_task"
+  | "blocked_high_risk_advice"
   | "scope_rejected"
   | "invalid_request"
   | "rate_limited"
   | "missing_key"
   | "request_failed"
   | "model_error"
+  | "provider_failed"
   | "evaluation_failed";
 
 export type AgentQuality = {

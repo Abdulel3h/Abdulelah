@@ -20,7 +20,7 @@ const PORTFOLIO_ANCHORS =
 const BLOG_ANCHORS = /\b(blog|article|insights?|context engineering)\b/i;
 
 const REFUSAL_ANCHORS =
-  /\b(only help|can only help|can't reveal|cannot reveal|public portfolio|portfolio context)\b|لا أستطيع|لا يمكنني|فقط/i;
+  /\b(only help|can only help|can help only|can't reveal|cannot reveal|public portfolio|portfolio context)\b|لا أستطيع|لا يمكنني|فقط/i;
 
 const SECRET_LEAK_PATTERNS = [
   /\b(DEEPSEEK_API_KEY|RESEND_API_KEY|CONTACT_TO_EMAIL|CONTACT_FROM_EMAIL|process\.env)\b/i,

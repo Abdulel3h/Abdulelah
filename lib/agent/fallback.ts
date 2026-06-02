@@ -54,7 +54,7 @@ export function getFallbackAgentResponse(message: string) {
   const safety = classifyAgentMessage(message);
 
   if (!safety.allowed) {
-    return getSafetyRefusal(safety);
+    return getSafetyRefusal(safety, message);
   }
 
   const normalized = message.toLowerCase();

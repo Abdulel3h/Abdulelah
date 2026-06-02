@@ -11,8 +11,6 @@ export function AgentMessage({
   onAction?: (action: AgentAction) => void;
 }) {
   const isAssistant = message.role === "assistant";
-  const showRuntimeProof =
-    process.env.NODE_ENV !== "production" || Boolean(message.runtime?.debugCode);
 
   function getModeLabel() {
     if (message.mode === "deepseek") {
@@ -54,16 +52,17 @@ export function AgentMessage({
           </p>
         ) : null}
 
-        {message.runtime && showRuntimeProof ? (
+        {message.runtime ? (
           <details className="mt-2 border-t border-white/[0.07] pt-2 text-[10px] leading-4 text-slate-500">
             <summary className="cursor-pointer text-slate-500/80 transition hover:text-slate-400">
-              Diagnostics: {message.runtime.mode} | {message.runtime.debugCode} |{" "}
-              {message.runtime.durationMs} ms
+              Runtime details
             </summary>
             <p className="mt-1 [overflow-wrap:anywhere]">
-              Model: {message.runtime.model} | Scope judge:{" "}
+              Mode: {message.runtime.mode} | Debug code: {message.runtime.debugCode} |{" "}
+              Duration: {message.runtime.durationMs} ms | Model: {message.runtime.model} | Scope judge:{" "}
               {message.runtime.scopeJudgeAttempted ? "yes" : "no"} | Scope allowed:{" "}
-              {message.runtime.scopeJudgeAllowed ? "yes" : "no"} | Provider attempted:{" "}
+              {message.runtime.scopeJudgeAllowed ? "yes" : "no"} | Scope reason:{" "}
+              {message.runtime.scopeJudgeReason} | Provider attempted:{" "}
               {message.runtime.providerAttempted ? "yes" : "no"} | Provider succeeded:{" "}
               {message.runtime.providerSucceeded ? "yes" : "no"}
             </p>

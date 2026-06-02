@@ -7,7 +7,6 @@ import {
 import { buildPortfolioContext } from "@/lib/agent/context";
 import {
   askDeepSeek,
-  getDeepSeekErrorCode,
   getDeepSeekModel,
   hasDeepSeekApiKey
 } from "@/lib/agent/deepseek";
@@ -16,7 +15,10 @@ import {
   MIN_AGENT_QUALITY_SCORE
 } from "@/lib/agent/evaluate";
 import { getFallbackAgentResponse } from "@/lib/agent/fallback";
-import { judgePortfolioScope } from "@/lib/agent/scope-judge";
+import {
+  judgePortfolioScope,
+  judgePortfolioScopeLocally
+} from "@/lib/agent/scope-judge";
 import {
   classifyAgentMessage,
   getPortfolioScopeResponse,
@@ -102,11 +104,12 @@ function getNoScopeJudgeProof(
 }
 
 function evaluationFailureResponse(
+  message: string,
   proof: Omit<AgentResponseProof, "debugCode" | "mode">,
   startedAt: number
 ) {
   return createEvaluatedResponse(
-    getPortfolioScopeResponse(),
+    getPortfolioScopeResponse(message),
     getPortfolioRedirectActions(),
     "refusal",
     {
@@ -132,7 +135,7 @@ function fallbackResponse(
   });
 
   if (!evaluation.passed) {
-    return evaluationFailureResponse(proof, startedAt);
+    return evaluationFailureResponse(message, proof, startedAt);
   }
 
   return jsonAgentResponse(
@@ -149,16 +152,22 @@ function fallbackResponse(
   );
 }
 
-function blockedResponse(safety: AgentSafetyResult, startedAt: number) {
+function blockedResponse(
+  message: string,
+  safety: AgentSafetyResult,
+  startedAt: number
+) {
   const debugCode: AgentDebugCode =
     safety.category === "secret-request"
       ? "blocked_secret_request"
       : safety.category === "unrelated-task"
         ? "blocked_unrelated_task"
-        : "blocked_prompt_injection";
+        : safety.category === "high-risk-advice"
+          ? "blocked_high_risk_advice"
+          : "blocked_prompt_injection";
 
   return createEvaluatedResponse(
-    getSafetyRefusal(safety),
+    getSafetyRefusal(safety, message),
     getPortfolioRedirectActions(),
     "refusal",
     {
@@ -250,7 +259,43 @@ export async function POST(request: Request) {
   const safety = classifyAgentMessage(message);
 
   if (!safety.allowed) {
-    return blockedResponse(safety, startedAt);
+    return blockedResponse(message, safety, startedAt);
+  }
+
+  if (!hasDeepSeekApiKey()) {
+    const scope = judgePortfolioScopeLocally(message);
+    const scopeProof = {
+      scopeJudgeAttempted: false,
+      scopeJudgeAllowed: scope.allowed,
+      scopeJudgeReason: scope.reason
+    };
+
+    if (!scope.allowed) {
+      return createEvaluatedResponse(
+        getPortfolioScopeResponse(message),
+        getPortfolioRedirectActions(),
+        "refusal",
+        {
+          mode: "fallback",
+          debugCode: "scope_rejected",
+          providerAttempted: false,
+          providerSucceeded: false,
+          ...scopeProof
+        },
+        startedAt
+      );
+    }
+
+    return fallbackResponse(
+      message,
+      {
+        debugCode: "missing_key",
+        providerAttempted: false,
+        providerSucceeded: false,
+        ...scopeProof
+      },
+      startedAt
+    );
   }
 
   const scope = await judgePortfolioScope(message);
@@ -262,25 +307,12 @@ export async function POST(request: Request) {
 
   if (!scope.allowed) {
     return createEvaluatedResponse(
-      getPortfolioScopeResponse(),
+      getPortfolioScopeResponse(message),
       getPortfolioRedirectActions(),
       "refusal",
       {
         mode: "fallback",
         debugCode: "scope_rejected",
-        providerAttempted: false,
-        providerSucceeded: false,
-        ...scopeProof
-      },
-      startedAt
-    );
-  }
-
-  if (!hasDeepSeekApiKey()) {
-    return fallbackResponse(
-      message,
-      {
-        debugCode: "missing_key",
         providerAttempted: false,
         providerSucceeded: false,
         ...scopeProof
@@ -300,6 +332,7 @@ export async function POST(request: Request) {
 
     if (!evaluation.passed) {
       return evaluationFailureResponse(
+        message,
         {
           providerAttempted: true,
           providerSucceeded: true,
@@ -327,11 +360,11 @@ export async function POST(request: Request) {
       },
       startedAt
     );
-  } catch (error) {
+  } catch {
     return fallbackResponse(
       message,
       {
-        debugCode: getDeepSeekErrorCode(error),
+        debugCode: "provider_failed",
         providerAttempted: true,
         providerSucceeded: false,
         ...scopeProof
