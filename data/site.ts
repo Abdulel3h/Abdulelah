@@ -1,4 +1,4 @@
-const fallbackSiteUrl = "https://abdulelah-ai.vercel.app";
+const fallbackSiteUrl = "https://www.abdulelah.de";
 
 export const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "") || fallbackSiteUrl;

@@ -3,6 +3,7 @@ import {
   getDeepSeekModel,
   hasDeepSeekApiKey
 } from "@/lib/agent/deepseek";
+import { siteUrl } from "@/data/site";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -12,7 +13,7 @@ export function GET() {
     {
       hasDeepSeekKey: hasDeepSeekApiKey(),
       model: getDeepSeekModel(),
-      siteUrl: process.env.NEXT_PUBLIC_SITE_URL?.trim() || null,
+      siteUrl,
       runtime: "node" as const
     },
     {
