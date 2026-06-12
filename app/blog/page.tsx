@@ -33,7 +33,7 @@ export default function BlogPage() {
         stats={[
           { value: String(blogPosts.length), label: "Original articles" },
           { value: String(blogCategories.length - 1), label: "AI topic areas" },
-          { value: "Static-first", label: "Credible knowledge, no fake live data" },
+          { value: "Curated", label: "Credible insights, clearly sourced" },
           { value: "Global", label: "Useful across backgrounds and specialties" }
         ]}
       />

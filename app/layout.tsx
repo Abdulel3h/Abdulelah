@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import type { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { AgentPanel } from "@/components/agent/AgentPanel";
@@ -14,7 +15,49 @@ import { ogImage } from "@/lib/metadata";
 import { absoluteUrl } from "@/lib/utils";
 import "./globals.css";
 
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter"
+});
+
 const socialImage = absoluteUrl(ogImage);
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: siteConfig.name,
+  url: siteConfig.url,
+  email: `mailto:${siteConfig.email}`,
+  jobTitle: "Junior AI Engineer & AI Solutions Specialist",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Riyadh",
+    addressCountry: "SA"
+  },
+  alumniOf: {
+    "@type": "CollegeOrUniversity",
+    name: "University of Bisha"
+  },
+  sameAs: [siteConfig.social.linkedin, siteConfig.social.github],
+  knowsAbout: [
+    "Artificial Intelligence",
+    "AI Engineering",
+    "AI Agents",
+    "Machine Learning",
+    "NLP",
+    "LLM Applications",
+    "Cloud AI"
+  ]
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: siteConfig.brand,
+  url: siteConfig.url,
+  description: siteConfig.description
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -59,8 +102,16 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" data-scroll-behavior="smooth">
+    <html lang="en" className={`dark ${inter.variable}`} data-scroll-behavior="smooth">
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
         <TooltipProvider delayDuration={160}>
           <AnimatedBackground />
           <ScrollProgress />

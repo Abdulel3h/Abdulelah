@@ -8,6 +8,7 @@ import {
   judgePortfolioScopeLocally
 } from "@/lib/agent/scope-judge";
 import { classifyAgentMessage } from "@/lib/agent/safety";
+import { applyRuntimeRateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -21,6 +22,24 @@ function getHardBlockReason(
 }
 
 export async function POST(request: Request) {
+  const rateLimit = applyRuntimeRateLimit(request, {
+    namespace: "agent-diagnose",
+    limit: 10,
+    windowMs: 60_000
+  });
+
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { error: "rate_limited" },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(rateLimit.retryAfterSeconds)
+        }
+      }
+    );
+  }
+
   let body: unknown;
 
   try {

@@ -89,8 +89,8 @@ export default function ResumePage() {
                 </TabsContent>
               </Tabs>
               <p className="mt-5 text-sm text-slate-400">
-                The current PDF paths are ready to replace later in{" "}
-                <span className="text-slate-200">/public/resume</span>.
+                Still unsure? Ask Agent Abdulelah in the corner chat and it will
+                recommend the right CV for the role you are hiring for.
               </p>
             </div>
           </div>
