@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import type { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { AgentPanel } from "@/components/agent/AgentPanel";
@@ -19,6 +20,32 @@ const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-inter"
+});
+
+// Arabic typeface for the bilingual blog. preload is off so the font is only
+// fetched on pages whose content actually uses var(--font-thmanyah).
+const thmanyah = localFont({
+  src: [
+    {
+      path: "../public/fonts/thmanyah/thmanyahsans-Regular.woff2",
+      weight: "400",
+      style: "normal"
+    },
+    {
+      path: "../public/fonts/thmanyah/thmanyahsans-Medium.woff2",
+      weight: "500 600",
+      style: "normal"
+    },
+    {
+      path: "../public/fonts/thmanyah/thmanyahsans-Bold.woff2",
+      weight: "700",
+      style: "normal"
+    }
+  ],
+  display: "swap",
+  variable: "--font-thmanyah",
+  preload: false,
+  fallback: ["system-ui", "sans-serif"]
 });
 
 const socialImage = absoluteUrl(ogImage);
@@ -102,7 +129,11 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en" className={`dark ${inter.variable}`} data-scroll-behavior="smooth">
+    <html
+      lang="en"
+      className={`dark ${inter.variable} ${thmanyah.variable}`}
+      data-scroll-behavior="smooth"
+    >
       <body>
         <script
           type="application/ld+json"

@@ -98,6 +98,19 @@ select {
     @apply inline-flex items-center rounded-full border border-white/10 bg-white/[0.055] px-3 py-1 text-xs font-medium text-slate-300;
   }
 
+  /* Arabic blog mode: Thmanyah typeface and no letter-spacing, because
+     tracking visually breaks connected Arabic glyphs. */
+  .blog-arabic {
+    font-family:
+      var(--font-thmanyah), var(--font-inter), Inter, ui-sans-serif, system-ui,
+      sans-serif;
+  }
+
+  .blog-arabic,
+  .blog-arabic * {
+    letter-spacing: 0;
+  }
+
   .section-band {
     @apply border-y border-white/10 bg-white/[0.025];
   }

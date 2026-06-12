@@ -1,13 +1,29 @@
 import { CheckCircle2, Lightbulb } from "lucide-react";
 import type { BlogPost } from "@/data/blog";
+import { getBlogText, localizeBlogPost, type BlogLanguage } from "@/data/blog.ar";
+import { cn } from "@/lib/utils";
 
-export function ArticleContent({ post }: { post: BlogPost }) {
+export function ArticleContent({
+  post,
+  language = "en"
+}: {
+  post: BlogPost;
+  language?: BlogLanguage;
+}) {
+  const isArabic = language === "ar";
+  const text = getBlogText(language);
+  const view = localizeBlogPost(post, language);
+
   return (
-    <article className="mx-auto max-w-3xl">
-      <p className="text-lg leading-9 text-slate-200">{post.content.intro}</p>
+    <article
+      dir={isArabic ? "rtl" : undefined}
+      lang={isArabic ? "ar" : undefined}
+      className={cn("mx-auto max-w-3xl", isArabic && "blog-arabic")}
+    >
+      <p className="text-lg leading-9 text-slate-200">{view.content.intro}</p>
 
       <div className="mt-12 space-y-12">
-        {post.content.sections.map((section) => (
+        {view.content.sections.map((section) => (
           <section key={section.heading}>
             <h2 className="text-2xl font-semibold leading-tight text-white sm:text-3xl">
               {section.heading}
@@ -36,10 +52,10 @@ export function ArticleContent({ post }: { post: BlogPost }) {
       <aside className="mt-14 rounded-3xl border border-gold/25 bg-gold/[0.08] p-6 sm:p-8">
         <Lightbulb className="h-6 w-6 text-amber-100" aria-hidden="true" />
         <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-amber-100">
-          Key takeaway
+          {text.keyTakeaway}
         </p>
         <p className="mt-3 text-base leading-8 text-amber-50/90">
-          {post.content.takeaway}
+          {view.content.takeaway}
         </p>
       </aside>
     </article>
