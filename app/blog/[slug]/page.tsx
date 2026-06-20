@@ -3,12 +3,14 @@ import { notFound } from "next/navigation";
 import { BlogLanguageProvider } from "@/components/blog/BlogLanguageProvider";
 import { BlogLanguageToggle } from "@/components/blog/BlogLanguageToggle";
 import { BlogPostContent } from "@/components/blog/BlogPostContent";
+import { JsonLd } from "@/components/seo/JsonLd";
 import {
   blogPosts,
   getBlogPostBySlug,
   getRelatedBlogPosts
 } from "@/data/blog";
 import { createPageMetadata } from "@/lib/metadata";
+import { blogPostingJsonLd, breadcrumbJsonLd } from "@/lib/structured-data";
 
 type BlogPostPageProps = {
   params: Promise<{
@@ -56,6 +58,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <BlogLanguageProvider>
+      <JsonLd data={blogPostingJsonLd(post)} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Abdulelah AI Insights", path: "/blog" },
+          { name: post.title, path: `/blog/${post.slug}` }
+        ])}
+      />
       <BlogPostContent post={post} relatedPosts={relatedPosts} />
       <BlogLanguageToggle />
     </BlogLanguageProvider>

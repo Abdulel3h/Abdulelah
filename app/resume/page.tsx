@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { FileText, SplitSquareHorizontal } from "lucide-react";
 import { CTASection } from "@/components/sections/CTASection";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { PageHero } from "@/components/ui/PageHero";
 import { ResumeDownloadButton } from "@/components/ui/ResumeDownloadButton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { siteConfig } from "@/data/site";
 import { createPageMetadata } from "@/lib/metadata";
+import { breadcrumbJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = createPageMetadata({
   title: "Resume",
@@ -38,6 +40,12 @@ const resumeCards = [
 export default function ResumePage() {
   return (
     <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Resume", path: "/resume" }
+        ])}
+      />
       <PageHero
         eyebrow="Resume"
         title="Download a version tailored to the role you are hiring for."

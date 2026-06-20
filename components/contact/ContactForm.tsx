@@ -12,11 +12,11 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { siteConfig } from "@/data/site";
 
 const interestTypes = ["Hiring", "Collaboration", "Hackathon", "AI Project", "Other"];
 const SUCCESS_MESSAGE = "Thank you. Your message has been sent successfully.";
-const ERROR_MESSAGE =
-  "Something went wrong. Please email me directly at Abdul0l0h.0@gmail.com.";
+const ERROR_MESSAGE = `Something went wrong. Please email me directly at ${siteConfig.email}.`;
 
 export function ContactForm() {
   const [statusMessage, setStatusMessage] = useState("");

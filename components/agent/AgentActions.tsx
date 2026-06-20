@@ -1,4 +1,4 @@
-import { ArrowRight, ArrowUpRight, Download } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Download, Mail } from "lucide-react";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -35,6 +35,8 @@ export function AgentActions({
             {action.label}
             {action.type === "download" ? (
               <Download className="h-3.5 w-3.5" aria-hidden="true" />
+            ) : action.type === "email" ? (
+              <Mail className="h-3.5 w-3.5" aria-hidden="true" />
             ) : action.type === "prompt" ? (
               <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
             ) : (

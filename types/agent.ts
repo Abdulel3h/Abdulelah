@@ -3,6 +3,7 @@ export type AgentActionType =
   | "external"
   | "download"
   | "contact"
+  | "email"
   | "prompt";
 
 type AgentLinkAction = {

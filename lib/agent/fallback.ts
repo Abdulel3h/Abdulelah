@@ -8,6 +8,10 @@ import {
   resolveAgentFollowUp
 } from "@/lib/agent/context";
 import {
+  getContactEmail,
+  resolveContactChannel
+} from "@/lib/agent/contact-routing";
+import {
   getCvRecommendation,
   getCvRecommendationResponse,
   getRecruiterModeResponse,
@@ -306,8 +310,21 @@ function getArabicFallbackAgentResponse(message: string) {
     ].join("\n");
   }
 
+  if (resolveContactChannel(message) === "business") {
+    return `للاستشارات أو الأعمال أو العمل الحر، يمكنك التواصل مع عبدالإله مباشرة عبر ${getContactEmail("business")}. يبني عبدالإله حلول ذكاء اصطناعي تطبيقية ويقدر يحدد الحل المناسب لاحتياجك. كما يمكنك إرسال رسالة عبر نموذج التواصل. ستجد أزرار التواصل بالأسفل.`;
+  }
+
   if (includesAny(normalized, ["تواصل", "اتواصل", "ايميل", "لينكد", "github"])) {
-    return "يمكنك التواصل مع عبدالإله من خلال نموذج الرسائل الخاص أو صفحة التواصل. ستجد خيارات التواصل المناسبة في أزرار الإجراءات بالأسفل.";
+    const channel = resolveContactChannel(message);
+    const routedEmail = getContactEmail(channel);
+    const channelIntro =
+      channel === "recruitment"
+        ? `للوظائف والتوظيف، تواصل مع عبدالإله عبر ${routedEmail}.`
+        : channel === "business"
+          ? `للاستشارات والأعمال، تواصل مع عبدالإله عبر ${routedEmail}.`
+          : `يمكنك التواصل مع عبدالإله مباشرة عبر ${routedEmail}.`;
+
+    return `${channelIntro} كما يمكنك إرسال رسالة خاصة عبر نموذج Agent Abdulelah أو صفحة التواصل. ستجد أزرار التواصل المناسبة بالأسفل.`;
   }
 
   if (includesAny(normalized, ["مقال", "مقالات", "كتب عن"])) {
@@ -598,8 +615,21 @@ export function getFallbackAgentResponse(
     return `${projectSummary("virtual-astronauts")} Virtual Astronauts combines VR and AI-generated learning content to make universe exploration more interactive and engaging.`;
   }
 
+  if (resolveContactChannel(resolvedMessage) === "business") {
+    return `For consulting, freelance, or business inquiries, you can email Abdulelah directly at ${getContactEmail("business")}. He builds practical, applied AI systems across education, cloud sustainability, security, legal tech, and fintech, and can scope a solution to your needs. You can also send a private message through the contact form. Use the action buttons below to email him or open the contact form.`;
+  }
+
   if (includesAny(normalized, ["contact", "email", "reach", "connect"])) {
-    return `You can send Abdulelah a private message through Agent Abdulelah or the contact page. He is based in ${siteConfig.location}. Use the action buttons below to open his LinkedIn profile or GitHub.`;
+    const channel = resolveContactChannel(resolvedMessage);
+    const routedEmail = getContactEmail(channel);
+    const channelIntro =
+      channel === "recruitment"
+        ? `For roles and recruitment, email Abdulelah at ${routedEmail}.`
+        : channel === "business"
+          ? `For consulting, freelance, or business inquiries, email Abdulelah at ${routedEmail}.`
+          : `You can email Abdulelah directly at ${routedEmail}.`;
+
+    return `${channelIntro} You can also send a private message through Agent Abdulelah or the contact page. He is based in ${siteConfig.location}. Use the action buttons below to email him, open the contact form, or view his LinkedIn.`;
   }
 
   if (includesAny(normalized, ["hire", "recruiter", "different", "fresh graduate"])) {

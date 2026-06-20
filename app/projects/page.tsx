@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { ProjectsFilter } from "@/components/projects/ProjectsFilter";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { PageHero } from "@/components/ui/PageHero";
 import { createPageMetadata } from "@/lib/metadata";
+import { breadcrumbJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = createPageMetadata({
   title: "Projects",
@@ -13,6 +15,12 @@ export const metadata: Metadata = createPageMetadata({
 export default function ProjectsPage() {
   return (
     <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Projects", path: "/projects" }
+        ])}
+      />
       <PageHero
         eyebrow="Projects"
         title="Applied AI case studies across cloud, NLP, security, and intelligent systems."

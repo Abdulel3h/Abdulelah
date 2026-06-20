@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Github, Linkedin, Mail, MapPin, Phone } from "lucide-react";
+import { Github, Linkedin, Mail, MapPin } from "lucide-react";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { ContactCard } from "@/components/ui/ContactCard";
 import { CopyEmailButton } from "@/components/ui/CopyEmailButton";
@@ -46,12 +46,6 @@ export default function ContactPage() {
                 label="Email"
                 value={siteConfig.email}
                 href={`mailto:${siteConfig.email}`}
-              />
-              <ContactCard
-                icon={Phone}
-                label="Phone"
-                value={siteConfig.phone}
-                href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}
               />
               <ContactCard icon={MapPin} label="Location" value={siteConfig.location} />
               {contactProfiles.map((profile) => (

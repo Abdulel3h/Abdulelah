@@ -15,7 +15,17 @@ const securityHeaders = [
   {
     key: "Permissions-Policy",
     value: "camera=(), microphone=(), geolocation=()"
-  }
+  },
+  // HSTS only in production: the site is served exclusively over HTTPS on its
+  // custom domain. Skipped in dev so local http://localhost is unaffected.
+  ...(process.env.NODE_ENV === "production"
+    ? [
+        {
+          key: "Strict-Transport-Security",
+          value: "max-age=31536000; includeSubDomains"
+        }
+      ]
+    : [])
 ];
 
 // TODO: Add a stricter Content-Security-Policy after the final deployment

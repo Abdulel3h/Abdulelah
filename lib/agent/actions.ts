@@ -1,5 +1,9 @@
 import { siteConfig } from "@/data/site";
 import {
+  getContactEmail,
+  resolveContactChannel
+} from "@/lib/agent/contact-routing";
+import {
   getCvRecommendation,
   getRecruiterRoleProfile,
   isCvRecommendationRequest,
@@ -195,6 +199,14 @@ function createPromptAction(
   };
 }
 
+function createEmailAction(email: string): AgentAction {
+  return {
+    label: `Email ${email}`,
+    href: `mailto:${email}`,
+    type: "email"
+  };
+}
+
 export function getContinueAnswerAction(message: string): AgentAction {
   const isArabic = containsArabic(message);
 
@@ -295,12 +307,21 @@ function getCvActions(recommendation: RecruiterCvRecommendation) {
 }
 
 function getRecruiterFitActions(profile: RecruiterRoleProfile) {
+  const recruitmentEmail = createEmailAction(getContactEmail("recruitment"));
+
   return profile.recommendedCv === "both"
-    ? [actions.engineerResume, actions.specialistResume, actions.projects, actions.navigatorContact]
+    ? [
+        actions.engineerResume,
+        actions.specialistResume,
+        recruitmentEmail,
+        actions.projects,
+        actions.navigatorContact
+      ]
     : [
         profile.recommendedCv === "engineer"
           ? actions.engineerResume
           : actions.specialistResume,
+        recruitmentEmail,
         actions.projects,
         actions.skills,
         actions.navigatorContact
@@ -424,7 +445,33 @@ export function enrichAgentActions(
     add(actions.navigatorContact);
   }
 
-  return [...promptActions, ...evidenceActions.slice(0, MAX_EVIDENCE_ACTIONS)];
+  // Surface any contact alias the answer mentions, prioritized so the email
+  // button is not crowded out of the action cap by project-evidence buttons.
+  const detectedEmailActions: AgentAction[] = [];
+
+  for (const email of Object.values(siteConfig.contactEmails)) {
+    const href = `mailto:${email}`;
+
+    if (
+      normalized.includes(email.toLowerCase()) &&
+      !detectedEmailActions.some((action) => action.href === href)
+    ) {
+      detectedEmailActions.push(createEmailAction(email));
+    }
+  }
+
+  const prioritizedEvidence = [
+    ...detectedEmailActions,
+    ...evidenceActions.filter(
+      (action) =>
+        !detectedEmailActions.some((email) => email.href === action.href)
+    )
+  ];
+
+  return [
+    ...promptActions,
+    ...prioritizedEvidence.slice(0, MAX_EVIDENCE_ACTIONS)
+  ];
 }
 
 export function getAgentActions(message: string): AgentAction[] {
@@ -590,7 +637,12 @@ export function getAgentActions(message: string): AgentAction[] {
       "ايميل"
     ])
   ) {
-    add(actions.navigatorContact, actions.contact, actions.linkedin);
+    add(
+      createEmailAction(getContactEmail(resolveContactChannel(message))),
+      actions.navigatorContact,
+      actions.contact,
+      actions.linkedin
+    );
   }
 
   if (

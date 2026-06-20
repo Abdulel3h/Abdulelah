@@ -11,8 +11,10 @@ import { AnimatedBackground } from "@/components/visuals/AnimatedBackground";
 import { PageTransitionWrapper } from "@/components/layout/PageTransitionWrapper";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { siteConfig } from "@/data/site";
 import { ogImage } from "@/lib/metadata";
+import { personJsonLd, websiteJsonLd } from "@/lib/structured-data";
 import { absoluteUrl } from "@/lib/utils";
 import "./globals.css";
 
@@ -49,42 +51,6 @@ const thmanyah = localFont({
 });
 
 const socialImage = absoluteUrl(ogImage);
-
-const personJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: siteConfig.name,
-  url: siteConfig.url,
-  email: `mailto:${siteConfig.email}`,
-  jobTitle: "Junior AI Engineer & AI Solutions Specialist",
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Riyadh",
-    addressCountry: "SA"
-  },
-  alumniOf: {
-    "@type": "CollegeOrUniversity",
-    name: "University of Bisha"
-  },
-  sameAs: [siteConfig.social.linkedin, siteConfig.social.github],
-  knowsAbout: [
-    "Artificial Intelligence",
-    "AI Engineering",
-    "AI Agents",
-    "Machine Learning",
-    "NLP",
-    "LLM Applications",
-    "Cloud AI"
-  ]
-};
-
-const websiteJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: siteConfig.brand,
-  url: siteConfig.url,
-  description: siteConfig.description
-};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -135,14 +101,8 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
     >
       <body>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
-        />
+        <JsonLd data={personJsonLd} />
+        <JsonLd data={websiteJsonLd} />
         <TooltipProvider delayDuration={160}>
           <AnimatedBackground />
           <ScrollProgress />

@@ -10,6 +10,7 @@ import {
   AGENT_CONTACT_INTENTS,
   type AgentContactIntent
 } from "@/lib/contact";
+import { siteConfig } from "@/data/site";
 
 const SUCCESS_MESSAGE = "Your message was sent to Abdulelah successfully.";
 
@@ -178,10 +179,10 @@ export function AgentContactForm({ onClose }: { onClose: () => void }) {
               >
                 Something went wrong. Please email Abdulelah directly at{" "}
                 <a
-                  href="mailto:Abdul0l0h.0@gmail.com"
+                  href={`mailto:${siteConfig.email}`}
                   className="font-semibold underline underline-offset-2"
                 >
-                  Abdul0l0h.0@gmail.com
+                  {siteConfig.email}
                 </a>
                 .
               </p>

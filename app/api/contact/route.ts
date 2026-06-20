@@ -9,9 +9,12 @@ import { applyRuntimeRateLimit } from "@/lib/rate-limit";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const DEFAULT_TO_EMAIL = "Abdul0l0h.0@gmail.com";
+const DEFAULT_TO_EMAIL = "me@abdulelah.de";
 const DEFAULT_FROM_EMAIL = "Portfolio Contact <onboarding@resend.dev>";
 const ERROR_MESSAGE = "Unable to send message right now. Please email me directly.";
+// Largest valid contact payload is a 5,000-char message plus short fields; cap
+// the request body before parsing to avoid buffering oversized payloads.
+const MAX_BODY_BYTES = 16_000;
 function jsonError(status: number) {
   return Response.json(
     {
@@ -30,6 +33,10 @@ function jsonSuccess() {
 }
 
 export async function POST(request: Request) {
+  if (Number(request.headers.get("content-length") ?? 0) > MAX_BODY_BYTES) {
+    return jsonError(413);
+  }
+
   let body: unknown;
 
   try {

@@ -15,6 +15,7 @@ const privacyPoints = [
   "This portfolio collects contact form submissions only when a visitor chooses to send a message.",
   "A contact message may include a name, email address, company, selected intent, and message content.",
   "Agent contact intent and message text are evaluated deterministically to suggest a follow-up priority. Private contact messages are not sent to DeepSeek.",
+  "This site uses Vercel Web Analytics to count anonymous, aggregated page views. It does not use tracking cookies and does not build advertising profiles.",
   "Agent Abdulelah may process visitor questions to answer portfolio-related queries.",
   "API keys and server-side credentials are never exposed to the browser.",
   "Contact messages are sent to Abdulelah's email using Resend.",
