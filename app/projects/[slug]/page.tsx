@@ -13,10 +13,12 @@ import {
   Sparkles
 } from "lucide-react";
 import { ProjectArchitectureFlow } from "@/components/projects/ProjectArchitectureFlow";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { getProjectBySlug, projects } from "@/data/projects";
 import { createPageMetadata } from "@/lib/metadata";
+import { breadcrumbJsonLd } from "@/lib/structured-data";
 
 type ProjectPageProps = {
   params: Promise<{
@@ -70,6 +72,13 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
 
   return (
     <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Projects", path: "/projects" },
+          { name: project.title, path: `/projects/${project.slug}` }
+        ])}
+      />
       <section className="container-shell pt-12 sm:pt-16 lg:pt-20">
         <Link
           href="/projects"

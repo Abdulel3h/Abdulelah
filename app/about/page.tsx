@@ -62,8 +62,10 @@ export default function AboutPage() {
           <div className="premium-panel p-6 sm:p-8">
             <div className="relative space-y-5 text-base leading-8 text-slate-300">
               <p>
-                I am an Information Systems graduate and aspiring AI Engineer focused
-                on building practical, reliable, and context-aware AI solutions.
+                I am Abdulelah Alkhathami (
+                <span lang="ar">عبدالإله الخثعمي</span>), an Information Systems
+                graduate and aspiring AI Engineer focused on building practical,
+                reliable, and context-aware AI solutions.
               </p>
               <p>
                 I have worked on applied AI projects in education, government digital

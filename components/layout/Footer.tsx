@@ -41,6 +41,9 @@ export function Footer() {
           <Link href="/" className="focus-ring rounded text-lg font-semibold">
             <span className="gradient-text">{siteConfig.name}</span>
           </Link>
+          <p className="mt-1 text-sm text-slate-400" lang="ar">
+            {siteConfig.arabicName}
+          </p>
           <p className="mt-3 max-w-xl text-sm leading-6 text-slate-400">
             Building practical, context-aware AI systems for real-world impact
             across NLP, LLMs, Cloud AI, education, security, sustainability,
@@ -97,7 +100,8 @@ export function Footer() {
           </div>
           <Separator className="my-6" />
           <p className="mt-6 text-xs text-slate-500">
-            Copyright {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
+            Copyright {new Date().getFullYear()} {siteConfig.name}{" "}
+            (<span lang="ar">{siteConfig.arabicName}</span>). All rights reserved.
           </p>
         </div>
       </div>

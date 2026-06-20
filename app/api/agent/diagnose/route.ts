@@ -1,8 +1,5 @@
 import { NextResponse } from "next/server";
-import {
-  getDeepSeekModel,
-  hasDeepSeekApiKey
-} from "@/lib/agent/deepseek";
+import { hasDeepSeekApiKey } from "@/lib/agent/deepseek";
 import {
   judgePortfolioScope,
   judgePortfolioScopeLocally
@@ -14,6 +11,10 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const MAX_MESSAGE_LENGTH = 1_200;
+const MAX_BODY_BYTES = 32_000;
+// In production the diagnose tool runs the scope classifier locally only, so an
+// exposed endpoint can never be used to drive paid DeepSeek calls (cost abuse).
+const ALLOW_REMOTE_SCOPE_JUDGE = process.env.NODE_ENV !== "production";
 
 function getHardBlockReason(
   category: ReturnType<typeof classifyAgentMessage>["category"]
@@ -38,6 +39,10 @@ export async function POST(request: Request) {
         }
       }
     );
+  }
+
+  if (Number(request.headers.get("content-length") ?? 0) > MAX_BODY_BYTES) {
+    return NextResponse.json({ error: "payload_too_large" }, { status: 413 });
   }
 
   let body: unknown;
@@ -78,7 +83,6 @@ export async function POST(request: Request) {
         scopeJudgeAllowed: false,
         scopeJudgeReason: "hard_blocked",
         wouldCallAnswerGenerator: false,
-        model: getDeepSeekModel(),
         hasDeepSeekKey
       },
       {
@@ -89,12 +93,13 @@ export async function POST(request: Request) {
     );
   }
 
-  const scope = hasDeepSeekKey
-    ? await judgePortfolioScope(message)
-    : {
-        ...judgePortfolioScopeLocally(message),
-        attempted: false
-      };
+  const scope =
+    hasDeepSeekKey && ALLOW_REMOTE_SCOPE_JUDGE
+      ? await judgePortfolioScope(message)
+      : {
+          ...judgePortfolioScopeLocally(message),
+          attempted: false
+        };
 
   return NextResponse.json(
     {
@@ -104,7 +109,6 @@ export async function POST(request: Request) {
       scopeJudgeAllowed: scope.allowed,
       scopeJudgeReason: scope.reason,
       wouldCallAnswerGenerator: scope.allowed && hasDeepSeekKey,
-      model: getDeepSeekModel(),
       hasDeepSeekKey
     },
     {

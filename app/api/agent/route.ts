@@ -47,6 +47,10 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const MAX_MESSAGE_LENGTH = 1_200;
+// Reject oversized payloads before parsing JSON into memory. Comfortably above a
+// max message plus 8 trimmed history turns and session context, far below the
+// platform body cap.
+const MAX_BODY_BYTES = 32_000;
 
 type AgentResponseBody = Pick<AgentApiResponse, "actions" | "answer" | "quality">;
 type AgentResponseProof = Omit<AgentRuntimeProof, "durationMs" | "model">;
@@ -230,6 +234,20 @@ function blockedResponse(
 
 export async function POST(request: Request) {
   const startedAt = Date.now();
+
+  if (Number(request.headers.get("content-length") ?? 0) > MAX_BODY_BYTES) {
+    return jsonAgentResponse(
+      {
+        answer: "Please send a shorter request so I can help you explore the portfolio.",
+        actions: [],
+        quality: { score: MIN_AGENT_QUALITY_SCORE, passed: true }
+      },
+      getNoScopeJudgeProof("invalid_request", "fallback"),
+      startedAt,
+      { status: 413 }
+    );
+  }
+
   let body: unknown;
 
   try {

@@ -1,3 +1,5 @@
+import { getContactEmail } from "@/lib/agent/contact-routing";
+
 export type RecruiterCvRecommendation = "engineer" | "specialist" | "both";
 
 export type RecruiterRoleId =
@@ -314,7 +316,8 @@ export function getRecruiterRoleResponse(profile: RecruiterRoleProfile) {
     `- Best matching projects: ${profile.projects.join(", ")}`,
     `- Matching skills: ${profile.skills.join(", ")}`,
     `- Recommended CV: ${getCvLabel(profile.recommendedCv)}`,
-    `- Suggested next action: ${profile.nextAction}`
+    `- Suggested next action: ${profile.nextAction}`,
+    `- Recruitment contact: ${getContactEmail("recruitment")}`
   ].join("\n");
 }
 
