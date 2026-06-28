@@ -37,7 +37,7 @@ export function ProjectArchitectureFlow({ project }: { project: Project }) {
         <Badge variant="sky" className="mb-4">
           Architecture Flow
         </Badge>
-        <h2 className="text-2xl font-semibold text-white">From data to usable AI value</h2>
+        <h2 className="text-2xl font-semibold text-paper">From data to usable AI value</h2>
         <div className="mt-8 grid gap-4 lg:grid-cols-4">
           {steps.map((step, index) => {
             const Icon = icons[index] ?? Bot;
@@ -45,14 +45,14 @@ export function ProjectArchitectureFlow({ project }: { project: Project }) {
             return (
               <div key={step} className="relative">
                 <Card className="h-full bg-white/[0.045] p-5">
-                  <span className="grid h-11 w-11 place-items-center rounded-full border border-sky-300/20 bg-sky-300/10 text-sky-200">
+                  <span className="grid h-11 w-11 place-items-center rounded-full border border-accent/20 bg-accent/10 text-accent">
                     <Icon className="h-5 w-5" aria-hidden="true" />
                   </span>
-                  <p className="mt-5 text-sm font-semibold leading-6 text-white">{step}</p>
+                  <p className="mt-5 text-sm font-semibold leading-6 text-paper">{step}</p>
                 </Card>
                 {index < steps.length - 1 ? (
                   <ArrowRight
-                    className="absolute -right-5 top-1/2 z-10 hidden h-5 w-5 -translate-y-1/2 text-sky-200 lg:block"
+                    className="absolute -right-5 top-1/2 z-10 hidden h-5 w-5 -translate-y-1/2 text-accent lg:block"
                     aria-hidden="true"
                   />
                 ) : null}

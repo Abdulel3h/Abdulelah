@@ -12,7 +12,7 @@ const profileLinks = [
 
 export function Footer() {
   return (
-    <footer className="relative border-t border-white/10 bg-[#030712]/78">
+    <footer className="relative border-t border-white/10 bg-[#0a0a0b]/78">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
       <div className="container-shell pt-14">
         <div className="premium-panel p-6 sm:p-8 lg:p-10">
@@ -58,7 +58,7 @@ export function Footer() {
           </p>
           <a
             href={`mailto:${siteConfig.email}`}
-            className="focus-ring mt-5 inline-flex items-center gap-2 rounded-full text-sm font-medium text-sky-200 transition hover:text-white"
+            className="focus-ring mt-5 inline-flex items-center gap-2 rounded-full text-sm font-medium text-accent transition hover:text-paper"
           >
             <Mail className="h-4 w-4" aria-hidden="true" />
             {siteConfig.email}
@@ -66,13 +66,13 @@ export function Footer() {
         </div>
 
         <div>
-          <h2 className="text-sm font-semibold text-white">Quick links</h2>
+          <h2 className="text-sm font-semibold text-paper">Quick links</h2>
           <div className="mt-4 grid grid-cols-2 gap-2">
             {quickLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="focus-ring rounded text-sm text-slate-400 transition hover:text-white"
+                className="focus-ring rounded text-sm text-paper-dim transition hover:text-paper"
               >
                 {link.label}
               </Link>
@@ -81,7 +81,7 @@ export function Footer() {
         </div>
 
         <div>
-          <h2 className="text-sm font-semibold text-white">Profiles</h2>
+          <h2 className="text-sm font-semibold text-paper">Profiles</h2>
           <div className="mt-4 flex flex-wrap gap-3">
             {profileLinks.map((profile) => {
               const Icon = profile.icon;
@@ -95,7 +95,7 @@ export function Footer() {
                   className={buttonVariants({
                     variant: "outline",
                     size: "sm",
-                    className: "text-slate-300"
+                    className: "text-paper-dim"
                   })}
                   aria-label={`${profile.label} profile`}
                 >
@@ -106,7 +106,7 @@ export function Footer() {
             })}
           </div>
           <Separator className="my-6" />
-          <p className="mt-6 text-xs text-slate-500">
+          <p className="mt-6 text-xs text-paper-faint">
             Copyright {new Date().getFullYear()} {siteConfig.name}{" "}
             (<span lang="ar">{siteConfig.arabicName}</span>). All rights reserved.
           </p>

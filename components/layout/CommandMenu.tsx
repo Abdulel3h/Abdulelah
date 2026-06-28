@@ -95,13 +95,13 @@ export function CommandMenu() {
         type="button"
         variant="outline"
         size="sm"
-        className="hidden text-xs text-slate-300 lg:inline-flex"
+        className="hidden text-xs text-paper-dim lg:inline-flex"
         onClick={() => setOpen(true)}
         aria-label="Open command menu"
       >
         <Search className="h-3.5 w-3.5" aria-hidden="true" />
         Search
-        <span className="rounded-md border border-white/10 bg-white/[0.06] px-1.5 py-0.5 text-[10px] text-slate-400">
+        <span className="rounded-md border border-white/10 bg-white/[0.06] px-1.5 py-0.5 text-[10px] text-paper-dim">
           Ctrl K
         </span>
       </Button>
@@ -138,13 +138,13 @@ export function CommandMenu() {
                       }}
                     >
                       <span>{command.label}</span>
-                      <span className="text-xs text-slate-500">{command.href}</span>
+                      <span className="text-xs text-paper-faint">{command.href}</span>
                     </Link>
                   </CommandItem>
                 ))}
               </CommandGroup>
               <CommandSeparator />
-              <p className="px-4 py-3 text-xs text-slate-500">
+              <p className="px-4 py-3 text-xs text-paper-faint">
                 Tip: use Ctrl K or Cmd K from anywhere on the site.
               </p>
             </CommandList>

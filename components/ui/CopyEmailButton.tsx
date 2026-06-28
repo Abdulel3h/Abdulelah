@@ -49,11 +49,11 @@ export function CopyEmailButton({ email }: { email: string }) {
     <button
       type="button"
       onClick={copyEmail}
-      className="focus-ring inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-sm font-semibold text-slate-200 transition hover:border-sky-300/35 hover:text-white"
+      className="focus-ring inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-sm font-semibold text-paper transition hover:border-accent/35 hover:text-paper"
       aria-label="Copy email address"
       aria-live="polite"
     >
-      {copied ? <Check className="h-4 w-4 text-sky-200" /> : <Copy className="h-4 w-4" />}
+      {copied ? <Check className="h-4 w-4 text-accent" /> : <Copy className="h-4 w-4" />}
       {copyState === "failed" ? "Copy failed" : copied ? "Copied" : "Copy email"}
     </button>
   );

@@ -85,8 +85,8 @@ export function BlogFilters({
       lang={isArabic ? "ar" : undefined}
       className={cn(isArabic && "blog-arabic")}
     >
-      <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.045] px-4 py-2 text-sm text-slate-300 backdrop-blur-xl">
-        <Search className="h-5 w-5 shrink-0 text-sky-200" aria-hidden="true" />
+      <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.045] px-4 py-2 text-sm text-paper-dim backdrop-blur-xl">
+        <Search className="h-5 w-5 shrink-0 text-accent" aria-hidden="true" />
         <span className="sr-only">{text.searchLabel}</span>
         <Input
           value={searchQuery}
@@ -98,7 +98,7 @@ export function BlogFilters({
       </label>
 
       <div className="mt-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-paper-faint">
           {text.exploreByTopic}
         </p>
         <div
@@ -116,7 +116,7 @@ export function BlogFilters({
               className={cn(
                 "shrink-0",
                 activeCategory === category &&
-                  "border-sky-300/60 bg-sky-300/15 text-sky-100"
+                  "border-accent/60 bg-accent/15 text-accent"
               )}
             >
               {isArabic ? blogCategoryLabelsAr[category] ?? category : category}
@@ -126,7 +126,7 @@ export function BlogFilters({
       </div>
 
       <div className="mt-5">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-paper-faint">
           {text.usefulFor}
         </p>
         <div
@@ -149,16 +149,16 @@ export function BlogFilters({
         </div>
       </div>
 
-      <p className="mt-8 text-sm text-slate-400" aria-live="polite">
+      <p className="mt-8 text-sm text-paper-dim" aria-live="polite">
         {isArabic ? (
           <>
             يعرض{" "}
-            <span className="font-semibold text-sky-100">{arabicCountLabel}</span>
+            <span className="font-semibold text-accent">{arabicCountLabel}</span>
           </>
         ) : (
           <>
             Showing{" "}
-            <span className="font-semibold text-sky-100">
+            <span className="font-semibold text-accent">
               {filteredPosts.length}
             </span>{" "}
             {filteredPosts.length === 1 ? "article" : "articles"}
@@ -173,7 +173,7 @@ export function BlogFilters({
       </div>
 
       {!filteredPosts.length ? (
-        <Card className="mt-8 p-8 text-center text-slate-300">
+        <Card className="mt-8 p-8 text-center text-paper-dim">
           {text.emptyState}
         </Card>
       ) : null}

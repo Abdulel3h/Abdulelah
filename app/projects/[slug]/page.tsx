@@ -83,7 +83,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
       <section className="container-shell pt-12 sm:pt-16 lg:pt-20">
         <Link
           href="/projects"
-          className="focus-ring mb-8 inline-flex items-center gap-2 rounded-full text-sm font-semibold text-slate-300 transition hover:text-white"
+          className="focus-ring mb-8 inline-flex items-center gap-2 rounded-full text-sm font-semibold text-paper-dim transition hover:text-paper"
         >
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Back to Projects
@@ -94,7 +94,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
           <div className="relative grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
           <div>
             <p className="badge mb-5">{project.category}</p>
-            <h1 className="max-w-5xl text-4xl font-semibold leading-tight text-white sm:text-5xl">
+            <h1 className="max-w-5xl text-4xl font-semibold leading-tight text-paper sm:text-5xl">
               {project.title}
             </h1>
             {project.tagline ? (
@@ -125,23 +125,23 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
           </div>
 
           <aside className="rounded-3xl border border-white/10 bg-white/[0.045] p-6">
-            <h2 className="text-lg font-semibold text-white">Case study profile</h2>
+            <h2 className="text-lg font-semibold text-paper">Case study profile</h2>
             <dl className="mt-6 grid gap-5">
               <div>
-                <dt className="text-sm text-slate-400">Role</dt>
-                <dd className="mt-1 font-semibold text-white">{project.role}</dd>
+                <dt className="text-sm text-paper-dim">Role</dt>
+                <dd className="mt-1 font-semibold text-paper">{project.role}</dd>
               </div>
               <div>
-                <dt className="text-sm text-slate-400">Year</dt>
-                <dd className="mt-1 font-semibold text-white">{project.year}</dd>
+                <dt className="text-sm text-paper-dim">Year</dt>
+                <dd className="mt-1 font-semibold text-paper">{project.year}</dd>
               </div>
               <div>
-                <dt className="text-sm text-slate-400">Technologies</dt>
+                <dt className="text-sm text-paper-dim">Technologies</dt>
                 <dd className="mt-3 flex flex-wrap gap-2">
                   {project.technologies.map((technology) => (
                     <span
                       key={technology}
-                      className="rounded-full bg-white/[0.06] px-3 py-1 text-xs text-slate-300"
+                      className="rounded-full bg-white/[0.06] px-3 py-1 text-xs text-paper-dim"
                     >
                       {technology}
                     </span>
@@ -156,9 +156,9 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
 
       {project.context ? (
         <section className="container-shell pb-12">
-          <div className="rounded-3xl border border-sky-300/20 bg-sky-300/10 p-6 text-sky-50">
+          <div className="rounded-3xl border border-accent/20 bg-accent/10 p-6 text-accent">
             <p className="text-sm font-semibold">Context</p>
-            <p className="mt-2 leading-7 text-sky-100/90">{project.context}</p>
+            <p className="mt-2 leading-7 text-accent/90">{project.context}</p>
           </div>
         </section>
       ) : null}
@@ -171,11 +171,11 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
 
               return (
                 <article key={card.title} className="glass-card rounded-3xl p-6">
-                  <span className="grid h-12 w-12 place-items-center rounded-full border border-sky-300/20 bg-sky-300/10 text-sky-200">
+                  <span className="grid h-12 w-12 place-items-center rounded-full border border-accent/20 bg-accent/10 text-accent">
                     <Icon className="h-5 w-5" aria-hidden="true" />
                   </span>
-                  <h2 className="mt-6 text-xl font-semibold text-white">{card.title}</h2>
-                  <p className="mt-4 text-sm leading-7 text-slate-300">{card.body}</p>
+                  <h2 className="mt-6 text-xl font-semibold text-paper">{card.title}</h2>
+                  <p className="mt-4 text-sm leading-7 text-paper-dim">{card.body}</p>
                 </article>
               );
             })}
@@ -194,9 +194,9 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
             {project.responsibilities.map((responsibility) => (
               <div
                 key={responsibility}
-                className="subtle-card flex gap-3 rounded-2xl p-4 text-sm leading-7 text-slate-300"
+                className="subtle-card flex gap-3 rounded-2xl p-4 text-sm leading-7 text-paper-dim"
               >
-                <ShieldCheck className="mt-1 h-4 w-4 shrink-0 text-sky-200" aria-hidden="true" />
+                <ShieldCheck className="mt-1 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
                 {responsibility}
               </div>
             ))}
@@ -217,10 +217,10 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
           <div className="mt-8 grid gap-5 md:grid-cols-2">
             {project.technicalApproach.map((item) => (
               <div key={item} className="glass-card flex gap-4 rounded-2xl p-5">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-sky-300/20 bg-sky-300/10 text-sky-200">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-accent/20 bg-accent/10 text-accent">
                   <Layers3 className="h-4 w-4" aria-hidden="true" />
                 </span>
-                <p className="text-sm leading-7 text-slate-300">{item}</p>
+                <p className="text-sm leading-7 text-paper-dim">{item}</p>
               </div>
             ))}
           </div>
@@ -233,8 +233,8 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
             <SectionHeader eyebrow="Key features" title="What the project enables" />
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
               {project.features.map((feature) => (
-                <div key={feature} className="subtle-card flex gap-3 rounded-2xl p-4 text-sm text-slate-300">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-sky-200" aria-hidden="true" />
+                <div key={feature} className="subtle-card flex gap-3 rounded-2xl p-4 text-sm text-paper-dim">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
                   {feature}
                 </div>
               ))}
@@ -243,16 +243,16 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
 
           <article className="glass-card rounded-3xl p-6 sm:p-8">
             <p className="badge mb-5">Impact</p>
-            <h2 className="text-2xl font-semibold text-white">Applied value</h2>
-            <p className="mt-4 text-sm leading-7 text-slate-300">{project.impact}</p>
+            <h2 className="text-2xl font-semibold text-paper">Applied value</h2>
+            <p className="mt-4 text-sm leading-7 text-paper-dim">{project.impact}</p>
             {project.lessons ? (
               <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-5">
-                <p className="text-sm font-semibold text-white">Lessons Learned</p>
-                <p className="mt-2 text-sm leading-7 text-slate-300">{project.lessons}</p>
+                <p className="text-sm font-semibold text-paper">Lessons Learned</p>
+                <p className="mt-2 text-sm leading-7 text-paper-dim">{project.lessons}</p>
               </div>
             ) : null}
             {project.quote ? (
-              <blockquote className="mt-6 border-l-2 border-gold pl-5 text-lg font-medium leading-8 text-amber-100">
+              <blockquote className="mt-6 border-l-2 border-accent pl-5 text-lg font-medium leading-8 text-accent-soft">
                 {project.quote}
               </blockquote>
             ) : null}
@@ -308,12 +308,12 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
             <Link
               key={related.slug}
               href={`/projects/${related.slug}`}
-              className="focus-ring glass-card group rounded-2xl p-6 transition hover:-translate-y-1 hover:border-sky-300/35"
+              className="focus-ring glass-card group rounded-2xl p-6 transition hover:-translate-y-1 hover:border-accent/35"
             >
               <p className="badge mb-4">{related.category}</p>
-              <h2 className="text-xl font-semibold text-white">{related.title}</h2>
-              <p className="mt-3 text-sm leading-7 text-slate-300">{related.shortDescription}</p>
-              <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-sky-100">
+              <h2 className="text-xl font-semibold text-paper">{related.title}</h2>
+              <p className="mt-3 text-sm leading-7 text-paper-dim">{related.shortDescription}</p>
+              <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-accent">
                 View case study
                 <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" aria-hidden="true" />
               </span>

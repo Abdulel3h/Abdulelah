@@ -73,21 +73,21 @@ export function AgentContactForm({ onClose }: { onClose: () => void }) {
     <section
       id="agent-contact"
       aria-labelledby="agent-contact-title"
-      className="rounded-2xl border border-gold/25 bg-gold/[0.07] p-4"
+      className="rounded-2xl border border-accent/25 bg-accent/[0.07] p-4"
     >
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h3 id="agent-contact-title" className="text-sm font-semibold text-white">
+          <h3 id="agent-contact-title" className="text-sm font-semibold text-paper">
             Send Abdulelah a message
           </h3>
-          <p className="mt-1 text-xs leading-5 text-slate-400">
+          <p className="mt-1 text-xs leading-5 text-paper-dim">
             Your message is sent privately to Abdulelah&apos;s email through Resend.
           </p>
         </div>
         <button
           type="button"
           onClick={onClose}
-          className="focus-ring grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/10 text-slate-400 transition hover:text-white"
+          className="focus-ring grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/10 text-paper-dim transition hover:text-paper"
           aria-label="Close message form"
         >
           <X className="h-3.5 w-3.5" aria-hidden="true" />
@@ -98,8 +98,8 @@ export function AgentContactForm({ onClose }: { onClose: () => void }) {
         {intent ? (
           <>
             <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-white/10 bg-white/[0.035] px-3 py-2">
-              <p className="text-xs text-slate-300">
-                Intent: <span className="font-semibold text-amber-100">{intent}</span>
+              <p className="text-xs text-paper-dim">
+                Intent: <span className="font-semibold text-accent-soft">{intent}</span>
               </p>
               <button
                 type="button"
@@ -107,13 +107,13 @@ export function AgentContactForm({ onClose }: { onClose: () => void }) {
                   setIntent(null);
                   setStatus("idle");
                 }}
-                className="focus-ring inline-flex items-center gap-1 rounded-full text-[11px] font-semibold text-sky-200 transition hover:text-white"
+                className="focus-ring inline-flex items-center gap-1 rounded-full text-[11px] font-semibold text-accent transition hover:text-paper"
               >
                 <ArrowLeft className="h-3 w-3" aria-hidden="true" />
                 Change
               </button>
             </div>
-            <label className="grid gap-1.5 text-xs font-medium text-slate-200">
+            <label className="grid gap-1.5 text-xs font-medium text-paper">
               Name
               <Input
                 ref={nameInputRef}
@@ -124,7 +124,7 @@ export function AgentContactForm({ onClose }: { onClose: () => void }) {
                 placeholder="Your name"
               />
             </label>
-            <label className="grid gap-1.5 text-xs font-medium text-slate-200">
+            <label className="grid gap-1.5 text-xs font-medium text-paper">
               Email
               <Input
                 required
@@ -135,8 +135,8 @@ export function AgentContactForm({ onClose }: { onClose: () => void }) {
                 placeholder="you@example.com"
               />
             </label>
-            <label className="grid gap-1.5 text-xs font-medium text-slate-200">
-              Company <span className="text-slate-500">Optional</span>
+            <label className="grid gap-1.5 text-xs font-medium text-paper">
+              Company <span className="text-paper-faint">Optional</span>
               <Input
                 name="company"
                 autoComplete="organization"
@@ -144,7 +144,7 @@ export function AgentContactForm({ onClose }: { onClose: () => void }) {
                 placeholder="Company or organization"
               />
             </label>
-            <label className="grid gap-1.5 text-xs font-medium text-slate-200">
+            <label className="grid gap-1.5 text-xs font-medium text-paper">
               Message
               <Textarea
                 required
@@ -191,7 +191,7 @@ export function AgentContactForm({ onClose }: { onClose: () => void }) {
             <div className="flex flex-wrap items-center justify-between gap-3">
               <Link
                 href="/privacy"
-                className="focus-ring rounded text-[11px] text-slate-400 underline underline-offset-4 transition hover:text-white"
+                className="focus-ring rounded text-[11px] text-paper-dim underline underline-offset-4 transition hover:text-paper"
               >
                 Privacy notice
               </Link>
@@ -204,7 +204,7 @@ export function AgentContactForm({ onClose }: { onClose: () => void }) {
         ) : (
           <>
             <fieldset>
-              <legend className="text-xs font-semibold text-slate-200">
+              <legend className="text-xs font-semibold text-paper">
                 What would you like to discuss?
               </legend>
               <div className="mt-3 grid gap-2 sm:grid-cols-2">
@@ -213,7 +213,7 @@ export function AgentContactForm({ onClose }: { onClose: () => void }) {
                     key={option}
                     type="button"
                     onClick={() => setIntent(option)}
-                    className="focus-ring min-h-10 rounded-xl border border-white/10 bg-white/[0.035] px-3 py-2 text-left text-xs font-semibold leading-5 text-slate-200 transition hover:border-sky-300/35 hover:bg-sky-300/10 hover:text-white"
+                    className="focus-ring min-h-10 rounded-xl border border-white/10 bg-white/[0.035] px-3 py-2 text-left text-xs font-semibold leading-5 text-paper transition hover:border-accent/35 hover:bg-accent/10 hover:text-paper"
                   >
                     {option}
                   </button>
@@ -222,7 +222,7 @@ export function AgentContactForm({ onClose }: { onClose: () => void }) {
             </fieldset>
             <Link
               href="/privacy"
-              className="focus-ring w-fit rounded text-[11px] text-slate-400 underline underline-offset-4 transition hover:text-white"
+              className="focus-ring w-fit rounded text-[11px] text-paper-dim underline underline-offset-4 transition hover:text-paper"
             >
               Privacy notice
             </Link>

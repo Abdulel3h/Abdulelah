@@ -21,7 +21,7 @@ const DropdownMenuContent = React.forwardRef<
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
-        "z-50 min-w-56 overflow-hidden rounded-2xl border border-white/10 bg-slate-950/95 p-2 text-slate-200 shadow-glow backdrop-blur-xl",
+        "z-50 min-w-56 overflow-hidden rounded-2xl border border-white/10 bg-ink-900/95 p-2 text-paper shadow-glow backdrop-blur-xl",
         className
       )}
       {...props}
@@ -39,7 +39,7 @@ const DropdownMenuItem = React.forwardRef<
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn(
-      "focus:bg-white/[0.06] focus:text-white relative flex cursor-default select-none items-center rounded-xl px-3 py-2 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "focus:bg-white/[0.06] focus:text-paper relative flex cursor-default select-none items-center rounded-xl px-3 py-2 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       inset && "pl-8",
       className
     )}
@@ -55,7 +55,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
   <DropdownMenuPrimitive.CheckboxItem
     ref={ref}
     className={cn(
-      "focus:bg-white/[0.06] focus:text-white relative flex cursor-default select-none items-center rounded-xl py-2 pl-8 pr-3 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "focus:bg-white/[0.06] focus:text-paper relative flex cursor-default select-none items-center rounded-xl py-2 pl-8 pr-3 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       className
     )}
     checked={checked}
@@ -78,7 +78,7 @@ const DropdownMenuRadioItem = React.forwardRef<
   <DropdownMenuPrimitive.RadioItem
     ref={ref}
     className={cn(
-      "focus:bg-white/[0.06] focus:text-white relative flex cursor-default select-none items-center rounded-xl py-2 pl-8 pr-3 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      "focus:bg-white/[0.06] focus:text-paper relative flex cursor-default select-none items-center rounded-xl py-2 pl-8 pr-3 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       className
     )}
     {...props}
@@ -101,7 +101,7 @@ const DropdownMenuLabel = React.forwardRef<
 >(({ className, inset, ...props }, ref) => (
   <DropdownMenuPrimitive.Label
     ref={ref}
-    className={cn("px-3 py-2 text-xs font-semibold text-slate-400", inset && "pl-8", className)}
+    className={cn("px-3 py-2 text-xs font-semibold text-paper-dim", inset && "pl-8", className)}
     {...props}
   />
 ));
@@ -120,7 +120,7 @@ const DropdownMenuSeparator = React.forwardRef<
 DropdownMenuSeparator.displayName = DropdownMenuPrimitive.Separator.displayName;
 
 const DropdownMenuShortcut = ({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>) => (
-  <span className={cn("ml-auto text-xs tracking-widest text-slate-500", className)} {...props} />
+  <span className={cn("ml-auto text-xs tracking-widest text-paper-faint", className)} {...props} />
 );
 DropdownMenuShortcut.displayName = "DropdownMenuShortcut";
 
@@ -133,7 +133,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
   <DropdownMenuPrimitive.SubTrigger
     ref={ref}
     className={cn(
-      "focus:bg-white/[0.06] focus:text-white flex cursor-default select-none items-center rounded-xl px-3 py-2 text-sm outline-none",
+      "focus:bg-white/[0.06] focus:text-paper flex cursor-default select-none items-center rounded-xl px-3 py-2 text-sm outline-none",
       inset && "pl-8",
       className
     )}
@@ -152,7 +152,7 @@ const DropdownMenuSubContent = React.forwardRef<
   <DropdownMenuPrimitive.SubContent
     ref={ref}
     className={cn(
-      "z-50 min-w-48 overflow-hidden rounded-2xl border border-white/10 bg-slate-950/95 p-2 text-slate-200 shadow-glow backdrop-blur-xl",
+      "z-50 min-w-48 overflow-hidden rounded-2xl border border-white/10 bg-ink-900/95 p-2 text-paper shadow-glow backdrop-blur-xl",
       className
     )}
     {...props}

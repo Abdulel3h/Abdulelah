@@ -34,7 +34,7 @@ export function PageHero({
     <section className="container-shell pt-14 sm:pt-20 lg:pt-24">
       <div className="premium-panel animate-hero-enter p-6 sm:p-8 lg:p-10">
         <div className="absolute inset-0 bg-soft-grid bg-[length:34px_34px] opacity-20" aria-hidden="true" />
-        <div className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-sky-400/15 blur-3xl" aria-hidden="true" />
+        <div className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-accent/15 blur-3xl" aria-hidden="true" />
         <div className="relative max-w-4xl">
           <Badge variant="sky" className="mb-5">
             {eyebrow}
@@ -67,8 +67,8 @@ export function PageHero({
           <div className="relative mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {stats.map((stat) => (
               <Card key={stat.label} className="rounded-2xl bg-white/[0.045] p-4">
-                <p className="text-xl font-semibold text-white">{stat.value}</p>
-                <p className="mt-1 text-sm leading-6 text-slate-400">{stat.label}</p>
+                <p className="text-xl font-semibold text-paper">{stat.value}</p>
+                <p className="mt-1 text-sm leading-6 text-paper-dim">{stat.label}</p>
               </Card>
             ))}
           </div>

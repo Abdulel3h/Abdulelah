@@ -59,14 +59,14 @@ export default function ResumePage() {
         <div className="grid gap-6 lg:grid-cols-2">
           {resumeCards.map((card) => (
             <article key={card.title} className="premium-panel p-6 sm:p-8">
-              <span className="grid h-12 w-12 place-items-center rounded-full border border-sky-300/20 bg-sky-300/10 text-sky-200">
+              <span className="grid h-12 w-12 place-items-center rounded-full border border-accent/20 bg-accent/10 text-accent">
                 <FileText className="h-5 w-5" aria-hidden="true" />
               </span>
-              <h2 className="mt-6 text-2xl font-semibold text-white">{card.title}</h2>
-              <p className="mt-4 text-sm leading-7 text-slate-300">{card.description}</p>
+              <h2 className="mt-6 text-2xl font-semibold text-paper">{card.title}</h2>
+              <p className="mt-4 text-sm leading-7 text-paper-dim">{card.description}</p>
               <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-5">
-                <p className="text-sm font-semibold text-slate-200">Positioning</p>
-                <p className="mt-2 text-sm leading-7 text-slate-300">{card.summary}</p>
+                <p className="text-sm font-semibold text-paper">Positioning</p>
+                <p className="mt-2 text-sm leading-7 text-paper-dim">{card.summary}</p>
               </div>
               <div className="mt-6">
                 <ResumeDownloadButton href={card.href}>{card.button}</ResumeDownloadButton>
@@ -77,26 +77,26 @@ export default function ResumePage() {
 
         <div className="mt-8 rounded-3xl border border-white/10 bg-white/[0.04] p-6 sm:p-8">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
-            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-gold/25 bg-gold/10 text-amber-100">
+            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-accent/25 bg-accent/10 text-accent-soft">
               <SplitSquareHorizontal className="h-5 w-5" aria-hidden="true" />
             </span>
             <div className="min-w-0">
-              <h2 className="text-2xl font-semibold text-white">Which CV should you choose?</h2>
+              <h2 className="text-2xl font-semibold text-paper">Which CV should you choose?</h2>
               <Tabs defaultValue="engineer" className="mt-5">
                 <TabsList className="w-full justify-start overflow-x-auto sm:w-auto">
                   <TabsTrigger value="engineer">AI Engineer</TabsTrigger>
                   <TabsTrigger value="specialist">AI Specialist</TabsTrigger>
                 </TabsList>
-                <TabsContent value="engineer" className="rounded-2xl border border-white/10 bg-white/[0.035] p-4 text-sm leading-7 text-slate-300">
+                <TabsContent value="engineer" className="rounded-2xl border border-white/10 bg-white/[0.035] p-4 text-sm leading-7 text-paper-dim">
                   Choose AI Engineer for technical AI development, NLP, LLMs,
                   cloud deployment, and intelligent systems roles.
                 </TabsContent>
-                <TabsContent value="specialist" className="rounded-2xl border border-white/10 bg-white/[0.035] p-4 text-sm leading-7 text-slate-300">
+                <TabsContent value="specialist" className="rounded-2xl border border-white/10 bg-white/[0.035] p-4 text-sm leading-7 text-paper-dim">
                   Choose AI Specialist for solution, consulting, analysis,
                   dashboard, and cross-functional implementation roles.
                 </TabsContent>
               </Tabs>
-              <p className="mt-5 text-sm text-slate-400">
+              <p className="mt-5 text-sm text-paper-dim">
                 Still unsure? Ask Agent Abdulelah in the corner chat and it will
                 recommend the right CV for the role you are hiring for.
               </p>

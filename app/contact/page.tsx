@@ -58,10 +58,10 @@ export default function ContactPage() {
                 />
               ))}
             </div>
-            <div className="mt-6 rounded-2xl border border-gold/25 bg-gold/10 p-5">
-              <p className="text-sm leading-7 text-amber-100">
+            <div className="mt-6 rounded-2xl border border-accent/25 bg-accent/10 p-5">
+              <p className="text-sm leading-7 text-accent-soft">
                 Prefer direct contact? Email me at{" "}
-                <a href={`mailto:${siteConfig.email}`} className="font-semibold text-white">
+                <a href={`mailto:${siteConfig.email}`} className="font-semibold text-paper">
                   {siteConfig.email}
                 </a>
               </p>

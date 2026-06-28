@@ -44,10 +44,10 @@ export function BlogIndexContent() {
         <section className="container-shell section-space">
           <div className="max-w-3xl">
             <p className="badge mb-4">{text.libraryBadge}</p>
-            <h2 className="text-3xl font-semibold text-white sm:text-4xl">
+            <h2 className="text-3xl font-semibold text-paper sm:text-4xl">
               {text.libraryTitle}
             </h2>
-            <p className="mt-5 text-base leading-8 text-slate-300">
+            <p className="mt-5 text-base leading-8 text-paper-dim">
               {text.libraryBody}
             </p>
           </div>

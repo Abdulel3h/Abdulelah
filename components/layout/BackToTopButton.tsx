@@ -21,7 +21,7 @@ export function BackToTopButton() {
           initial={{ opacity: 0, y: 16, scale: 0.96 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 12, scale: 0.96 }}
-          className="focus-ring fixed bottom-20 right-5 z-30 grid h-11 w-11 place-items-center rounded-full border border-white/10 bg-slate-950/80 text-sky-100 shadow-glow backdrop-blur-xl transition hover:border-sky-300/45"
+          className="focus-ring fixed bottom-20 right-5 z-30 grid h-11 w-11 place-items-center rounded-full border border-white/10 bg-ink-900/80 text-accent shadow-glow backdrop-blur-xl transition hover:border-accent/45"
           aria-label="Back to top"
           onClick={() => window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" })}
         >

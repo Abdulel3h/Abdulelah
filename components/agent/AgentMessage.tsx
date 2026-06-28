@@ -31,7 +31,7 @@ export function AgentMessage({
       aria-label={`${isAssistant ? "Agent Abdulelah" : "You"} message`}
     >
       {isAssistant ? (
-        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-sky-300/25 bg-sky-300/10 text-sky-100">
+        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-accent/25 bg-accent/10 text-accent">
           <Bot className="h-4 w-4" aria-hidden="true" />
         </span>
       ) : null}
@@ -40,8 +40,8 @@ export function AgentMessage({
         className={cn(
           "min-w-0 max-w-[92%] overflow-visible rounded-2xl border px-4 py-3 text-sm sm:max-w-[90%]",
           isAssistant
-            ? "border-white/10 bg-white/[0.045] text-slate-200"
-            : "border-gold/25 bg-gold/[0.11] text-amber-50",
+            ? "border-white/10 bg-white/[0.045] text-paper"
+            : "border-accent/25 bg-accent/[0.11] text-amber-50",
           message.isError && "border-rose-300/25 bg-rose-400/[0.08] text-rose-100"
         )}
       >
@@ -50,7 +50,7 @@ export function AgentMessage({
         {message.mode ? (
           <p
             dir="ltr"
-            className="mt-2 text-left text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500"
+            className="mt-2 text-left text-[10px] font-semibold uppercase tracking-[0.18em] text-paper-faint"
           >
             {getModeLabel()}
           </p>
@@ -59,9 +59,9 @@ export function AgentMessage({
         {message.runtime ? (
           <details
             dir="ltr"
-            className="mt-2 border-t border-white/[0.07] pt-2 text-left text-[10px] leading-4 text-slate-500"
+            className="mt-2 border-t border-white/[0.07] pt-2 text-left text-[10px] leading-4 text-paper-faint"
           >
-            <summary className="cursor-pointer text-slate-500/80 transition hover:text-slate-400">
+            <summary className="cursor-pointer text-paper-faint/80 transition hover:text-paper-dim">
               Runtime details
             </summary>
             <p className="mt-1 [overflow-wrap:anywhere]">
@@ -86,7 +86,7 @@ export function AgentMessage({
       </div>
 
       {!isAssistant ? (
-        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-gold/25 bg-gold/10 text-amber-100">
+        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-accent/25 bg-accent/10 text-accent-soft">
           <UserRound className="h-4 w-4" aria-hidden="true" />
         </span>
       ) : null}

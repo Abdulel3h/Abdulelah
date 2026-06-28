@@ -326,7 +326,7 @@ export function AgentPanel() {
             <motion.button
               type="button"
               aria-label="Close Agent Abdulelah"
-              className="fixed inset-0 z-[39] bg-slate-950/55 backdrop-blur-sm"
+              className="fixed inset-0 z-[39] bg-ink-900/55 backdrop-blur-sm"
               initial={reduceMotion ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={reduceMotion ? undefined : { opacity: 0 }}
@@ -337,27 +337,27 @@ export function AgentPanel() {
               aria-modal="false"
               aria-labelledby="agent-panel-title"
               aria-describedby="agent-panel-description"
-              className="fixed inset-x-0 bottom-0 top-16 z-40 flex h-[calc(100vh-4rem)] flex-col overflow-hidden rounded-t-3xl border border-white/10 bg-slate-950/95 shadow-[0_-24px_90px_rgba(15,23,42,0.7),0_0_44px_rgba(56,189,248,0.12)] backdrop-blur-2xl supports-[height:100dvh]:h-[calc(100dvh-4rem)] sm:inset-x-auto sm:bottom-24 sm:right-5 sm:top-auto sm:h-[min(660px,calc(100dvh-11rem))] sm:w-[min(440px,calc(100vw-2.5rem))] sm:rounded-3xl"
+              className="fixed inset-x-0 bottom-0 top-16 z-40 flex h-[calc(100vh-4rem)] flex-col overflow-hidden rounded-t-3xl border border-white/10 bg-ink-900/95 shadow-[0_-24px_90px_rgba(20,20,22,0.7),0_0_44px_rgba(201,167,92,0.12)] backdrop-blur-2xl supports-[height:100dvh]:h-[calc(100dvh-4rem)] sm:inset-x-auto sm:bottom-24 sm:right-5 sm:top-auto sm:h-[min(660px,calc(100dvh-11rem))] sm:w-[min(440px,calc(100vw-2.5rem))] sm:rounded-3xl"
               initial={reduceMotion ? false : { opacity: 0, y: 20, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={reduceMotion ? undefined : { opacity: 0, y: 16, scale: 0.98 }}
               transition={{ duration: reduceMotion ? 0 : 0.24, ease: "easeOut" }}
             >
               <div className="relative border-b border-white/10 px-5 py-4">
-                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/60 to-transparent" />
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/60 to-transparent" />
                 <div className="flex items-start gap-3 pr-20">
-                  <span className="relative grid h-11 w-11 shrink-0 place-items-center rounded-full border border-sky-300/30 bg-sky-300/10 text-sky-100 shadow-glow">
+                  <span className="relative grid h-11 w-11 shrink-0 place-items-center rounded-full border border-accent/30 bg-accent/10 text-accent shadow-glow">
                     <Bot className="h-5 w-5" aria-hidden="true" />
-                    <Sparkles className="absolute -right-1 -top-1 h-3.5 w-3.5 text-amber-200" aria-hidden="true" />
+                    <Sparkles className="absolute -right-1 -top-1 h-3.5 w-3.5 text-accent-soft" aria-hidden="true" />
                   </span>
                   <div className="min-w-0">
-                    <h2 id="agent-panel-title" className="text-base font-semibold text-white">
+                    <h2 id="agent-panel-title" className="text-base font-semibold text-paper">
                       Agent Abdulelah
                     </h2>
-                    <p id="agent-panel-description" className="mt-1 text-xs leading-5 text-slate-400">
+                    <p id="agent-panel-description" className="mt-1 text-xs leading-5 text-paper-dim">
                       Ask about Abdulelah&rsquo;s projects, skills, resume, and hiring fit.
                     </p>
-                    <p className="mt-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-sky-200/80">
+                    <p className="mt-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-accent/80">
                       {getModeLabel(mode)}
                     </p>
                   </div>
@@ -367,7 +367,7 @@ export function AgentPanel() {
                   <button
                     type="button"
                     onClick={clearConversation}
-                    className="focus-ring grid h-9 w-9 place-items-center rounded-full border border-white/10 text-slate-400 transition hover:border-sky-300/35 hover:text-white"
+                    className="focus-ring grid h-9 w-9 place-items-center rounded-full border border-white/10 text-paper-dim transition hover:border-accent/35 hover:text-paper"
                     aria-label="Clear conversation"
                     title="Clear chat"
                   >
@@ -376,7 +376,7 @@ export function AgentPanel() {
                   <button
                     type="button"
                     onClick={closePanel}
-                    className="focus-ring grid h-9 w-9 place-items-center rounded-full border border-white/10 text-slate-400 transition hover:border-sky-300/35 hover:text-white"
+                    className="focus-ring grid h-9 w-9 place-items-center rounded-full border border-white/10 text-paper-dim transition hover:border-accent/35 hover:text-paper"
                     aria-label="Close Agent Abdulelah"
                   >
                     <X className="h-4 w-4" aria-hidden="true" />
@@ -394,7 +394,7 @@ export function AgentPanel() {
 
                 {messages.length === 1 ? (
                   <section aria-label="Suggested questions" className="pt-1">
-                    <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+                    <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-paper-faint">
                       Try a guided question
                     </p>
                     <div className="flex flex-wrap gap-2">
@@ -413,7 +413,7 @@ export function AgentPanel() {
 
                 {showProjectFollowUps ? (
                   <section aria-label="Project follow-up questions" className="pt-1">
-                    <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+                    <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-paper-faint">
                       Follow up on {sessionContext.lastProject}
                     </p>
                     <div className="flex flex-wrap gap-2">
@@ -429,7 +429,7 @@ export function AgentPanel() {
                       <Link
                         href={`/projects/${projectSlug}`}
                         onClick={closePanel}
-                        className="focus-ring inline-flex items-center rounded-full border border-white/10 bg-white/[0.045] px-3 py-2 text-left text-xs font-medium text-slate-300 transition hover:border-sky-300/35 hover:bg-sky-300/[0.08] hover:text-white"
+                        className="focus-ring inline-flex items-center rounded-full border border-white/10 bg-white/[0.045] px-3 py-2 text-left text-xs font-medium text-paper-dim transition hover:border-accent/35 hover:bg-accent/[0.08] hover:text-paper"
                       >
                         {sessionContext.lastLanguage === "ar"
                           ? "عرض دراسة الحالة"
@@ -445,7 +445,7 @@ export function AgentPanel() {
                   <button
                     type="button"
                     onClick={() => setIsContactFormOpen(true)}
-                    className="focus-ring flex w-full items-center justify-between gap-3 rounded-2xl border border-gold/20 bg-gold/[0.055] px-4 py-3 text-left text-xs font-semibold text-amber-100 transition hover:border-gold/45 hover:bg-gold/[0.09]"
+                    className="focus-ring flex w-full items-center justify-between gap-3 rounded-2xl border border-accent/20 bg-accent/[0.055] px-4 py-3 text-left text-xs font-semibold text-accent-soft transition hover:border-accent/45 hover:bg-accent/[0.09]"
                   >
                     <span>Send Abdulelah a message</span>
                     <MessageCircle className="h-4 w-4 shrink-0" aria-hidden="true" />
@@ -454,13 +454,13 @@ export function AgentPanel() {
 
                 {isLoading ? (
                   <div className="flex items-start gap-3" role="status">
-                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-sky-300/25 bg-sky-300/10 text-sky-100">
+                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-accent/25 bg-accent/10 text-accent">
                       <Bot className="h-4 w-4" aria-hidden="true" />
                     </span>
                     <span className="inline-flex items-center gap-1 rounded-2xl border border-white/10 bg-white/[0.045] px-4 py-3">
-                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-sky-200" />
-                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-violet-300 [animation-delay:160ms]" />
-                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-amber-200 [animation-delay:320ms]" />
+                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
+                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent [animation-delay:160ms]" />
+                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent-soft [animation-delay:320ms]" />
                       <span className="sr-only">Agent Abdulelah is preparing a response.</span>
                     </span>
                   </div>
@@ -469,7 +469,7 @@ export function AgentPanel() {
               </div>
 
               <form
-                className="border-t border-white/10 bg-slate-950/70 px-4 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] pt-3"
+                className="border-t border-white/10 bg-ink-900/70 px-4 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] pt-3"
                 onSubmit={(event) => {
                   event.preventDefault();
                   void sendMessage();
@@ -496,7 +496,7 @@ export function AgentPanel() {
                     <Send className="h-4 w-4" aria-hidden="true" />
                   </Button>
                 </div>
-                <p className="mt-2 text-[10px] leading-4 text-slate-500">
+                <p className="mt-2 text-[10px] leading-4 text-paper-faint">
                   Portfolio-grounded answers only. Memory is temporary for this session only.
                   No private API key is sent to your browser.
                 </p>

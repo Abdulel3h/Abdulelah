@@ -14,13 +14,13 @@ export function ContactCard({
 }) {
   const isExternal = href?.startsWith("http://") || href?.startsWith("https://");
   const content = (
-    <Card className="flex items-start gap-4 p-5 transition hover:border-sky-300/30">
-      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-sky-300/20 bg-sky-300/10 text-sky-200">
+    <Card className="flex items-start gap-4 p-5 transition hover:border-accent/30">
+      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-accent/20 bg-accent/10 text-accent">
         <Icon className="h-5 w-5" aria-hidden="true" />
       </span>
       <div>
-        <p className="text-sm text-slate-400">{label}</p>
-        <p className="mt-1 break-words text-base font-semibold text-white">{value}</p>
+        <p className="text-sm text-paper-dim">{label}</p>
+        <p className="mt-1 break-words text-base font-semibold text-paper">{value}</p>
       </div>
     </Card>
   );

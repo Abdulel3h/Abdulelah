@@ -68,8 +68,8 @@ export function Navbar() {
               key={link.href}
               href={link.href}
               className={cn(
-                "focus-ring group relative rounded-full px-3 py-2 text-sm font-medium text-slate-300 transition hover:text-white",
-                isActive(link.href) && "text-white"
+                "focus-ring group relative rounded-full px-3 py-2 text-sm font-medium text-paper-dim transition hover:text-paper",
+                isActive(link.href) && "text-paper"
               )}
             >
               {link.label}
@@ -86,8 +86,8 @@ export function Navbar() {
               <button
                 type="button"
                 className={cn(
-                  "focus-ring group relative inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium text-slate-300 transition hover:text-white",
-                  isMoreActive && "text-white"
+                  "focus-ring group relative inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium text-paper-dim transition hover:text-paper",
+                  isMoreActive && "text-paper"
                 )}
                 aria-label="Open more navigation links"
               >
@@ -106,7 +106,7 @@ export function Navbar() {
                 <DropdownMenuItem key={link.href} asChild>
                   <Link
                     href={link.href}
-                    className={cn(isActive(link.href) && "bg-white/[0.06] text-white")}
+                    className={cn(isActive(link.href) && "bg-white/[0.06] text-paper")}
                   >
                     {link.label}
                   </Link>
@@ -133,7 +133,7 @@ export function Navbar() {
                         className={buttonVariants({
                           variant: "outline",
                           size: "icon",
-                          className: "text-slate-300"
+                          className: "text-paper-dim"
                         })}
                         aria-label={`${profile.label} profile`}
                       >
@@ -181,8 +181,8 @@ export function Navbar() {
                     <Link
                       href={link.href}
                       className={cn(
-                        "focus-ring rounded-xl px-4 py-3 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white",
-                        isActive(link.href) && "bg-white/10 text-white"
+                        "focus-ring rounded-xl px-4 py-3 text-sm font-medium text-paper-dim transition hover:bg-white/5 hover:text-paper",
+                        isActive(link.href) && "bg-white/10 text-paper"
                       )}
                     >
                       {link.label}
@@ -214,13 +214,13 @@ export function Navbar() {
                       href={profile.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="focus-ring inline-flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-medium text-slate-200 transition hover:border-sky-300/35 hover:text-white"
+                      className="focus-ring inline-flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-medium text-paper transition hover:border-accent/35 hover:text-paper"
                     >
                       <span className="inline-flex items-center gap-2">
-                        <Icon className="h-4 w-4 text-sky-200" aria-hidden="true" />
+                        <Icon className="h-4 w-4 text-accent" aria-hidden="true" />
                         {profile.label}
                       </span>
-                      <ExternalLink className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                      <ExternalLink className="h-4 w-4 text-paper-faint" aria-hidden="true" />
                     </a>
                   );
                 })}

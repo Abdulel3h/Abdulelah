@@ -37,8 +37,8 @@ export default function SkillsPage() {
 
             return (
               <article key={strength.title} className="glass-card rounded-2xl p-5">
-                <Icon className="h-6 w-6 text-sky-200" aria-hidden="true" />
-                <h2 className="mt-4 text-sm font-semibold leading-6 text-white">
+                <Icon className="h-6 w-6 text-accent" aria-hidden="true" />
+                <h2 className="mt-4 text-sm font-semibold leading-6 text-paper">
                   {strength.title}
                 </h2>
               </article>
@@ -53,10 +53,10 @@ export default function SkillsPage() {
           return (
             <section key={group.title} className="glass-card rounded-3xl p-6 sm:p-8">
               <div className="flex items-center gap-4">
-                <span className="grid h-12 w-12 place-items-center rounded-full border border-sky-300/20 bg-sky-300/10 text-sky-200">
+                <span className="grid h-12 w-12 place-items-center rounded-full border border-accent/20 bg-accent/10 text-accent">
                   <Icon className="h-5 w-5" aria-hidden="true" />
                 </span>
-                <h2 className="text-2xl font-semibold text-white">{group.title}</h2>
+                <h2 className="text-2xl font-semibold text-paper">{group.title}</h2>
               </div>
               <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {group.skills.map((skill) => (
