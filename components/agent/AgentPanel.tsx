@@ -1,14 +1,15 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Bot, MessageCircle, RotateCcw, Send, Sparkles, X } from "lucide-react";
+import { MessageCircle, RotateCcw, Send, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { AgentContactForm } from "@/components/agent/AgentContactForm";
 import { AgentLauncher } from "@/components/agent/AgentLauncher";
 import { AgentMessage } from "@/components/agent/AgentMessage";
 import { AgentSuggestion } from "@/components/agent/AgentSuggestion";
-import { OPEN_AGENT_EVENT } from "@/components/blog/AgentAskButton";
+import { OPEN_AGENT_EVENT } from "@/lib/agent/companion";
+import { Monogram } from "@/components/ui/Monogram";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type {
@@ -24,7 +25,7 @@ const INITIAL_MESSAGE: AgentChatMessage = {
   id: "welcome",
   role: "assistant",
   content:
-    "Hi, I\u2019m Agent Abdulelah. I can help you explore Abdulelah Alkhathami\u2019s projects, skills, achievements, resume, and hiring fit."
+    "I\u2019m a guide to Abdulelah\u2019s work \u2014 here to walk you through the projects, the thinking behind them, and where he\u2019d fit. Ask me anything, and I\u2019ll stick to what\u2019s real on this site."
 };
 
 const suggestions = [
@@ -82,15 +83,11 @@ function createMessageId(role: AgentChatMessage["role"]) {
 }
 
 function getModeLabel(mode?: AgentMode) {
-  if (mode === "deepseek") {
-    return "AI-assisted portfolio mode";
-  }
-
   if (mode === "blocked") {
-    return "Portfolio scope only";
+    return "Keeping to the work";
   }
 
-  return mode ? "Portfolio-grounded mode" : "Recruiter assistant";
+  return "Grounded in what's real here";
 }
 
 export function AgentPanel() {
@@ -98,6 +95,7 @@ export function AgentPanel() {
   const launcherRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const sendMessageRef = useRef<(prompt?: string) => void>(() => {});
   const [isOpen, setIsOpen] = useState(false);
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -125,13 +123,19 @@ export function AgentPanel() {
 
   useEffect(() => {
     function onOpenAgent(event: Event) {
-      const prompt = (event as CustomEvent<{ prompt?: string }>).detail?.prompt;
-
-      if (prompt) {
-        setInput(prompt);
-      }
+      const detail = (event as CustomEvent<{ prompt?: string; send?: boolean }>)
+        .detail;
+      const prompt = detail?.prompt;
 
       setIsOpen(true);
+
+      if (prompt) {
+        if (detail?.send) {
+          void sendMessageRef.current(prompt);
+        } else {
+          setInput(prompt);
+        }
+      }
     }
 
     window.addEventListener(OPEN_AGENT_EVENT, onOpenAgent);
@@ -290,6 +294,8 @@ export function AgentPanel() {
     }
   }
 
+  sendMessageRef.current = sendMessage;
+
   function handleAction(action: AgentAction) {
     if (action.type === "prompt") {
       void sendMessage(action.prompt);
@@ -345,20 +351,16 @@ export function AgentPanel() {
             >
               <div className="relative border-b border-white/10 px-5 py-4">
                 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/60 to-transparent" />
-                <div className="flex items-start gap-3 pr-20">
-                  <span className="relative grid h-11 w-11 shrink-0 place-items-center rounded-full border border-accent/30 bg-accent/10 text-accent shadow-glow">
-                    <Bot className="h-5 w-5" aria-hidden="true" />
-                    <Sparkles className="absolute -right-1 -top-1 h-3.5 w-3.5 text-accent-soft" aria-hidden="true" />
+                <div className="flex items-center gap-3 pr-20">
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-accent/25 bg-accent/[0.08] text-accent">
+                    <Monogram className="h-5 w-auto" />
                   </span>
                   <div className="min-w-0">
-                    <h2 id="agent-panel-title" className="text-base font-semibold text-paper">
-                      Agent Abdulelah
+                    <h2 id="agent-panel-title" className="font-display text-lg font-medium text-paper">
+                      Abdulelah&rsquo;s guide
                     </h2>
-                    <p id="agent-panel-description" className="mt-1 text-xs leading-5 text-paper-dim">
-                      Ask about Abdulelah&rsquo;s projects, skills, resume, and hiring fit.
-                    </p>
-                    <p className="mt-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-accent/80">
-                      {getModeLabel(mode)}
+                    <p id="agent-panel-description" className="mt-0.5 text-xs leading-5 text-paper-dim">
+                      A calm walk through the work · {getModeLabel(mode)}
                     </p>
                   </div>
                 </div>
@@ -455,7 +457,7 @@ export function AgentPanel() {
                 {isLoading ? (
                   <div className="flex items-start gap-3" role="status">
                     <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-accent/25 bg-accent/10 text-accent">
-                      <Bot className="h-4 w-4" aria-hidden="true" />
+                      <Monogram className="h-3.5 w-auto" />
                     </span>
                     <span className="inline-flex items-center gap-1 rounded-2xl border border-white/10 bg-white/[0.045] px-4 py-3">
                       <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />

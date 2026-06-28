@@ -12,6 +12,7 @@ import {
   ShieldCheck,
   Sparkles
 } from "lucide-react";
+import { CompanionCue } from "@/components/agent/CompanionCue";
 import { ProjectArchitectureFlow } from "@/components/projects/ProjectArchitectureFlow";
 import { ProductPreview } from "@/components/work/ProductPreview";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -296,6 +297,15 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
           </div>
         </section>
       ) : null}
+
+      <section className="container-shell pb-4">
+        <CompanionCue
+          title={`Want the story behind ${project.title.split(" - ")[0]}?`}
+          body="I'll walk you through how it started, the hardest part, the trade-offs, and what I'd change next time."
+          prompt={`Tell me the story behind ${project.title} — how it started, the hardest part, the key trade-offs, and what you would improve.`}
+          cta="Tell me"
+        />
+      </section>
 
       <section className="container-shell section-space">
         <SectionHeader

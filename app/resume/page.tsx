@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { CompanionCue } from "@/components/agent/CompanionCue";
 import { CTASection } from "@/components/sections/CTASection";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ResumeDownloadButton } from "@/components/ui/ResumeDownloadButton";
@@ -101,11 +102,14 @@ export default function ResumePage() {
               </div>
             ))}
           </div>
-          <p className="mt-8 max-w-2xl text-sm leading-7 text-paper-dim">
-            Not sure which fits? Ask{" "}
-            <span className="text-paper">Agent Abdulelah</span> in the corner — tell
-            it the role and it&apos;ll point you to the right one.
-          </p>
+          <div className="mt-8 max-w-2xl">
+            <CompanionCue
+              title="Not sure which one fits?"
+              body="Tell me the role you're hiring for and I'll point you to the right CV — engineer or specialist."
+              prompt="Which CV should I download — the AI Engineer or AI Specialist version? Help me decide for the role I'm hiring for."
+              cta="Help me choose"
+            />
+          </div>
         </div>
       </section>
 

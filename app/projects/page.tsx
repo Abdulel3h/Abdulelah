@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { CompanionCue } from "@/components/agent/CompanionCue";
 import { WorkIndex } from "@/components/work/WorkIndex";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { createPageMetadata } from "@/lib/metadata";
@@ -37,6 +38,14 @@ export default function ProjectsPage() {
 
       <section className="container-shell section-space">
         <WorkIndex />
+        <div className="mt-16 border-t border-white/[0.08] pt-12">
+          <CompanionCue
+            title="Not sure where to start?"
+            body="Tell me what you're hiring for, and I'll point you to the projects that matter most."
+            prompt="I'm hiring — which of Abdulelah's projects should I look at first, and why?"
+            cta="Recommend a project"
+          />
+        </div>
       </section>
     </>
   );

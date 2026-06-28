@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { CTASection } from "@/components/sections/CTASection";
+import { CompanionCue } from "@/components/agent/CompanionCue";
 import { JourneyPath } from "@/components/about/JourneyPath";
 import { Reveal } from "@/components/ui/Reveal";
 import { SignatureMonogram } from "@/components/ui/SignatureMonogram";
@@ -108,6 +109,17 @@ export default function AboutPage() {
               </p>
             </div>
           </Reveal>
+        </div>
+      </section>
+
+      <section className="container-shell pt-4">
+        <div className="max-w-2xl">
+          <CompanionCue
+            title="Prefer the two-minute version?"
+            body="Ask me how Abdulelah thinks, what he cares about, and where he's strongest."
+            prompt="Give me the two-minute overview of who Abdulelah is, how he thinks, and where he's strongest."
+            cta="Give me the overview"
+          />
         </div>
       </section>
 
