@@ -86,8 +86,8 @@ export default function ContactPage() {
 
             <p className="mt-8 text-sm leading-7 text-paper-dim">
               In a hurry? Ask{" "}
-              <span className="text-paper">Agent Abdulelah</span> in the corner — it
-              knows my work and can point you to the right project or the right CV.
+              <span className="text-paper">Abdulelah&apos;s guide</span> in the corner —
+              it knows the work and can point you to the right project or the right CV.
             </p>
           </div>
 
