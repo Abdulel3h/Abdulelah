@@ -20,11 +20,27 @@ export type Project = {
     github?: string;
     demo?: string;
   };
+  /** Punchy product line for the studio showcase. */
+  tagline?: string;
+  /** Which handcrafted preview to render in the featured showcase. */
+  previewKind?: "chat" | "map" | "security";
+  /** Short architecture flow (3–4 steps) shown as connected chips. */
+  flow?: string[];
+  /** Outcome / signal metrics surfaced in the showcase. */
+  metrics?: { value: string; label: string }[];
 };
 
 export const projects: Project[] = [
   {
     slug: "chatub",
+    tagline: "Every academic answer, grounded in the real regulations.",
+    previewKind: "chat",
+    flow: ["Student question", "NLP intent", "Retrieve official docs", "Grounded answer"],
+    metrics: [
+      { value: "Local-first", label: "Runs on-prem for data privacy" },
+      { value: "Project Lead", label: "Led the graduation team" },
+      { value: "Official sources", label: "Grounded, not generic answers" }
+    ],
     title: "ChatUB - Local AI Academic Assistant",
     category: "Education AI / Local AI / NLP / LLMs",
     shortDescription:
@@ -77,6 +93,14 @@ export const projects: Project[] = [
   },
   {
     slug: "althil",
+    tagline: "Designing cooler cities, one shaded street at a time.",
+    previewKind: "map",
+    flow: ["Location & sun data", "BigQuery analysis", "Vertex AI scoring", "Shade recommendation"],
+    metrics: [
+      { value: "Google Cloud", label: "Run · BigQuery · Vertex AI" },
+      { value: "KFUPM × GC", label: "Intelligent Planet Hackathon" },
+      { value: "Cooling, not cost", label: "Comfort without more energy" }
+    ],
     title: "Althil - Urban Thermal Comfort Decision-Support Platform",
     category: "Sustainability / Google Cloud / AI for Good",
     shortDescription:
@@ -133,6 +157,14 @@ export const projects: Project[] = [
   },
   {
     slug: "absher-insight-ai",
+    tagline: "Security that predicts risk, instead of reacting to it.",
+    previewKind: "security",
+    flow: ["Behavior signals", "UEBA analytics", "Anomaly detection", "Risk score"],
+    metrics: [
+      { value: "Proactive", label: "Predict risk before incidents" },
+      { value: "Privacy-by-design", label: "Synthetic-data UEBA" },
+      { value: "Tuwaiq", label: "Absher security hackathon" }
+    ],
     title: "Absher Insight AI - Proactive Digital Security Platform",
     category: "AI Security / Government Tech / UEBA",
     shortDescription:
