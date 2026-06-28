@@ -6,6 +6,10 @@ Premium AI Engineer portfolio for Abdulelah Alkhathami. The site positions the p
 
 This repository powers [abdulelah.de](https://www.abdulelah.de). It is built as a recruiter-facing AI portfolio, not a generic personal site. The content focuses on LLM applications, NLP, RAG-style assistants, AI automation concepts, applied AI projects, and cloud AI exposure.
 
+## Documentation
+
+- [Architecture](docs/architecture.md)
+
 ## Features
 
 - AI Engineer homepage with proof-oriented project positioning
@@ -124,4 +128,3 @@ Abdulelah Alkhathami
 - Website: [abdulelah.de](https://www.abdulelah.de)
 - GitHub: [Abdulel3h](https://github.com/Abdulel3h)
 - Email: [me@abdulelah.de](mailto:me@abdulelah.de)
-
