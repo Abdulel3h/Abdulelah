@@ -4,6 +4,8 @@
 
 # Abdulelah AI Portfolio
 
+[![CI](https://github.com/Abdulel3h/Abdulelah/actions/workflows/ci.yml/badge.svg)](https://github.com/Abdulel3h/Abdulelah/actions/workflows/ci.yml)
+
 Premium AI Engineer portfolio for Abdulelah Alkhathami. The site positions the public website, project case studies, role-specific resumes, bilingual AI writing, and Agent Abdulelah as one unified portfolio system.
 
 ## Overview
@@ -17,6 +19,7 @@ This repository powers [abdulelah.de](https://www.abdulelah.de). It is built as 
 - [Engineering Principles](docs/engineering-principles.md)
 - [Technical Decisions](docs/technical-decisions.md)
 - [Reviewer Guide](docs/reviewer-guide.md)
+- [Testing and CI](docs/testing.md)
 
 ## Features
 
@@ -70,6 +73,7 @@ Then open `http://localhost:3000`.
 ```bash
 npm run dev
 npm run lint
+npm run typecheck
 npm run build
 npm run start
 ```
