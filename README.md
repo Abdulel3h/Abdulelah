@@ -86,7 +86,9 @@ NEXT_PUBLIC_SITE_URL=https://www.abdulelah.de
 
 ## Screenshots
 
-Screenshots are not committed yet. Add desktop and mobile captures from the homepage, projects page, resume page, and Agent Abdulelah panel before using this repository as a pinned GitHub project.
+![Portfolio homepage](assets/screenshots/portfolio-home.png)
+
+Captured from the live portfolio homepage. Add more captures for projects, resume, contact, and Agent Abdulelah flows as future work.
 
 ## System Design
 
@@ -116,7 +118,7 @@ types/               Shared TypeScript types
 
 ## Future Work
 
-- Add real project screenshots and architecture diagrams for every project page.
+- Add project-page screenshots and architecture diagrams for every project page.
 - Add automated link checks for external project, GitHub, LinkedIn, and resume URLs.
 - Add e2e tests for navigation, resume downloads, contact form validation, and assistant open/close behavior.
 - Add a public portfolio changelog so recruiters can see active maintenance.
