@@ -3,6 +3,7 @@ import Image from "next/image";
 import { CTASection } from "@/components/sections/CTASection";
 import { JourneyPath } from "@/components/about/JourneyPath";
 import { Reveal } from "@/components/ui/Reveal";
+import { SignatureMonogram } from "@/components/ui/SignatureMonogram";
 import { skillGroups } from "@/data/skills";
 import { siteConfig } from "@/data/site";
 import { createPageMetadata } from "@/lib/metadata";
@@ -215,7 +216,8 @@ export default function AboutPage() {
               “Real innovation starts when technology respects context, privacy,
               and real human needs.”
             </blockquote>
-            <figcaption className="mt-6 flex justify-center">
+            <figcaption className="mt-10 flex flex-col items-center gap-4">
+              <SignatureMonogram className="h-12 w-auto text-accent" />
               <span className="eyebrow">
                 <span lang="ar">عبدالإله الخثعمي</span> · Abdulelah Alkhathami
               </span>

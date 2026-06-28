@@ -3,6 +3,7 @@ import { CTASection } from "@/components/sections/CTASection";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { HowIBuild } from "@/components/sections/HowIBuild";
 import { ImpactAreas } from "@/components/sections/ImpactAreas";
+import { PhilosophyReveal } from "@/components/sections/PhilosophyReveal";
 import { FeaturedWork } from "@/components/work/FeaturedWork";
 import { siteConfig } from "@/data/site";
 import { createPageMetadata } from "@/lib/metadata";
@@ -21,6 +22,7 @@ export default function HomePage() {
       <FeaturedWork />
       <HowIBuild />
       <ImpactAreas />
+      <PhilosophyReveal />
       <CTASection
         title="Let's build something worth remembering."
         description="Hiring, collaborating, or just curious how something was made — I'd like to hear from you."

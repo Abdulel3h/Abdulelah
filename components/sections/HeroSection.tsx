@@ -1,9 +1,11 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 import { Download } from "lucide-react";
 import Image from "next/image";
+import { useRef, type PointerEvent } from "react";
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { Magnetic } from "@/components/ui/Magnetic";
 import { Monogram } from "@/components/ui/Monogram";
 import { siteConfig } from "@/data/site";
 
@@ -17,6 +19,40 @@ const recognition = [
 export function HeroSection() {
   const reduceMotion = useReducedMotion();
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const portraitRef = useRef<HTMLDivElement>(null);
+  const lightRef = useRef<HTMLDivElement>(null);
+  const rotateX = useSpring(useMotionValue(0), { stiffness: 150, damping: 18, mass: 0.5 });
+  const rotateY = useSpring(useMotionValue(0), { stiffness: 150, damping: 18, mass: 0.5 });
+
+  function handlePointer(event: PointerEvent<HTMLElement>) {
+    if (reduceMotion || event.pointerType !== "mouse") return;
+
+    const section = sectionRef.current;
+    const light = lightRef.current;
+    if (section && light) {
+      const rect = section.getBoundingClientRect();
+      light.style.setProperty("--px", `${((event.clientX - rect.left) / rect.width) * 100}%`);
+      light.style.setProperty("--py", `${((event.clientY - rect.top) / rect.height) * 100}%`);
+      light.style.opacity = "1";
+    }
+
+    const portrait = portraitRef.current;
+    if (portrait) {
+      const rect = portrait.getBoundingClientRect();
+      const dx = (event.clientX - (rect.left + rect.width / 2)) / rect.width;
+      const dy = (event.clientY - (rect.top + rect.height / 2)) / rect.height;
+      rotateY.set(dx * 8);
+      rotateX.set(dy * -8);
+    }
+  }
+
+  function handleLeave() {
+    rotateX.set(0);
+    rotateY.set(0);
+    if (lightRef.current) lightRef.current.style.opacity = "0";
+  }
+
   const reveal = (delay: number) =>
     reduceMotion
       ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.3 } }
@@ -27,8 +63,23 @@ export function HeroSection() {
         };
 
   return (
-    <section className="container-shell grid min-h-[calc(100svh-4rem)] items-center gap-14 pb-16 pt-14 sm:pt-16 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20 lg:pb-24 lg:pt-20">
-      <div className="order-2 lg:order-1">
+    <section
+      ref={sectionRef}
+      onPointerMove={handlePointer}
+      onPointerLeave={handleLeave}
+      className="container-shell relative grid min-h-[calc(100svh-4rem)] items-center gap-14 pb-16 pt-14 sm:pt-16 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20 lg:pb-24 lg:pt-20"
+    >
+      <div
+        ref={lightRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700"
+        style={{
+          background:
+            "radial-gradient(440px circle at var(--px, 50%) var(--py, 50%), rgba(201,167,92,0.10), transparent 62%)"
+        }}
+      />
+
+      <div className="relative z-10 order-2 lg:order-1">
         <motion.p {...reveal(0)} className="eyebrow mb-7">
           Riyadh, Saudi Arabia · Available for select work
         </motion.p>
@@ -56,9 +107,11 @@ export function HeroSection() {
           {...reveal(0.22)}
           className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center"
         >
-          <ButtonLink href="/projects" showArrow className="w-full sm:w-auto">
-            View my work
-          </ButtonLink>
+          <Magnetic className="w-full sm:w-auto">
+            <ButtonLink href="/projects" showArrow className="w-full">
+              View my work
+            </ButtonLink>
+          </Magnetic>
           <ButtonLink href="/about" variant="ghost" showArrow className="w-full sm:w-auto">
             My story
           </ButtonLink>
@@ -92,9 +145,15 @@ export function HeroSection() {
         initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.98 }}
         animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: reduceMotion ? 0.3 : 0.9, ease: [0.22, 1, 0.36, 1] }}
-        className="order-1 mx-auto w-full max-w-[380px] lg:order-2 lg:max-w-[440px]"
+        className="relative z-10 order-1 mx-auto w-full max-w-[380px] lg:order-2 lg:max-w-[440px]"
       >
-        <div className="relative">
+        <motion.div
+          ref={portraitRef}
+          style={
+            reduceMotion ? undefined : { rotateX, rotateY, transformPerspective: 900 }
+          }
+          className="relative transform-gpu [transform-style:preserve-3d]"
+        >
           <div
             className="absolute -inset-6 -z-10 rounded-[2.75rem]"
             style={{
@@ -125,7 +184,7 @@ export function HeroSection() {
               </span>
             </span>
           </div>
-        </div>
+        </motion.div>
       </motion.div>
     </section>
   );
