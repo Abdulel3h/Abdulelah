@@ -15,7 +15,7 @@ const projectGuideProfiles: ProjectGuideProfile[] = [
     slug: "chatub",
     shortName: "ChatUB",
     aliases: ["chatub", "مشروع chatub"],
-    bestJobFit: "Junior AI Engineer, NLP / LLM application, or intelligent search role",
+    bestJobFit: "AI Engineer, NLP / LLM application, or intelligent search role",
     recommendedCv: "engineer"
   },
   {
@@ -198,7 +198,7 @@ export function getPortfolioTourResponse() {
   return [
     "60-second portfolio tour",
     "",
-    "1. Who Abdulelah is: An Information Systems graduate, Junior AI Engineer, and AI Solutions Specialist focused on practical, context-aware AI systems.",
+    "1. Who Abdulelah is: An Information Systems graduate and AI Engineer focused on practical, context-aware AI systems, LLM applications, automation concepts, and cloud AI.",
     "2. Leadership and local AI: ChatUB is his graduation project, a local academic assistant built around official university knowledge, NLP, LLM applications, intelligent search, privacy, and reliability.",
     "3. Cloud AI: Althil connects Google Cloud Run, BigQuery, Cloud Storage, Vertex AI, maps, and analysis for urban thermal comfort decisions.",
     "4. Security AI: Absher Insight AI explores proactive digital security through synthetic data, UEBA, behavioral analytics, anomaly detection, and dashboard thinking.",

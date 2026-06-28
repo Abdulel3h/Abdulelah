@@ -131,9 +131,9 @@ const actions = {
     type: "external"
   },
   recruiterJuniorEngineer: {
-    label: "Junior AI Engineer",
+    label: "AI Engineer",
     href: "#recruiter-junior-ai-engineer",
-    prompt: "I am hiring for a Junior AI Engineer",
+    prompt: "I am hiring for an AI Engineer",
     type: "prompt"
   },
   recruiterSolutionsSpecialist: {

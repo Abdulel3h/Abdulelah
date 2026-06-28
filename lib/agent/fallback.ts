@@ -643,8 +643,8 @@ export function getFallbackAgentResponse(
   }
 
   if (includesAny(normalized, ["30 seconds", "quick summary", "summarize", "summary", "who is"])) {
-    return "Abdulelah Alkhathami is a Riyadh-based Information Systems graduate, Junior AI Engineer, and AI Solutions Specialist. He builds practical AI systems with NLP, LLM applications, cloud services, dashboards, and domain-aware product thinking. His portfolio includes six applied AI projects and experience from national hackathons, including KFUPM x Google Cloud, Absher x Tuwaiq, and SDAIA x Microsoft programs.";
+    return "Abdulelah Alkhathami is a Riyadh-based Information Systems graduate and AI Engineer focused on LLM applications, RAG-style assistants, AI automation concepts, cloud services, dashboards, and domain-aware product thinking. His portfolio includes six applied AI projects and experience from national hackathons, including KFUPM x Google Cloud, Absher x Tuwaiq, and SDAIA x Microsoft programs.";
   }
 
-  return "Abdulelah Alkhathami is a Junior AI Engineer and AI Solutions Specialist focused on practical, context-aware AI systems. His portfolio spans six applied projects across education, cloud sustainability, digital security, legal tech, fintech, and immersive learning. A strong starting point is ChatUB, Althil, and Absher Insight AI, followed by the resume page for role-specific CV versions.";
+  return "Abdulelah Alkhathami is an AI Engineer focused on practical, context-aware AI systems, LLM applications, automation concepts, and cloud AI. His portfolio spans six applied projects across education, cloud sustainability, digital security, legal tech, fintech, and immersive learning. A strong starting point is ChatUB, Althil, and Absher Insight AI, followed by the resume page for role-specific CV versions.";
 }

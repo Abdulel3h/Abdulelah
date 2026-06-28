@@ -1,6 +1,6 @@
 <svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
   <title id="title">Abdulelah Alkhathami AI portfolio preview</title>
-  <desc id="desc">Premium dark AI portfolio Open Graph image for Abdulelah Alkhathami, Junior AI Engineer and AI Solutions Specialist.</desc>
+  <desc id="desc">Premium dark AI portfolio Open Graph image for Abdulelah Alkhathami, AI Engineer focused on LLM applications and Cloud AI.</desc>
   <defs>
     <linearGradient id="background" x1="60" y1="30" x2="1110" y2="630" gradientUnits="userSpaceOnUse">
       <stop stop-color="#071426"/>
@@ -87,7 +87,7 @@
 
   <text x="88" y="198" fill="url(#nameGradient)" font-family="Inter, Arial, sans-serif" font-size="66" font-weight="700" letter-spacing="-2">Abdulelah</text>
   <text x="88" y="266" fill="url(#nameGradient)" font-family="Inter, Arial, sans-serif" font-size="66" font-weight="700" letter-spacing="-2">Alkhathami</text>
-  <text x="92" y="318" fill="#BAE6FD" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="600">Junior AI Engineer | AI Solutions Specialist</text>
+  <text x="92" y="318" fill="#BAE6FD" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="600">AI Engineer | LLM Applications | Cloud AI</text>
 
   <rect x="92" y="348" width="544" height="1" fill="#7DD3FC" fill-opacity="0.2"/>
   <rect x="92" y="348" width="112" height="1" fill="#7DD3FC" fill-opacity="0.85"/>
