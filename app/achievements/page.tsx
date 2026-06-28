@@ -1,54 +1,85 @@
 import type { Metadata } from "next";
-import { AchievementTimeline } from "@/components/achievements/AchievementTimeline";
-import { MetricCard } from "@/components/ui/MetricCard";
-import { PageHero } from "@/components/ui/PageHero";
-import { SectionHeader } from "@/components/ui/SectionHeader";
+import { CTASection } from "@/components/sections/CTASection";
+import { Reveal } from "@/components/ui/Reveal";
 import { achievements } from "@/data/achievements";
 import { createPageMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "Experience & Achievements",
+  title: "Recognition",
   description:
-    "Hackathons, training programs, awards, and leadership highlights from Abdulelah Alkhathami's applied AI journey.",
+    "Where Abdulelah Alkhathami's work has been tested — national hackathons, the SDAIA x Microsoft AthkaU Top 30, and Google Cloud programs.",
   path: "/achievements"
 });
 
-export default function AchievementsPage() {
-  const credibilityMetrics = [
-    { value: "Top 30", label: "SDAIA x Microsoft AthkaU" },
-    { value: "Google Cloud", label: "Hackathon AI project" },
-    { value: "Absher", label: "Tuwaiq Hackathon concept" },
-    { value: "CITC", label: "Innovation Hackathon Finalist" },
-    { value: "5+", label: "Applied AI domains" }
-  ];
+const milestones = [...achievements].sort(
+  (a, b) => Number(b.year) - Number(a.year)
+);
 
+export default function AchievementsPage() {
   return (
     <>
-      <PageHero
-        eyebrow="Achievements & Experience"
-        title="Achievements & Experience"
-        subtitle="A practical record of building AI ideas under real constraints, collaborating with teams, and presenting solutions in national innovation settings."
-      />
-      <section className="container-shell section-space">
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {credibilityMetrics.map((metric) => (
-            <MetricCard key={metric.label} value={metric.value} label={metric.label} />
-          ))}
+      <section className="container-shell pt-16 sm:pt-20 lg:pt-24">
+        <div className="max-w-3xl">
+          <p className="eyebrow mb-6">Recognition</p>
+          <h1 className="font-display text-4xl font-medium leading-[1.04] tracking-[-0.01em] text-paper sm:text-5xl lg:text-6xl">
+            Where the work has been tested.
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-paper-dim">
+            I learn fastest under real constraints. These are the rooms where the
+            ideas had to hold up — a{" "}
+            <span className="text-paper">Top 30 finish</span>{" "}
+            in SDAIA × Microsoft&apos;s AthkaU, national hackathons with{" "}
+            <span className="text-paper">Google Cloud</span> and{" "}
+            <span className="text-paper">Absher</span>, and a CITC innovation
+            final.
+          </p>
         </div>
       </section>
 
-      <section className="section-space section-band">
-        <div className="container-shell">
-          <SectionHeader
-            eyebrow="Timeline"
-            title="Applied AI credibility timeline"
-            description="These experiences show project leadership, cloud AI exposure, cross-domain thinking, and national program participation."
-          />
-          <div className="mt-10">
-            <AchievementTimeline items={achievements} />
-          </div>
-        </div>
+      <section className="container-shell section-space">
+        <ol className="border-t border-white/[0.08]">
+          {milestones.map((item, index) => (
+            <li key={item.title}>
+              <Reveal delay={index * 0.04}>
+                <div className="grid gap-x-10 gap-y-4 border-b border-white/[0.08] py-9 md:grid-cols-[9rem_1fr]">
+                  <div className="flex items-baseline gap-3 md:flex-col md:gap-1">
+                    <span className="font-display text-3xl text-paper/40 md:text-[2.6rem]">
+                      {item.year}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-[0.7rem] font-medium uppercase tracking-[0.18em] text-accent">
+                      {item.organization}
+                    </p>
+                    <h2 className="mt-2 font-display text-2xl font-medium leading-snug text-paper">
+                      {item.title}
+                    </h2>
+                    <p className="mt-3 max-w-2xl text-sm leading-7 text-paper-dim">
+                      {item.description}
+                    </p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {item.tags.map((tag) => (
+                        <span key={tag} className="chip">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            </li>
+          ))}
+        </ol>
       </section>
+
+      <CTASection
+        title="The next room is the interesting one."
+        description="If you're running a team, a program, or a problem worth solving — let's talk."
+        primaryHref="/contact"
+        primaryLabel="Start a conversation"
+        secondaryHref="/projects"
+        secondaryLabel="See the work"
+      />
     </>
   );
 }
