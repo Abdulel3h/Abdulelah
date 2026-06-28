@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
-import { ProjectsFilter } from "@/components/projects/ProjectsFilter";
+import { WorkIndex } from "@/components/work/WorkIndex";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { PageHero } from "@/components/ui/PageHero";
 import { createPageMetadata } from "@/lib/metadata";
 import { breadcrumbJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = createPageMetadata({
   title: "Projects",
   description:
-    "A collection of AI, cloud, NLP, security, sustainability, fintech, legal tech, and intelligent system projects by Abdulelah Alkhathami.",
+    "Six products Abdulelah Alkhathami designed and built — across education, urban sustainability, government security, legal guidance, fintech inclusion, and immersive VR learning.",
   path: "/projects"
 });
 
@@ -21,19 +20,23 @@ export default function ProjectsPage() {
           { name: "Projects", path: "/projects" }
         ])}
       />
-      <PageHero
-        eyebrow="Projects"
-        title="Applied AI case studies across cloud, NLP, security, and intelligent systems."
-        subtitle="A collection of applied projects built across education, urban planning, government digital security, legal guidance, fintech inclusion, and VR learning."
-        stats={[
-          { value: "6", label: "Projects" },
-          { value: "6", label: "Domains" },
-          { value: "Cloud + AI", label: "Google Cloud and Azure exposure" },
-          { value: "Leadership", label: "Graduation project and delivery" }
-        ]}
-      />
+
+      <section className="container-shell pt-16 sm:pt-20 lg:pt-24">
+        <div className="max-w-3xl">
+          <p className="eyebrow mb-6">The work</p>
+          <h1 className="font-display text-4xl font-medium leading-[1.02] tracking-[-0.01em] text-paper sm:text-5xl lg:text-6xl">
+            Six products. Six real problems.
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-paper-dim">
+            From a university&apos;s AI assistant to a city&apos;s cooling strategy —
+            each one began as a problem worth solving, and became a working system.
+            Hover any title to look inside.
+          </p>
+        </div>
+      </section>
+
       <section className="container-shell section-space">
-        <ProjectsFilter />
+        <WorkIndex />
       </section>
     </>
   );

@@ -1,11 +1,14 @@
-import { ArrowUp, FileText } from "lucide-react";
+import { ArrowUp, FileText, Play, Scale, Wallet } from "lucide-react";
 
-type PreviewKind = "chat" | "map" | "security";
+type PreviewKind = "chat" | "map" | "security" | "legal" | "fintech" | "vr";
 
 const labels: Record<PreviewKind, { title: string; sub: string }> = {
   chat: { title: "ChatUB", sub: "University of Bisha" },
   map: { title: "Althil", sub: "Thermal comfort" },
-  security: { title: "Absher Insight", sub: "Risk monitor" }
+  security: { title: "Absher Insight", sub: "Risk monitor" },
+  legal: { title: "Qanouni", sub: "Labor rights" },
+  fintech: { title: "Medad", sub: "Inclusive banking" },
+  vr: { title: "Virtual Astronauts", sub: "Immersive learning" }
 };
 
 /**
@@ -32,6 +35,9 @@ export function ProductPreview({ kind }: { kind?: PreviewKind }) {
         {k === "chat" ? <ChatBody /> : null}
         {k === "map" ? <MapBody /> : null}
         {k === "security" ? <SecurityBody /> : null}
+        {k === "legal" ? <LegalBody /> : null}
+        {k === "fintech" ? <FintechBody /> : null}
+        {k === "vr" ? <VrBody /> : null}
       </div>
     </div>
   );
@@ -155,6 +161,117 @@ function SecurityBody() {
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+function LegalBody() {
+  return (
+    <div className="space-y-3" aria-hidden="true">
+      <div className="ml-auto max-w-[84%] rounded-2xl rounded-tr-sm border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-paper">
+        Can my employer cut my salary without notice?
+      </div>
+      <div className="max-w-[94%] rounded-2xl rounded-tl-sm border border-accent/20 bg-accent/[0.06] px-3.5 py-3 text-sm leading-6 text-paper">
+        Not unilaterally. A pay change needs your written agreement — otherwise it
+        may count as an arbitrary change to the contract.
+        <span className="mt-2.5 flex w-fit items-center gap-1.5 rounded-full border border-white/10 bg-ink-900/70 px-2.5 py-1 text-[0.68rem] text-paper-dim">
+          <Scale className="h-3 w-3 text-accent" aria-hidden="true" />
+          Labor Law · Art. 61
+        </span>
+      </div>
+      <div className="rounded-xl border border-white/[0.08] bg-ink-900/60 p-3">
+        <p className="text-[0.64rem] uppercase tracking-[0.14em] text-paper-faint">
+          Your options
+        </p>
+        <ul className="mt-2 space-y-1.5 text-[0.78rem] text-paper-dim">
+          <li className="flex gap-2">
+            <span className="text-accent">1.</span> Request the change in writing
+          </li>
+          <li className="flex gap-2">
+            <span className="text-accent">2.</span> File with the labor office within 12 months
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+function FintechBody() {
+  const bars = [42, 64, 30, 78, 52, 88];
+
+  return (
+    <div className="space-y-4" aria-hidden="true">
+      <div className="flex items-end justify-between">
+        <div>
+          <p className="text-[0.66rem] uppercase tracking-[0.16em] text-paper-faint">
+            Balance
+          </p>
+          <p className="mt-1 font-display text-3xl leading-none text-paper">SAR 4,820</p>
+        </div>
+        <span className="flex items-center gap-1.5 rounded-full border border-accent/25 bg-accent/[0.08] px-2.5 py-1 text-[0.66rem] text-accent-soft">
+          <Wallet className="h-3 w-3" aria-hidden="true" /> On track
+        </span>
+      </div>
+      <div className="flex h-20 items-end gap-2">
+        {bars.map((height, index) => (
+          <div
+            key={`${height}-${index}`}
+            className="flex-1 rounded-t bg-gradient-to-t from-accent/20 to-accent/70"
+            style={{ height: `${height}%` }}
+          />
+        ))}
+      </div>
+      <div className="flex items-start gap-2 rounded-xl border border-white/[0.08] bg-ink-900/60 px-3 py-2.5 text-[0.78rem] leading-5 text-paper-dim">
+        <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+        Set aside SAR 220 this month to reach your savings goal by December.
+      </div>
+    </div>
+  );
+}
+
+function VrBody() {
+  const stars: Array<[string, string]> = [
+    ["12%", "22%"],
+    ["28%", "66%"],
+    ["62%", "16%"],
+    ["80%", "44%"],
+    ["46%", "34%"],
+    ["88%", "72%"]
+  ];
+
+  return (
+    <div aria-hidden="true">
+      <div
+        className="relative h-[208px] overflow-hidden rounded-lg border border-white/[0.07]"
+        style={{
+          background:
+            "radial-gradient(120% 120% at 70% 120%, rgba(204,92,58,0.18), transparent 60%), #070708"
+        }}
+      >
+        {stars.map(([left, top], index) => (
+          <span
+            key={`${left}-${index}`}
+            className="absolute h-0.5 w-0.5 rounded-full bg-paper/70"
+            style={{ left, top }}
+          />
+        ))}
+        <div
+          className="absolute -bottom-16 left-1/2 h-44 w-44 -translate-x-1/2 rounded-full"
+          style={{
+            background:
+              "radial-gradient(circle at 35% 30%, #d8a36a, #b5532f 55%, #5e2415)"
+          }}
+        />
+        <span className="absolute left-3 top-3 rounded-full border border-white/10 bg-ink-900/80 px-2.5 py-1 text-[0.66rem] text-paper-dim">
+          Mars · guided tour
+        </span>
+        <span className="absolute left-1/2 top-[38%] grid h-11 w-11 -translate-x-1/2 place-items-center rounded-full border border-accent/40 bg-ink-900/70 text-accent backdrop-blur">
+          <Play className="h-4 w-4 translate-x-0.5" aria-hidden="true" />
+        </span>
+      </div>
+      <p className="mt-3 text-[0.72rem] text-paper-dim">
+        AI narrates the science as you explore in VR.
+      </p>
     </div>
   );
 }

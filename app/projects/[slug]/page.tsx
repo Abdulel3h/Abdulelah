@@ -13,6 +13,7 @@ import {
   Sparkles
 } from "lucide-react";
 import { ProjectArchitectureFlow } from "@/components/projects/ProjectArchitectureFlow";
+import { ProductPreview } from "@/components/work/ProductPreview";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -96,7 +97,12 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
             <h1 className="max-w-5xl text-4xl font-semibold leading-tight text-white sm:text-5xl">
               {project.title}
             </h1>
-            <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
+            {project.tagline ? (
+              <p className="mt-6 max-w-3xl font-display text-2xl italic leading-snug text-paper">
+                {project.tagline}
+              </p>
+            ) : null}
+            <p className="mt-4 max-w-3xl text-base leading-8 text-paper-dim">
               {project.shortDescription}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -254,27 +260,42 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
         </div>
       </section>
 
-      <section className="section-space section-band">
-        <div className="container-shell">
-          <SectionHeader
-            eyebrow="Gallery"
-            title="Future media placeholders"
-            description="Elegant slots ready for screenshots, architecture diagrams, prototype screens, or demo visuals."
-          />
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
-            {project.gallery.map((item) => (
-              <div
-                key={item}
-                className="relative min-h-56 overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(135deg,rgba(56,189,248,0.14),rgba(124,58,237,0.10),rgba(201,168,76,0.09))] p-5"
-              >
-                <div className="absolute inset-0 bg-soft-grid bg-[length:24px_24px] opacity-30" />
-                <div className="absolute bottom-5 left-5 right-5 h-24 rounded-2xl border border-white/10 bg-slate-950/35" />
-                <p className="relative badge">{item}</p>
+      {project.previewKind ? (
+        <section className="section-space section-band">
+          <div className="container-shell">
+            <SectionHeader
+              eyebrow="Inside the product"
+              title="A look at how it works"
+              description="A handcrafted preview of the experience — drawn to show the idea, not a stock screenshot."
+            />
+            <div className="mt-10 grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+              <div className="relative">
+                <div
+                  className="absolute -inset-6 -z-10 rounded-[2.5rem]"
+                  style={{
+                    background:
+                      "radial-gradient(closest-side, rgba(201,167,92,0.12), transparent 76%)"
+                  }}
+                  aria-hidden="true"
+                />
+                <ProductPreview kind={project.previewKind} />
               </div>
-            ))}
+              {project.metrics ? (
+                <div className="grid grid-cols-2 gap-x-8 gap-y-8 sm:grid-cols-3 lg:grid-cols-1 lg:gap-0 lg:divide-y lg:divide-white/[0.08]">
+                  {project.metrics.map((metric) => (
+                    <div key={metric.label} className="lg:py-5 lg:first:pt-0">
+                      <p className="font-display text-2xl text-paper">{metric.value}</p>
+                      <p className="mt-1 text-sm leading-6 text-paper-dim">
+                        {metric.label}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ) : null}
 
       <section className="container-shell section-space">
         <SectionHeader

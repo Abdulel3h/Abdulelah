@@ -22,8 +22,8 @@ export type Project = {
   };
   /** Punchy product line for the studio showcase. */
   tagline?: string;
-  /** Which handcrafted preview to render in the featured showcase. */
-  previewKind?: "chat" | "map" | "security";
+  /** Which handcrafted preview to render in the showcase / work index. */
+  previewKind?: "chat" | "map" | "security" | "legal" | "fintech" | "vr";
   /** Short architecture flow (3–4 steps) shown as connected chips. */
   flow?: string[];
   /** Outcome / signal metrics surfaced in the showcase. */
@@ -217,6 +217,14 @@ export const projects: Project[] = [
   },
   {
     slug: "qanouni",
+    tagline: "Labor rights, explained in plain language.",
+    previewKind: "legal",
+    flow: ["Worker's question", "Map to labor law", "Azure AI reasoning", "Clear next steps"],
+    metrics: [
+      { value: "Azure AI", label: "Language understanding" },
+      { value: "Plain language", label: "Rights made readable" },
+      { value: "Guided steps", label: "Not just answers" }
+    ],
     title: "Qanouni - AI Legal Advisor",
     category: "LegalTech / AI Advisor",
     shortDescription:
@@ -264,6 +272,14 @@ export const projects: Project[] = [
   },
   {
     slug: "medad",
+    tagline: "Banking that includes everyone.",
+    previewKind: "fintech",
+    flow: ["User & spend data", "AI analytics", "Personalized insight", "Inclusive guidance"],
+    metrics: [
+      { value: "Inclusion", label: "Built for the underserved" },
+      { value: "Power BI", label: "Insight dashboards" },
+      { value: "Personalized", label: "AI recommendations" }
+    ],
     title: "Medad - Financial Inclusion Banking App",
     category: "Fintech / AI Analytics",
     shortDescription:
@@ -309,6 +325,14 @@ export const projects: Project[] = [
   },
   {
     slug: "virtual-astronauts",
+    tagline: "Step inside the universe to learn it.",
+    previewKind: "vr",
+    flow: ["VR environment", "AI content engine", "Dynamic narration", "Guided exploration"],
+    metrics: [
+      { value: "Immersive", label: "Learn by exploring" },
+      { value: "AI-generated", label: "Living content" },
+      { value: "Engagement", label: "Memorable science" }
+    ],
     title: "Virtual Astronauts - VR + AI Educational Experience",
     category: "VR / AI Education",
     shortDescription:
