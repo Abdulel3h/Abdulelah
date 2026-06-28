@@ -23,7 +23,7 @@ export function SectionHeader({
         align === "center" && "mx-auto text-center"
       )}
     >
-      {eyebrow ? <p className="badge mb-5">{eyebrow}</p> : null}
+      {eyebrow ? <p className="eyebrow mb-5">{eyebrow}</p> : null}
       <h2 className="font-display text-3xl font-medium leading-tight tracking-[-0.01em] text-paper sm:text-4xl lg:text-[2.9rem]">
         {title}
       </h2>

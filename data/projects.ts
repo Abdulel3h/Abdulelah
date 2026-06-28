@@ -28,6 +28,8 @@ export type Project = {
   flow?: string[];
   /** Outcome / signal metrics surfaced in the showcase. */
   metrics?: { value: string; label: string }[];
+  /** Real, stated engineering & product decisions — grounded in the work, never invented. */
+  decisions?: { title: string; body: string }[];
 };
 
 export const projects: Project[] = [
@@ -35,6 +37,16 @@ export const projects: Project[] = [
     slug: "chatub",
     tagline: "Every academic answer, grounded in the real regulations.",
     previewKind: "chat",
+    decisions: [
+      {
+        title: "Local-first, not cloud",
+        body: "I made the call to run ChatUB as a local AI system so student data and university content stay on-prem. Privacy and institutional trust mattered more than the convenience of a hosted model."
+      },
+      {
+        title: "Grounded in official documents",
+        body: "Answers are generated from the university's real regulations and procedures — not generic knowledge — so a student gets the same reliable guidance no matter who they ask."
+      }
+    ],
     flow: ["Student question", "NLP intent", "Retrieve official docs", "Grounded answer"],
     metrics: [
       { value: "Local-first", label: "Runs on-prem for data privacy" },
@@ -95,6 +107,16 @@ export const projects: Project[] = [
     slug: "althil",
     tagline: "Designing cooler cities, one shaded street at a time.",
     previewKind: "map",
+    decisions: [
+      {
+        title: "Cloud-native on Google Cloud",
+        body: "Built on Cloud Run, BigQuery, and Vertex AI so the analysis could scale and stay maintainable — and so the team could move fast inside hackathon time limits."
+      },
+      {
+        title: "Explain, don't just compute",
+        body: "Added a conversational layer so planners get the reasoning behind each shade recommendation, not just a score they have to trust blindly."
+      }
+    ],
     flow: ["Location & sun data", "BigQuery analysis", "Vertex AI scoring", "Shade recommendation"],
     metrics: [
       { value: "Google Cloud", label: "Run · BigQuery · Vertex AI" },
@@ -159,6 +181,16 @@ export const projects: Project[] = [
     slug: "absher-insight-ai",
     tagline: "Security that predicts risk, instead of reacting to it.",
     previewKind: "security",
+    decisions: [
+      {
+        title: "Proactive over reactive",
+        body: "Designed around predicting risk from behavioural patterns before an incident — rather than the usual model of responding after something has already gone wrong."
+      },
+      {
+        title: "Privacy by design, on synthetic data",
+        body: "Modelled everything on synthetic user behaviour so the concept could be tested and demonstrated without ever touching real personal data."
+      }
+    ],
     flow: ["Behavior signals", "UEBA analytics", "Anomaly detection", "Risk score"],
     metrics: [
       { value: "Proactive", label: "Predict risk before incidents" },
@@ -219,6 +251,16 @@ export const projects: Project[] = [
     slug: "qanouni",
     tagline: "Labor rights, explained in plain language.",
     previewKind: "legal",
+    decisions: [
+      {
+        title: "Plain language over legal jargon",
+        body: "Structured answers to explain labour rights and the next steps in language a non-lawyer can actually act on — the goal was clarity, not sounding legal."
+      },
+      {
+        title: "Guidance, used responsibly",
+        body: "Framed responses for responsible use: a way to understand rights and procedures, not a replacement for formal legal advice."
+      }
+    ],
     flow: ["Worker's question", "Map to labor law", "Azure AI reasoning", "Clear next steps"],
     metrics: [
       { value: "Azure AI", label: "Language understanding" },
@@ -274,6 +316,16 @@ export const projects: Project[] = [
     slug: "medad",
     tagline: "Banking that includes everyone.",
     previewKind: "fintech",
+    decisions: [
+      {
+        title: "Inclusion-first",
+        body: "Designed the experience around underserved users who are usually an afterthought in banking products — the people who need guidance the most."
+      },
+      {
+        title: "Insight over raw data",
+        body: "Turned analytics into clear, personalized recommendations through dashboards, instead of handing people raw numbers to decode."
+      }
+    ],
     flow: ["User & spend data", "AI analytics", "Personalized insight", "Inclusive guidance"],
     metrics: [
       { value: "Inclusion", label: "Built for the underserved" },
@@ -327,6 +379,16 @@ export const projects: Project[] = [
     slug: "virtual-astronauts",
     tagline: "Step inside the universe to learn it.",
     previewKind: "vr",
+    decisions: [
+      {
+        title: "Immersion over lecture",
+        body: "Chose an explorable VR environment so learners experience the universe directly, instead of reading about it and hoping it sticks."
+      },
+      {
+        title: "Living, AI-generated content",
+        body: "Used AI to generate dynamic learning content aligned to the experience, so it stays fresh and engaging rather than a fixed script."
+      }
+    ],
     flow: ["VR environment", "AI content engine", "Dynamic narration", "Guided exploration"],
     metrics: [
       { value: "Immersive", label: "Learn by exploring" },

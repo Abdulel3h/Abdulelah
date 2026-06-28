@@ -15,7 +15,7 @@ import {
 import { FieldNote } from "@/components/agent/FieldNote";
 import { ProjectViewRecorder } from "@/components/agent/ProjectViewRecorder";
 import { ReadingPath } from "@/components/agent/ReadingPath";
-import { ProjectArchitectureFlow } from "@/components/projects/ProjectArchitectureFlow";
+import { ProjectArchitecture } from "@/components/projects/ProjectArchitecture";
 import { ProductPreview } from "@/components/work/ProductPreview";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ButtonLink } from "@/components/ui/ButtonLink";
@@ -102,7 +102,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
           <div className="relative grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
           <div>
             <p className="badge mb-5">{project.category}</p>
-            <h1 className="max-w-5xl text-4xl font-semibold leading-tight text-paper sm:text-5xl">
+            <h1 className="max-w-5xl font-display text-4xl font-medium leading-tight tracking-[-0.01em] text-paper sm:text-5xl">
               {project.title}
             </h1>
             {project.tagline ? (
@@ -220,20 +220,52 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
             description="Each case study is grounded in a practical technical approach, from local AI knowledge design to cloud-native analysis and behavioral analytics."
           />
           <div className="mt-10">
-            <ProjectArchitectureFlow project={project} />
+            <ProjectArchitecture
+              steps={project.flow ?? project.technicalApproach.slice(0, 4)}
+            />
           </div>
-          <div className="mt-8 grid gap-5 md:grid-cols-2">
-            {project.technicalApproach.map((item) => (
-              <div key={item} className="glass-card flex gap-4 rounded-2xl p-5">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-accent/20 bg-accent/10 text-accent">
-                  <Layers3 className="h-4 w-4" aria-hidden="true" />
-                </span>
-                <p className="text-sm leading-7 text-paper-dim">{item}</p>
-              </div>
-            ))}
+          <div className="mt-12">
+            <p className="eyebrow mb-6">Engineering notes</p>
+            <div className="grid gap-x-12 gap-y-4 sm:grid-cols-2">
+              {project.technicalApproach.map((item) => (
+                <div
+                  key={item}
+                  className="flex gap-3 border-t border-white/[0.08] pt-4 text-sm leading-7 text-paper-dim"
+                >
+                  <span
+                    className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-accent"
+                    aria-hidden="true"
+                  />
+                  {item}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
+
+      {project.decisions?.length ? (
+        <section className="container-shell section-space">
+          <SectionHeader
+            eyebrow="Decisions"
+            title="The calls that shaped it"
+            description="The choices that mattered most — and the thinking behind each one."
+          />
+          <div className="mt-10 grid gap-x-12 gap-y-10 sm:grid-cols-2">
+            {project.decisions.map((decision, index) => (
+              <div key={decision.title} className="border-t border-accent/30 pt-6">
+                <span className="font-display text-sm text-accent">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <h3 className="mt-2 font-display text-xl font-medium text-paper">
+                  {decision.title}
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-paper-dim">{decision.body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <section className="container-shell section-space">
         <div className="grid gap-8 lg:grid-cols-2">
