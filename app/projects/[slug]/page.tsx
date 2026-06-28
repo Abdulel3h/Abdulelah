@@ -12,7 +12,9 @@ import {
   ShieldCheck,
   Sparkles
 } from "lucide-react";
-import { CompanionCue } from "@/components/agent/CompanionCue";
+import { FieldNote } from "@/components/agent/FieldNote";
+import { ProjectViewRecorder } from "@/components/agent/ProjectViewRecorder";
+import { ReadingPath } from "@/components/agent/ReadingPath";
 import { ProjectArchitectureFlow } from "@/components/projects/ProjectArchitectureFlow";
 import { ProductPreview } from "@/components/work/ProductPreview";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -80,6 +82,11 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
           { name: "Projects", path: "/projects" },
           { name: project.title, path: `/projects/${project.slug}` }
         ])}
+      />
+      <ProjectViewRecorder
+        slug={project.slug}
+        name={project.title.split(" - ")[0]}
+        category={project.category}
       />
       <section className="container-shell pt-12 sm:pt-16 lg:pt-20">
         <Link
@@ -247,9 +254,8 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
             <h2 className="text-2xl font-semibold text-paper">Applied value</h2>
             <p className="mt-4 text-sm leading-7 text-paper-dim">{project.impact}</p>
             {project.lessons ? (
-              <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-5">
-                <p className="text-sm font-semibold text-paper">Lessons Learned</p>
-                <p className="mt-2 text-sm leading-7 text-paper-dim">{project.lessons}</p>
+              <div className="mt-7">
+                <FieldNote label="After shipping">{project.lessons}</FieldNote>
               </div>
             ) : null}
             {project.quote ? (
@@ -299,12 +305,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
       ) : null}
 
       <section className="container-shell pb-4">
-        <CompanionCue
-          title={`Want the story behind ${project.title.split(" - ")[0]}?`}
-          body="I'll walk you through how it started, the hardest part, the trade-offs, and what I'd change next time."
-          prompt={`Tell me the story behind ${project.title} — how it started, the hardest part, the key trade-offs, and what you would improve.`}
-          cta="Tell me"
-        />
+        <ReadingPath page="detail" slug={project.slug} />
       </section>
 
       <section className="container-shell section-space">

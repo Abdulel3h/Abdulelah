@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CompanionCue } from "@/components/agent/CompanionCue";
+import { ResumeViewRecorder } from "@/components/agent/ResumeViewRecorder";
 import { CTASection } from "@/components/sections/CTASection";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ResumeDownloadButton } from "@/components/ui/ResumeDownloadButton";
@@ -49,6 +50,7 @@ export default function ResumePage() {
           { name: "Resume", path: "/resume" }
         ])}
       />
+      <ResumeViewRecorder />
 
       <section className="container-shell pt-16 sm:pt-20 lg:pt-24">
         <div className="max-w-3xl">
