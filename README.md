@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/project-banner.svg" alt="Abdulelah AI Portfolio project banner" />
+</p>
+
 # Abdulelah AI Portfolio
 
 Premium AI Engineer portfolio for Abdulelah Alkhathami. The site positions the public website, project case studies, role-specific resumes, bilingual AI writing, and Agent Abdulelah as one unified portfolio system.
@@ -9,6 +13,8 @@ This repository powers [abdulelah.de](https://www.abdulelah.de). It is built as 
 ## Documentation
 
 - [Architecture](docs/architecture.md)
+- [Engineering Principles](docs/engineering-principles.md)
+- [Technical Decisions](docs/technical-decisions.md)
 
 ## Features
 
