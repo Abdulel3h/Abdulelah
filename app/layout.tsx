@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Fraunces, Inter } from "next/font/google";
 import localFont from "next/font/local";
 import type { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/next";
@@ -22,6 +22,16 @@ const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-inter"
+});
+
+// Fraunces is the editorial display voice — used for the wordmark and large
+// headlines so the brand reads like a person, not a SaaS template.
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-fraunces"
 });
 
 // Arabic typeface for the bilingual blog. preload is off so the font is only
@@ -55,8 +65,8 @@ const socialImage = absoluteUrl(ogImage);
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: "Abdulelah Alkhathami | Junior AI Engineer & AI Solutions Specialist",
-    template: "%s | Abdulelah AI"
+    default: "Abdulelah Alkhathami — Builder of intelligent products",
+    template: "%s — Abdulelah Alkhathami"
   },
   description: siteConfig.description,
   keywords: siteConfig.keywords,
@@ -69,21 +79,21 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: siteConfig.url,
-    title: "Abdulelah Alkhathami | Junior AI Engineer & AI Solutions Specialist",
+    title: "Abdulelah Alkhathami — Builder of intelligent products",
     description: siteConfig.description,
-    siteName: "Abdulelah AI",
+    siteName: siteConfig.name,
     images: [
       {
         url: socialImage,
         width: 1200,
         height: 630,
-        alt: "Abdulelah AI portfolio preview"
+        alt: "Abdulelah Alkhathami"
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "Abdulelah Alkhathami | Junior AI Engineer & AI Solutions Specialist",
+    title: "Abdulelah Alkhathami — Builder of intelligent products",
     description: siteConfig.description,
     images: [socialImage]
   }
@@ -97,7 +107,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`dark ${inter.variable} ${thmanyah.variable}`}
+      className={`dark ${inter.variable} ${fraunces.variable} ${thmanyah.variable}`}
       data-scroll-behavior="smooth"
     >
       <body>

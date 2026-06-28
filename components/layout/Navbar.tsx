@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronDown, ExternalLink, Github, Linkedin, Menu, Sparkles } from "lucide-react";
+import { ChevronDown, ExternalLink, Github, Linkedin, Menu } from "lucide-react";
 import { useState } from "react";
 import { contactLink, navLinks, siteConfig } from "@/data/site";
 import { CommandMenu } from "@/components/layout/CommandMenu";
+import { Monogram } from "@/components/ui/Monogram";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -46,18 +47,18 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 px-3 pt-3 sm:px-4 sm:pt-4">
-      <nav className="relative mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-3 rounded-2xl border border-white/10 bg-[#030712]/[0.78] px-4 shadow-[0_18px_48px_rgba(2,6,23,0.38),0_0_30px_rgba(56,189,248,0.08)] backdrop-blur-2xl sm:px-5 md:px-6 lg:gap-4 lg:rounded-3xl">
-        <div className="pointer-events-none absolute inset-x-5 bottom-0 h-px bg-gradient-to-r from-transparent via-sky-300/40 to-transparent" />
+      <nav className="relative mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-3 rounded-2xl border border-white/[0.08] bg-[#0a0a0b]/72 px-4 shadow-[0_18px_48px_rgba(0,0,0,0.45)] backdrop-blur-2xl sm:px-5 md:px-6 lg:gap-4 lg:rounded-3xl">
+        <div className="pointer-events-none absolute inset-x-5 bottom-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
         <Link
           href="/"
-          className="focus-ring group flex items-center gap-2 rounded-full text-sm font-semibold"
-          aria-label="Go to home"
+          className="focus-ring group flex items-center gap-2.5 rounded-full"
+          aria-label="Abdulelah Alkhathami — home"
           onClick={() => setIsOpen(false)}
         >
-          <span className="grid h-9 w-9 place-items-center rounded-full border border-sky-300/25 bg-sky-300/10 text-sky-200 shadow-glow transition group-hover:border-sky-300/50">
-            <Sparkles className="h-4 w-4" aria-hidden="true" />
+          <Monogram className="h-6 w-auto text-accent transition-colors group-hover:text-accent-soft" />
+          <span className="font-display text-[0.98rem] font-medium tracking-tight text-paper">
+            Abdulelah <span className="hidden sm:inline">Alkhathami</span>
           </span>
-          <span className="gradient-text">{siteConfig.brand}</span>
         </Link>
 
         <div className="hidden items-center gap-1 lg:flex">
@@ -73,7 +74,7 @@ export function Navbar() {
               {link.label}
               <span
                 className={cn(
-                  "absolute inset-x-3 -bottom-0.5 h-px origin-left scale-x-0 bg-gradient-to-r from-sky-300 to-violet-300 transition group-hover:scale-x-100",
+                  "absolute inset-x-3 -bottom-0.5 h-px origin-left scale-x-0 bg-gradient-to-r from-accent to-accent/30 transition group-hover:scale-x-100",
                   isActive(link.href) && "scale-x-100"
                 )}
               />
@@ -93,7 +94,7 @@ export function Navbar() {
                 <ChevronDown className="h-4 w-4 transition group-data-[state=open]:rotate-180" aria-hidden="true" />
                 <span
                   className={cn(
-                    "absolute inset-x-3 -bottom-0.5 h-px origin-left scale-x-0 bg-gradient-to-r from-sky-300 to-violet-300 transition group-hover:scale-x-100",
+                    "absolute inset-x-3 -bottom-0.5 h-px origin-left scale-x-0 bg-gradient-to-r from-accent to-accent/30 transition group-hover:scale-x-100",
                     isMoreActive && "scale-x-100"
                   )}
                 />

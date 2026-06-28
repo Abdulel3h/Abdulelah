@@ -10,7 +10,7 @@ import { siteConfig } from "@/data/site";
 import { createPageMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "Abdulelah Alkhathami | Junior AI Engineer & AI Solutions Specialist",
+  title: "Abdulelah Alkhathami — Builder of intelligent products",
   description: siteConfig.description,
   keywords: siteConfig.keywords,
   path: "/"

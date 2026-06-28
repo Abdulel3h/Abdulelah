@@ -6,8 +6,9 @@ export const siteUrl =
 export const siteConfig = {
   name: "Abdulelah Alkhathami",
   arabicName: "عبدالإله الخثعمي",
-  brand: "Abdulelah AI",
-  role: "Junior AI Engineer | AI Solutions Specialist",
+  brand: "Abdulelah Alkhathami",
+  role: "AI Engineer & Product Builder",
+  tagline: "I build intelligent products.",
   location: "Riyadh, Saudi Arabia",
   email: "me@abdulelah.de",
   // Role-based aliases. `primary` is the only address surfaced on public pages;
@@ -20,7 +21,7 @@ export const siteConfig = {
   },
   url: siteUrl,
   description:
-    "Portfolio of Abdulelah Alkhathami (عبدالإله الخثعمي), an AI Engineer and AI Solutions Specialist in Riyadh, Saudi Arabia, building AI agents, RAG systems, LLM applications, and Arabic AI systems across education, security, sustainability, fintech, and legal tech.",
+    "Abdulelah Alkhathami (عبدالإله الخثعمي) builds intelligent products — AI agents, RAG systems, LLM applications, and Arabic AI systems — across education, security, sustainability, fintech, and legal tech. Based in Riyadh, Saudi Arabia.",
   keywords: [
     "Abdulelah Alkhathami",
     "عبدالإله الخثعمي",

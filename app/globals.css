@@ -17,19 +17,19 @@ html {
 body {
   min-height: 100vh;
   overflow-x: hidden;
-  background:
-    radial-gradient(circle at 50% -10%, rgba(56, 189, 248, 0.12), transparent 34rem),
-    linear-gradient(180deg, rgba(3, 7, 18, 0.96), rgba(5, 8, 22, 0.98)),
-    #030712;
-  color: #f8fafc;
+  background: #0a0a0b;
+  color: #ece9e1;
   font-family:
     var(--font-inter), Inter, ui-sans-serif, system-ui, -apple-system,
     BlinkMacSystemFont, "Segoe UI", sans-serif;
   letter-spacing: 0;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-body::selection {
-  background: rgba(56, 189, 248, 0.35);
+::selection {
+  background: rgba(201, 167, 92, 0.28);
+  color: #fff;
 }
 
 a,
@@ -37,7 +37,7 @@ button,
 input,
 textarea,
 select {
-  outline-color: #38bdf8;
+  outline-color: #c9a75c;
 }
 
 @layer components {
@@ -65,14 +65,28 @@ select {
   }
 
   .gradient-text {
-    background: linear-gradient(90deg, #7dd3fc, #ffffff 48%, #a78bfa 76%, #fde68a);
+    background: linear-gradient(100deg, #f4f1ea 28%, #d9be82 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
+  /* Editorial eyebrow: small, uppercase, generously tracked. */
   .badge {
-    @apply inline-flex items-center rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-medium text-slate-200;
+    @apply inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[0.68rem] font-medium uppercase tracking-[0.18em] text-paper-dim;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2.5 text-[0.7rem] font-medium uppercase tracking-[0.22em] text-paper-dim;
+  }
+
+  .eyebrow::before {
+    content: "";
+    @apply h-px w-7 bg-accent/60;
+  }
+
+  .accent-rule {
+    @apply h-px w-full bg-gradient-to-r from-accent/40 via-white/10 to-transparent;
   }
 
   .premium-panel {
@@ -85,7 +99,7 @@ select {
     inset: 0;
     border-radius: inherit;
     padding: 1px;
-    background: linear-gradient(135deg, rgba(56, 189, 248, 0.34), rgba(124, 58, 237, 0.18), rgba(201, 168, 76, 0.22));
+    background: linear-gradient(135deg, rgba(242, 239, 231, 0.16), rgba(201, 167, 92, 0.12) 55%, transparent);
     -webkit-mask:
       linear-gradient(#000 0 0) content-box,
       linear-gradient(#000 0 0);
@@ -117,7 +131,7 @@ select {
 }
 
 .focus-ring:focus-visible {
-  outline-color: #38bdf8;
+  outline-color: #c9a75c;
 }
 
 .page-grid {

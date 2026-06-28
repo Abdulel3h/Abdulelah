@@ -39,10 +39,10 @@ export function PageHero({
           <Badge variant="sky" className="mb-5">
             {eyebrow}
           </Badge>
-          <h1 className="text-balance text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
+          <h1 className="text-balance font-display text-4xl font-medium leading-[1.03] tracking-[-0.01em] text-paper sm:text-5xl lg:text-6xl">
             {title}
           </h1>
-          <p className="mt-6 max-w-3xl text-base leading-8 text-slate-300 sm:text-lg">
+          <p className="mt-6 max-w-3xl text-base leading-8 text-paper-dim sm:text-lg">
             {subtitle}
           </p>
           {actions?.length ? (
