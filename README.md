@@ -13,6 +13,7 @@ This repository powers [abdulelah.de](https://www.abdulelah.de). It is built as 
 ## Documentation
 
 - [Architecture](docs/architecture.md)
+- [Case Study](docs/case-study.md)
 - [Engineering Principles](docs/engineering-principles.md)
 - [Technical Decisions](docs/technical-decisions.md)
 - [Reviewer Guide](docs/reviewer-guide.md)
