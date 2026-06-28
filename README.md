@@ -15,6 +15,7 @@ This repository powers [abdulelah.de](https://www.abdulelah.de). It is built as 
 - [Architecture](docs/architecture.md)
 - [Engineering Principles](docs/engineering-principles.md)
 - [Technical Decisions](docs/technical-decisions.md)
+- [Reviewer Guide](docs/reviewer-guide.md)
 
 ## Features
 
