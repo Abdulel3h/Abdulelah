@@ -114,20 +114,8 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
               {project.shortDescription}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              {project.links?.demo ? (
-                <ButtonLink href={project.links.demo} external>
-                  <ExternalLink className="h-4 w-4" aria-hidden="true" />
-                  Demo
-                </ButtonLink>
-              ) : null}
-              {project.links?.github ? (
-                <ButtonLink href={project.links.github} variant="secondary" external>
-                  <Github className="h-4 w-4" aria-hidden="true" />
-                  GitHub
-                </ButtonLink>
-              ) : null}
               <ButtonLink href="/contact" variant="gold">
-                Discuss Similar Work
+                Discuss similar work
               </ButtonLink>
             </div>
           </div>
@@ -162,8 +150,36 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
         </div>
       </section>
 
+      {project.links?.github || project.links?.demo ? (
+        <section className="container-shell pb-2">
+          <div className="flex flex-col gap-4 border-t border-white/[0.08] pt-6 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="eyebrow mb-2">Evidence</p>
+              <p className="max-w-md text-sm leading-7 text-paper-dim">
+                See the code and verify the work yourself — nothing here is a claim
+                you have to take on faith.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {project.links?.github ? (
+                <ButtonLink href={project.links.github} variant="secondary" external>
+                  <Github className="h-4 w-4" aria-hidden="true" />
+                  View source
+                </ButtonLink>
+              ) : null}
+              {project.links?.demo ? (
+                <ButtonLink href={project.links.demo} external>
+                  <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                  Live demo
+                </ButtonLink>
+              ) : null}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       {project.context ? (
-        <section className="container-shell pb-12">
+        <section className="container-shell pb-12 pt-10">
           <div className="rounded-3xl border border-accent/20 bg-accent/10 p-6 text-accent">
             <p className="text-sm font-semibold">Context</p>
             <p className="mt-2 leading-7 text-accent/90">{project.context}</p>

@@ -37,6 +37,7 @@ export const projects: Project[] = [
     slug: "chatub",
     tagline: "Every academic answer, grounded in the real regulations.",
     previewKind: "chat",
+    links: { github: "https://github.com/Abdulel3h/ChatUB" },
     decisions: [
       {
         title: "Local-first, not cloud",
@@ -181,6 +182,7 @@ export const projects: Project[] = [
     slug: "absher-insight-ai",
     tagline: "Security that predicts risk, instead of reacting to it.",
     previewKind: "security",
+    links: { github: "https://github.com/Abdulel3h/absher-insight" },
     decisions: [
       {
         title: "Proactive over reactive",
