@@ -20,9 +20,10 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 const staticCommands = [
   ...navLinks,
-  contactLink,
-  { label: "Blog / Insights", href: "/blog" },
-  { label: "AI Journey", href: "/journey" }
+  { label: "Achievements", href: "/achievements" },
+  { label: "Skills", href: "/skills" },
+  { label: "Writing / Blog", href: "/blog" },
+  contactLink
 ];
 
 export function CommandMenu() {

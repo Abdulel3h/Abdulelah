@@ -63,15 +63,14 @@ export const navLinks = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Projects", href: "/projects" },
-  { label: "Achievements", href: "/achievements" },
-  { label: "Skills", href: "/skills" },
   { label: "Resume", href: "/resume" }
 ];
 
 export const quickLinks = [
   ...navLinks,
+  { label: "Achievements", href: "/achievements" },
+  { label: "Skills", href: "/skills" },
+  { label: "Writing", href: "/blog" },
   contactLink,
-  { label: "Privacy", href: "/privacy" },
-  { label: "Insights", href: "/blog" },
-  { label: "AI Journey", href: "/journey" }
+  { label: "Privacy", href: "/privacy" }
 ];

@@ -28,8 +28,9 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { cn } from "@/lib/utils";
 
 const moreLinks = [
-  { label: "Blog / Insights", href: "/blog" },
-  { label: "AI Journey", href: "/journey" }
+  { label: "Achievements", href: "/achievements" },
+  { label: "Skills", href: "/skills" },
+  { label: "Writing", href: "/blog" }
 ];
 
 const profileLinks = [
