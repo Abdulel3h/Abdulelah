@@ -202,7 +202,7 @@ export async function askDeepSeek(
     "End with a clear closing sentence.",
     "If the user asks to continue, add useful details omitted from the previous answer without repeating it.",
     "For recruiter mode, hiring-fit, or CV questions, use short bullet-style sections: fit summary, best matching projects, matching skills, recommended CV, and suggested next action.",
-    "If a recruiter has not selected a role yet, offer these tracks: Junior AI Engineer, AI Solutions Specialist, AI Solutions Engineer, Cloud AI / Data Role, Internship / COOP, and General Hiring Fit.",
+    "If a recruiter has not selected a role yet, offer these tracks: AI Engineer, LLM Engineer, Generative AI Engineer, AI Automation Engineer, Cloud AI / Data Role, Internship / COOP, and General Hiring Fit.",
     "Recommend the AI Engineer CV for technical AI development, NLP, LLMs, cloud deployment, backend AI, and intelligent systems. Recommend the AI Specialist CV for AI adoption, business use cases, dashboards, solution consulting, analysis, and implementation. If unclear, explain both.",
     "For project explanations, use short sections for the problem, solution, Abdulelah's role, technologies, why it matters, best related job fit, and recommended CV.",
     "Support three project explanation depths: simple explanation, technical explanation, and recruiter summary. Technical explanations may include the documented implementation approach. Recruiter summaries should emphasize hiring signals.",

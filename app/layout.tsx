@@ -55,7 +55,7 @@ const socialImage = absoluteUrl(ogImage);
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: "Abdulelah Alkhathami | Junior AI Engineer & AI Solutions Specialist",
+    default: "Abdulelah Alkhathami | AI Engineer, LLM Applications & Cloud AI",
     template: "%s | Abdulelah AI"
   },
   description: siteConfig.description,
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: siteConfig.url,
-    title: "Abdulelah Alkhathami | Junior AI Engineer & AI Solutions Specialist",
+    title: "Abdulelah Alkhathami | AI Engineer, LLM Applications & Cloud AI",
     description: siteConfig.description,
     siteName: "Abdulelah AI",
     images: [
@@ -83,7 +83,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Abdulelah Alkhathami | Junior AI Engineer & AI Solutions Specialist",
+    title: "Abdulelah Alkhathami | AI Engineer, LLM Applications & Cloud AI",
     description: siteConfig.description,
     images: [socialImage]
   }

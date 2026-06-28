@@ -23,9 +23,9 @@ export type RecruiterRoleProfile = {
 export const recruiterRoleProfiles: RecruiterRoleProfile[] = [
   {
     id: "junior-ai-engineer",
-    label: "Junior AI Engineer",
+    label: "AI Engineer",
     fitSummary:
-      "Abdulelah is a strong junior AI engineering candidate because he has built applied AI systems using NLP, LLM applications, cloud AI, and intelligent search across multiple domains.",
+      "Abdulelah is a strong early-career AI engineering candidate because he has built applied AI systems using NLP, LLM applications, cloud AI, and intelligent search across multiple domains.",
     projects: ["ChatUB", "Althil", "Absher Insight AI"],
     skills: [
       "NLP",
@@ -297,7 +297,7 @@ export function getRecruiterModeResponse() {
     "Recruiter Mode",
     "",
     "Choose the hiring track that best matches your open role for Abdulelah:",
-    "- Junior AI Engineer",
+    "- AI Engineer",
     "- AI Solutions Specialist",
     "- AI Solutions Engineer",
     "- Cloud AI / Data Role",

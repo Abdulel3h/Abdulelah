@@ -25,7 +25,7 @@ export function HeroSection() {
           className="badge mb-6 border-sky-300/20 bg-sky-300/10 text-sky-100"
         >
           <Sparkles className="mr-2 h-3.5 w-3.5 text-sky-200" aria-hidden="true" />
-          Junior AI Engineer &middot; AI Solutions Specialist &middot; Riyadh, Saudi Arabia
+          AI Engineer &middot; LLM Applications &middot; Cloud AI &middot; Riyadh, Saudi Arabia
         </motion.p>
         <motion.h1
           initial={{ opacity: 0, y: 18 }}
@@ -43,9 +43,9 @@ export function HeroSection() {
           className="mt-6 max-w-3xl text-base leading-8 text-slate-300 sm:text-lg"
         >
           I am Abdulelah Alkhathami, an Information Systems graduate focused on
-          NLP, LLMs, Cloud AI, intelligent systems, and applied AI projects
-          across education, digital security, sustainability, fintech, legal
-          tech, and immersive learning.
+          NLP, LLM applications, RAG-style assistants, AI automation concepts,
+          Cloud AI, and applied AI projects across education, digital security,
+          sustainability, fintech, legal tech, and immersive learning.
         </motion.p>
 
         <motion.div

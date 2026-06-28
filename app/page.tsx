@@ -10,7 +10,7 @@ import { siteConfig } from "@/data/site";
 import { createPageMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "Abdulelah Alkhathami | Junior AI Engineer & AI Solutions Specialist",
+  title: "Abdulelah Alkhathami | AI Engineer, LLM Applications & Cloud AI",
   description: siteConfig.description,
   keywords: siteConfig.keywords,
   path: "/"
@@ -33,7 +33,7 @@ export default function HomePage() {
           <SectionHeader
             eyebrow="Proof of direction"
             title="Applied AI, not just AI demos"
-            description="The portfolio is built around real project settings: academic services, public digital security, city sustainability, banking inclusion, legal guidance, and immersive learning."
+            description="The portfolio is built around grounded project settings: academic services, public digital security, city sustainability, banking inclusion, legal guidance, and immersive learning."
           />
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {proofMetrics.map((metric) => (

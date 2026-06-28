@@ -14,7 +14,14 @@ export const personJsonLd = {
   url: siteConfig.url,
   email: `mailto:${siteConfig.email}`,
   image: absoluteUrl(siteConfig.assets.profileImage),
-  jobTitle: ["AI Engineer", "AI Solutions Specialist"],
+  jobTitle: [
+    "AI Engineer",
+    "LLM Engineer",
+    "Generative AI Engineer",
+    "AI Automation Engineer",
+    "Applied Machine Learning Engineer",
+    "Cloud AI Engineer"
+  ],
   address: {
     "@type": "PostalAddress",
     addressLocality: "Riyadh",
@@ -33,6 +40,8 @@ export const personJsonLd = {
     "AI Agents",
     "RAG Systems",
     "LLM Applications",
+    "Generative AI",
+    "AI Automation",
     "Arabic AI Systems",
     "Cloud AI",
     "NLP",
