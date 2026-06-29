@@ -7,6 +7,7 @@ import { useRef, type PointerEvent } from "react";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Magnetic } from "@/components/ui/Magnetic";
 import { Monogram } from "@/components/ui/Monogram";
+import { duration, ease, spring } from "@/lib/motion";
 import { siteConfig } from "@/data/site";
 
 const recognition = [
@@ -22,8 +23,8 @@ export function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const portraitRef = useRef<HTMLDivElement>(null);
   const lightRef = useRef<HTMLDivElement>(null);
-  const rotateX = useSpring(useMotionValue(0), { stiffness: 150, damping: 18, mass: 0.5 });
-  const rotateY = useSpring(useMotionValue(0), { stiffness: 150, damping: 18, mass: 0.5 });
+  const rotateX = useSpring(useMotionValue(0), spring.tilt);
+  const rotateY = useSpring(useMotionValue(0), spring.tilt);
 
   function handlePointer(event: PointerEvent<HTMLElement>) {
     if (reduceMotion || event.pointerType !== "mouse") return;
@@ -59,7 +60,7 @@ export function HeroSection() {
       : {
           initial: { opacity: 0, y: 18 },
           animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] as const }
+          transition: { duration: 0.7, delay, ease: ease.out }
         };
 
   return (
@@ -144,7 +145,7 @@ export function HeroSection() {
       <motion.div
         initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.98 }}
         animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: reduceMotion ? 0.3 : 0.9, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: reduceMotion ? 0.3 : duration.slower, ease: ease.out }}
         className="relative z-10 order-1 mx-auto w-full max-w-[380px] lg:order-2 lg:max-w-[440px]"
       >
         <motion.div

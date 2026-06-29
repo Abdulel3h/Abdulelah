@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Database, Cpu, Lightbulb, LayoutDashboard } from "lucide-react";
 import { Fragment } from "react";
+import { ease } from "@/lib/motion";
 
 const stageIcons = [Database, Cpu, Lightbulb, LayoutDashboard];
 const stageLabels = ["Source", "Processing", "Intelligence", "Experience"];
@@ -30,7 +31,7 @@ export function ProjectArchitecture({ steps }: { steps: string[] }) {
               transition={{
                 duration: 0.5,
                 delay: index * 0.1,
-                ease: [0.22, 1, 0.36, 1]
+                ease: ease.out
               }}
               className="group relative flex flex-1 flex-col rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 transition-colors hover:border-accent/30 hover:bg-accent/[0.04]"
             >

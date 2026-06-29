@@ -2,6 +2,7 @@
 
 import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 import { useRef, type ReactNode, type PointerEvent } from "react";
+import { spring } from "@/lib/motion";
 
 /**
  * Subtle magnetism — the wrapped element eases toward the cursor within its
@@ -21,9 +22,8 @@ export function Magnetic({
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const springConfig = { stiffness: 220, damping: 18, mass: 0.4 };
-  const sx = useSpring(x, springConfig);
-  const sy = useSpring(y, springConfig);
+  const sx = useSpring(x, spring.magnetic);
+  const sy = useSpring(y, spring.magnetic);
 
   function handleMove(event: PointerEvent<HTMLDivElement>) {
     if (reduce || event.pointerType !== "mouse" || !ref.current) return;

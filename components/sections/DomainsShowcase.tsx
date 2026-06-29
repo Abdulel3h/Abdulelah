@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { useState } from "react";
+import { ease } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 const domains = [
@@ -76,7 +77,7 @@ export function DomainsShowcase() {
           key={active}
           initial={reduceMotion ? false : { opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.4, ease: ease.out }}
           className="max-w-xl text-base leading-7 text-paper-dim"
         >
           {domains[active].blurb}

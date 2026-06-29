@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Fragment, useState } from "react";
 import { ProductPreview } from "@/components/work/ProductPreview";
 import { projects } from "@/data/projects";
+import { ease } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 export function WorkIndex() {
@@ -83,7 +84,7 @@ export function WorkIndex() {
             key={active.slug}
             initial={reduceMotion ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.4, ease: ease.out }}
           >
             <div className="relative">
               <div

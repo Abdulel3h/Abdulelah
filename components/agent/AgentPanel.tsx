@@ -9,6 +9,7 @@ import { AgentLauncher } from "@/components/agent/AgentLauncher";
 import { AgentMessage } from "@/components/agent/AgentMessage";
 import { AgentSuggestion } from "@/components/agent/AgentSuggestion";
 import { OPEN_AGENT_EVENT } from "@/lib/agent/companion";
+import { duration, ease } from "@/lib/motion";
 import { Monogram } from "@/components/ui/Monogram";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -347,7 +348,7 @@ export function AgentPanel() {
               initial={reduceMotion ? false : { opacity: 0, y: 20, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={reduceMotion ? undefined : { opacity: 0, y: 16, scale: 0.98 }}
-              transition={{ duration: reduceMotion ? 0 : 0.24, ease: "easeOut" }}
+              transition={{ duration: reduceMotion ? 0 : duration.base, ease: ease.out }}
             >
               <div className="relative border-b border-white/10 px-5 py-4">
                 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/60 to-transparent" />

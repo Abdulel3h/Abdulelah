@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Fragment } from "react";
 import { ProductPreview } from "@/components/work/ProductPreview";
 import type { Project } from "@/data/projects";
+import { ease } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 export function WorkStory({ project, index }: { project: Project; index: number }) {
@@ -25,12 +26,12 @@ export function WorkStory({ project, index }: { project: Project; index: number 
       initial={reduceMotion ? false : { opacity: 0, y: 48 }}
       whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-90px" }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.8, ease: ease.out }}
       className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16"
     >
       <motion.div
         whileHover={reduceMotion ? undefined : { y: -8 }}
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.5, ease: ease.out }}
         className={cn("relative", flipped && "lg:order-2")}
       >
         <div

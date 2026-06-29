@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { ease } from "@/lib/motion";
 
 const paths = [
   "M4 37 L14 6 L24 37",
@@ -40,7 +41,7 @@ export function SignatureMonogram({ className }: { className?: string }) {
             transition={
               reduce
                 ? undefined
-                : { duration: 0.85, delay: index * 0.22, ease: [0.4, 0, 0.2, 1] }
+                : { duration: 0.85, delay: index * 0.22, ease: ease.out }
             }
           />
         ))}
