@@ -344,7 +344,7 @@ export function AgentPanel() {
               aria-modal="false"
               aria-labelledby="agent-panel-title"
               aria-describedby="agent-panel-description"
-              className="fixed inset-x-0 bottom-0 top-16 z-40 flex h-[calc(100vh-4rem)] flex-col overflow-hidden rounded-t-3xl border border-white/10 bg-ink-900/95 shadow-[0_-24px_90px_rgba(20,20,22,0.7),0_0_44px_rgba(201,167,92,0.12)] backdrop-blur-2xl supports-[height:100dvh]:h-[calc(100dvh-4rem)] sm:inset-x-auto sm:bottom-24 sm:right-5 sm:top-auto sm:h-[min(660px,calc(100dvh-11rem))] sm:w-[min(440px,calc(100vw-2.5rem))] sm:rounded-3xl"
+              className="fixed inset-x-0 bottom-0 top-16 z-40 flex h-[calc(100vh-4rem)] flex-col overflow-hidden rounded-t-3xl border border-white/10 bg-ink-900/95 shadow-[0_-24px_90px_rgba(20,20,22,0.7),0_0_44px_rgba(201,167,92,0.12)] backdrop-blur-md supports-[height:100dvh]:h-[calc(100dvh-4rem)] sm:inset-x-auto sm:bottom-24 sm:right-5 sm:top-auto sm:h-[min(660px,calc(100dvh-11rem))] sm:w-[min(440px,calc(100vw-2.5rem))] sm:rounded-3xl"
               initial={reduceMotion ? false : { opacity: 0, y: 20, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={reduceMotion ? undefined : { opacity: 0, y: 16, scale: 0.98 }}

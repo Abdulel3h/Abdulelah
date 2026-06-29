@@ -80,7 +80,7 @@ export function HeroSection() {
         }}
       />
 
-      <div className="relative z-10 order-2 lg:order-1">
+      <div className="relative z-10 order-1 lg:order-1">
         <motion.p {...reveal(0)} className="eyebrow mb-7">
           Riyadh, Saudi Arabia · Available for select work
         </motion.p>
@@ -146,7 +146,7 @@ export function HeroSection() {
         initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.98 }}
         animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: reduceMotion ? 0.3 : duration.slower, ease: ease.out }}
-        className="relative z-10 order-1 mx-auto w-full max-w-[380px] lg:order-2 lg:max-w-[440px]"
+        className="relative z-10 order-2 mx-auto w-full max-w-[300px] sm:max-w-[360px] lg:order-2 lg:max-w-[440px]"
       >
         <motion.div
           ref={portraitRef}

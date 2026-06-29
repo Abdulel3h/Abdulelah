@@ -50,7 +50,7 @@ select {
   }
 
   .glass-card {
-    @apply border border-white/10 bg-ink-800/60 shadow-glow backdrop-blur-xl;
+    @apply border border-white/10 bg-ink-800/70 shadow-glow backdrop-blur-md sm:bg-ink-800/60 sm:backdrop-blur-xl;
     background-image:
       linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.015)),
       linear-gradient(180deg, rgba(20,20,22,0.74), rgba(10,10,11,0.54));
@@ -90,7 +90,7 @@ select {
   }
 
   .premium-panel {
-    @apply relative overflow-hidden rounded-3xl border border-white/10 bg-ink-900/55 shadow-glow backdrop-blur-2xl;
+    @apply relative overflow-hidden rounded-3xl border border-white/10 bg-ink-900/70 shadow-glow backdrop-blur-md sm:bg-ink-900/55 sm:backdrop-blur-2xl;
   }
 
   .premium-panel::before {

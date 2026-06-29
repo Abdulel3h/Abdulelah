@@ -46,7 +46,7 @@ export function WorkIndex() {
                         "font-display text-2xl font-medium leading-tight transition-colors sm:text-3xl lg:text-[2.4rem]",
                         isActive
                           ? "text-paper"
-                          : "text-paper/45 group-hover:text-paper/80"
+                          : "text-paper/75 lg:text-paper/45 lg:group-hover:text-paper/80"
                       )}
                     >
                       {name}
