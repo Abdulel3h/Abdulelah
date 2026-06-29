@@ -13,9 +13,7 @@ import { ScrollProgress } from "@/components/layout/ScrollProgress";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { siteConfig } from "@/data/site";
-import { ogImage } from "@/lib/metadata";
 import { personJsonLd, websiteJsonLd } from "@/lib/structured-data";
-import { absoluteUrl } from "@/lib/utils";
 import "./globals.css";
 
 const inter = Inter({
@@ -60,8 +58,6 @@ const thmanyah = localFont({
   fallback: ["system-ui", "sans-serif"]
 });
 
-const socialImage = absoluteUrl(ogImage);
-
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
@@ -81,21 +77,12 @@ export const metadata: Metadata = {
     url: siteConfig.url,
     title: "Abdulelah Alkhathami — Builder of intelligent products",
     description: siteConfig.description,
-    siteName: siteConfig.name,
-    images: [
-      {
-        url: socialImage,
-        width: 1200,
-        height: 630,
-        alt: "Abdulelah Alkhathami"
-      }
-    ]
+    siteName: siteConfig.name
   },
   twitter: {
     card: "summary_large_image",
     title: "Abdulelah Alkhathami — Builder of intelligent products",
-    description: siteConfig.description,
-    images: [socialImage]
+    description: siteConfig.description
   }
 };
 

@@ -12,6 +12,7 @@ import { OPEN_AGENT_EVENT } from "@/lib/agent/companion";
 import { duration, ease } from "@/lib/motion";
 import { Monogram } from "@/components/ui/Monogram";
 import { Button } from "@/components/ui/button";
+import { trackEvent } from "@/lib/analytics";
 import { Input } from "@/components/ui/input";
 import type {
   AgentAction,
@@ -127,6 +128,7 @@ export function AgentPanel() {
       const prompt = detail?.prompt;
 
       setIsOpen(true);
+      trackEvent("companion_open", { source: "cue" });
 
       if (prompt) {
         if (detail?.send) {
@@ -146,6 +148,7 @@ export function AgentPanel() {
 
   function openPanel() {
     setIsOpen(true);
+    trackEvent("companion_open", { source: "launcher" });
   }
 
   function closePanel() {
@@ -330,7 +333,7 @@ export function AgentPanel() {
           <>
             <motion.button
               type="button"
-              aria-label="Close Agent Abdulelah"
+              aria-label="Close Abdulelah's guide"
               className="fixed inset-0 z-[39] bg-ink-900/55 backdrop-blur-sm"
               initial={reduceMotion ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -378,7 +381,7 @@ export function AgentPanel() {
                     type="button"
                     onClick={closePanel}
                     className="focus-ring grid h-9 w-9 place-items-center rounded-full border border-white/10 text-paper-dim transition hover:border-accent/35 hover:text-paper"
-                    aria-label="Close Agent Abdulelah"
+                    aria-label="Close Abdulelah's guide"
                   >
                     <X className="h-4 w-4" aria-hidden="true" />
                   </button>
@@ -462,7 +465,7 @@ export function AgentPanel() {
                       <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
                       <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent [animation-delay:160ms]" />
                       <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent-soft [animation-delay:320ms]" />
-                      <span className="sr-only">Agent Abdulelah is preparing a response.</span>
+                      <span className="sr-only">Abdulelah&apos;s guide is preparing a response.</span>
                     </span>
                   </div>
                 ) : null}
@@ -481,8 +484,8 @@ export function AgentPanel() {
                     ref={inputRef}
                     value={input}
                     onChange={(event) => setInput(event.target.value)}
-                    placeholder="Ask about Abdulelah's portfolio..."
-                    aria-label="Ask Agent Abdulelah a question"
+                    placeholder="Ask about Abdulelah's work…"
+                    aria-label="Ask Abdulelah's guide a question"
                     maxLength={1_200}
                     disabled={isLoading}
                     className="min-w-0 flex-1"

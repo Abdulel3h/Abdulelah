@@ -62,7 +62,7 @@ function blogPostSummary(slug: string) {
     return "";
   }
 
-  return `Read "${post.title}" in Abdulelah AI Insights. ${post.excerpt} Key takeaway: ${post.content.takeaway}`;
+  return `Read "${post.title}" in Abdulelah's notes. ${post.excerpt} Key takeaway: ${post.content.takeaway}`;
 }
 
 function normalizeArabicMessage(message: string) {
@@ -324,7 +324,7 @@ function getArabicFallbackAgentResponse(message: string) {
           ? `للاستشارات والأعمال، تواصل مع عبدالإله عبر ${routedEmail}.`
           : `يمكنك التواصل مع عبدالإله مباشرة عبر ${routedEmail}.`;
 
-    return `${channelIntro} كما يمكنك إرسال رسالة خاصة عبر نموذج Agent Abdulelah أو صفحة التواصل. ستجد أزرار التواصل المناسبة بالأسفل.`;
+    return `${channelIntro} كما يمكنك إرسال رسالة خاصة عبر نموذج Abdulelah's guide أو صفحة التواصل. ستجد أزرار التواصل المناسبة بالأسفل.`;
   }
 
   if (includesAny(normalized, ["مقال", "مقالات", "كتب عن"])) {
@@ -629,7 +629,7 @@ export function getFallbackAgentResponse(
           ? `For consulting, freelance, or business inquiries, email Abdulelah at ${routedEmail}.`
           : `You can email Abdulelah directly at ${routedEmail}.`;
 
-    return `${channelIntro} You can also send a private message through Agent Abdulelah or the contact page. He is based in ${siteConfig.location}. Use the action buttons below to email him, open the contact form, or view his LinkedIn.`;
+    return `${channelIntro} You can also send a private message through Abdulelah's guide or the contact page. He is based in ${siteConfig.location}. Use the action buttons below to email him, open the contact form, or view his LinkedIn.`;
   }
 
   if (includesAny(normalized, ["hire", "recruiter", "different", "fresh graduate"])) {
@@ -643,8 +643,8 @@ export function getFallbackAgentResponse(
   }
 
   if (includesAny(normalized, ["30 seconds", "quick summary", "summarize", "summary", "who is"])) {
-    return "Abdulelah Alkhathami is a Riyadh-based Information Systems graduate, Junior AI Engineer, and AI Solutions Specialist. He builds practical AI systems with NLP, LLM applications, cloud services, dashboards, and domain-aware product thinking. His portfolio includes six applied AI projects and experience from national hackathons, including KFUPM x Google Cloud, Absher x Tuwaiq, and SDAIA x Microsoft programs.";
+    return "Abdulelah Alkhathami is a Riyadh-based builder and product thinker (AI Engineer & AI Solutions Specialist). He builds practical AI systems with NLP, LLM applications, cloud services, dashboards, and domain-aware product thinking. His portfolio includes seven applied projects — two with public GitHub source (ChatUB and Absher Insight AI) — and experience from national hackathons, including KFUPM x Google Cloud, Absher x Tuwaiq, and SDAIA x Microsoft programs.";
   }
 
-  return "Abdulelah Alkhathami is a Junior AI Engineer and AI Solutions Specialist focused on practical, context-aware AI systems. His portfolio spans six applied projects across education, cloud sustainability, digital security, legal tech, fintech, and immersive learning. A strong starting point is ChatUB, Althil, and Absher Insight AI, followed by the resume page for role-specific CV versions.";
+  return "Abdulelah Alkhathami is a builder and product thinker (AI Engineer & AI Solutions Specialist) focused on practical, context-aware AI systems. His portfolio spans seven applied projects across education, cloud sustainability, digital security, legal tech, fintech, immersive learning, and computer-vision safety. A strong starting point is ChatUB, Althil, and Absher Insight AI, followed by the resume page for role-specific CV versions.";
 }

@@ -7,6 +7,11 @@ Verification rule: a repository is linked on the public site **only** at ≥90%
 confidence, after a quality audit, and only if it is suitable for public
 presentation. Nothing is fabricated.
 
+## Final-phase update (launch readiness)
+- **Stadium** was promoted to a real project and linked → `github.com/Abdulel3h/Stadium` (100% — his own solo build). So **3 repos are now linked**: ChatUB, Absher Insight AI, Stadium.
+- Public proof shown = only verified GitHub source links (Evidence section renders only when a repo exists). No demo links shown (none verified). No fabricated metrics — project "metrics" are qualitative signals, not invented numbers.
+- **Still missing real assets (do not surface until provided):** Althil repo, Qanouni repo, live demos for any project, screenshots/GIFs in the linked repos, LICENSE files in ChatUB/absher-insight/Stadium, Medad repo confirmation (midad-landing). `Stadium` candidate `architect-of-intelligence` (has a live demo) remains a future portfolio addition.
+
 ## Per-project verification
 
 | Project | Repo | Confidence | Quality | Public URL | Linked? |

@@ -1,73 +1,99 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 export type ViewedProject = { slug: string; name: string; category: string };
 
 type SessionState = {
   projects: ViewedProject[];
   resumeViewed: boolean;
+  /** False on the server and until sessionStorage has been read on the client. */
+  ready: boolean;
 };
 
 const STORAGE_KEY = "abdulelah:visit";
-const EMPTY: SessionState = { projects: [], resumeViewed: false };
+const EMPTY: SessionState = { projects: [], resumeViewed: false, ready: false };
 
 let state: SessionState = EMPTY;
 let hydrated = false;
 const listeners = new Set<() => void>();
 
-function hydrate() {
-  if (hydrated || typeof window === "undefined") return;
-  hydrated = true;
+function notify() {
+  listeners.forEach((listener) => listener());
+}
+
+function persist() {
   try {
-    const raw = window.sessionStorage.getItem(STORAGE_KEY);
-    if (raw) state = { ...EMPTY, ...JSON.parse(raw) };
+    window.sessionStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        projects: state.projects,
+        resumeViewed: state.resumeViewed
+      })
+    );
   } catch {
-    // sessionStorage unavailable — stay in-memory only for this visit.
+    // sessionStorage unavailable — stay in-memory for this visit only.
   }
 }
 
-function commit(next: SessionState) {
-  state = next;
+function hydrate() {
+  if (hydrated || typeof window === "undefined") return;
+  hydrated = true;
+  let next: SessionState = { projects: [], resumeViewed: false, ready: true };
   try {
-    window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    const raw = window.sessionStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw) as Partial<SessionState>;
+      next = {
+        projects: parsed.projects ?? [],
+        resumeViewed: parsed.resumeViewed ?? false,
+        ready: true
+      };
+    }
   } catch {
-    // ignore persistence failures; memory is best-effort and visit-only.
+    // ignore malformed storage.
   }
-  listeners.forEach((listener) => listener());
+  state = next;
+  notify();
 }
 
 export function recordProjectView(project: ViewedProject) {
   hydrate();
   if (state.projects.some((entry) => entry.slug === project.slug)) return;
-  commit({ ...state, projects: [...state.projects, project] });
+  state = { ...state, projects: [...state.projects, project], ready: true };
+  persist();
+  notify();
 }
 
 export function recordResumeView() {
   hydrate();
   if (state.resumeViewed) return;
-  commit({ ...state, resumeViewed: true });
+  state = { ...state, resumeViewed: true, ready: true };
+  persist();
+  notify();
+}
+
+function subscribe(listener: () => void) {
+  listeners.add(listener);
+  hydrate();
+  return () => {
+    listeners.delete(listener);
+  };
+}
+
+function getSnapshot() {
+  return state;
+}
+
+function getServerSnapshot() {
+  return EMPTY;
 }
 
 /**
  * Reads the current visit's memory. Returns the empty state on the server and
- * the first client render (no hydration mismatch), then fills in after mount.
- * `ready` lets callers wait until the real visit state is known.
+ * the first client render (no hydration mismatch), then fills in from
+ * sessionStorage after mount. `ready` lets callers wait for real state.
  */
 export function useSession() {
-  const [snapshot, setSnapshot] = useState<SessionState>(EMPTY);
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    hydrate();
-    setSnapshot(state);
-    setReady(true);
-    const listener = () => setSnapshot(state);
-    listeners.add(listener);
-    return () => {
-      listeners.delete(listener);
-    };
-  }, []);
-
-  return { projects: snapshot.projects, resumeViewed: snapshot.resumeViewed, ready };
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }

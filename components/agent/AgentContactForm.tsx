@@ -57,7 +57,7 @@ export function AgentContactForm({ onClose }: { onClose: () => void }) {
       });
 
       if (!response.ok) {
-        throw new Error("Unable to send Agent Abdulelah message.");
+        throw new Error("Unable to send your message right now.");
       }
 
       form.reset();

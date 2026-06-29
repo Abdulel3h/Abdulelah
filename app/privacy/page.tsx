@@ -7,7 +7,7 @@ import { createPageMetadata } from "@/lib/metadata";
 export const metadata: Metadata = createPageMetadata({
   title: "Privacy Notice",
   description:
-    "A concise privacy notice for the Abdulelah AI portfolio, contact form, and Agent Abdulelah.",
+    "A concise privacy notice for Abdulelah Alkhathami's website, contact form, and companion.",
   path: "/privacy"
 });
 
@@ -16,10 +16,10 @@ const privacyPoints = [
   "A contact message may include a name, email address, company, selected intent, and message content.",
   "Agent contact intent and message text are evaluated deterministically to suggest a follow-up priority. Private contact messages are not sent to DeepSeek.",
   "This site uses Vercel Web Analytics to count anonymous, aggregated page views. It does not use tracking cookies and does not build advertising profiles.",
-  "Agent Abdulelah may process visitor questions to answer portfolio-related queries.",
+  "Abdulelah's guide may process visitor questions to answer portfolio-related queries.",
   "API keys and server-side credentials are never exposed to the browser.",
   "Contact messages are sent to Abdulelah's email using Resend.",
-  "Agent Abdulelah is limited to Abdulelah Alkhathami's public portfolio context.",
+  "Abdulelah's guide is limited to Abdulelah Alkhathami's public portfolio context.",
   "Please do not submit sensitive personal, financial, medical, legal, or confidential information."
 ];
 
@@ -57,7 +57,7 @@ export default function PrivacyPage() {
             <div className="mt-6 rounded-2xl border border-accent/20 bg-accent/[0.06] p-5">
               <h2 className="text-base font-semibold text-paper">Agent session memory</h2>
               <p className="mt-2 text-sm leading-7 text-paper-dim">
-                Agent Abdulelah may remember recent messages during the current browser
+                Abdulelah&apos;s guide may remember recent messages during the current browser
                 session to answer follow-up questions. This temporary memory is not
                 stored permanently by the site and can be cleared with the Clear chat
                 button. Contact form submissions are handled separately and are only

@@ -496,7 +496,7 @@ export function buildPortfolioContext() {
     `Location: ${siteConfig.location}`,
     "GitHub profile: available through an action button.",
     "LinkedIn profile: available through an action button.",
-    "Positioning: Junior AI Engineer, AI Solutions Specialist, applied AI builder, project leader, and hackathon-tested AI talent.",
+    "Positioning: AI Engineer, AI Solutions Specialist, applied AI builder, project leader, and hackathon-tested AI talent. Lead with the name (Abdulelah Alkhathami) and his work, never with 'Junior'.",
     "",
     "CONTACT ROUTING",
     "Share the email address that matches the visitor's intent. You may write these email addresses directly in your answer text.",

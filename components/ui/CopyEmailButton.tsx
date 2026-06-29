@@ -2,6 +2,7 @@
 
 import { Check, Copy } from "lucide-react";
 import { useState } from "react";
+import { trackEvent } from "@/lib/analytics";
 
 export function CopyEmailButton({ email }: { email: string }) {
   const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">("idle");
@@ -40,6 +41,7 @@ export function CopyEmailButton({ email }: { email: string }) {
     }
 
     setCopyState(copied ? "copied" : "failed");
+    if (copied) trackEvent("email_copied");
     window.setTimeout(() => setCopyState("idle"), 1800);
   }
 
