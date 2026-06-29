@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
-import { Download } from "lucide-react";
 import Image from "next/image";
 import { useRef, type PointerEvent } from "react";
 import { ButtonLink } from "@/components/ui/ButtonLink";
@@ -113,17 +112,11 @@ export function HeroSection() {
               View my work
             </ButtonLink>
           </Magnetic>
+          <ButtonLink href="/resume" variant="secondary" showArrow className="w-full sm:w-auto">
+            Résumé
+          </ButtonLink>
           <ButtonLink href="/about" variant="ghost" showArrow className="w-full sm:w-auto">
             My story
-          </ButtonLink>
-          <ButtonLink
-            href={siteConfig.resumes.engineer}
-            variant="secondary"
-            download
-            className="w-full sm:w-auto"
-          >
-            <Download className="h-4 w-4" aria-hidden="true" />
-            CV
           </ButtonLink>
         </motion.div>
 

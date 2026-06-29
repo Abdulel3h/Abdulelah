@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Github } from "lucide-react";
 import Link from "next/link";
 import { Fragment } from "react";
 import { ProductPreview } from "@/components/work/ProductPreview";
@@ -99,13 +99,26 @@ export function WorkStory({ project, index }: { project: Project; index: number 
           <span className="text-paper">{project.role}</span>
         </p>
 
-        <Link
-          href={`/projects/${project.slug}`}
-          className="focus-ring group mt-7 inline-flex items-center gap-2 rounded-full text-sm font-semibold text-accent-soft transition hover:text-accent"
-        >
-          Explore the build
-          <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
-        </Link>
+        <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <Link
+            href={`/projects/${project.slug}`}
+            className="focus-ring group inline-flex items-center gap-2 rounded-full text-sm font-semibold text-accent-soft transition hover:text-accent"
+          >
+            Explore the build
+            <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
+          </Link>
+          {project.links?.github ? (
+            <a
+              href={project.links.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="focus-ring inline-flex items-center gap-2 rounded-full text-sm font-medium text-paper-dim transition hover:text-paper"
+            >
+              <Github className="h-4 w-4" aria-hidden="true" />
+              View source
+            </a>
+          ) : null}
+        </div>
       </div>
     </motion.article>
   );

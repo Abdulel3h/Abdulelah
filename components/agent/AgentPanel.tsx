@@ -30,14 +30,12 @@ const INITIAL_MESSAGE: AgentChatMessage = {
 };
 
 const suggestions = [
-  "Recruiter Mode",
-  "Which CV should I download?",
-  "Start portfolio tour",
-  "Explain a project",
-  "Compare projects",
-  "Explain ChatUB",
-  "Explain Althil",
-  "Explain Absher Insight AI"
+  "Give me the 30-second summary",
+  "Show the strongest projects",
+  "Which CV fits my role?",
+  "Which projects have GitHub code?",
+  "Why does ChatUB matter?",
+  "How do I contact Abdulelah?"
 ];
 
 const MAX_HISTORY_TURNS = 8;

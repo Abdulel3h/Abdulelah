@@ -21,7 +21,8 @@ const glance = [
   { label: "Education", value: "Information Systems — University of Bisha" },
   { label: "Based in", value: siteConfig.location },
   { label: "Selected work", value: "Seven products across seven domains" },
-  { label: "Recognition", value: "Top 30 — SDAIA × Microsoft AthkaU" }
+  { label: "Recognition", value: "Top 30 — SDAIA × Microsoft AthkaU" },
+  { label: "Code", value: "Key projects are open-source on GitHub" }
 ];
 
 const versions = [

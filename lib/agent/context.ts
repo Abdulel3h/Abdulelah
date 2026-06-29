@@ -430,7 +430,10 @@ export function buildPortfolioContext() {
           `  Technologies: ${list(project.technologies)}`,
           `  Approach: ${list(project.technicalApproach)}`,
           project.context ? `  Context: ${project.context}` : null,
-          `  Impact: ${project.impact}`
+          `  Impact: ${project.impact}`,
+          project.links?.github
+            ? `  Source (verified public GitHub repo): ${project.links.github}`
+            : null
         ]
           .filter(Boolean)
           .join("\n")
