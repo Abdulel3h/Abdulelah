@@ -514,8 +514,8 @@ export const globalPulseItemsAr: GlobalPulseItem[] = [
 
 export const blogText = {
   en: {
-    heroEyebrow: "AI Knowledge Hub",
-    heroTitle: "Abdulelah AI Insights",
+    heroEyebrow: "Writing",
+    heroTitle: "Notes",
     heroSubtitle:
       "Practical ideas about AI agents, LLMs, cloud AI, privacy-first systems, and applied AI for students, builders, and decision-makers.",
     statArticlesLabel: "Original articles",
@@ -552,8 +552,8 @@ export const blogText = {
     viewProjects: "View Projects",
     askAgent: "Ask Agent Abdulelah",
     downloadResume: "Download Resume",
-    ctaPrompt: "What should I read first in Abdulelah AI Insights?",
-    backToBlog: "Back to Abdulelah AI Insights",
+    ctaPrompt: "What should I read first?",
+    backToBlog: "Back to Notes",
     forAudiences: "For",
     externalSource: "External source:",
     continueBadge: "Continue exploring",
@@ -571,8 +571,8 @@ export const blogText = {
       `Explain the "${title}" article and how it relates to Abdulelah's portfolio.`
   },
   ar: {
-    heroEyebrow: "مركز معرفة الـ AI",
-    heroTitle: "رؤى عبدالإله في الذكاء الاصطناعي",
+    heroEyebrow: "كتابات",
+    heroTitle: "ملاحظات",
     heroSubtitle:
       "أفكار عملية عن الـ AI Agents والـ LLMs والـ Cloud AI والأنظمة اللي تحترم الخصوصية، وتطبيقات واقعية للذكاء الاصطناعي — للطلاب والبنّائين وصنّاع القرار.",
     statArticlesLabel: "مقالات أصلية",
@@ -610,7 +610,7 @@ export const blogText = {
     askAgent: "اسأل Agent Abdulelah",
     downloadResume: "حمّل السيرة الذاتية",
     ctaPrompt: "وش تنصحني أقرأ أول شيء في مدونة عبدالإله؟",
-    backToBlog: "الرجوع إلى مدونة عبدالإله",
+    backToBlog: "الرجوع إلى الملاحظات",
     forAudiences: "لـ",
     externalSource: "المصدر الخارجي:",
     continueBadge: "تابع الاستكشاف",

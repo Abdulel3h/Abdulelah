@@ -70,7 +70,7 @@ export const quickLinks = [
   ...navLinks,
   { label: "Achievements", href: "/achievements" },
   { label: "Skills", href: "/skills" },
-  { label: "Writing", href: "/blog" },
+  { label: "Notes", href: "/blog" },
   contactLink,
   { label: "Privacy", href: "/privacy" }
 ];

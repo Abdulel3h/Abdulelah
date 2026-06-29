@@ -30,7 +30,7 @@ import { cn } from "@/lib/utils";
 const moreLinks = [
   { label: "Achievements", href: "/achievements" },
   { label: "Skills", href: "/skills" },
-  { label: "Writing", href: "/blog" }
+  { label: "Notes", href: "/blog" }
 ];
 
 const profileLinks = [

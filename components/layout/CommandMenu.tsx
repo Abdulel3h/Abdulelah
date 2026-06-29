@@ -22,7 +22,7 @@ const staticCommands = [
   ...navLinks,
   { label: "Achievements", href: "/achievements" },
   { label: "Skills", href: "/skills" },
-  { label: "Writing / Blog", href: "/blog" },
+  { label: "Notes", href: "/blog" },
   contactLink
 ];
 

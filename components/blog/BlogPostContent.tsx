@@ -4,7 +4,7 @@ import { ArrowLeft, ArrowRight, Clock3, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { AgentAskButton } from "@/components/blog/AgentAskButton";
 import { ArticleContent } from "@/components/blog/ArticleContent";
-import { BlogCard } from "@/components/blog/BlogCard";
+import { NotesList } from "@/components/blog/NotesList";
 import { useBlogLanguage } from "@/components/blog/BlogLanguageProvider";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/ButtonLink";
@@ -119,23 +119,17 @@ export function BlogPostContent({
       </section>
 
       <section className="container-shell section-space">
-        <div className="max-w-3xl">
-          <p className="badge mb-4">{text.relatedBadge}</p>
-          <h2 className="text-3xl font-semibold text-paper sm:text-4xl">
+        <div className="max-w-2xl">
+          <p className="eyebrow mb-5">{text.relatedBadge}</p>
+          <h2 className="font-display text-3xl font-medium leading-tight tracking-[-0.01em] text-paper sm:text-4xl">
             {text.relatedTitle}
           </h2>
           <p className="mt-5 text-base leading-8 text-paper-dim">
             {text.relatedBody}
           </p>
         </div>
-        <div className="mt-9 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {relatedPosts.map((relatedPost) => (
-            <BlogCard
-              key={relatedPost.slug}
-              post={relatedPost}
-              language={language}
-            />
-          ))}
+        <div className="mt-9">
+          <NotesList posts={relatedPosts} language={language} />
         </div>
         <Link
           href="/blog"
