@@ -23,7 +23,7 @@ export type Project = {
   /** Punchy product line for the studio showcase. */
   tagline?: string;
   /** Which handcrafted preview to render in the showcase / work index. */
-  previewKind?: "chat" | "map" | "security" | "legal" | "fintech" | "vr";
+  previewKind?: "chat" | "map" | "security" | "legal" | "fintech" | "vr" | "vision";
   /** Short architecture flow (3–4 steps) shown as connected chips. */
   flow?: string[];
   /** Outcome / signal metrics surfaced in the showcase. */
@@ -438,6 +438,74 @@ export const projects: Project[] = [
       "VR exploration concept",
       "AI learning content engine",
       "Astronomy education journey"
+    ]
+  },
+  {
+    slug: "stadium",
+    tagline: "See the crowd forming before it becomes a crush.",
+    previewKind: "vision",
+    links: { github: "https://github.com/Abdulel3h/Stadium" },
+    decisions: [
+      {
+        title: "Vision over new hardware",
+        body: "Used computer vision on ordinary camera feeds instead of installing new sensors — cheaper to deploy and it works with the cameras a venue already has."
+      },
+      {
+        title: "Recommend an action, not just an alarm",
+        body: "The decision engine doesn't only flag a busy gate — it recommends where to move staff, so the output is something an operator can act on immediately."
+      }
+    ],
+    flow: ["Camera feed", "YOLO detection", "Zone & status logic", "Live dashboard & alerts"],
+    metrics: [
+      { value: "Real-time", label: "~2s dashboard refresh" },
+      { value: "4 zones", label: "Configurable gate areas" },
+      { value: "Solo build", label: "End to end by Abdulelah" }
+    ],
+    title: "Stadium - Crowd & Gate Monitoring with Computer Vision",
+    category: "Computer Vision / Operations / Safety",
+    shortDescription:
+      "A computer-vision system that watches stadium gate zones in real time, flags crowding before it becomes dangerous, and recommends how to redistribute staff.",
+    problem:
+      "Crowd build-up at stadium gates can turn dangerous quickly, and staff often react only once a zone is already overflowing. Operators need to see congestion forming early enough to act.",
+    solution:
+      "Stadium uses computer vision to count and track people across gate zones, classify each gate's status, and recommend where to move staff before a zone overflows.",
+    role: "Solo Developer",
+    responsibilities: [
+      "Built the full system end to end as a solo project",
+      "Implemented YOLO-based person detection and per-zone tracking",
+      "Designed the decision engine for gate status and alerts",
+      "Built the Flask API and the live monitoring dashboard"
+    ],
+    technologies: [
+      "Python",
+      "YOLO (Ultralytics)",
+      "OpenCV",
+      "Flask",
+      "NumPy",
+      "JavaScript"
+    ],
+    features: [
+      "Real-time person detection across four gate zones",
+      "Gate status: normal, busy, critical, overflow",
+      "Crowding alerts and incident logging",
+      "Staff distribution recommendations",
+      "ETA estimation",
+      "Live dashboard polling every two seconds"
+    ],
+    impact:
+      "Stadium shows how computer vision on existing cameras can turn a safety blind spot into an early-warning system operators can act on.",
+    year: "2026",
+    technicalApproach: [
+      "YOLO (Ultralytics) for person detection and tracking",
+      "Frame-by-frame assignment of people to configurable gate zones",
+      "A decision engine that classifies gate status and raises alerts",
+      "Flask API exposing live status at /api/status",
+      "HTML/JS dashboard polling the API every two seconds"
+    ],
+    gallery: [
+      "Gate zone detection",
+      "Crowding decision engine",
+      "Live operations dashboard"
     ]
   }
 ];

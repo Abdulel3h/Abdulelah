@@ -94,7 +94,7 @@ function compute(
     }
 
     return {
-      title: "You've seen all six",
+      title: "You've seen them all",
       body: "Tell me the role you're hiring for and I'll point to the strongest fit.",
       prompt:
         "I've looked through all of Abdulelah's projects — which one best fits the role I'm hiring for, and why?"

@@ -10,7 +10,7 @@ import { Monogram } from "@/components/ui/Monogram";
 import { siteConfig } from "@/data/site";
 
 const recognition = [
-  "6 products shipped",
+  "7 products shipped",
   "Top 30 · SDAIA × Microsoft",
   "Google Cloud × KFUPM",
   "University of Bisha"

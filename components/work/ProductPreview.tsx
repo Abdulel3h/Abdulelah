@@ -1,6 +1,13 @@
 import { ArrowUp, FileText, Play, Scale, Wallet } from "lucide-react";
 
-type PreviewKind = "chat" | "map" | "security" | "legal" | "fintech" | "vr";
+type PreviewKind =
+  | "chat"
+  | "map"
+  | "security"
+  | "legal"
+  | "fintech"
+  | "vr"
+  | "vision";
 
 const labels: Record<PreviewKind, { title: string; sub: string }> = {
   chat: { title: "ChatUB", sub: "University of Bisha" },
@@ -8,7 +15,8 @@ const labels: Record<PreviewKind, { title: string; sub: string }> = {
   security: { title: "Absher Insight", sub: "Risk monitor" },
   legal: { title: "Qanouni", sub: "Labor rights" },
   fintech: { title: "Medad", sub: "Inclusive banking" },
-  vr: { title: "Virtual Astronauts", sub: "Immersive learning" }
+  vr: { title: "Virtual Astronauts", sub: "Immersive learning" },
+  vision: { title: "Stadium", sub: "Gate monitor" }
 };
 
 /**
@@ -38,6 +46,7 @@ export function ProductPreview({ kind }: { kind?: PreviewKind }) {
         {k === "legal" ? <LegalBody /> : null}
         {k === "fintech" ? <FintechBody /> : null}
         {k === "vr" ? <VrBody /> : null}
+        {k === "vision" ? <VisionBody /> : null}
       </div>
     </div>
   );
@@ -272,6 +281,53 @@ function VrBody() {
       <p className="mt-3 text-[0.72rem] text-paper-dim">
         AI narrates the science as you explore in VR.
       </p>
+    </div>
+  );
+}
+
+function VisionBody() {
+  const gates = [
+    { name: "Gate A", level: 38, status: "Normal", tone: "bg-accent/55" },
+    { name: "Gate B", level: 64, status: "Busy", tone: "bg-accent" },
+    { name: "Gate C", level: 92, status: "Critical", tone: "bg-[#c85c3a]" },
+    { name: "Gate D", level: 27, status: "Normal", tone: "bg-accent/55" }
+  ];
+
+  return (
+    <div className="space-y-4" aria-hidden="true">
+      <div className="flex items-end justify-between">
+        <div>
+          <p className="text-[0.66rem] uppercase tracking-[0.16em] text-paper-faint">
+            Live occupancy
+          </p>
+          <p className="mt-1 font-display text-3xl leading-none text-paper">
+            342 <span className="text-base text-paper-dim">people</span>
+          </p>
+        </div>
+        <span className="rounded-full border border-accent/25 bg-accent/[0.08] px-2.5 py-1 text-[0.66rem] text-accent-soft">
+          4 gates
+        </span>
+      </div>
+      <div className="space-y-2.5">
+        {gates.map((gate) => (
+          <div key={gate.name}>
+            <div className="flex items-center justify-between text-[0.72rem] text-paper-dim">
+              <span>{gate.name}</span>
+              <span>{gate.status}</span>
+            </div>
+            <div className="mt-1 h-1.5 w-full rounded-full bg-white/[0.06]">
+              <div
+                className={`h-full rounded-full ${gate.tone}`}
+                style={{ width: `${gate.level}%` }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="flex items-start gap-2 rounded-xl border border-white/[0.08] bg-ink-900/60 px-3 py-2.5 text-[0.78rem] leading-5 text-paper-dim">
+        <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#c85c3a]" />
+        Gate C is overflowing — move 2 staff from Gate D.
+      </div>
     </div>
   );
 }

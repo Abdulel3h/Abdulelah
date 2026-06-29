@@ -20,7 +20,7 @@ const glance = [
   { label: "Focus", value: "AI products · NLP & LLMs · cloud" },
   { label: "Education", value: "Information Systems — University of Bisha" },
   { label: "Based in", value: siteConfig.location },
-  { label: "Selected work", value: "Six products across six domains" },
+  { label: "Selected work", value: "Seven products across seven domains" },
   { label: "Recognition", value: "Top 30 — SDAIA × Microsoft AthkaU" }
 ];
 
