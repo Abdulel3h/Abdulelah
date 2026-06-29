@@ -11,10 +11,17 @@ const paths = [
 ];
 
 /**
- * The AA monogram, drawn the way a signature is written — stroke by stroke as it
- * scrolls into view. Under reduced motion it simply appears, fully formed.
+ * The AA monogram, drawn the way a signature is written — stroke by stroke.
+ * Draws as it scrolls into view; pass `play` to draw immediately on mount (e.g.
+ * inside a portal/overlay). Under reduced motion it simply appears, fully formed.
  */
-export function SignatureMonogram({ className }: { className?: string }) {
+export function SignatureMonogram({
+  className,
+  play = false
+}: {
+  className?: string;
+  play?: boolean;
+}) {
   const reduce = useReducedMotion();
 
   return (
@@ -36,8 +43,11 @@ export function SignatureMonogram({ className }: { className?: string }) {
             key={d}
             d={d}
             initial={reduce ? false : { pathLength: 0, opacity: 0 }}
-            whileInView={reduce ? undefined : { pathLength: 1, opacity: 1 }}
-            viewport={{ once: true, margin: "-12%" }}
+            animate={play && !reduce ? { pathLength: 1, opacity: 1 } : undefined}
+            whileInView={
+              play || reduce ? undefined : { pathLength: 1, opacity: 1 }
+            }
+            viewport={play ? undefined : { once: true, margin: "-12%" }}
             transition={
               reduce
                 ? undefined

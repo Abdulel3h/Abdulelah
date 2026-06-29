@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronDown, ExternalLink, Github, Linkedin, Menu } from "lucide-react";
-import { useState } from "react";
+import { ChevronDown, Github, Linkedin } from "lucide-react";
 import { contactLink, navLinks, siteConfig } from "@/data/site";
 import { CommandMenu } from "@/components/layout/CommandMenu";
+import { MobileMenu } from "@/components/layout/MobileMenu";
 import { Monogram } from "@/components/ui/Monogram";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -14,16 +14,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { Separator } from "@/components/ui/separator";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger
-} from "@/components/ui/sheet";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
@@ -40,7 +30,6 @@ const profileLinks = [
 
 export function Navbar() {
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -54,7 +43,6 @@ export function Navbar() {
           href="/"
           className="focus-ring group flex items-center gap-2.5 rounded-full"
           aria-label="Abdulelah Alkhathami — home"
-          onClick={() => setIsOpen(false)}
         >
           <Monogram className="h-6 w-auto text-accent transition-colors group-hover:text-accent-soft" />
           <span className="font-display text-[0.98rem] font-medium tracking-tight text-paper">
@@ -151,83 +139,7 @@ export function Navbar() {
           </Button>
         </div>
 
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild>
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              className="lg:hidden"
-              aria-label="Open navigation menu"
-            >
-              <Menu className="h-5 w-5" aria-hidden="true" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent
-            side="right"
-            className="h-screen max-h-screen overflow-hidden p-0 supports-[height:100dvh]:h-dvh supports-[height:100dvh]:max-h-dvh"
-          >
-            <div className="h-full touch-pan-y overflow-x-hidden overflow-y-auto overscroll-contain px-6 pb-[calc(env(safe-area-inset-bottom)+2rem)] pt-6 [-webkit-overflow-scrolling:touch]">
-              <SheetHeader className="pr-12">
-                <SheetTitle>{siteConfig.brand}</SheetTitle>
-                <SheetDescription>
-                  Navigate Abdulelah&apos;s AI projects, skills, resume, and contact details.
-                </SheetDescription>
-              </SheetHeader>
-
-              <div className="mt-8 grid gap-2">
-                {[...navLinks, ...moreLinks].map((link) => (
-                  <SheetClose key={link.href} asChild>
-                    <Link
-                      href={link.href}
-                      className={cn(
-                        "focus-ring rounded-xl px-4 py-3 text-sm font-medium text-paper-dim transition hover:bg-white/5 hover:text-paper",
-                        isActive(link.href) && "bg-white/10 text-paper"
-                      )}
-                    >
-                      {link.label}
-                    </Link>
-                  </SheetClose>
-                ))}
-                <SheetClose asChild>
-                  <Link
-                    href={contactLink.href}
-                    className={buttonVariants({
-                      variant: "gold",
-                      className: "mt-3 w-full"
-                    })}
-                  >
-                    {contactLink.label}
-                  </Link>
-                </SheetClose>
-              </div>
-
-              <Separator className="my-6" />
-
-              <div className="grid gap-3">
-                {profileLinks.map((profile) => {
-                  const Icon = profile.icon;
-
-                  return (
-                    <a
-                      key={profile.href}
-                      href={profile.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="focus-ring inline-flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-medium text-paper transition hover:border-accent/35 hover:text-paper"
-                    >
-                      <span className="inline-flex items-center gap-2">
-                        <Icon className="h-4 w-4 text-accent" aria-hidden="true" />
-                        {profile.label}
-                      </span>
-                      <ExternalLink className="h-4 w-4 text-paper-faint" aria-hidden="true" />
-                    </a>
-                  );
-                })}
-              </div>
-            </div>
-          </SheetContent>
-        </Sheet>
+        <MobileMenu />
       </nav>
     </header>
   );
