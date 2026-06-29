@@ -25,7 +25,7 @@ function renderInlineFormatting(text: string) {
           <code
             key={`${token}-${index}`}
             dir="ltr"
-            className="rounded bg-white/[0.08] px-1 py-0.5 font-mono text-[0.92em] text-sky-100"
+            className="rounded bg-white/[0.08] px-1 py-0.5 font-mono text-[0.92em] text-accent"
           >
             {token.slice(1, -1)}
           </code>

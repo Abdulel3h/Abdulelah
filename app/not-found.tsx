@@ -1,25 +1,41 @@
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+
+const links = [
+  { label: "Home", href: "/" },
+  { label: "The work", href: "/projects" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" }
+];
 
 export default function NotFound() {
   return (
-    <main className="container-shell flex min-h-[70vh] items-center justify-center py-24">
-      <section className="glass-card max-w-2xl rounded-2xl p-8 text-center">
-        <p className="badge mx-auto mb-5 w-fit">404</p>
-        <h1 className="text-3xl font-semibold text-white sm:text-4xl">
-          This page is not available.
-        </h1>
-        <p className="mt-4 text-slate-300">
-          The route may have moved, or the case study has not been published yet.
-        </p>
-        <Link
-          href="/"
-          className="focus-ring mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-sky-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-sky-300"
-        >
-          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-          Back to home
-        </Link>
-      </section>
+    <main className="container-shell flex min-h-[78svh] flex-col justify-center py-24">
+      <p className="eyebrow mb-6">Error 404</p>
+      <h1 className="font-display text-5xl font-medium leading-[0.98] tracking-[-0.01em] text-paper sm:text-6xl lg:text-7xl">
+        This page didn&apos;t{" "}
+        <span className="italic text-paper/55">make it to production.</span>
+      </h1>
+      <p className="mt-6 max-w-xl text-lg leading-8 text-paper-dim">
+        The link may have moved, or the case study isn&apos;t published yet.
+        Here&apos;s the way back.
+      </p>
+      <ul className="mt-10 flex flex-wrap gap-x-8 gap-y-3">
+        {links.map((link) => (
+          <li key={link.href}>
+            <Link
+              href={link.href}
+              className="focus-ring group inline-flex items-center gap-1.5 rounded text-base font-medium text-paper transition-colors hover:text-accent"
+            >
+              {link.label}
+              <ArrowUpRight
+                className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                aria-hidden="true"
+              />
+            </Link>
+          </li>
+        ))}
+      </ul>
     </main>
   );
 }

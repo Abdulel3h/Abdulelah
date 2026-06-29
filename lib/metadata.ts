@@ -26,7 +26,6 @@ export function createPageMetadata({
       ? title
       : `${title} | ${siteConfig.brand}`;
   const pageUrl = absoluteUrl(path);
-  const socialImage = absoluteUrl(ogImage);
 
   return {
     title,
@@ -47,21 +46,12 @@ export function createPageMetadata({
             authors: [siteConfig.name],
             publishedTime
           }
-        : {}),
-      images: [
-        {
-          url: socialImage,
-          width: 1200,
-          height: 630,
-          alt: "Abdulelah AI portfolio preview"
-        }
-      ]
+        : {})
     },
     twitter: {
       card: "summary_large_image",
       title: fullTitle,
-      description,
-      images: [socialImage]
+      description
     }
   };
 }

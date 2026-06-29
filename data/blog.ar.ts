@@ -1,6 +1,5 @@
 import type { BlogPost } from "@/data/blog";
 import { formatBlogDate } from "@/data/blog";
-import type { GlobalPulseItem } from "@/data/globalPulse";
 
 export type BlogLanguage = "en" | "ar";
 
@@ -23,7 +22,7 @@ export type ArabicBlogPost = {
 /**
  * Najdi-professional Arabic translations of the blog articles, keyed by slug.
  * The English source of truth stays untouched in data/blog.ts (it also feeds
- * Agent Abdulelah and the sitemap), so this file is presentation-only.
+ * Abdulelah's guide and the sitemap), so this file is presentation-only.
  */
 export const blogTranslationsAr: Record<string, ArabicBlogPost> = {
   "why-context-matters-more-than-prompts-in-ai-agents": {
@@ -491,31 +490,10 @@ export function localizeBlogPost(
   };
 }
 
-export const globalPulseItemsAr: GlobalPulseItem[] = [
-  {
-    title: "الـ AI Agents صاروا واجهات منتجات",
-    summary:
-      "التحول المهم مو نافذة محادثة جديدة، بل الانتقال نحو تجارب AI تقدر تسترجع السياق وتستخدم أدوات معتمدة وتقود المستخدم خلال خطوات عمل حقيقية.",
-    category: "الـ AI Agents"
-  },
-  {
-    title: "الـ AI المحلي والخصوصية صارا أولوية استراتيجية",
-    summary:
-      "المؤسسات صارت تدقق أكثر في وين تسافر بياناتها، وأي مصادر معرفة يستخدمها نظام الـ AI، وكم تحتفظ من السيطرة على المسارات الحساسة.",
-    category: "AI يحترم الخصوصية"
-  },
-  {
-    title: "تقييم الـ AI صار بأهمية توليده",
-    summary:
-      "الفرق صارت تتجاوز الانبهار بالمخرجات نحو طرق قابلة للتكرار لقياس الموثوقية والفائدة والأمان وأنماط الفشل قبل وصول الـ AI للمستخدمين.",
-    category: "بناء منتجات الـ AI"
-  }
-];
-
 export const blogText = {
   en: {
-    heroEyebrow: "AI Knowledge Hub",
-    heroTitle: "Abdulelah AI Insights",
+    heroEyebrow: "Writing",
+    heroTitle: "Notes",
     heroSubtitle:
       "Practical ideas about AI agents, LLMs, cloud AI, privacy-first systems, and applied AI for students, builders, and decision-makers.",
     statArticlesLabel: "Original articles",
@@ -548,19 +526,19 @@ export const blogText = {
     curatedSignal: "Curated signal",
     ctaTitle: "Want to explore my applied AI work?",
     ctaBody:
-      "Continue from practical ideas into project case studies, ask Agent Abdulelah about a topic, or download a role-focused resume.",
+      "Continue from practical ideas into project case studies, ask Abdulelah's guide about a topic, or download a role-focused resume.",
     viewProjects: "View Projects",
-    askAgent: "Ask Agent Abdulelah",
+    askAgent: "Ask Abdulelah",
     downloadResume: "Download Resume",
-    ctaPrompt: "What should I read first in Abdulelah AI Insights?",
-    backToBlog: "Back to Abdulelah AI Insights",
+    ctaPrompt: "What should I read first?",
+    backToBlog: "Back to Notes",
     forAudiences: "For",
     externalSource: "External source:",
     continueBadge: "Continue exploring",
     continueTitle: "Ask a question or view applied work",
     continueBody:
-      "Use Agent Abdulelah to explore this topic in context, or move into project case studies that show applied AI thinking.",
-    askAboutTopic: "Ask Agent Abdulelah about this topic",
+      "Use Abdulelah's guide to explore this topic in context, or move into project case studies that show applied AI thinking.",
+    askAboutTopic: "Ask Abdulelah about this topic",
     viewRelatedProjects: "View related projects",
     relatedBadge: "Related posts",
     relatedTitle: "Keep building your AI perspective",
@@ -571,8 +549,8 @@ export const blogText = {
       `Explain the "${title}" article and how it relates to Abdulelah's portfolio.`
   },
   ar: {
-    heroEyebrow: "مركز معرفة الـ AI",
-    heroTitle: "رؤى عبدالإله في الذكاء الاصطناعي",
+    heroEyebrow: "كتابات",
+    heroTitle: "ملاحظات",
     heroSubtitle:
       "أفكار عملية عن الـ AI Agents والـ LLMs والـ Cloud AI والأنظمة اللي تحترم الخصوصية، وتطبيقات واقعية للذكاء الاصطناعي — للطلاب والبنّائين وصنّاع القرار.",
     statArticlesLabel: "مقالات أصلية",
@@ -605,19 +583,19 @@ export const blogText = {
     curatedSignal: "إشارة منتقاة",
     ctaTitle: "تبي تستكشف شغلي التطبيقي في الـ AI؟",
     ctaBody:
-      "انتقل من الأفكار العملية إلى دراسات حالة المشاريع، أو اسأل Agent Abdulelah عن موضوع، أو حمّل سيرة ذاتية مخصصة حسب الدور.",
+      "انتقل من الأفكار العملية إلى دراسات حالة المشاريع، أو اسأل Abdulelah's guide عن موضوع، أو حمّل سيرة ذاتية مخصصة حسب الدور.",
     viewProjects: "استعرض المشاريع",
-    askAgent: "اسأل Agent Abdulelah",
+    askAgent: "اسأل Abdulelah's guide",
     downloadResume: "حمّل السيرة الذاتية",
     ctaPrompt: "وش تنصحني أقرأ أول شيء في مدونة عبدالإله؟",
-    backToBlog: "الرجوع إلى مدونة عبدالإله",
+    backToBlog: "الرجوع إلى الملاحظات",
     forAudiences: "لـ",
     externalSource: "المصدر الخارجي:",
     continueBadge: "تابع الاستكشاف",
     continueTitle: "اسأل سؤال أو شف الشغل التطبيقي",
     continueBody:
-      "استخدم Agent Abdulelah لاستكشاف هذا الموضوع بسياقه، أو انتقل لدراسات حالة المشاريع اللي توضح التفكير التطبيقي في الـ AI.",
-    askAboutTopic: "اسأل Agent Abdulelah عن هذا الموضوع",
+      "استخدم Abdulelah's guide لاستكشاف هذا الموضوع بسياقه، أو انتقل لدراسات حالة المشاريع اللي توضح التفكير التطبيقي في الـ AI.",
+    askAboutTopic: "اسأل Abdulelah's guide عن هذا الموضوع",
     viewRelatedProjects: "شف المشاريع المرتبطة",
     relatedBadge: "مقالات مرتبطة",
     relatedTitle: "واصل بناء منظورك في الـ AI",

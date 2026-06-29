@@ -1,12 +1,10 @@
 "use client";
 
 import { BlogCTA } from "@/components/blog/BlogCTA";
-import { BlogFilters } from "@/components/blog/BlogFilters";
 import { FeaturedPost } from "@/components/blog/FeaturedPost";
-import { GlobalPulse } from "@/components/blog/GlobalPulse";
+import { NotesList } from "@/components/blog/NotesList";
 import { useBlogLanguage } from "@/components/blog/BlogLanguageProvider";
-import { PageHero } from "@/components/ui/PageHero";
-import { blogCategories, blogPosts, featuredBlogPost } from "@/data/blog";
+import { featuredBlogPost } from "@/data/blog";
 import { getBlogText } from "@/data/blog.ar";
 import { cn } from "@/lib/utils";
 
@@ -15,50 +13,41 @@ export function BlogIndexContent() {
   const text = getBlogText(language);
 
   return (
-    <>
-      <div
-        dir={isArabic ? "rtl" : undefined}
-        lang={isArabic ? "ar" : undefined}
-        className={cn(isArabic && "blog-arabic")}
-      >
-        <PageHero
-          eyebrow={text.heroEyebrow}
-          title={text.heroTitle}
-          subtitle={text.heroSubtitle}
-          stats={[
-            { value: String(blogPosts.length), label: text.statArticlesLabel },
-            {
-              value: String(blogCategories.length - 1),
-              label: text.statTopicsLabel
-            },
-            { value: text.statCuratedValue, label: text.statCuratedLabel },
-            { value: text.statGlobalValue, label: text.statGlobalLabel }
-          ]}
-        />
+    <div
+      dir={isArabic ? "rtl" : undefined}
+      lang={isArabic ? "ar" : undefined}
+      className={cn(isArabic && "blog-arabic")}
+    >
+      <section className="container-shell pt-16 sm:pt-20 lg:pt-24">
+        <div className="max-w-3xl">
+          <p className="eyebrow mb-6">{text.heroEyebrow}</p>
+          <h1 className="font-display text-4xl font-medium leading-[1.04] tracking-[-0.01em] text-paper sm:text-5xl lg:text-6xl">
+            {text.heroTitle}
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-paper-dim">
+            {text.heroSubtitle}
+          </p>
+        </div>
+      </section>
 
-        <section className="container-shell pt-16 sm:pt-20 lg:pt-24">
-          <p className="badge mb-5">{text.startHere}</p>
-          <FeaturedPost post={featuredBlogPost} language={language} />
-        </section>
+      <section className="container-shell section-space">
+        <p className="eyebrow mb-6">{text.startHere}</p>
+        <FeaturedPost post={featuredBlogPost} language={language} />
+      </section>
 
-        <section className="container-shell section-space">
-          <div className="max-w-3xl">
-            <p className="badge mb-4">{text.libraryBadge}</p>
-            <h2 className="text-3xl font-semibold text-white sm:text-4xl">
-              {text.libraryTitle}
-            </h2>
-            <p className="mt-5 text-base leading-8 text-slate-300">
-              {text.libraryBody}
-            </p>
-          </div>
-          <div className="mt-9">
-            <BlogFilters posts={blogPosts} language={language} />
-          </div>
-        </section>
-      </div>
+      <section className="container-shell pb-16 sm:pb-20 lg:pb-24">
+        <div className="max-w-2xl">
+          <p className="eyebrow mb-5">{text.libraryBadge}</p>
+          <h2 className="font-display text-3xl font-medium leading-tight tracking-[-0.01em] text-paper sm:text-4xl">
+            {text.libraryTitle}
+          </h2>
+        </div>
+        <div className="mt-10">
+          <NotesList language={language} excludeSlug={featuredBlogPost.slug} />
+        </div>
+      </section>
 
-      <GlobalPulse language={language} />
       <BlogCTA language={language} />
-    </>
+    </div>
   );
 }

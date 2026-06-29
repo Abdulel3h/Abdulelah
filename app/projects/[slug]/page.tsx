@@ -12,7 +12,11 @@ import {
   ShieldCheck,
   Sparkles
 } from "lucide-react";
-import { ProjectArchitectureFlow } from "@/components/projects/ProjectArchitectureFlow";
+import { FieldNote } from "@/components/agent/FieldNote";
+import { ProjectViewRecorder } from "@/components/agent/ProjectViewRecorder";
+import { ReadingPath } from "@/components/agent/ReadingPath";
+import { ProjectArchitecture } from "@/components/projects/ProjectArchitecture";
+import { ProductPreview } from "@/components/work/ProductPreview";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -79,10 +83,15 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
           { name: project.title, path: `/projects/${project.slug}` }
         ])}
       />
+      <ProjectViewRecorder
+        slug={project.slug}
+        name={project.title.split(" - ")[0]}
+        category={project.category}
+      />
       <section className="container-shell pt-12 sm:pt-16 lg:pt-20">
         <Link
           href="/projects"
-          className="focus-ring mb-8 inline-flex items-center gap-2 rounded-full text-sm font-semibold text-slate-300 transition hover:text-white"
+          className="focus-ring mb-8 inline-flex items-center gap-2 rounded-full text-sm font-semibold text-paper-dim transition hover:text-paper"
         >
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Back to Projects
@@ -93,49 +102,42 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
           <div className="relative grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
           <div>
             <p className="badge mb-5">{project.category}</p>
-            <h1 className="max-w-5xl text-4xl font-semibold leading-tight text-white sm:text-5xl">
+            <h1 className="max-w-5xl font-display text-4xl font-medium leading-tight tracking-[-0.01em] text-paper sm:text-5xl">
               {project.title}
             </h1>
-            <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
+            {project.tagline ? (
+              <p className="mt-6 max-w-3xl font-display text-2xl italic leading-snug text-paper">
+                {project.tagline}
+              </p>
+            ) : null}
+            <p className="mt-4 max-w-3xl text-base leading-8 text-paper-dim">
               {project.shortDescription}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              {project.links?.demo ? (
-                <ButtonLink href={project.links.demo} external>
-                  <ExternalLink className="h-4 w-4" aria-hidden="true" />
-                  Demo
-                </ButtonLink>
-              ) : null}
-              {project.links?.github ? (
-                <ButtonLink href={project.links.github} variant="secondary" external>
-                  <Github className="h-4 w-4" aria-hidden="true" />
-                  GitHub
-                </ButtonLink>
-              ) : null}
               <ButtonLink href="/contact" variant="gold">
-                Discuss Similar Work
+                Discuss similar work
               </ButtonLink>
             </div>
           </div>
 
           <aside className="rounded-3xl border border-white/10 bg-white/[0.045] p-6">
-            <h2 className="text-lg font-semibold text-white">Case study profile</h2>
+            <h2 className="text-lg font-semibold text-paper">Case study profile</h2>
             <dl className="mt-6 grid gap-5">
               <div>
-                <dt className="text-sm text-slate-400">Role</dt>
-                <dd className="mt-1 font-semibold text-white">{project.role}</dd>
+                <dt className="text-sm text-paper-dim">Role</dt>
+                <dd className="mt-1 font-semibold text-paper">{project.role}</dd>
               </div>
               <div>
-                <dt className="text-sm text-slate-400">Year</dt>
-                <dd className="mt-1 font-semibold text-white">{project.year}</dd>
+                <dt className="text-sm text-paper-dim">Year</dt>
+                <dd className="mt-1 font-semibold text-paper">{project.year}</dd>
               </div>
               <div>
-                <dt className="text-sm text-slate-400">Technologies</dt>
+                <dt className="text-sm text-paper-dim">Technologies</dt>
                 <dd className="mt-3 flex flex-wrap gap-2">
                   {project.technologies.map((technology) => (
                     <span
                       key={technology}
-                      className="rounded-full bg-white/[0.06] px-3 py-1 text-xs text-slate-300"
+                      className="rounded-full bg-white/[0.06] px-3 py-1 text-xs text-paper-dim"
                     >
                       {technology}
                     </span>
@@ -148,11 +150,39 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
         </div>
       </section>
 
+      {project.links?.github || project.links?.demo ? (
+        <section className="container-shell pb-2">
+          <div className="flex flex-col gap-4 border-t border-white/[0.08] pt-6 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="eyebrow mb-2">Evidence</p>
+              <p className="max-w-md text-sm leading-7 text-paper-dim">
+                See the code and verify the work yourself — nothing here is a claim
+                you have to take on faith.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {project.links?.github ? (
+                <ButtonLink href={project.links.github} variant="secondary" external>
+                  <Github className="h-4 w-4" aria-hidden="true" />
+                  View source
+                </ButtonLink>
+              ) : null}
+              {project.links?.demo ? (
+                <ButtonLink href={project.links.demo} external>
+                  <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                  Live demo
+                </ButtonLink>
+              ) : null}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       {project.context ? (
-        <section className="container-shell pb-12">
-          <div className="rounded-3xl border border-sky-300/20 bg-sky-300/10 p-6 text-sky-50">
+        <section className="container-shell pb-12 pt-10">
+          <div className="rounded-3xl border border-accent/20 bg-accent/10 p-6 text-accent">
             <p className="text-sm font-semibold">Context</p>
-            <p className="mt-2 leading-7 text-sky-100/90">{project.context}</p>
+            <p className="mt-2 leading-7 text-accent/90">{project.context}</p>
           </div>
         </section>
       ) : null}
@@ -165,11 +195,11 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
 
               return (
                 <article key={card.title} className="glass-card rounded-3xl p-6">
-                  <span className="grid h-12 w-12 place-items-center rounded-full border border-sky-300/20 bg-sky-300/10 text-sky-200">
+                  <span className="grid h-12 w-12 place-items-center rounded-full border border-accent/20 bg-accent/10 text-accent">
                     <Icon className="h-5 w-5" aria-hidden="true" />
                   </span>
-                  <h2 className="mt-6 text-xl font-semibold text-white">{card.title}</h2>
-                  <p className="mt-4 text-sm leading-7 text-slate-300">{card.body}</p>
+                  <h2 className="mt-6 text-xl font-semibold text-paper">{card.title}</h2>
+                  <p className="mt-4 text-sm leading-7 text-paper-dim">{card.body}</p>
                 </article>
               );
             })}
@@ -188,9 +218,9 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
             {project.responsibilities.map((responsibility) => (
               <div
                 key={responsibility}
-                className="subtle-card flex gap-3 rounded-2xl p-4 text-sm leading-7 text-slate-300"
+                className="subtle-card flex gap-3 rounded-2xl p-4 text-sm leading-7 text-paper-dim"
               >
-                <ShieldCheck className="mt-1 h-4 w-4 shrink-0 text-sky-200" aria-hidden="true" />
+                <ShieldCheck className="mt-1 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
                 {responsibility}
               </div>
             ))}
@@ -206,20 +236,52 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
             description="Each case study is grounded in a practical technical approach, from local AI knowledge design to cloud-native analysis and behavioral analytics."
           />
           <div className="mt-10">
-            <ProjectArchitectureFlow project={project} />
+            <ProjectArchitecture
+              steps={project.flow ?? project.technicalApproach.slice(0, 4)}
+            />
           </div>
-          <div className="mt-8 grid gap-5 md:grid-cols-2">
-            {project.technicalApproach.map((item) => (
-              <div key={item} className="glass-card flex gap-4 rounded-2xl p-5">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-sky-300/20 bg-sky-300/10 text-sky-200">
-                  <Layers3 className="h-4 w-4" aria-hidden="true" />
-                </span>
-                <p className="text-sm leading-7 text-slate-300">{item}</p>
-              </div>
-            ))}
+          <div className="mt-12">
+            <p className="eyebrow mb-6">Engineering notes</p>
+            <div className="grid gap-x-12 gap-y-4 sm:grid-cols-2">
+              {project.technicalApproach.map((item) => (
+                <div
+                  key={item}
+                  className="flex gap-3 border-t border-white/[0.08] pt-4 text-sm leading-7 text-paper-dim"
+                >
+                  <span
+                    className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-accent"
+                    aria-hidden="true"
+                  />
+                  {item}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
+
+      {project.decisions?.length ? (
+        <section className="container-shell section-space">
+          <SectionHeader
+            eyebrow="Decisions"
+            title="The calls that shaped it"
+            description="The choices that mattered most — and the thinking behind each one."
+          />
+          <div className="mt-10 grid gap-x-12 gap-y-10 sm:grid-cols-2">
+            {project.decisions.map((decision, index) => (
+              <div key={decision.title} className="border-t border-accent/30 pt-6">
+                <span className="font-display text-sm text-accent">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <h3 className="mt-2 font-display text-xl font-medium text-paper">
+                  {decision.title}
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-paper-dim">{decision.body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <section className="container-shell section-space">
         <div className="grid gap-8 lg:grid-cols-2">
@@ -227,8 +289,8 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
             <SectionHeader eyebrow="Key features" title="What the project enables" />
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
               {project.features.map((feature) => (
-                <div key={feature} className="subtle-card flex gap-3 rounded-2xl p-4 text-sm text-slate-300">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-sky-200" aria-hidden="true" />
+                <div key={feature} className="subtle-card flex gap-3 rounded-2xl p-4 text-sm text-paper-dim">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
                   {feature}
                 </div>
               ))}
@@ -237,16 +299,15 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
 
           <article className="glass-card rounded-3xl p-6 sm:p-8">
             <p className="badge mb-5">Impact</p>
-            <h2 className="text-2xl font-semibold text-white">Applied value</h2>
-            <p className="mt-4 text-sm leading-7 text-slate-300">{project.impact}</p>
+            <h2 className="text-2xl font-semibold text-paper">Applied value</h2>
+            <p className="mt-4 text-sm leading-7 text-paper-dim">{project.impact}</p>
             {project.lessons ? (
-              <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-5">
-                <p className="text-sm font-semibold text-white">Lessons Learned</p>
-                <p className="mt-2 text-sm leading-7 text-slate-300">{project.lessons}</p>
+              <div className="mt-7">
+                <FieldNote label="After shipping">{project.lessons}</FieldNote>
               </div>
             ) : null}
             {project.quote ? (
-              <blockquote className="mt-6 border-l-2 border-gold pl-5 text-lg font-medium leading-8 text-amber-100">
+              <blockquote className="mt-6 border-l-2 border-accent pl-5 text-lg font-medium leading-8 text-accent-soft">
                 {project.quote}
               </blockquote>
             ) : null}
@@ -254,26 +315,45 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
         </div>
       </section>
 
-      <section className="section-space section-band">
-        <div className="container-shell">
-          <SectionHeader
-            eyebrow="Gallery"
-            title="Future media placeholders"
-            description="Elegant slots ready for screenshots, architecture diagrams, prototype screens, or demo visuals."
-          />
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
-            {project.gallery.map((item) => (
-              <div
-                key={item}
-                className="relative min-h-56 overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(135deg,rgba(56,189,248,0.14),rgba(124,58,237,0.10),rgba(201,168,76,0.09))] p-5"
-              >
-                <div className="absolute inset-0 bg-soft-grid bg-[length:24px_24px] opacity-30" />
-                <div className="absolute bottom-5 left-5 right-5 h-24 rounded-2xl border border-white/10 bg-slate-950/35" />
-                <p className="relative badge">{item}</p>
+      {project.previewKind ? (
+        <section className="section-space section-band">
+          <div className="container-shell">
+            <SectionHeader
+              eyebrow="Inside the product"
+              title="A look at how it works"
+              description="A handcrafted preview of the experience — drawn to show the idea, not a stock screenshot."
+            />
+            <div className="mt-10 grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+              <div className="relative">
+                <div
+                  className="absolute -inset-6 -z-10 rounded-[2.5rem]"
+                  style={{
+                    background:
+                      "radial-gradient(closest-side, rgba(201,167,92,0.12), transparent 76%)"
+                  }}
+                  aria-hidden="true"
+                />
+                <ProductPreview kind={project.previewKind} />
               </div>
-            ))}
+              {project.metrics ? (
+                <div className="grid grid-cols-2 gap-x-8 gap-y-8 sm:grid-cols-3 lg:grid-cols-1 lg:gap-0 lg:divide-y lg:divide-white/[0.08]">
+                  {project.metrics.map((metric) => (
+                    <div key={metric.label} className="lg:py-5 lg:first:pt-0">
+                      <p className="font-display text-2xl text-paper">{metric.value}</p>
+                      <p className="mt-1 text-sm leading-6 text-paper-dim">
+                        {metric.label}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+            </div>
           </div>
-        </div>
+        </section>
+      ) : null}
+
+      <section className="container-shell pb-4">
+        <ReadingPath page="detail" slug={project.slug} />
       </section>
 
       <section className="container-shell section-space">
@@ -287,12 +367,12 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
             <Link
               key={related.slug}
               href={`/projects/${related.slug}`}
-              className="focus-ring glass-card group rounded-2xl p-6 transition hover:-translate-y-1 hover:border-sky-300/35"
+              className="focus-ring glass-card group rounded-2xl p-6 transition hover:-translate-y-1 hover:border-accent/35"
             >
               <p className="badge mb-4">{related.category}</p>
-              <h2 className="text-xl font-semibold text-white">{related.title}</h2>
-              <p className="mt-3 text-sm leading-7 text-slate-300">{related.shortDescription}</p>
-              <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-sky-100">
+              <h2 className="text-xl font-semibold text-paper">{related.title}</h2>
+              <p className="mt-3 text-sm leading-7 text-paper-dim">{related.shortDescription}</p>
+              <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-accent">
                 View case study
                 <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" aria-hidden="true" />
               </span>

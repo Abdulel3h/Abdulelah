@@ -1,14 +1,15 @@
 "use client";
 
-import { Bot } from "lucide-react";
 import type { ReactNode } from "react";
+import { Monogram } from "@/components/ui/Monogram";
 import { Button } from "@/components/ui/button";
+import { OPEN_AGENT_EVENT, openCompanion } from "@/lib/agent/companion";
 import { cn } from "@/lib/utils";
 
-export const OPEN_AGENT_EVENT = "open-abdulelah-ai";
+export { OPEN_AGENT_EVENT };
 
 export function AgentAskButton({
-  children = "Ask Agent Abdulelah",
+  children = "Ask Abdulelah",
   className,
   prompt,
   variant = "gold"
@@ -23,15 +24,9 @@ export function AgentAskButton({
       type="button"
       variant={variant}
       className={cn("w-full sm:w-auto", className)}
-      onClick={() => {
-        window.dispatchEvent(
-          new CustomEvent(OPEN_AGENT_EVENT, {
-            detail: { prompt }
-          })
-        );
-      }}
+      onClick={() => openCompanion({ prompt })}
     >
-      <Bot className="h-4 w-4" aria-hidden="true" />
+      <Monogram className="h-4 w-auto" />
       {children}
     </Button>
   );

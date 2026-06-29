@@ -64,10 +64,10 @@ export function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="premium-panel p-6">
-      <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-sky-400/10 blur-3xl" aria-hidden="true" />
+      <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-accent/10 blur-3xl" aria-hidden="true" />
       <div className="relative">
         <div className="grid gap-4 sm:grid-cols-2">
-          <label className="grid gap-2 text-sm font-medium text-slate-200">
+          <label className="grid gap-2 text-sm font-medium text-paper">
             Name
             <Input
               required
@@ -77,7 +77,7 @@ export function ContactForm() {
               placeholder="Your name"
             />
           </label>
-          <label className="grid gap-2 text-sm font-medium text-slate-200">
+          <label className="grid gap-2 text-sm font-medium text-paper">
             Email
             <Input
               required
@@ -88,7 +88,7 @@ export function ContactForm() {
               placeholder="you@example.com"
             />
           </label>
-          <label className="grid gap-2 text-sm font-medium text-slate-200">
+          <label className="grid gap-2 text-sm font-medium text-paper">
             Company
             <Input
               name="company"
@@ -97,7 +97,7 @@ export function ContactForm() {
               placeholder="Company or organization"
             />
           </label>
-          <div className="grid gap-2 text-sm font-medium text-slate-200">
+          <div className="grid gap-2 text-sm font-medium text-paper">
             <span id="interest-label">Interest type</span>
             <input type="hidden" name="interestType" value={interest} />
             <Select value={interest} onValueChange={setInterest}>
@@ -114,7 +114,7 @@ export function ContactForm() {
             </Select>
           </div>
         </div>
-        <label className="mt-4 grid gap-2 text-sm font-medium text-slate-200">
+        <label className="mt-4 grid gap-2 text-sm font-medium text-paper">
           Message
           <Textarea
             required
@@ -139,7 +139,7 @@ export function ContactForm() {
 
         {statusMessage ? (
           <p
-            className="mt-4 rounded-xl border border-sky-300/25 bg-sky-300/10 px-4 py-3 text-sm text-sky-100"
+            className="mt-4 rounded-xl border border-accent/25 bg-accent/10 px-4 py-3 text-sm text-accent"
             role="status"
             aria-live="polite"
           >

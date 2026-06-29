@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { FileText, SplitSquareHorizontal } from "lucide-react";
+import { CompanionCue } from "@/components/agent/CompanionCue";
+import { ResumeViewRecorder } from "@/components/agent/ResumeViewRecorder";
 import { CTASection } from "@/components/sections/CTASection";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { PageHero } from "@/components/ui/PageHero";
 import { ResumeDownloadButton } from "@/components/ui/ResumeDownloadButton";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { siteConfig } from "@/data/site";
 import { createPageMetadata } from "@/lib/metadata";
 import { breadcrumbJsonLd } from "@/lib/structured-data";
@@ -12,28 +11,34 @@ import { breadcrumbJsonLd } from "@/lib/structured-data";
 export const metadata: Metadata = createPageMetadata({
   title: "Resume",
   description:
-    "Download tailored AI Engineer and AI Specialist CV versions for Abdulelah Alkhathami.",
+    "A quick read on Abdulelah Alkhathami — what he does, where he's been tested, and two tailored CVs to download.",
   path: "/resume"
 });
 
-const resumeCards = [
+const glance = [
+  { label: "Now", value: "Builder & product thinker" },
+  { label: "Focus", value: "AI products · NLP & LLMs · cloud" },
+  { label: "Education", value: "Information Systems — University of Bisha" },
+  { label: "Based in", value: siteConfig.location },
+  { label: "Selected work", value: "Seven products across seven domains" },
+  { label: "Recognition", value: "Top 30 — SDAIA × Microsoft AthkaU" },
+  { label: "Code", value: "Key projects are open-source on GitHub" }
+];
+
+const versions = [
   {
     title: "AI Engineer CV",
-    description:
-      "Best for technical roles focused on AI development, NLP, LLMs, cloud deployment, and intelligent systems engineering.",
+    positioning:
+      "For technical roles: building, integrating, and deploying AI systems with NLP, LLMs, cloud services, and data-driven architecture.",
     href: siteConfig.resumes.engineer,
-    button: "Download AI Engineer CV",
-    summary:
-      "Focused on building, integrating, and deploying AI-powered systems using NLP, LLMs, cloud services, and data-driven architecture."
+    button: "Download Engineer CV"
   },
   {
     title: "AI Specialist CV",
-    description:
-      "Best for roles focused on AI solutions, business use cases, AI adoption, analysis, dashboards, and cross-functional implementation.",
+    positioning:
+      "For solution-focused roles: spotting AI opportunities, translating business needs, and driving adoption through analysis and dashboards.",
     href: siteConfig.resumes.specialist,
-    button: "Download AI Specialist CV",
-    summary:
-      "Focused on identifying AI opportunities, translating business needs into AI solutions, and supporting adoption through analysis, dashboards, and practical implementation."
+    button: "Download Specialist CV"
   }
 ];
 
@@ -46,72 +51,78 @@ export default function ResumePage() {
           { name: "Resume", path: "/resume" }
         ])}
       />
-      <PageHero
-        eyebrow="Resume"
-        title="Download a version tailored to the role you are hiring for."
-        subtitle="Two CV paths make it easier for recruiters and teams to evaluate Abdulelah for hands-on AI engineering roles or AI solutions-focused opportunities."
-        stats={[
-          { value: "AI Engineer", label: "Technical development and deployment" },
-          { value: "AI Specialist", label: "Solutions, adoption, and implementation" }
-        ]}
-      />
-      <section className="container-shell section-space">
-        <div className="grid gap-6 lg:grid-cols-2">
-          {resumeCards.map((card) => (
-            <article key={card.title} className="premium-panel p-6 sm:p-8">
-              <span className="grid h-12 w-12 place-items-center rounded-full border border-sky-300/20 bg-sky-300/10 text-sky-200">
-                <FileText className="h-5 w-5" aria-hidden="true" />
-              </span>
-              <h2 className="mt-6 text-2xl font-semibold text-white">{card.title}</h2>
-              <p className="mt-4 text-sm leading-7 text-slate-300">{card.description}</p>
-              <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-5">
-                <p className="text-sm font-semibold text-slate-200">Positioning</p>
-                <p className="mt-2 text-sm leading-7 text-slate-300">{card.summary}</p>
-              </div>
-              <div className="mt-6">
-                <ResumeDownloadButton href={card.href}>{card.button}</ResumeDownloadButton>
-              </div>
-            </article>
-          ))}
-        </div>
+      <ResumeViewRecorder />
 
-        <div className="mt-8 rounded-3xl border border-white/10 bg-white/[0.04] p-6 sm:p-8">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
-            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-gold/25 bg-gold/10 text-amber-100">
-              <SplitSquareHorizontal className="h-5 w-5" aria-hidden="true" />
-            </span>
-            <div className="min-w-0">
-              <h2 className="text-2xl font-semibold text-white">Which CV should you choose?</h2>
-              <Tabs defaultValue="engineer" className="mt-5">
-                <TabsList className="w-full justify-start overflow-x-auto sm:w-auto">
-                  <TabsTrigger value="engineer">AI Engineer</TabsTrigger>
-                  <TabsTrigger value="specialist">AI Specialist</TabsTrigger>
-                </TabsList>
-                <TabsContent value="engineer" className="rounded-2xl border border-white/10 bg-white/[0.035] p-4 text-sm leading-7 text-slate-300">
-                  Choose AI Engineer for technical AI development, NLP, LLMs,
-                  cloud deployment, and intelligent systems roles.
-                </TabsContent>
-                <TabsContent value="specialist" className="rounded-2xl border border-white/10 bg-white/[0.035] p-4 text-sm leading-7 text-slate-300">
-                  Choose AI Specialist for solution, consulting, analysis,
-                  dashboard, and cross-functional implementation roles.
-                </TabsContent>
-              </Tabs>
-              <p className="mt-5 text-sm text-slate-400">
-                Still unsure? Ask Agent Abdulelah in the corner chat and it will
-                recommend the right CV for the role you are hiring for.
-              </p>
+      <section className="container-shell pt-16 sm:pt-20 lg:pt-24">
+        <div className="max-w-3xl">
+          <p className="eyebrow mb-6">Resume</p>
+          <h1 className="font-display text-4xl font-medium leading-[1.04] tracking-[-0.01em] text-paper sm:text-5xl lg:text-6xl">
+            The short version.
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-paper-dim">
+            Everything important in thirty seconds — then a CV tailored to the
+            angle you&apos;re hiring for.
+          </p>
+        </div>
+      </section>
+
+      <section className="container-shell section-space">
+        <dl className="grid border-t border-white/[0.08] sm:grid-cols-2">
+          {glance.map((item) => (
+            <div
+              key={item.label}
+              className="border-b border-white/[0.08] py-5 sm:odd:pr-8 sm:even:border-l sm:even:border-white/[0.08] sm:even:pl-8"
+            >
+              <dt className="text-[0.66rem] font-medium uppercase tracking-[0.2em] text-paper-faint">
+                {item.label}
+              </dt>
+              <dd className="mt-2 font-display text-xl text-paper">{item.value}</dd>
             </div>
+          ))}
+        </dl>
+
+        <div className="mt-16">
+          <p className="text-[0.7rem] font-medium uppercase tracking-[0.2em] text-paper-faint">
+            Two versions — pick your angle
+          </p>
+          <div className="mt-6 grid gap-10 lg:grid-cols-2">
+            {versions.map((version) => (
+              <div
+                key={version.title}
+                className="flex flex-col border-t border-accent/30 pt-6"
+              >
+                <h2 className="font-display text-2xl font-medium text-paper">
+                  {version.title}
+                </h2>
+                <p className="mt-3 flex-1 text-sm leading-7 text-paper-dim">
+                  {version.positioning}
+                </p>
+                <div className="mt-6">
+                  <ResumeDownloadButton href={version.href}>
+                    {version.button}
+                  </ResumeDownloadButton>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 max-w-2xl">
+            <CompanionCue
+              title="Not sure which one fits?"
+              body="Tell me the role you're hiring for and I'll point you to the right CV — engineer or specialist."
+              prompt="Which CV should I download — the AI Engineer or AI Specialist version? Help me decide for the role I'm hiring for."
+              cta="Help me choose"
+            />
           </div>
         </div>
       </section>
 
       <CTASection
-        title="Need a fast summary for screening?"
-        description="The projects page gives a recruiter-friendly view of role, technologies, problem, solution, and impact for each applied AI project."
+        title="Want the long version?"
+        description="The work itself says more than any CV — see how each product was thought through and built."
         primaryHref="/projects"
-        primaryLabel="Review Projects"
+        primaryLabel="See the work"
         secondaryHref="/contact"
-        secondaryLabel="Contact Directly"
+        secondaryLabel="Start a conversation"
       />
     </>
   );

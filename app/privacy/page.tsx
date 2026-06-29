@@ -7,7 +7,7 @@ import { createPageMetadata } from "@/lib/metadata";
 export const metadata: Metadata = createPageMetadata({
   title: "Privacy Notice",
   description:
-    "A concise privacy notice for the Abdulelah AI portfolio, contact form, and Agent Abdulelah.",
+    "A concise privacy notice for Abdulelah Alkhathami's website, contact form, and companion.",
   path: "/privacy"
 });
 
@@ -16,10 +16,10 @@ const privacyPoints = [
   "A contact message may include a name, email address, company, selected intent, and message content.",
   "Agent contact intent and message text are evaluated deterministically to suggest a follow-up priority. Private contact messages are not sent to DeepSeek.",
   "This site uses Vercel Web Analytics to count anonymous, aggregated page views. It does not use tracking cookies and does not build advertising profiles.",
-  "Agent Abdulelah may process visitor questions to answer portfolio-related queries.",
+  "Abdulelah's guide may process visitor questions to answer portfolio-related queries.",
   "API keys and server-side credentials are never exposed to the browser.",
   "Contact messages are sent to Abdulelah's email using Resend.",
-  "Agent Abdulelah is limited to Abdulelah Alkhathami's public portfolio context.",
+  "Abdulelah's guide is limited to Abdulelah Alkhathami's public portfolio context.",
   "Please do not submit sensitive personal, financial, medical, legal, or confidential information."
 ];
 
@@ -34,19 +34,19 @@ export default function PrivacyPage() {
       <section className="container-shell section-space">
         <div className="grid gap-6 lg:grid-cols-[0.72fr_1.28fr]">
           <article className="premium-panel p-6 sm:p-8">
-            <span className="grid h-12 w-12 place-items-center rounded-full border border-sky-300/20 bg-sky-300/10 text-sky-200">
+            <span className="grid h-12 w-12 place-items-center rounded-full border border-accent/20 bg-accent/10 text-accent">
               <ShieldCheck className="h-5 w-5" aria-hidden="true" />
             </span>
-            <h2 className="mt-5 text-2xl font-semibold text-white">Privacy notice</h2>
-            <p className="mt-3 text-sm leading-7 text-slate-300">
+            <h2 className="mt-5 text-2xl font-semibold text-paper">Privacy notice</h2>
+            <p className="mt-3 text-sm leading-7 text-paper-dim">
               The site is designed to support portfolio exploration and direct contact
               while keeping data handling focused and understandable.
             </p>
           </article>
 
           <article className="rounded-3xl border border-white/10 bg-white/[0.035] p-6 sm:p-8">
-            <h2 className="text-xl font-semibold text-white">What to know</h2>
-            <ul className="mt-5 grid gap-3 text-sm leading-7 text-slate-300">
+            <h2 className="text-xl font-semibold text-paper">What to know</h2>
+            <ul className="mt-5 grid gap-3 text-sm leading-7 text-paper-dim">
               {privacyPoints.map((point) => (
                 <li key={point} className="rounded-xl border border-white/10 bg-white/[0.035] px-4 py-3">
                   {point}
@@ -54,10 +54,10 @@ export default function PrivacyPage() {
               ))}
             </ul>
 
-            <div className="mt-6 rounded-2xl border border-sky-300/20 bg-sky-300/[0.06] p-5">
-              <h2 className="text-base font-semibold text-white">Agent session memory</h2>
-              <p className="mt-2 text-sm leading-7 text-slate-300">
-                Agent Abdulelah may remember recent messages during the current browser
+            <div className="mt-6 rounded-2xl border border-accent/20 bg-accent/[0.06] p-5">
+              <h2 className="text-base font-semibold text-paper">Agent session memory</h2>
+              <p className="mt-2 text-sm leading-7 text-paper-dim">
+                Abdulelah&apos;s guide may remember recent messages during the current browser
                 session to answer follow-up questions. This temporary memory is not
                 stored permanently by the site and can be cleared with the Clear chat
                 button. Contact form submissions are handled separately and are only
@@ -65,13 +65,13 @@ export default function PrivacyPage() {
               </p>
             </div>
 
-            <div className="mt-6 rounded-2xl border border-gold/25 bg-gold/10 p-5">
-              <p className="text-sm leading-7 text-amber-100">
+            <div className="mt-6 rounded-2xl border border-accent/25 bg-accent/10 p-5">
+              <p className="text-sm leading-7 text-accent-soft">
                 For privacy questions, contact Abdulelah directly.
               </p>
               <a
                 href={`mailto:${siteConfig.email}`}
-                className="focus-ring mt-3 inline-flex items-center gap-2 rounded-full text-sm font-semibold text-white transition hover:text-amber-100"
+                className="focus-ring mt-3 inline-flex items-center gap-2 rounded-full text-sm font-semibold text-paper transition hover:text-accent-soft"
               >
                 <Mail className="h-4 w-4" aria-hidden="true" />
                 {siteConfig.email}

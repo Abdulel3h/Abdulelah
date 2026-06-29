@@ -16,7 +16,7 @@ const DialogOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Overlay
     ref={ref}
-    className={cn("fixed inset-0 z-50 bg-slate-950/72 backdrop-blur-md", className)}
+    className={cn("fixed inset-0 z-50 bg-ink-900/72 backdrop-blur-md", className)}
     {...props}
   />
 ));
@@ -31,13 +31,13 @@ const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed left-1/2 top-1/2 z-50 grid w-[calc(100%-2rem)] max-w-2xl -translate-x-1/2 -translate-y-1/2 gap-4 overflow-hidden rounded-3xl border border-white/10 bg-slate-950/95 p-0 shadow-glow backdrop-blur-xl",
+        "fixed left-1/2 top-1/2 z-50 grid w-[calc(100%-2rem)] max-w-2xl -translate-x-1/2 -translate-y-1/2 gap-4 overflow-hidden rounded-3xl border border-white/10 bg-ink-900/95 p-0 shadow-glow backdrop-blur-xl",
         className
       )}
       {...props}
     >
       {children}
-      <DialogPrimitive.Close className="focus-ring absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-full border border-white/10 text-slate-300 transition hover:text-white">
+      <DialogPrimitive.Close className="focus-ring absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-full border border-white/10 text-paper-dim transition hover:text-paper">
         <X className="h-4 w-4" aria-hidden="true" />
         <span className="sr-only">Close</span>
       </DialogPrimitive.Close>
@@ -57,7 +57,7 @@ const DialogTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn("text-lg font-semibold text-white", className)}
+    className={cn("text-lg font-semibold text-paper", className)}
     {...props}
   />
 ));
@@ -69,7 +69,7 @@ const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn("text-sm leading-6 text-slate-400", className)}
+    className={cn("text-sm leading-6 text-paper-dim", className)}
     {...props}
   />
 ));

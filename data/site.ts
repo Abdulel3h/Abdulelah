@@ -6,8 +6,9 @@ export const siteUrl =
 export const siteConfig = {
   name: "Abdulelah Alkhathami",
   arabicName: "عبدالإله الخثعمي",
-  brand: "Abdulelah AI",
-  role: "AI Engineer | LLM Applications | Cloud AI",
+  brand: "Abdulelah Alkhathami",
+  role: "AI Engineer & Product Builder",
+  tagline: "I build intelligent products.",
   location: "Riyadh, Saudi Arabia",
   email: "me@abdulelah.de",
   // Role-based aliases. `primary` is the only address surfaced on public pages;
@@ -20,16 +21,12 @@ export const siteConfig = {
   },
   url: siteUrl,
   description:
-    "Portfolio of Abdulelah Alkhathami (عبدالإله الخثعمي), an AI Engineer in Riyadh, Saudi Arabia, building LLM applications, RAG-style assistants, AI automation concepts, cloud AI systems, and Arabic AI experiences across education, security, sustainability, fintech, and legal tech.",
+    "Abdulelah Alkhathami (عبدالإله الخثعمي) builds intelligent products — AI agents, RAG systems, LLM applications, and Arabic AI systems — across education, security, sustainability, fintech, and legal tech. Based in Riyadh, Saudi Arabia.",
   keywords: [
     "Abdulelah Alkhathami",
     "عبدالإله الخثعمي",
     "AI Engineer",
-    "LLM Engineer",
-    "Generative AI Engineer",
-    "AI Automation Engineer",
-    "Applied Machine Learning Engineer",
-    "Cloud AI Engineer",
+    "AI Solutions Specialist",
     "AI Agents",
     "RAG Systems",
     "LLM Applications",
@@ -66,15 +63,14 @@ export const navLinks = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Projects", href: "/projects" },
-  { label: "Achievements", href: "/achievements" },
-  { label: "Skills", href: "/skills" },
   { label: "Resume", href: "/resume" }
 ];
 
 export const quickLinks = [
   ...navLinks,
+  { label: "Achievements", href: "/achievements" },
+  { label: "Skills", href: "/skills" },
+  { label: "Notes", href: "/blog" },
   contactLink,
-  { label: "Privacy", href: "/privacy" },
-  { label: "Insights", href: "/blog" },
-  { label: "AI Journey", href: "/journey" }
+  { label: "Privacy", href: "/privacy" }
 ];

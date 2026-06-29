@@ -20,11 +20,40 @@ export type Project = {
     github?: string;
     demo?: string;
   };
+  /** Punchy product line for the studio showcase. */
+  tagline?: string;
+  /** Which handcrafted preview to render in the showcase / work index. */
+  previewKind?: "chat" | "map" | "security" | "legal" | "fintech" | "vr" | "vision";
+  /** Short architecture flow (3–4 steps) shown as connected chips. */
+  flow?: string[];
+  /** Outcome / signal metrics surfaced in the showcase. */
+  metrics?: { value: string; label: string }[];
+  /** Real, stated engineering & product decisions — grounded in the work, never invented. */
+  decisions?: { title: string; body: string }[];
 };
 
 export const projects: Project[] = [
   {
     slug: "chatub",
+    tagline: "Every academic answer, grounded in the real regulations.",
+    previewKind: "chat",
+    links: { github: "https://github.com/Abdulel3h/ChatUB" },
+    decisions: [
+      {
+        title: "Local-first, not cloud",
+        body: "I made the call to run ChatUB as a local AI system so student data and university content stay on-prem. Privacy and institutional trust mattered more than the convenience of a hosted model."
+      },
+      {
+        title: "Grounded in official documents",
+        body: "Answers are generated from the university's real regulations and procedures — not generic knowledge — so a student gets the same reliable guidance no matter who they ask."
+      }
+    ],
+    flow: ["Student question", "NLP intent", "Retrieve official docs", "Grounded answer"],
+    metrics: [
+      { value: "Local-first", label: "Runs on-prem for data privacy" },
+      { value: "Project Lead", label: "Led the graduation team" },
+      { value: "Official sources", label: "Grounded, not generic answers" }
+    ],
     title: "ChatUB - Local AI Academic Assistant",
     category: "Education AI / Local AI / NLP / LLMs",
     shortDescription:
@@ -77,6 +106,24 @@ export const projects: Project[] = [
   },
   {
     slug: "althil",
+    tagline: "Designing cooler cities, one shaded street at a time.",
+    previewKind: "map",
+    decisions: [
+      {
+        title: "Cloud-native on Google Cloud",
+        body: "Built on Cloud Run, BigQuery, and Vertex AI so the analysis could scale and stay maintainable — and so the team could move fast inside hackathon time limits."
+      },
+      {
+        title: "Explain, don't just compute",
+        body: "Added a conversational layer so planners get the reasoning behind each shade recommendation, not just a score they have to trust blindly."
+      }
+    ],
+    flow: ["Location & sun data", "BigQuery analysis", "Vertex AI scoring", "Shade recommendation"],
+    metrics: [
+      { value: "Google Cloud", label: "Run · BigQuery · Vertex AI" },
+      { value: "KFUPM × GC", label: "Intelligent Planet Hackathon" },
+      { value: "Cooling, not cost", label: "Comfort without more energy" }
+    ],
     title: "Althil - Urban Thermal Comfort Decision-Support Platform",
     category: "Sustainability / Google Cloud / AI for Good",
     shortDescription:
@@ -133,6 +180,25 @@ export const projects: Project[] = [
   },
   {
     slug: "absher-insight-ai",
+    tagline: "Security that predicts risk, instead of reacting to it.",
+    previewKind: "security",
+    links: { github: "https://github.com/Abdulel3h/absher-insight" },
+    decisions: [
+      {
+        title: "Proactive over reactive",
+        body: "Designed around predicting risk from behavioural patterns before an incident — rather than the usual model of responding after something has already gone wrong."
+      },
+      {
+        title: "Privacy by design, on synthetic data",
+        body: "Modelled everything on synthetic user behaviour so the concept could be tested and demonstrated without ever touching real personal data."
+      }
+    ],
+    flow: ["Behavior signals", "UEBA analytics", "Anomaly detection", "Risk score"],
+    metrics: [
+      { value: "Proactive", label: "Predict risk before incidents" },
+      { value: "Privacy-by-design", label: "Synthetic-data UEBA" },
+      { value: "Tuwaiq", label: "Absher security hackathon" }
+    ],
     title: "Absher Insight AI - Proactive Digital Security Platform",
     category: "AI Security / Government Tech / UEBA",
     shortDescription:
@@ -185,6 +251,24 @@ export const projects: Project[] = [
   },
   {
     slug: "qanouni",
+    tagline: "Labor rights, explained in plain language.",
+    previewKind: "legal",
+    decisions: [
+      {
+        title: "Plain language over legal jargon",
+        body: "Structured answers to explain labour rights and the next steps in language a non-lawyer can actually act on — the goal was clarity, not sounding legal."
+      },
+      {
+        title: "Guidance, used responsibly",
+        body: "Framed responses for responsible use: a way to understand rights and procedures, not a replacement for formal legal advice."
+      }
+    ],
+    flow: ["Worker's question", "Map to labor law", "Azure AI reasoning", "Clear next steps"],
+    metrics: [
+      { value: "Azure AI", label: "Language understanding" },
+      { value: "Plain language", label: "Rights made readable" },
+      { value: "Guided steps", label: "Not just answers" }
+    ],
     title: "Qanouni - AI Legal Advisor",
     category: "LegalTech / AI Advisor",
     shortDescription:
@@ -232,6 +316,24 @@ export const projects: Project[] = [
   },
   {
     slug: "medad",
+    tagline: "Banking that includes everyone.",
+    previewKind: "fintech",
+    decisions: [
+      {
+        title: "Inclusion-first",
+        body: "Designed the experience around underserved users who are usually an afterthought in banking products — the people who need guidance the most."
+      },
+      {
+        title: "Insight over raw data",
+        body: "Turned analytics into clear, personalized recommendations through dashboards, instead of handing people raw numbers to decode."
+      }
+    ],
+    flow: ["User & spend data", "AI analytics", "Personalized insight", "Inclusive guidance"],
+    metrics: [
+      { value: "Inclusion", label: "Built for the underserved" },
+      { value: "Power BI", label: "Insight dashboards" },
+      { value: "Personalized", label: "AI recommendations" }
+    ],
     title: "Medad - Financial Inclusion Banking App",
     category: "Fintech / AI Analytics",
     shortDescription:
@@ -277,6 +379,24 @@ export const projects: Project[] = [
   },
   {
     slug: "virtual-astronauts",
+    tagline: "Step inside the universe to learn it.",
+    previewKind: "vr",
+    decisions: [
+      {
+        title: "Immersion over lecture",
+        body: "Chose an explorable VR environment so learners experience the universe directly, instead of reading about it and hoping it sticks."
+      },
+      {
+        title: "Living, AI-generated content",
+        body: "Used AI to generate dynamic learning content aligned to the experience, so it stays fresh and engaging rather than a fixed script."
+      }
+    ],
+    flow: ["VR environment", "AI content engine", "Dynamic narration", "Guided exploration"],
+    metrics: [
+      { value: "Immersive", label: "Learn by exploring" },
+      { value: "AI-generated", label: "Living content" },
+      { value: "Engagement", label: "Memorable science" }
+    ],
     title: "Virtual Astronauts - VR + AI Educational Experience",
     category: "VR / AI Education",
     shortDescription:
@@ -318,6 +438,74 @@ export const projects: Project[] = [
       "VR exploration concept",
       "AI learning content engine",
       "Astronomy education journey"
+    ]
+  },
+  {
+    slug: "stadium",
+    tagline: "See the crowd forming before it becomes a crush.",
+    previewKind: "vision",
+    links: { github: "https://github.com/Abdulel3h/Stadium" },
+    decisions: [
+      {
+        title: "Vision over new hardware",
+        body: "Used computer vision on ordinary camera feeds instead of installing new sensors — cheaper to deploy and it works with the cameras a venue already has."
+      },
+      {
+        title: "Recommend an action, not just an alarm",
+        body: "The decision engine doesn't only flag a busy gate — it recommends where to move staff, so the output is something an operator can act on immediately."
+      }
+    ],
+    flow: ["Camera feed", "YOLO detection", "Zone & status logic", "Live dashboard & alerts"],
+    metrics: [
+      { value: "Real-time", label: "~2s dashboard refresh" },
+      { value: "4 zones", label: "Configurable gate areas" },
+      { value: "Solo build", label: "End to end by Abdulelah" }
+    ],
+    title: "Stadium - Crowd & Gate Monitoring with Computer Vision",
+    category: "Computer Vision / Operations / Safety",
+    shortDescription:
+      "A computer-vision system that watches stadium gate zones in real time, flags crowding before it becomes dangerous, and recommends how to redistribute staff.",
+    problem:
+      "Crowd build-up at stadium gates can turn dangerous quickly, and staff often react only once a zone is already overflowing. Operators need to see congestion forming early enough to act.",
+    solution:
+      "Stadium uses computer vision to count and track people across gate zones, classify each gate's status, and recommend where to move staff before a zone overflows.",
+    role: "Solo Developer",
+    responsibilities: [
+      "Built the full system end to end as a solo project",
+      "Implemented YOLO-based person detection and per-zone tracking",
+      "Designed the decision engine for gate status and alerts",
+      "Built the Flask API and the live monitoring dashboard"
+    ],
+    technologies: [
+      "Python",
+      "YOLO (Ultralytics)",
+      "OpenCV",
+      "Flask",
+      "NumPy",
+      "JavaScript"
+    ],
+    features: [
+      "Real-time person detection across four gate zones",
+      "Gate status: normal, busy, critical, overflow",
+      "Crowding alerts and incident logging",
+      "Staff distribution recommendations",
+      "ETA estimation",
+      "Live dashboard polling every two seconds"
+    ],
+    impact:
+      "Stadium shows how computer vision on existing cameras can turn a safety blind spot into an early-warning system operators can act on.",
+    year: "2026",
+    technicalApproach: [
+      "YOLO (Ultralytics) for person detection and tracking",
+      "Frame-by-frame assignment of people to configurable gate zones",
+      "A decision engine that classifies gate status and raises alerts",
+      "Flask API exposing live status at /api/status",
+      "HTML/JS dashboard polling the API every two seconds"
+    ],
+    gallery: [
+      "Gate zone detection",
+      "Crowding decision engine",
+      "Live operations dashboard"
     ]
   }
 ];

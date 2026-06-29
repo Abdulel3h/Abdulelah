@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
+import { duration, ease } from "@/lib/motion";
 
 export function PageTransitionWrapper({
   children
@@ -16,10 +17,10 @@ export function PageTransitionWrapper({
     <AnimatePresence mode="wait">
       <motion.main
         key={pathname}
-        initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+        initial={reduceMotion ? false : { opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={reduceMotion ? undefined : { opacity: 0, y: -8 }}
-        transition={{ duration: reduceMotion ? 0 : 0.28, ease: "easeOut" }}
+        exit={reduceMotion ? undefined : { opacity: 0, y: -10 }}
+        transition={{ duration: reduceMotion ? 0 : duration.base, ease: ease.out }}
       >
         {children}
       </motion.main>

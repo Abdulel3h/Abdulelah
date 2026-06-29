@@ -9,19 +9,44 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-inter)", "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ["var(--font-fraunces)", "Georgia", "Cambria", "serif"]
+      },
       colors: {
         midnight: "#050816",
-        ink: "#0A0F1F",
+        ink: {
+          DEFAULT: "#0A0A0B",
+          900: "#0A0A0B",
+          800: "#121214",
+          700: "#1B1B1E",
+          600: "#26262A"
+        },
         navy: "#0B1120",
         electric: "#00A3FF",
         "brand-cyan": "#38BDF8",
         "brand-violet": "#7C3AED",
+        // Single signature accent — a warm brass/gold, used with restraint.
+        accent: {
+          DEFAULT: "#C9A75C",
+          soft: "#E6D2A0",
+          deep: "#8A6E32"
+        },
+        // Warm "premium paper" text on deep ink.
+        paper: {
+          DEFAULT: "#F2EFE7",
+          dim: "#ACA79B",
+          faint: "#75716A"
+        },
         gold: "#C9A84C",
         silver: "#CBD5E1"
       },
       boxShadow: {
-        glow: "0 0 40px rgba(56, 189, 248, 0.16)",
-        "gold-glow": "0 0 34px rgba(201, 168, 76, 0.16)"
+        glow: "0 28px 80px -32px rgba(0, 0, 0, 0.75)",
+        "gold-glow": "0 0 0 1px rgba(201, 168, 76, 0.16)"
+      },
+      letterSpacing: {
+        eyebrow: "0.2em"
       },
       backgroundImage: {
         "soft-grid":

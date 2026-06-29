@@ -430,7 +430,10 @@ export function buildPortfolioContext() {
           `  Technologies: ${list(project.technologies)}`,
           `  Approach: ${list(project.technicalApproach)}`,
           project.context ? `  Context: ${project.context}` : null,
-          `  Impact: ${project.impact}`
+          `  Impact: ${project.impact}`,
+          project.links?.github
+            ? `  Source (verified public GitHub repo): ${project.links.github}`
+            : null
         ]
           .filter(Boolean)
           .join("\n")
@@ -493,7 +496,7 @@ export function buildPortfolioContext() {
     `Location: ${siteConfig.location}`,
     "GitHub profile: available through an action button.",
     "LinkedIn profile: available through an action button.",
-    "Positioning: AI Engineer, LLM application builder, AI automation contributor, applied AI project leader, and hackathon-tested AI talent.",
+    "Positioning: AI Engineer, AI Solutions Specialist, applied AI builder, project leader, and hackathon-tested AI talent. Lead with the name (Abdulelah Alkhathami) and his work, never with 'Junior'.",
     "",
     "CONTACT ROUTING",
     "Share the email address that matches the visitor's intent. You may write these email addresses directly in your answer text.",

@@ -7,12 +7,12 @@ import { createPageMetadata } from "@/lib/metadata";
 import { breadcrumbJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = createPageMetadata({
-  title: "Abdulelah AI Insights",
+  title: "Notes",
   description:
-    "Practical AI insights about agents, LLMs, cloud AI, privacy-first systems, and applied artificial intelligence for students, builders, and decision-makers.",
+    "Notes by Abdulelah Alkhathami on AI agents, LLMs, cloud AI, privacy-first systems, and AI product thinking — written for students, builders, and decision-makers.",
   path: "/blog",
   keywords: [
-    "Abdulelah AI Insights",
+    "Abdulelah Alkhathami notes",
     "AI Agents",
     "LLMs",
     "Cloud AI",
@@ -28,7 +28,7 @@ export default function BlogPage() {
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "Home", path: "/" },
-          { name: "Abdulelah AI Insights", path: "/blog" }
+          { name: "Notes", path: "/blog" }
         ])}
       />
       <BlogIndexContent />

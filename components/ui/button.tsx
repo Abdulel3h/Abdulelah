@@ -9,14 +9,14 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-sky-300 text-slate-950 shadow-[0_18px_60px_rgba(56,189,248,0.22)] hover:bg-sky-200",
+          "bg-accent text-ink-900 hover:bg-accent-soft",
         secondary:
-          "border border-white/[0.12] bg-white/[0.07] text-white hover:border-sky-300/40 hover:bg-white/10",
-        ghost: "text-slate-300 hover:bg-white/[0.07] hover:text-white",
+          "border border-white/[0.12] bg-white/[0.05] text-paper hover:border-accent/40 hover:bg-white/[0.09]",
+        ghost: "text-paper-dim hover:bg-white/[0.06] hover:text-paper",
         gold:
-          "border border-gold/40 bg-gold/[0.12] text-amber-100 hover:border-gold/70 hover:bg-gold/[0.18]",
+          "border border-accent/40 bg-accent/[0.10] text-accent-soft hover:border-accent/70 hover:bg-accent/[0.16]",
         outline:
-          "border border-white/10 bg-white/[0.035] text-slate-200 hover:border-sky-300/35 hover:text-white"
+          "border border-white/10 bg-white/[0.035] text-paper-dim hover:border-accent/35 hover:text-paper"
       },
       size: {
         default: "h-11 px-5 py-3",
