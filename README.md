@@ -1,14 +1,18 @@
 <p align="center">
-  <img src="./assets/project-banner.svg" alt="Abdulelah AI Portfolio project banner" />
+  <img src="assets/branding/cover.svg" alt="Abdulelah AI Portfolio project banner" />
 </p>
 
 # Abdulelah AI Portfolio
 
-Premium AI Engineer portfolio for Abdulelah Alkhathami. The site positions the public website, project case studies, role-specific resumes, bilingual AI writing, and Agent Abdulelah as one unified portfolio system.
+A bilingual portfolio that connects project evidence, technical writing and an embedded AI assistant around one consistent source of personal facts.
+
+## Product intent
+
+Help a visitor understand the work, inspect a project and find the right way to make contact. Typed content modules keep the pages and assistant aligned; server routes handle model and email integrations.
 
 ## Overview
 
-This repository powers [abdulelah.de](https://www.abdulelah.de). It is built as a recruiter-facing AI portfolio, not a generic personal site. The content focuses on LLM applications, NLP, RAG-style assistants, AI automation concepts, applied AI projects, and cloud AI exposure.
+This repository powers [abdulelah.de](https://www.abdulelah.de). It gives recruiters and collaborators a direct path from the homepage to project evidence. The content focuses on LLM applications, NLP, RAG-style assistants, AI automation concepts, applied AI projects, and cloud AI exposure.
 
 ## Documentation
 
