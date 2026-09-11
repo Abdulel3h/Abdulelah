@@ -34,11 +34,14 @@ import {
   getSafetyRefusal,
   type AgentSafetyResult
 } from "@/lib/agent/safety";
-import { applyRuntimeRateLimit } from "@/lib/rate-limit";
+import { readJsonBody } from "@/lib/http/read-json-body";
+import { applyRateLimit } from "@/lib/rate-limit";
+import { buildHumanGrantCookie, checkBotProtection } from "@/lib/security/bot-check";
 import { containsArabic } from "@/lib/text-direction";
 import type {
   AgentApiResponse,
   AgentDebugCode,
+  AgentPublicRuntime,
   AgentRuntimeProof,
   AgentSessionContext
 } from "@/types/agent";
@@ -47,9 +50,9 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const MAX_MESSAGE_LENGTH = 1_200;
-// Reject oversized payloads before parsing JSON into memory. Comfortably above a
-// max message plus 8 trimmed history turns and session context, far below the
-// platform body cap.
+// Measured against the bytes actually read, so a missing or lying
+// Content-Length cannot get a huge payload through. Comfortably above a max
+// message plus 8 trimmed history turns, session context and a bot token.
 const MAX_BODY_BYTES = 32_000;
 
 type AgentResponseBody = Pick<AgentApiResponse, "actions" | "answer" | "quality">;
@@ -61,6 +64,23 @@ function appendContinuationHint(answer: string, message: string) {
     : "The answer is long. I can continue with more details in the next message.";
 
   return `${answer.trim()}\n\n${hint}`;
+}
+
+/**
+ * Production clients get only what the UI needs: the conversation mode and
+ * whether the question stayed in scope. The model id, debug codes, provider
+ * attempts and scope-judge reasoning describe internal implementation and are
+ * kept for local development only.
+ */
+function toPublicRuntime(proof: AgentRuntimeProof): AgentPublicRuntime {
+  if (process.env.NODE_ENV !== "production") {
+    return proof;
+  }
+
+  return {
+    mode: proof.mode,
+    scopeJudgeAllowed: proof.scopeJudgeAllowed
+  };
 }
 
 function jsonAgentResponse(
@@ -76,12 +96,13 @@ function jsonAgentResponse(
     durationMs: Date.now() - startedAt
   };
 
+  // The full proof is operator information: it stays in the server log.
   console.info("[agent]", runtimeProof);
 
   return NextResponse.json<AgentApiResponse>(
     {
       ...response,
-      ...runtimeProof,
+      ...toPublicRuntime(runtimeProof),
       sessionContext: sanitizeAgentSessionContext(sessionContext)
     },
     init
@@ -232,113 +253,16 @@ function blockedResponse(
   );
 }
 
-export async function POST(request: Request) {
-  const startedAt = Date.now();
-
-  if (Number(request.headers.get("content-length") ?? 0) > MAX_BODY_BYTES) {
-    return jsonAgentResponse(
-      {
-        answer: "Please send a shorter request so I can help you explore the portfolio.",
-        actions: [],
-        quality: { score: MIN_AGENT_QUALITY_SCORE, passed: true }
-      },
-      getNoScopeJudgeProof("invalid_request", "fallback"),
-      startedAt,
-      { status: 413 }
-    );
-  }
-
-  let body: unknown;
-
-  try {
-    body = await request.json();
-  } catch {
-    return jsonAgentResponse(
-      {
-        answer: "Please send a valid message so I can help you explore the portfolio.",
-        actions: [],
-        quality: { score: MIN_AGENT_QUALITY_SCORE, passed: true }
-      },
-      getNoScopeJudgeProof("invalid_request", "fallback"),
-      startedAt,
-      { status: 400 }
-    );
-  }
-
-  const message =
-    typeof body === "object" &&
-    body !== null &&
-    "message" in body &&
-    typeof body.message === "string"
-      ? body.message.trim()
-      : "";
-  const history =
-    typeof body === "object" && body !== null && "history" in body
-      ? sanitizeAgentHistory(body.history)
-      : [];
-  const sessionContext =
-    typeof body === "object" && body !== null && "sessionContext" in body
-      ? sanitizeAgentSessionContext(body.sessionContext)
-      : { ...EMPTY_AGENT_SESSION_CONTEXT };
-  const memory: AgentConversationMemory = {
-    history,
-    sessionContext
-  };
-
-  if (!message) {
-    return jsonAgentResponse(
-      {
-        answer: "Please enter a question about Abdulelah's projects, blog insights, skills, resume, or hiring fit.",
-        actions: [],
-        quality: { score: MIN_AGENT_QUALITY_SCORE, passed: true }
-      },
-      getNoScopeJudgeProof("invalid_request", "fallback"),
-      startedAt,
-      { status: 400 },
-      sessionContext
-    );
-  }
-
-  if (message.length > MAX_MESSAGE_LENGTH) {
-    return jsonAgentResponse(
-      {
-        answer: "Please shorten your question so I can give you a focused answer.",
-        actions: [],
-        quality: { score: MIN_AGENT_QUALITY_SCORE, passed: true }
-      },
-      getNoScopeJudgeProof("invalid_request", "fallback"),
-      startedAt,
-      { status: 400 },
-      sessionContext
-    );
-  }
-
-  const rateLimit = applyRuntimeRateLimit(request, {
-    namespace: "agent",
-    limit: 30,
-    windowMs: 60_000
-  });
-
-  if (!rateLimit.allowed) {
-    return jsonAgentResponse(
-      {
-        answer:
-          "You've sent several questions in a short time. Please wait a moment, then ask about Abdulelah's portfolio, projects, blog insights, skills, or resume.",
-        actions: getPortfolioRedirectActions(),
-        quality: { score: 100, passed: true }
-      },
-      getNoScopeJudgeProof("rate_limited", "fallback"),
-      startedAt,
-      {
-        status: 429,
-        headers: {
-          "Retry-After": String(rateLimit.retryAfterSeconds)
-        }
-      },
-      sessionContext
-    );
-  }
-
+/**
+ * The answering pipeline, reached only after the request has passed rate
+ * limiting, size limits, input validation and bot protection.
+ */
+async function respondToAgentMessage(
+  message: string,
+  memory: AgentConversationMemory,
+  startedAt: number
+) {
+  const { sessionContext } = memory;
   const safety = classifyAgentMessage(message);
 
   if (!safety.allowed) {
@@ -512,4 +436,142 @@ export async function POST(request: Request) {
       memory
     );
   }
+}
+
+function invalidRequestResponse(
+  answer: string,
+  startedAt: number,
+  status: 400 | 403 | 413 | 415,
+  debugCode: "invalid_request" | "verification_failed",
+  sessionContext?: AgentSessionContext
+) {
+  return jsonAgentResponse(
+    {
+      answer,
+      actions: [],
+      quality: { score: MIN_AGENT_QUALITY_SCORE, passed: true }
+    },
+    getNoScopeJudgeProof(debugCode, "fallback"),
+    startedAt,
+    { status },
+    sessionContext
+  );
+}
+
+export async function POST(request: Request) {
+  const startedAt = Date.now();
+
+  // Throttle first, so a flood costs nothing beyond one shared-store lookup.
+  const rateLimit = await applyRateLimit(request, {
+    namespace: "agent",
+    limit: 30,
+    windowMs: 60_000
+  });
+
+  if (!rateLimit.allowed) {
+    return jsonAgentResponse(
+      {
+        answer:
+          "You've sent several questions in a short time. Please wait a moment, then ask about Abdulelah's portfolio, projects, blog insights, skills, or resume.",
+        actions: getPortfolioRedirectActions(),
+        quality: { score: 100, passed: true }
+      },
+      getNoScopeJudgeProof("rate_limited", "fallback"),
+      startedAt,
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(rateLimit.retryAfterSeconds)
+        }
+      }
+    );
+  }
+
+  const body = await readJsonBody(request, MAX_BODY_BYTES);
+
+  if (!body.ok) {
+    return invalidRequestResponse(
+      body.status === 413
+        ? "Please send a shorter request so I can help you explore the portfolio."
+        : "Please send a valid message so I can help you explore the portfolio.",
+      startedAt,
+      body.status,
+      "invalid_request"
+    );
+  }
+
+  const payload = body.data;
+  const message =
+    typeof payload === "object" &&
+    payload !== null &&
+    "message" in payload &&
+    typeof payload.message === "string"
+      ? payload.message.trim()
+      : "";
+  const history =
+    typeof payload === "object" && payload !== null && "history" in payload
+      ? sanitizeAgentHistory(payload.history)
+      : [];
+  const sessionContext =
+    typeof payload === "object" &&
+    payload !== null &&
+    "sessionContext" in payload
+      ? sanitizeAgentSessionContext(payload.sessionContext)
+      : { ...EMPTY_AGENT_SESSION_CONTEXT };
+  const memory: AgentConversationMemory = {
+    history,
+    sessionContext
+  };
+
+  if (!message) {
+    return invalidRequestResponse(
+      "Please enter a question about Abdulelah's projects, blog insights, skills, resume, or hiring fit.",
+      startedAt,
+      400,
+      "invalid_request",
+      sessionContext
+    );
+  }
+
+  if (message.length > MAX_MESSAGE_LENGTH) {
+    return invalidRequestResponse(
+      "Please shorten your question so I can give you a focused answer.",
+      startedAt,
+      400,
+      "invalid_request",
+      sessionContext
+    );
+  }
+
+  // Turnstile runs before any model call. The first verified message mints a
+  // short-lived signed cookie so the rest of the conversation is not
+  // challenged again; the cookie is HttpOnly and server-signed.
+  const botCheck = await checkBotProtection({
+    request,
+    token:
+      typeof payload === "object" &&
+      payload !== null &&
+      "turnstileToken" in payload
+        ? (payload as { turnstileToken: unknown }).turnstileToken
+        : undefined,
+    allowSessionGrant: true
+  });
+
+  if (!botCheck.ok) {
+    return invalidRequestResponse(
+      "I couldn't verify this request. Please reload the page and ask again.",
+      startedAt,
+      403,
+      "verification_failed",
+      sessionContext
+    );
+  }
+
+  const response = await respondToAgentMessage(message, memory, startedAt);
+
+  if (botCheck.grant) {
+    response.headers.append("Set-Cookie", buildHumanGrantCookie(botCheck.grant));
+  }
+
+  return response;
 }

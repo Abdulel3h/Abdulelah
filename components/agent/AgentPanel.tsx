@@ -8,6 +8,7 @@ import { AgentContactForm } from "@/components/agent/AgentContactForm";
 import { AgentLauncher } from "@/components/agent/AgentLauncher";
 import { AgentMessage } from "@/components/agent/AgentMessage";
 import { AgentSuggestion } from "@/components/agent/AgentSuggestion";
+import { useTurnstile } from "@/components/security/useTurnstile";
 import { OPEN_AGENT_EVENT } from "@/lib/agent/companion";
 import { duration, ease } from "@/lib/motion";
 import { Monogram } from "@/components/ui/Monogram";
@@ -92,6 +93,10 @@ function getModeLabel(mode?: AgentMode) {
 
 export function AgentPanel() {
   const reduceMotion = useReducedMotion();
+  const { containerRef: turnstileRef, getToken } = useTurnstile();
+  // The server mints a short-lived signed cookie after the first verified
+  // message, so later messages do not run a challenge unless it rejects them.
+  const isVerifiedRef = useRef(false);
   const launcherRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -217,17 +222,35 @@ export function AgentPanel() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/agent", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          message,
-          history: chatHistory.slice(-MAX_HISTORY_TURNS),
-          sessionContext
-        })
-      });
+      const postMessage = (turnstileToken: string | null) =>
+        fetch("/api/agent", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message,
+            history: chatHistory.slice(-MAX_HISTORY_TURNS),
+            sessionContext,
+            turnstileToken
+          })
+        });
+
+      let response = await postMessage(
+        isVerifiedRef.current ? null : await getToken()
+      );
+
+      // The session grant expired or was never issued: solve one challenge
+      // and retry, so the visitor never sees a verification error mid-chat.
+      if (response.status === 403) {
+        isVerifiedRef.current = false;
+        response = await postMessage(await getToken());
+      }
+
+      if (response.ok) {
+        isVerifiedRef.current = true;
+      }
+
       const payload = (await response.json()) as AgentApiResponse;
 
       setSessionContext(payload.sessionContext);
@@ -500,6 +523,7 @@ export function AgentPanel() {
                     <Send className="h-4 w-4" aria-hidden="true" />
                   </Button>
                 </div>
+                <div ref={turnstileRef} className="mt-2 empty:mt-0" />
                 <p className="mt-2 text-[10px] leading-4 text-paper-faint">
                   Portfolio-grounded answers only. Memory is temporary for this session only.
                   No private API key is sent to your browser.

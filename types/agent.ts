@@ -73,7 +73,8 @@ export type AgentDebugCode =
   | "model_error"
   | "provider_failed"
   | "output_truncated"
-  | "evaluation_failed";
+  | "evaluation_failed"
+  | "verification_failed";
 
 export type AgentQuality = {
   score: number;
@@ -93,7 +94,17 @@ export type AgentRuntimeProof = {
   finishReason?: AgentFinishReason;
 };
 
-export type AgentApiResponse = AgentRuntimeProof & {
+/**
+ * What the browser is actually allowed to see. The full runtime proof stays in
+ * server logs: model id, debug codes and scope-judge reasoning describe how the
+ * pipeline is built and are only surfaced outside production.
+ */
+export type AgentPublicRuntime = {
+  mode: AgentMode;
+  scopeJudgeAllowed: boolean;
+} & Partial<Omit<AgentRuntimeProof, "mode" | "scopeJudgeAllowed">>;
+
+export type AgentApiResponse = AgentPublicRuntime & {
   answer: string;
   actions: AgentAction[];
   quality: AgentQuality;
@@ -106,6 +117,6 @@ export type AgentChatMessage = {
   content: string;
   actions?: AgentAction[];
   mode?: AgentMode;
-  runtime?: AgentRuntimeProof;
+  runtime?: AgentPublicRuntime;
   isError?: boolean;
 };

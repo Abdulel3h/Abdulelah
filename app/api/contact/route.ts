@@ -4,7 +4,9 @@ import {
   createContactEmailText,
   parseContactRequest
 } from "@/lib/contact";
-import { applyRuntimeRateLimit } from "@/lib/rate-limit";
+import { readJsonBody } from "@/lib/http/read-json-body";
+import { applyRateLimit } from "@/lib/rate-limit";
+import { checkBotProtection } from "@/lib/security/bot-check";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -12,14 +14,17 @@ export const dynamic = "force-dynamic";
 const DEFAULT_TO_EMAIL = "me@abdulelah.de";
 const DEFAULT_FROM_EMAIL = "Portfolio Contact <onboarding@resend.dev>";
 const ERROR_MESSAGE = "Unable to send message right now. Please email me directly.";
-// Largest valid contact payload is a 5,000-char message plus short fields; cap
-// the request body before parsing to avoid buffering oversized payloads.
-const MAX_BODY_BYTES = 16_000;
-function jsonError(status: number) {
+const VERIFICATION_MESSAGE =
+  "We couldn't verify this submission. Please reload the page and try again.";
+// Largest valid contact payload is a 5,000-char message plus short fields and a
+// Turnstile token. Enforced against the actual bytes read, not Content-Length.
+const MAX_BODY_BYTES = 24_000;
+
+function jsonError(status: number, message = ERROR_MESSAGE) {
   return Response.json(
     {
       success: false,
-      message: ERROR_MESSAGE
+      message
     },
     { status }
   );
@@ -32,30 +37,16 @@ function jsonSuccess() {
   });
 }
 
+function readTurnstileToken(payload: unknown) {
+  return typeof payload === "object" &&
+    payload !== null &&
+    "turnstileToken" in payload
+    ? (payload as { turnstileToken: unknown }).turnstileToken
+    : undefined;
+}
+
 export async function POST(request: Request) {
-  if (Number(request.headers.get("content-length") ?? 0) > MAX_BODY_BYTES) {
-    return jsonError(413);
-  }
-
-  let body: unknown;
-
-  try {
-    body = await request.json();
-  } catch {
-    return jsonError(400);
-  }
-
-  const contactRequest = parseContactRequest(body);
-
-  if (!contactRequest) {
-    return jsonError(400);
-  }
-
-  if (contactRequest.website) {
-    return jsonSuccess();
-  }
-
-  const rateLimit = applyRuntimeRateLimit(request, {
+  const rateLimit = await applyRateLimit(request, {
     namespace: "contact",
     limit: 5,
     windowMs: 15 * 60_000
@@ -74,6 +65,33 @@ export async function POST(request: Request) {
         }
       }
     );
+  }
+
+  const body = await readJsonBody(request, MAX_BODY_BYTES);
+
+  if (!body.ok) {
+    return jsonError(body.status);
+  }
+
+  const contactRequest = parseContactRequest(body.data);
+
+  if (!contactRequest) {
+    return jsonError(400);
+  }
+
+  // Honeypot: answer as if it succeeded so a bot learns nothing, and never
+  // spend a Turnstile verification or an email on it.
+  if (contactRequest.website) {
+    return jsonSuccess();
+  }
+
+  const botCheck = await checkBotProtection({
+    request,
+    token: readTurnstileToken(body.data)
+  });
+
+  if (!botCheck.ok) {
+    return jsonError(403, VERIFICATION_MESSAGE);
   }
 
   const apiKey = process.env.RESEND_API_KEY;

@@ -12,13 +12,17 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useTurnstile } from "@/components/security/useTurnstile";
 import { siteConfig } from "@/data/site";
 
 const interestTypes = ["Hiring", "Collaboration", "Hackathon", "AI Project", "Other"];
 const SUCCESS_MESSAGE = "Thank you. Your message has been sent successfully.";
 const ERROR_MESSAGE = `Something went wrong. Please email me directly at ${siteConfig.email}.`;
+const VERIFICATION_MESSAGE =
+  "We couldn't verify this submission. Please reload the page and try again.";
 
 export function ContactForm() {
+  const { containerRef, getToken } = useTurnstile();
   const [statusMessage, setStatusMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [interest, setInterest] = useState("Hiring");
@@ -32,6 +36,8 @@ export function ContactForm() {
     setStatusMessage("");
 
     try {
+      // Invisible for a normal visitor; the server checks it with Cloudflare.
+      const turnstileToken = await getToken();
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
@@ -44,9 +50,16 @@ export function ContactForm() {
           interestType: interest,
           message: formData.get("message"),
           website: formData.get("website"),
-          source: "contact-page"
+          source: "contact-page",
+          turnstileToken
         })
       });
+
+      if (response.status === 403) {
+        setStatusMessage(VERIFICATION_MESSAGE);
+
+        return;
+      }
 
       if (!response.ok) {
         throw new Error("Unable to send contact message.");
@@ -136,6 +149,8 @@ export function ContactForm() {
             />
           </label>
         </div>
+
+        <div ref={containerRef} className="mt-4 empty:mt-0" />
 
         {statusMessage ? (
           <p

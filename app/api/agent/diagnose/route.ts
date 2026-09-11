@@ -5,15 +5,44 @@ import {
   judgePortfolioScopeLocally
 } from "@/lib/agent/scope-judge";
 import { classifyAgentMessage } from "@/lib/agent/safety";
-import { applyRuntimeRateLimit } from "@/lib/rate-limit";
+import { readJsonBody } from "@/lib/http/read-json-body";
+import { applyRateLimit } from "@/lib/rate-limit";
+import { constantTimeEquals } from "@/lib/security/signed-token";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const MAX_MESSAGE_LENGTH = 1_200;
 const MAX_BODY_BYTES = 32_000;
-// In production the diagnose tool runs the scope classifier locally only, so an
-// exposed endpoint can never be used to drive paid DeepSeek calls (cost abuse).
+
+/**
+ * Developer-only diagnostics. This endpoint reports safety classifier and
+ * scope judge internals, which must never be readable by the public, so in
+ * production it stays closed unless AGENT_DIAGNOSE_TOKEN is configured and
+ * presented as a bearer token. Unauthorized callers get a plain 404.
+ */
+function isAuthorized(request: Request) {
+  if (process.env.NODE_ENV !== "production") {
+    return true;
+  }
+
+  const expectedToken = process.env.AGENT_DIAGNOSE_TOKEN?.trim();
+
+  if (!expectedToken) {
+    return false;
+  }
+
+  const header = request.headers.get("authorization") ?? "";
+  const providedToken = header.toLowerCase().startsWith("bearer ")
+    ? header.slice(7).trim()
+    : "";
+
+  return (
+    providedToken.length > 0 && constantTimeEquals(providedToken, expectedToken)
+  );
+}
+
+// Even when authorized, production never drives paid DeepSeek calls from here.
 const ALLOW_REMOTE_SCOPE_JUDGE = process.env.NODE_ENV !== "production";
 
 function getHardBlockReason(
@@ -22,8 +51,16 @@ function getHardBlockReason(
   return category === "allowed" ? null : category;
 }
 
+function notFound() {
+  return new NextResponse(null, { status: 404 });
+}
+
 export async function POST(request: Request) {
-  const rateLimit = applyRuntimeRateLimit(request, {
+  if (!isAuthorized(request)) {
+    return notFound();
+  }
+
+  const rateLimit = await applyRateLimit(request, {
     namespace: "agent-diagnose",
     limit: 10,
     windowMs: 60_000
@@ -41,27 +78,29 @@ export async function POST(request: Request) {
     );
   }
 
-  if (Number(request.headers.get("content-length") ?? 0) > MAX_BODY_BYTES) {
-    return NextResponse.json({ error: "payload_too_large" }, { status: 413 });
-  }
+  const body = await readJsonBody(request, MAX_BODY_BYTES);
 
-  let body: unknown;
-
-  try {
-    body = await request.json();
-  } catch {
+  if (!body.ok) {
     return NextResponse.json(
-      { error: "invalid_request" },
-      { status: 400 }
+      {
+        error:
+          body.status === 413
+            ? "payload_too_large"
+            : body.status === 415
+              ? "unsupported_media_type"
+              : "invalid_request"
+      },
+      { status: body.status }
     );
   }
 
+  const payload = body.data;
   const message =
-    typeof body === "object" &&
-    body !== null &&
-    "message" in body &&
-    typeof body.message === "string"
-      ? body.message.trim()
+    typeof payload === "object" &&
+    payload !== null &&
+    "message" in payload &&
+    typeof payload.message === "string"
+      ? payload.message.trim()
       : "";
 
   if (!message || message.length > MAX_MESSAGE_LENGTH) {

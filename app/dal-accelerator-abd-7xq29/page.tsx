@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { cookies } from "next/headers";
+import { notFound } from "next/navigation";
 import {
   ArrowUpRight,
   BrainCircuit,
@@ -18,9 +20,20 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/data/site";
+import {
+  DAL_ACCESS_COOKIE,
+  DAL_CV_PATH,
+  DAL_PROFILE_PATH,
+  verifyDalAccessToken
+} from "@/lib/security/dal-access";
 
-const pagePath = "/dal-accelerator-abd-7xq29";
-const cvPath = "/resume/Abdulelah_Alkhathami_Dal_AI_Data_CV.pdf";
+const pagePath = DAL_PROFILE_PATH;
+// Served through an authorization check; the file itself is not in /public.
+const cvPath = DAL_CV_PATH;
+
+// The grant cookie is per-visitor, so this page can never be cached or
+// prerendered as public HTML.
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: {
@@ -33,7 +46,12 @@ export const metadata: Metadata = {
   },
   robots: {
     index: false,
-    follow: false
+    follow: false,
+    nocache: true,
+    googleBot: {
+      index: false,
+      follow: false
+    }
   }
 };
 
@@ -121,7 +139,18 @@ const reviewerLinks = [
   }
 ];
 
-export default function DalAcceleratorProfilePage() {
+export default async function DalAcceleratorProfilePage() {
+  // Real access control. `noindex` below is only an SEO safeguard on top of
+  // this check — an unauthorized visitor gets the normal 404 page.
+  const cookieStore = await cookies();
+  const isAuthorized = await verifyDalAccessToken(
+    cookieStore.get(DAL_ACCESS_COOKIE)?.value
+  );
+
+  if (!isAuthorized) {
+    notFound();
+  }
+
   return (
     <main className="pb-20">
       <section className="container-shell pt-14 sm:pt-16 lg:pt-20">
@@ -159,7 +188,7 @@ export default function DalAcceleratorProfilePage() {
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <Button asChild size="lg" className="w-full sm:w-auto">
-                  <a href={cvPath} download>
+                  <a href={cvPath} rel="nofollow">
                     <Download className="h-4 w-4" aria-hidden="true" />
                     Download CV
                   </a>
@@ -381,7 +410,7 @@ export default function DalAcceleratorProfilePage() {
                 and practical training readiness.
               </p>
               <Button asChild size="lg" className="mt-6 w-full">
-                <a href={cvPath} download>
+                <a href={cvPath} rel="nofollow">
                   <Download className="h-4 w-4" aria-hidden="true" />
                   Download CV
                 </a>

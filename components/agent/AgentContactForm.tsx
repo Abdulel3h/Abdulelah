@@ -6,6 +6,7 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useTurnstile } from "@/components/security/useTurnstile";
 import {
   AGENT_CONTACT_INTENTS,
   type AgentContactIntent
@@ -16,9 +17,12 @@ const SUCCESS_MESSAGE = "Your message was sent to Abdulelah successfully.";
 
 export function AgentContactForm({ onClose }: { onClose: () => void }) {
   const nameInputRef = useRef<HTMLInputElement>(null);
+  const { containerRef, getToken } = useTurnstile();
   const [intent, setIntent] = useState<AgentContactIntent | null>(null);
   const [isSending, setIsSending] = useState(false);
-  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "success" | "error" | "unverified"
+  >("idle");
 
   useEffect(() => {
     if (intent) {
@@ -40,6 +44,8 @@ export function AgentContactForm({ onClose }: { onClose: () => void }) {
     setStatus("idle");
 
     try {
+      // Invisible for a normal visitor; the server checks it with Cloudflare.
+      const turnstileToken = await getToken();
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
@@ -52,9 +58,16 @@ export function AgentContactForm({ onClose }: { onClose: () => void }) {
           interestType: intent,
           message: formData.get("message"),
           website: formData.get("website"),
-          source: "agent-abdulelah"
+          source: "agent-abdulelah",
+          turnstileToken
         })
       });
+
+      if (response.status === 403) {
+        setStatus("unverified");
+
+        return;
+      }
 
       if (!response.ok) {
         throw new Error("Unable to send your message right now.");
@@ -162,6 +175,8 @@ export function AgentContactForm({ onClose }: { onClose: () => void }) {
               </label>
             </div>
 
+            <div ref={containerRef} className="empty:hidden" />
+
             {status === "success" ? (
               <p
                 className="rounded-xl border border-emerald-300/25 bg-emerald-300/10 px-3 py-2 text-xs leading-5 text-emerald-100"
@@ -169,6 +184,16 @@ export function AgentContactForm({ onClose }: { onClose: () => void }) {
                 aria-live="polite"
               >
                 {SUCCESS_MESSAGE}
+              </p>
+            ) : null}
+
+            {status === "unverified" ? (
+              <p
+                className="rounded-xl border border-amber-300/25 bg-amber-300/10 px-3 py-2 text-xs leading-5 text-amber-100"
+                role="alert"
+              >
+                We couldn&apos;t verify this submission. Please reload the page
+                and try again.
               </p>
             ) : null}
 
