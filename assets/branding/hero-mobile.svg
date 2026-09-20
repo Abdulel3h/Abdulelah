@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="t d">
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="620" viewBox="0 0 760 620" role="img" aria-labelledby="t d">
   <title id="t">Abdulelah.de — A portfolio you can ask.</title>
   <desc id="d">Abdulelah.de — two interlocking translucent forms turning around one shared luminous core, exchanging light in both directions.</desc>
   <defs>
@@ -142,10 +142,11 @@
       .still { display: inline !important; }
     }
   </style>
-  <rect width="1280" height="640" rx="0" fill="url(#vignette)"/>
+  <rect width="760" height="620" rx="26" fill="url(#vignette)"/>
+  <rect x=".75" y=".75" width="758.5" height="618.5" rx="25.25" fill="none" stroke="#123029" stroke-width="1.5"/>
   <text class="m eyebrow" x="60" y="50" font-size="15" fill="#5E7A74" font-weight="500">AI product · bilingual web</text>
-  <text class="m eyebrow" x="1220" y="50" font-size="15" fill="#5E7A74" font-weight="500" text-anchor="end">Deployed product</text>
-  <g transform="translate(944 300) scale(0.96)">
+  <text class="m eyebrow" x="700" y="50" font-size="15" fill="#5E7A74" font-weight="500" text-anchor="end">Deployed</text>
+  <g transform="translate(380 236) scale(0.78)">
     <ellipse rx="250" ry="180" fill="url(#haze)" opacity=".7"/>
     <ellipse cx="0" cy="158" rx="217" ry="23.1" fill="url(#pool)" opacity=".5"/><ellipse cx="0" cy="158" rx="140" ry="11" fill="#010403" opacity="0.85" filter="url(#shade)"/>
     <g filter="url(#glossM)" opacity="0.78"><path d="M-178 34C-206-64-134-140-56-114C4-94 26-34 4 16" fill="none" stroke="url(#glassBack)" stroke-width="52" stroke-linecap="round" stroke-linejoin="round"/><path d="M-178 34C-206-64-134-140-56-114C4-94 26-34 4 16" fill="none" stroke="#F2FFFC" stroke-width="13.5" stroke-linecap="round" opacity=".14" transform="translate(-4.7 -5.7)"/></g>
@@ -159,11 +160,8 @@
     <circle cx="-88" cy="-52" r="7" fill="#C8FF54" filter="url(#bloomS)" opacity=".85"/>
     <circle cx="88" cy="52" r="7" fill="#46F6FF" filter="url(#bloomS)" opacity=".85"/>
   </g>
-  <text class="m eyebrow" x="64" y="150" font-size="20" fill="#22E3C5" font-weight="600">Abdulelah Alkhathami</text>
-  <text class="s" x="64" y="262" font-size="78" fill="#F4FFF9" font-weight="700" letter-spacing="-2.4">Abdulelah.de</text>
-  <text class="s" x="64" y="330" font-size="38" fill="url(#inkFade)" font-weight="600" letter-spacing="-.8">A portfolio you can ask.</text>
-  <text class="s" x="64" y="392" font-size="20" fill="#8FA8A1">Next.js · typed project facts · server-side AI assistant</text>
-  <g transform="translate(64 500)"><rect width="206" height="64" rx="18" fill="#081915" stroke="#123029"/><text class="s" x="24" y="40" font-size="17" fill="#C3D8D2" font-weight="600">Bilingual</text></g><g transform="translate(288 500)"><rect width="206" height="64" rx="18" fill="#081915" stroke="#123029"/><text class="s" x="24" y="40" font-size="17" fill="#C3D8D2" font-weight="600">Typed project facts</text></g><g transform="translate(512 500)"><rect width="206" height="64" rx="18" fill="#081915" stroke="#123029"/><text class="s" x="24" y="40" font-size="17" fill="#C3D8D2" font-weight="600">Embedded assistant</text></g>
-  <text class="m eyebrow" x="64" y="608" font-size="18" fill="#5E7A74" font-weight="500">abdulelah.de</text>
-  <rect width="1280" height="640" rx="0" filter="url(#grain)" opacity="0.5" pointer-events="none"/>
+  <text class="s" x="56" y="444" font-size="56" fill="#F4FFF9" font-weight="700" letter-spacing="-1.4">Abdulelah.de</text>
+  <text class="s" x="56" y="500" font-size="31" fill="url(#inkFade)" font-weight="600">A portfolio you can ask.</text>
+  <text class="s" x="56" y="552" font-size="22" fill="#8FA8A1">Next.js · typed facts · AI assistant</text>
+  <rect width="760" height="620" rx="26" filter="url(#grain)" opacity="0.55" pointer-events="none"/>
 </svg>

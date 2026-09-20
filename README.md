@@ -1,37 +1,29 @@
-<p align="center">
-  <img src="assets/branding/cover.svg" alt="Abdulelah AI Portfolio project banner" />
-</p>
+<picture>
+  <source media="(max-width: 600px)" srcset="assets/branding/hero-mobile.svg">
+  <img src="assets/branding/hero.svg" width="100%" alt="Abdulelah.de — a portfolio you can ask. Next.js, typed project facts and a server-side AI assistant.">
+</picture>
 
-# Abdulelah AI Portfolio
+# Abdulelah.de · Bilingual AI Portfolio
 
-A bilingual portfolio that connects project evidence, technical writing and an embedded AI assistant around one consistent source of personal facts.
+A bilingual portfolio where the pages and the embedded assistant answer from the same typed source of facts, so what a visitor reads and what the assistant says cannot drift apart.
 
-## Product intent
+**Status: deployed product.** Live at [abdulelah.de](https://www.abdulelah.de).
 
-Help a visitor understand the work, inspect a project and find the right way to make contact. Typed content modules keep the pages and assistant aligned; server routes handle model and email integrations.
+## Problem
 
-## Overview
+A portfolio and a chatbot bolted onto it usually disagree. The site says one thing, the assistant improvises another, and the visitor cannot tell which to trust. Meanwhile a recruiter has a narrow question — what did he actually build, and can I see it — and needs an answer in under a minute.
 
-This repository powers [abdulelah.de](https://www.abdulelah.de). It gives recruiters and collaborators a direct path from the homepage to project evidence. The content focuses on LLM applications, NLP, RAG-style assistants, AI automation concepts, applied AI projects, and cloud AI exposure.
+## Solution
 
-## Documentation
+Every portfolio fact lives in typed data modules. Pages, project cards, SEO metadata, structured data and the assistant all read from those same modules, so the assistant is constrained by the content rather than free to invent around it. Server route handlers keep model and email integrations off the client.
 
-- [Architecture](docs/architecture.md)
-- [Case Study](docs/case-study.md)
-- [Engineering Principles](docs/engineering-principles.md)
-- [Technical Decisions](docs/technical-decisions.md)
-- [Reviewer Guide](docs/reviewer-guide.md)
+## How it works
 
-## Features
-
-- AI Engineer homepage with proof-oriented project positioning
-- Project case-study pages for ChatUB, Althil, Absher Insight AI, Qanouni, Medad, and Virtual Astronauts
-- Role-specific resume downloads for AI Engineer and AI Specialist paths
-- Agent Abdulelah, an embedded portfolio assistant with recruiter-mode responses
-- Blog and Arabic blog content for AI agents, university AI, cloud AI, and responsible AI UX
-- SEO metadata, JSON-LD structured data, sitemap, robots, and Open Graph assets
-- Responsive dark interface with reduced-motion handling and mobile navigation
-- Contact route with email delivery via Resend when configured
+1. **One source of facts.** `data/site.ts` holds identity, links, SEO keywords, contact addresses and resume links; `data/projects.ts` holds project descriptions, role, technologies, features and impact copy.
+2. **Pages render from it.** App Router pages and components compose those typed facts into the site.
+3. **The assistant is constrained by it.** `lib/agent/*` maps recruiter and visitor questions into portfolio responses drawn from the same data.
+4. **Integrations stay server-side.** `app/api/agent/*` and `app/api/contact/*` expose server-only behaviour; keys never reach the browser.
+5. **Discoverability is generated, not hand-kept.** Sitemap, robots, JSON-LD and Open Graph assets derive from the same content.
 
 ## Architecture
 
@@ -44,22 +36,28 @@ Browser
   -> Optional external services: DeepSeek API, Resend, Vercel Analytics
 ```
 
-The site keeps most portfolio facts in typed data files so copy, project cards, project pages, SEO, and assistant responses can stay aligned.
+## Verified capabilities
 
-## Tech Stack
+- AI-engineer homepage with proof-oriented project positioning
+- Project case-study pages for ChatUB, Althil, Absher Insight AI, Qanouni, Medad and Virtual Astronauts
+- Role-specific resume downloads for AI Engineer and AI Specialist paths
+- Agent Abdulelah, an embedded portfolio assistant with recruiter-mode responses
+- Blog and Arabic blog content on AI agents, university AI, cloud AI and responsible AI UX
+- SEO metadata, JSON-LD structured data, sitemap, robots and Open Graph assets
+- Responsive dark interface with reduced-motion handling and mobile navigation
+- Contact route with email delivery via Resend when configured
 
-- Next.js 16 App Router
-- React 18
-- TypeScript
-- Tailwind CSS
-- Framer Motion
-- Radix UI primitives
-- lucide-react icons
-- Vercel Analytics
-- Resend for contact email
-- DeepSeek-compatible chat completion API for optional assistant responses
+## Screenshot
 
-## Installation
+![Portfolio homepage](assets/screenshots/portfolio-home.png)
+
+Captured from the live portfolio homepage.
+
+## Tech stack
+
+Next.js 16 App Router · React 18 · TypeScript · Tailwind CSS · Framer Motion · Radix UI primitives · lucide-react · Vercel Analytics · Resend · DeepSeek-compatible chat completion API
+
+## Quick start
 
 ```bash
 npm install
@@ -67,18 +65,15 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Then open `http://localhost:3000`.
-
-## Usage
+Open `http://localhost:3000`. Other scripts:
 
 ```bash
-npm run dev
 npm run lint
 npm run build
 npm run start
 ```
 
-Configure optional environment variables:
+Optional environment variables:
 
 ```bash
 DEEPSEEK_API_KEY=
@@ -89,21 +84,15 @@ CONTACT_FROM_EMAIL="Portfolio Contact <onboarding@resend.dev>"
 NEXT_PUBLIC_SITE_URL=https://www.abdulelah.de
 ```
 
-## Screenshots
+The assistant and contact delivery are optional: without keys the site runs, and those routes degrade rather than break.
 
-![Portfolio homepage](assets/screenshots/portfolio-home.png)
+## Limitations
 
-Captured from the live portfolio homepage. Add more captures for projects, resume, contact, and Agent Abdulelah flows as future work.
+- **Screenshot coverage.** Project pages still need per-project captures and architecture diagrams.
+- **Test coverage.** No end-to-end tests yet for navigation, resume downloads, contact validation or assistant open/close behaviour.
+- **Link checking.** External project, GitHub, LinkedIn and resume URLs are not yet checked automatically.
 
-## System Design
-
-- `data/site.ts` is the canonical source for identity, links, SEO keywords, contact addresses, and resume links.
-- `data/projects.ts` is the canonical source for project descriptions, role, technologies, features, and impact copy.
-- `lib/agent/*` maps recruiter and visitor questions into constrained portfolio responses.
-- `app/api/agent/*` and `app/api/contact/*` expose server-only API behavior.
-- `components/sections/*` and `components/projects/*` render the portfolio experience.
-
-## Folder Structure
+## Repository structure
 
 ```text
 app/                 App Router pages, API routes, sitemap, robots, errors
@@ -114,31 +103,14 @@ public/              Open Graph images, profile assets, fonts, resume PDFs
 types/               Shared TypeScript types
 ```
 
-## Challenges
+## Documentation
 
-- Keeping the website, GitHub profile, project READMEs, and assistant responses consistent.
-- Avoiding overclaiming while still making the AI engineering direction clear.
-- Balancing animation polish with mobile readability and recruiter scan speed.
-- Maintaining Arabic and English content without breaking SEO or typography.
-
-## Future Work
-
-- Add project-page screenshots and architecture diagrams for every project page.
-- Add automated link checks for external project, GitHub, LinkedIn, and resume URLs.
-- Add e2e tests for navigation, resume downloads, contact form validation, and assistant open/close behavior.
-- Add a public portfolio changelog so recruiters can see active maintenance.
-- Connect repository descriptions and topics on GitHub to match the website taxonomy.
+[Architecture](docs/architecture.md) · [Case study](docs/case-study.md) · [Engineering principles](docs/engineering-principles.md) · [Technical decisions](docs/technical-decisions.md) · [Reviewer guide](docs/reviewer-guide.md) · [Branding assets](assets/branding/README.md)
 
 ## License
 
 No license file is currently present. All rights are reserved by default unless a license is added.
 
-## Author
-
-Abdulelah Alkhathami
-
 ## Contact
 
-- Website: [abdulelah.de](https://www.abdulelah.de)
-- GitHub: [Abdulel3h](https://github.com/Abdulel3h)
-- Email: [me@abdulelah.de](mailto:me@abdulelah.de)
+**Abdulelah Alkhathami** · [Portfolio](https://abdulelah.de) · [GitHub](https://github.com/Abdulel3h) · [Email](mailto:me@abdulelah.de)
