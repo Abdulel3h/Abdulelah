@@ -26,10 +26,11 @@ export const config = {
 export async function proxy(request: NextRequest) {
   const host = request.headers.get("host")?.toLowerCase() ?? "";
 
-  // The Vercel deployment domain must not behave as a second, indexable copy
-  // of the site. Cloning nextUrl (rather than composing a string) keeps the
+  // Redirect only the stable production alias. Preview deployment domains must
+  // remain reachable so feature branches can be reviewed before they are
+  // merged. Cloning nextUrl (rather than composing a string) keeps the
   // destination host fixed, so a crafted path can never redirect off-site.
-  if (host === "abdulelah.vercel.app" || host.endsWith(".vercel.app")) {
+  if (host === "abdulelah.vercel.app") {
     const canonicalUrl = request.nextUrl.clone();
 
     canonicalUrl.protocol = "https:";
