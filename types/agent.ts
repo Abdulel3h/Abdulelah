@@ -40,7 +40,8 @@ export type AgentProjectName =
   | "Absher Insight AI"
   | "Qanouni"
   | "Medad"
-  | "Virtual Astronauts";
+  | "Virtual Astronauts"
+  | "Stadium";
 
 export type AgentIntent =
   | "project_explanation"

@@ -76,7 +76,9 @@ const PORTFOLIO_NAMES = [
   "قانوني",
   "medad",
   "مداد",
-  "virtual astronauts"
+  "virtual astronauts",
+  "stadium",
+  "الملعب"
 ];
 
 const PORTFOLIO_TERMS = [

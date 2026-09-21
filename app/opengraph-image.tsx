@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Abdulelah Alkhathami — builder of intelligent products";
+export const alt = "Abdulelah Alkhathami — AI Product Builder: agents, RAG and Arabic AI";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -71,8 +71,8 @@ export default function OpengraphImage() {
               fontFamily: "sans-serif"
             }}
           >
-            Software, AI, and considered design — turning real problems into
-            systems people actually use.
+            AI Product Builder · Agents, RAG &amp; Arabic AI — real problems
+            turned into working systems.
           </div>
         </div>
 
@@ -86,7 +86,7 @@ export default function OpengraphImage() {
             fontFamily: "sans-serif"
           }}
         >
-          <div>7 products · GitHub-backed · Riyadh</div>
+          <div>7 applied AI projects · 3 with public code · Riyadh</div>
           <div style={{ color: "#c9a75c" }}>abdulelah.de</div>
         </div>
       </div>

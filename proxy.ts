@@ -7,21 +7,23 @@ import {
   verifyDalAccessToken
 } from "@/lib/security/dal-access";
 import { getSignedTokenRemainingSeconds } from "@/lib/security/signed-token";
+import { resolveLocaleRoute } from "@/lib/i18n/routing";
 
 const CANONICAL_HOSTNAME = "www.abdulelah.de";
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"]
+  matcher: ["/((?!_next/static|_next/image|_vercel|favicon.ico).*)"]
 };
 
 /**
  * Runs ahead of every page and API request (Next 16 renamed this convention
  * from `middleware` to `proxy`).
  *
- * Two jobs: keep the Vercel deployment domain from becoming a second indexable
- * copy of the site, and exchange a signed Dal access link for an HttpOnly
- * cookie. The authorization decision itself is re-checked in the page and the
- * download route, so it never depends on this layer alone.
+ * Three jobs: keep the Vercel deployment domain from becoming a second
+ * indexable copy of the site, exchange a signed Dal access link for an
+ * HttpOnly cookie, and map locale routes — English pages keep their
+ * unprefixed URLs (rewritten internally to /en/...), Arabic lives under /ar,
+ * and explicit /en/... URLs redirect to the unprefixed canonical form.
  */
 export async function proxy(request: NextRequest) {
   const host = request.headers.get("host")?.toLowerCase() ?? "";
@@ -65,6 +67,32 @@ export async function proxy(request: NextRequest) {
 
       return response;
     }
+  }
+
+  const route = resolveLocaleRoute(pathname);
+
+  if (route.action === "redirect") {
+    const url = request.nextUrl.clone();
+
+    url.pathname = route.pathname;
+
+    return NextResponse.redirect(url, 308);
+  }
+
+  if (route.action === "not-found") {
+    const url = request.nextUrl.clone();
+
+    url.pathname = route.pathname;
+
+    return NextResponse.rewrite(url, { status: 404 });
+  }
+
+  if (route.action === "rewrite") {
+    const url = request.nextUrl.clone();
+
+    url.pathname = route.pathname;
+
+    return NextResponse.rewrite(url);
   }
 
   return NextResponse.next();

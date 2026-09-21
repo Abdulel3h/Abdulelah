@@ -55,6 +55,11 @@ const actions = {
     href: "/projects/virtual-astronauts",
     type: "internal"
   },
+  stadium: {
+    label: "View Stadium",
+    href: "/projects/stadium",
+    type: "internal"
+  },
   projects: {
     label: "View All Projects",
     href: "/projects",
@@ -183,7 +188,8 @@ const projectViewActions: Record<string, AgentAction> = {
   "absher-insight-ai": actions.absher,
   qanouni: actions.qanouni,
   medad: actions.medad,
-  "virtual-astronauts": actions.virtualAstronauts
+  "virtual-astronauts": actions.virtualAstronauts,
+  stadium: actions.stadium
 };
 
 function createPromptAction(
@@ -366,6 +372,10 @@ const projectEvidenceMatchers = [
   {
     action: actions.virtualAstronauts,
     terms: ["virtual astronauts", "immersive learning"]
+  },
+  {
+    action: actions.stadium,
+    terms: ["stadium", "computer vision", "yolo", "crowd"]
   }
 ];
 
@@ -618,8 +628,8 @@ export function getAgentActions(message: string): AgentAction[] {
     add(actions.engineerResume, actions.specialistResume, actions.resume);
   }
 
-  if (includesAny(normalized, ["github", "code", "repository"])) {
-    add(actions.github);
+  if (includesAny(normalized, ["github", "code", "repository", "كود", "مستودع"])) {
+    add(actions.chatub, actions.absher, actions.stadium, actions.github);
   }
 
   if (includesAny(normalized, ["linkedin"])) {

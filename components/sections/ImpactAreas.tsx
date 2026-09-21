@@ -1,28 +1,36 @@
 import { DomainsShowcase } from "@/components/sections/DomainsShowcase";
-import { Reveal } from "@/components/ui/Reveal";
+import { localizeHref, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
-export function ImpactAreas() {
+export function ImpactAreas({ locale }: { locale: Locale }) {
+  const t = getDictionary(locale).home.range;
+
   return (
-    <section className="section-space section-band">
+    <section className="section-space section-band" aria-labelledby="range-title">
       <div className="container-shell">
-        <Reveal>
-          <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
-            <div>
-              <p className="eyebrow mb-5">Range</p>
-              <h2 className="font-display text-3xl font-medium leading-tight tracking-[-0.01em] text-paper sm:text-4xl">
-                One way of thinking, across very different problems.
-              </h2>
-            </div>
-            <p className="max-w-md text-base leading-8 text-paper-dim lg:pb-2">
-              From a classroom to a city&apos;s heat map to a government&apos;s
-              security desk — the domain changes, the care doesn&apos;t.
-            </p>
+        <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
+          <div>
+            <p className="eyebrow mb-5">{t.eyebrow}</p>
+            <h2
+              id="range-title"
+              className="font-display text-3xl font-medium leading-tight tracking-[-0.01em] text-paper sm:text-4xl"
+            >
+              {t.title}
+            </h2>
           </div>
-        </Reveal>
+          <p className="max-w-md text-base leading-8 text-paper-dim lg:pb-2">{t.intro}</p>
+        </div>
 
-        <Reveal delay={0.08} className="mt-12">
-          <DomainsShowcase />
-        </Reveal>
+        <div className="mt-12">
+          <DomainsShowcase
+            exploreLabel={t.explore}
+            domains={t.domains.map((domain) => ({
+              label: domain.label,
+              blurb: domain.blurb,
+              href: localizeHref(`/projects/${domain.slug}`, locale)
+            }))}
+          />
+        </div>
       </div>
     </section>
   );

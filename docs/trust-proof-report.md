@@ -7,6 +7,22 @@ Verification rule: a repository is linked on the public site **only** at ≥90%
 confidence, after a quality audit, and only if it is suitable for public
 presentation. Nothing is fabricated.
 
+## September 2026 status audit
+
+The homepage claim "7 products shipped" was not supported by the evidence and has been replaced with "7 applied AI projects · 3 with public code". Statuses now shown on every card and case study:
+
+| Project | Status | Evidence shown |
+|---|---|---|
+| ChatUB | Graduation project (working prototype, not deployed to students) | Public repository + README screenshot |
+| Absher Insight AI | Hackathon prototype (synthetic data, not affiliated with Absher) | Public repository + README screenshots |
+| Stadium | Working prototype (solo, not calibrated for a venue) | Public repository + README screenshot |
+| Althil | Hackathon prototype | Program record; code private, not linked |
+| Qanouni | Concept (AthkaU Top 30 idea) | Program record |
+| Virtual Astronauts | Concept (AthkaU Top 30 idea) | Program record |
+| Medad | Concept | Private project evidence; nothing linked |
+
+The `midad-landing`, `example` and `architect-of-intelligence` repositories referenced below are no longer public (GitHub API returns 404), so none of them is linked.
+
 ## Final-phase update (launch readiness)
 - **Stadium** was promoted to a real project and linked → `github.com/Abdulel3h/Stadium` (100% — his own solo build). So **3 repos are now linked**: ChatUB, Absher Insight AI, Stadium.
 - Public proof shown = only verified GitHub source links (Evidence section renders only when a repo exists). No demo links shown (none verified). No fabricated metrics — project "metrics" are qualitative signals, not invented numbers.

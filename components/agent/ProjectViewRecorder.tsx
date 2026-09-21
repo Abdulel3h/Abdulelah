@@ -2,9 +2,13 @@
 
 import { useEffect } from "react";
 import { recordProjectView } from "@/lib/agent/session-memory";
+import { trackEvent } from "@/lib/analytics";
 
-/** Records (visit-only) that this project was explored, so the guide can later
- * suggest comparisons and a reading path. Renders nothing. */
+/**
+ * Records (visit-only, sessionStorage) that this case study was opened so the
+ * guide can suggest a reading path, and sends one anonymous "project_opened"
+ * analytics event. Renders nothing.
+ */
 export function ProjectViewRecorder({
   slug,
   name,
@@ -16,6 +20,7 @@ export function ProjectViewRecorder({
 }) {
   useEffect(() => {
     recordProjectView({ slug, name, category });
+    trackEvent("project_opened", { project: slug });
   }, [slug, name, category]);
 
   return null;

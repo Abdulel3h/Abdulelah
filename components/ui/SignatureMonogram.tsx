@@ -1,59 +1,59 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import { ease } from "@/lib/motion";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { cn } from "@/lib/utils";
 
-const paths = [
-  "M4 37 L14 6 L24 37",
-  "M24 37 L34 6 L44 37",
-  "M8 25 H20",
-  "M28 25 H40"
-];
+const paths = ["M4 37 L14 6 L24 37", "M24 37 L34 6 L44 37", "M8 25 H20", "M28 25 H40"];
 
 /**
- * The AA monogram, drawn the way a signature is written — stroke by stroke.
- * Draws as it scrolls into view; pass `play` to draw immediately on mount (e.g.
- * inside a portal/overlay). Under reduced motion it simply appears, fully formed.
+ * The AA monogram, drawn stroke by stroke like a signature (CSS stroke
+ * animation). It is fully drawn in the server HTML; the drawing only replays
+ * when it scrolls into view — or immediately with `play` — and never under
+ * reduced motion.
  */
-export function SignatureMonogram({
-  className,
-  play = false
-}: {
-  className?: string;
-  play?: boolean;
-}) {
-  const reduce = useReducedMotion();
+export function SignatureMonogram({ className, play = false }: { className?: string; play?: boolean }) {
+  const ref = useRef<SVGSVGElement>(null);
+  const [state, setState] = useState<"drawn" | "armed" | "play">(play ? "play" : "drawn");
+
+  useEffect(() => {
+    const element = ref.current;
+
+    if (play || !element || typeof IntersectionObserver === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (element.getBoundingClientRect().top < window.innerHeight) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setState("play");
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "0px 0px -12% 0px" }
+    );
+
+    const frame = window.requestAnimationFrame(() => setState("armed"));
+
+    observer.observe(element);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
+  }, [play]);
 
   return (
     <svg
+      ref={ref}
       viewBox="0 0 48 42"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
-      className={className}
+      className={cn("signature", state === "armed" && "signature-armed", state === "play" && "signature-play", className)}
     >
-      <g
-        stroke="currentColor"
-        strokeWidth={2.2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
+      <g stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
         {paths.map((d, index) => (
-          <motion.path
-            key={d}
-            d={d}
-            initial={reduce ? false : { pathLength: 0, opacity: 0 }}
-            animate={play && !reduce ? { pathLength: 1, opacity: 1 } : undefined}
-            whileInView={
-              play || reduce ? undefined : { pathLength: 1, opacity: 1 }
-            }
-            viewport={play ? undefined : { once: true, margin: "-12%" }}
-            transition={
-              reduce
-                ? undefined
-                : { duration: 0.85, delay: index * 0.22, ease: ease.out }
-            }
-          />
+          <path key={d} d={d} pathLength={1} style={{ "--sig-delay": `${index * 0.22}s` } as CSSProperties} />
         ))}
       </g>
     </svg>

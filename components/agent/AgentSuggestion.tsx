@@ -12,10 +12,10 @@ export function AgentSuggestion({
       type="button"
       disabled={disabled}
       onClick={() => onSelect(children)}
-      className="focus-ring inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-left text-xs font-medium text-paper-dim transition hover:border-accent/35 hover:bg-accent/[0.08] hover:text-paper disabled:cursor-not-allowed disabled:opacity-50"
+      className="focus-ring inline-flex min-h-10 items-center gap-2 rounded-full border border-white/[0.14] bg-white/[0.04] px-3.5 py-1.5 text-start text-xs font-medium text-paper transition hover:border-accent/40 hover:bg-accent/[0.08] disabled:cursor-not-allowed disabled:opacity-60"
     >
       <span className="h-px w-3 shrink-0 bg-accent/70" aria-hidden="true" />
-      {children}
+      <span dir="auto">{children}</span>
     </button>
   );
 }

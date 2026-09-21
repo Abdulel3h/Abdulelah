@@ -19,11 +19,12 @@ Every portfolio fact lives in typed data modules. Pages, project cards, SEO meta
 
 ## How it works
 
-1. **One source of facts.** `data/site.ts` holds identity, links, SEO keywords, contact addresses and resume links; `data/projects.ts` holds project descriptions, role, technologies, features and impact copy.
+1. **One source of facts.** `data/site.ts` holds identity, links and resume files; `data/projects.ts` holds every project in English and Arabic with its verified status, evidence, role, constraints, decisions, outcome and limitations.
 2. **Pages render from it.** App Router pages and components compose those typed facts into the site.
 3. **The assistant is constrained by it.** `lib/agent/*` maps recruiter and visitor questions into portfolio responses drawn from the same data.
 4. **Integrations stay server-side.** `app/api/agent/*` and `app/api/contact/*` expose server-only behaviour; keys never reach the browser.
-5. **Discoverability is generated, not hand-kept.** Sitemap, robots, JSON-LD and Open Graph assets derive from the same content.
+5. **Discoverability is generated, not hand-kept.** Sitemap (with hreflang alternates), robots, JSON-LD and Open Graph metadata derive from the same content.
+6. **Two languages, one set of routes.** Pages live in `app/[locale]`; English keeps its unprefixed URLs (`/about`) and Arabic lives under `/ar` (`/ar/about`). `proxy.ts` rewrites, redirects `/en/...` to the canonical URL, and answers unknown URLs with a server-rendered 404.
 
 ## Architecture
 
@@ -38,14 +39,15 @@ Browser
 
 ## Verified capabilities
 
-- AI-engineer homepage with proof-oriented project positioning
-- Project case-study pages for ChatUB, Althil, Absher Insight AI, Qanouni, Medad and Virtual Astronauts
-- Role-specific resume downloads for AI Engineer and AI Specialist paths
-- Agent Abdulelah, an embedded portfolio assistant with recruiter-mode responses
-- Blog and Arabic blog content on AI agents, university AI, cloud AI and responsible AI UX
-- SEO metadata, JSON-LD structured data, sitemap, robots and Open Graph assets
-- Responsive dark interface with reduced-motion handling and mobile navigation
-- Contact route with email delivery via Resend when configured
+- Full English and Arabic versions of every public page (`lang`/`dir`, localized metadata, canonical + hreflang, bilingual sitemap)
+- Seven case studies — ChatUB, Absher Insight AI, Stadium, Althil, Qanouni, Virtual Astronauts, Medad — each with a standard evidence panel: status, evidence, what is not claimed, limitations and next steps
+- Evidence-based statuses: four working prototypes (three with public repositories) and three concepts; nothing is presented as shipped or in production
+- Two role-specific CV downloads (AI Engineer, AI Specialist) on the Resume page
+- Abdulelah's guide: a modal, bilingual portfolio assistant grounded in the same data, loaded on demand
+- Site search (Ctrl/⌘ K), a "More" disclosure menu and a mobile menu with correct focus management
+- Contact form with a real POST path (JSON, or a same-origin native form post without JavaScript), shared server/client validation and email delivery via Resend
+- Privacy-conscious analytics: cookieless Vercel Web Analytics page views, anonymous journey events and real-user LCP/INP/CLS
+- WCAG 2.2 AA-oriented UI: skip link, visible focus, contrast-checked tokens, reduced-motion support, no hover-only interactions
 
 ## Screenshot
 
@@ -55,7 +57,7 @@ Captured from the live portfolio homepage.
 
 ## Tech stack
 
-Next.js 16 App Router · React 18 · TypeScript · Tailwind CSS · Framer Motion · Radix UI primitives · lucide-react · Vercel Analytics · Resend · DeepSeek-compatible chat completion API
+Next.js 16 App Router (React 19 runtime) · TypeScript · Tailwind CSS · Radix UI Dialog · cmdk · lucide-react · Vercel Web Analytics · Resend · DeepSeek-compatible chat completion API · Vitest · Playwright + axe-core
 
 ## Quick start
 
@@ -68,9 +70,11 @@ npm run dev
 Open `http://localhost:3000`. Other scripts:
 
 ```bash
-npm run lint
+npm run lint        # ESLint (Next core-web-vitals + TypeScript rules)
+npm run typecheck   # tsc --noEmit
+npm test            # Vitest unit tests (routing, content evidence, contact validation, SEO)
 npm run build
-npm run start
+npm run test:e2e    # Playwright + axe against the production build (uses the installed Chrome)
 ```
 
 Optional environment variables:
@@ -88,9 +92,10 @@ The assistant and contact delivery are optional: without keys the site runs, and
 
 ## Limitations
 
-- **Screenshot coverage.** Project pages still need per-project captures and architecture diagrams.
-- **Test coverage.** No end-to-end tests yet for navigation, resume downloads, contact validation or assistant open/close behaviour.
-- **Link checking.** External project, GitHub, LinkedIn and resume URLs are not yet checked automatically.
+- **Project visuals are concept sketches.** The code-drawn previews on the site are labelled "Concept visualization"; real screenshots live in the public project repositories and are linked from each evidence panel.
+- **Althil, Qanouni, Medad and Virtual Astronauts have no public code.** Their case studies say so and link only to program records.
+- **Lab LCP.** The hero now paints its text immediately (observed LCP equals FCP), but Lighthouse's simulated mobile LCP still charges the framework JavaScript that loads before first paint.
+- **No formatter.** Style is enforced by ESLint; there is no Prettier configuration.
 
 ## Repository structure
 
@@ -101,11 +106,13 @@ data/                Portfolio facts, projects, skills, achievements, blog data
 lib/                 Metadata, structured data, contact, rate limit, agent logic
 public/              Open Graph images, profile assets, fonts, resume PDFs
 types/               Shared TypeScript types
+tests/unit           Vitest unit tests
+tests/e2e            Playwright browser, keyboard, accessibility and link tests
 ```
 
 ## Documentation
 
-[Architecture](docs/architecture.md) · [Case study](docs/case-study.md) · [Engineering principles](docs/engineering-principles.md) · [Technical decisions](docs/technical-decisions.md) · [Reviewer guide](docs/reviewer-guide.md) · [Branding assets](assets/branding/README.md)
+[Content guidelines](docs/content-guidelines.md) · [Architecture](docs/architecture.md) · [Case study](docs/case-study.md) · [Engineering principles](docs/engineering-principles.md) · [Technical decisions](docs/technical-decisions.md) · [Reviewer guide](docs/reviewer-guide.md) · [Branding assets](assets/branding/README.md)
 
 ## License
 

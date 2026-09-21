@@ -99,11 +99,23 @@ const nextConfig = {
   outputFileTracingIncludes: {
     "/api/dal-cv": ["./private/dal/**"]
   },
+  async redirects() {
+    return [
+      // The journey now lives inside the About story ("The path").
+      { source: "/journey", destination: "/about", permanent: true },
+      { source: "/ar/journey", destination: "/ar/about", permanent: true }
+    ];
+  },
   async headers() {
     return [
       {
         source: "/(.*)",
         headers: securityHeaders
+      },
+      {
+        // Self-hosted Arabic font files never change in place.
+        source: "/fonts/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }]
       },
       {
         source: "/dal-accelerator-abd-7xq29",

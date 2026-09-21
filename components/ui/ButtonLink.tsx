@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 
@@ -12,6 +12,9 @@ type ButtonLinkProps = {
   showArrow?: boolean;
   download?: boolean;
   external?: boolean;
+  /** Screen-reader note for external links, e.g. "opens in a new tab". */
+  externalLabel?: string;
+  onClick?: () => void;
 };
 
 export function buttonLinkClassName(
@@ -30,9 +33,14 @@ export function ButtonLink({
   className,
   showArrow,
   download,
-  external
+  external,
+  externalLabel,
+  onClick
 }: ButtonLinkProps) {
   const styles = buttonLinkClassName(variant, className);
+  const arrow = showArrow ? (
+    <ArrowRight className="h-4 w-4 rtl:-scale-x-100" aria-hidden="true" />
+  ) : null;
 
   if (external || download) {
     return (
@@ -42,17 +50,19 @@ export function ButtonLink({
         download={download}
         target={external ? "_blank" : undefined}
         rel={external ? "noopener noreferrer" : undefined}
+        onClick={onClick}
       >
         {children}
-        {showArrow ? <ArrowRight className="h-4 w-4" aria-hidden="true" /> : null}
+        {external ? <ArrowUpRight className="external-mark" aria-hidden="true" /> : arrow}
+        {external && externalLabel ? <span className="sr-only">({externalLabel})</span> : null}
       </a>
     );
   }
 
   return (
-    <Link href={href} className={styles}>
+    <Link href={href} className={styles} onClick={onClick}>
       {children}
-      {showArrow ? <ArrowRight className="h-4 w-4" aria-hidden="true" /> : null}
+      {arrow}
     </Link>
   );
 }

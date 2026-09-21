@@ -1,6 +1,6 @@
 import type { BlogPost } from "@/data/blog";
 import { siteConfig } from "@/data/site";
-import { ogImage } from "@/lib/metadata";
+import { localizeHref, type Locale } from "@/lib/i18n/config";
 import { absoluteUrl } from "@/lib/utils";
 
 const PERSON_ID = `${siteConfig.url}/#person`;
@@ -14,14 +14,7 @@ export const personJsonLd = {
   url: siteConfig.url,
   email: `mailto:${siteConfig.email}`,
   image: absoluteUrl(siteConfig.assets.profileImage),
-  jobTitle: [
-    "AI Engineer",
-    "LLM Engineer",
-    "Generative AI Engineer",
-    "AI Automation Engineer",
-    "Applied Machine Learning Engineer",
-    "Cloud AI Engineer"
-  ],
+  jobTitle: ["AI Product Builder", "AI Engineer", "AI Solutions Specialist"],
   address: {
     "@type": "PostalAddress",
     addressLocality: "Riyadh",
@@ -31,39 +24,38 @@ export const personJsonLd = {
     "@type": "CollegeOrUniversity",
     name: "University of Bisha"
   },
-  sameAs: [
-    siteConfig.social.github,
-    siteConfig.social.linkedin,
-    siteConfig.url
-  ],
+  sameAs: [siteConfig.social.github, siteConfig.social.linkedin],
   knowsAbout: [
     "AI Agents",
-    "RAG Systems",
+    "Retrieval-Augmented Generation",
     "LLM Applications",
-    "Generative AI",
-    "AI Automation",
-    "Arabic AI Systems",
-    "Cloud AI",
-    "NLP",
-    "Intelligent Systems",
-    "Cybersecurity AI",
+    "Arabic Natural Language Processing",
+    "Computer Vision",
+    "Security Analytics",
     "Google Cloud",
     "Azure AI"
   ]
 };
 
-export const websiteJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: "Abdulelah Alkhathami Portfolio",
-  alternateName: [siteConfig.brand, siteConfig.arabicName],
-  url: siteConfig.url,
-  description: siteConfig.description,
-  inLanguage: ["en", "ar"],
-  publisher: { "@id": PERSON_ID }
-};
+export function websiteJsonLd(locale: Locale) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${siteConfig.url}/#website`,
+    name: locale === "ar" ? siteConfig.arabicName : siteConfig.name,
+    alternateName: locale === "ar" ? siteConfig.name : siteConfig.arabicName,
+    url: absoluteUrl(localizeHref("/", locale)),
+    description:
+      locale === "ar"
+        ? "موقع عبدالإله الخثعمي: مشاريع الذكاء الاصطناعي التطبيقية وأدلتها وسيرته الذاتية."
+        : siteConfig.description,
+    inLanguage: locale,
+    publisher: { "@id": PERSON_ID }
+  };
+}
 
-export function breadcrumbJsonLd(items: { name: string; path: string }[]) {
+/** `items` use locale-free paths; they are localized here. */
+export function breadcrumbJsonLd(items: { name: string; path: string }[], locale: Locale = "en") {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -71,30 +63,34 @@ export function breadcrumbJsonLd(items: { name: string; path: string }[]) {
       "@type": "ListItem",
       position: index + 1,
       name: item.name,
-      item: absoluteUrl(item.path)
+      item: absoluteUrl(localizeHref(item.path, locale))
     }))
   };
 }
 
-export function blogPostingJsonLd(post: BlogPost) {
-  const url = absoluteUrl(`/blog/${post.slug}`);
+export function blogPostingJsonLd(
+  post: BlogPost,
+  view: { title: string; excerpt: string; category: string; tags: string[] },
+  locale: Locale
+) {
+  const url = absoluteUrl(localizeHref(`/blog/${post.slug}`, locale));
 
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    headline: post.title,
-    description: post.excerpt,
+    headline: view.title,
+    description: view.excerpt,
     url,
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": url
     },
-    image: absoluteUrl(ogImage),
+    image: absoluteUrl(siteConfig.assets.ogImage),
     datePublished: post.date,
     dateModified: post.date,
-    inLanguage: "en",
-    articleSection: post.category,
-    keywords: post.tags.join(", "),
+    inLanguage: locale,
+    articleSection: view.category,
+    keywords: view.tags.join(", "),
     author: {
       "@type": "Person",
       "@id": PERSON_ID,
@@ -107,5 +103,23 @@ export function blogPostingJsonLd(post: BlogPost) {
       name: siteConfig.name,
       url: siteConfig.url
     }
+  };
+}
+
+export function projectJsonLd(
+  project: { name: string; title: string; summary: string; year: string; slug: string; links: { github?: string } },
+  locale: Locale
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: project.title,
+    alternateName: project.name,
+    description: project.summary,
+    url: absoluteUrl(localizeHref(`/projects/${project.slug}`, locale)),
+    dateCreated: project.year,
+    inLanguage: locale,
+    creator: { "@id": PERSON_ID },
+    ...(project.links.github ? { sameAs: [project.links.github] } : {})
   };
 }

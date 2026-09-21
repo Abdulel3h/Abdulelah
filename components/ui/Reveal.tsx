@@ -1,35 +1,87 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import type { ReactNode } from "react";
-import { duration, ease, revealViewport } from "@/lib/motion";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+
+type RevealState = "visible" | "hidden";
 
 /**
- * Reusable scroll reveal — a quiet fade-up as content enters the viewport.
- * Fully disabled under prefers-reduced-motion.
+ * Scroll reveal that can never hide content by accident.
+ *
+ * The server renders everything visible. After hydration, only an element
+ * that is still below the fold is hidden, and it comes back when it scrolls
+ * into view, when anything inside it receives keyboard focus, or after a
+ * short safety timeout — so a missing IntersectionObserver, a slow device or
+ * a failed script can never leave text invisible. Reduced motion skips the
+ * effect entirely.
  */
 export function Reveal({
   children,
   delay = 0,
-  y = 24,
-  className
+  className,
+  as: Tag = "div"
 }: {
   children: ReactNode;
   delay?: number;
-  y?: number;
   className?: string;
+  as?: "div" | "li" | "section" | "article";
 }) {
-  const reduceMotion = useReducedMotion();
+  const ref = useRef<HTMLElement | null>(null);
+  const [state, setState] = useState<RevealState>("visible");
+
+  useEffect(() => {
+    const element = ref.current;
+
+    if (
+      !element ||
+      typeof IntersectionObserver === "undefined" ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
+    const rect = element.getBoundingClientRect();
+
+    // Already on screen (or above it): never hide what the reader can see.
+    if (rect.top < window.innerHeight * 0.92) {
+      return;
+    }
+
+    setState("hidden");
+
+    const show = () => setState("visible");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          show();
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "0px 0px -8% 0px" }
+    );
+    const fallback = window.setTimeout(show, 6000);
+
+    observer.observe(element);
+    element.addEventListener("focusin", show);
+
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(fallback);
+      element.removeEventListener("focusin", show);
+    };
+  }, []);
+
+  const style = delay ? ({ "--reveal-delay": `${delay}s` } as CSSProperties) : undefined;
 
   return (
-    <motion.div
+    <Tag
+      ref={(node: HTMLElement | null) => {
+        ref.current = node;
+      }}
+      data-reveal={state}
+      style={style}
       className={className}
-      initial={reduceMotion ? false : { opacity: 0, y }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-      viewport={revealViewport}
-      transition={{ duration: duration.slow, delay, ease: ease.out }}
     >
       {children}
-    </motion.div>
+    </Tag>
   );
 }
