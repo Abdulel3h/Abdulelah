@@ -1,5 +1,5 @@
 import { getBlogPostBySlug } from "@/data/blog";
-import { getProjectBySlug } from "@/data/projects";
+import { getProject, getProjectBySlug, projectCounts } from "@/data/projects";
 import { siteConfig } from "@/data/site";
 import {
   EMPTY_AGENT_SESSION_CONTEXT,
@@ -113,40 +113,48 @@ function getProjectFollowUpResponse(
   }
 
   if (containsArabic(message)) {
+    const arabic = getProject(profile.slug, "ar");
+
+    if (!arabic) {
+      return null;
+    }
+
     if (kind === "technologies") {
       return [
         `التقنيات المستخدمة في ${profile.shortName}:`,
-        ...project.technologies.map((technology) => `- ${technology}`)
+        ...arabic.technologies.map((technology) => `- ${technology}`),
+        ...(arabic.technologiesNote ? ["", arabic.technologiesNote] : [])
       ].join("\n");
     }
 
     if (kind === "role") {
       return [
-        `دور عبدالإله في ${profile.shortName}: ${project.role}.`,
+        `دور عبدالإله في ${profile.shortName}: ${arabic.role}.`,
         "",
-        ...project.responsibilities
-          .slice(0, 4)
-          .map((responsibility) => `- ${responsibility}`)
+        ...arabic.responsibilities.slice(0, 4).map((responsibility) => `- ${responsibility}`)
       ].join("\n");
     }
 
     if (kind === "impact") {
-      return `أهمية ${profile.shortName}: ${project.impact}`;
+      return `ما تحقق في ${profile.shortName}: ${arabic.outcome}`;
     }
 
     if (kind === "technical") {
       return [
-        `شرح تقني مختصر لمشروع ${profile.shortName}:`,
-        ...project.technicalApproach.map((step) => `- ${step}`)
+        `شرح تقني مختصر لـ ${profile.shortName}:`,
+        ...arabic.approach.map((step) => `- ${step}`),
+        "",
+        `الحالة: ${arabic.statusDetail}`
       ].join("\n");
     }
 
     return [
-      `ملخص ${profile.shortName} للريكروتر:`,
-      `- المجال: ${project.category}`,
-      `- دور عبدالإله: ${project.role}`,
-      `- أبرز التقنيات: ${project.technologies.join(", ")}`,
-      `- الأثر: ${project.impact}`,
+      `ملخص ${profile.shortName} لمسؤول التوظيف:`,
+      `- المجال: ${arabic.domain}`,
+      `- دور عبدالإله: ${arabic.role}`,
+      `- الحالة: ${arabic.statusDetail}`,
+      `- أبرز التقنيات: ${arabic.technologies.join("، ")}`,
+      `- النتيجة: ${arabic.outcome}`,
       `- أنسب مسار وظيفي: ${profile.bestJobFit}`
     ].join("\n");
   }
@@ -250,19 +258,40 @@ function getArabicProjectComparisonResponse(profiles: ProjectGuideProfile[]) {
     `مقارنة المشاريع: ${profiles.map((profile) => profile.shortName).join(" مقابل ")}`,
     "",
     ...profiles.flatMap((profile, index) => {
-      const project = getProjectBySlug(profile.slug);
+      const project = getProject(profile.slug, "ar");
 
       return project
         ? [
             profile.shortName,
-            `- المجال: ${project.category}`,
+            `- المجال: ${project.domain}`,
             `- دور عبدالإله: ${project.role}`,
-            `- التركيز التقني: ${project.technologies.slice(0, 5).join(", ")}`,
-            `- الأثر: ${project.impact}`,
+            `- الحالة: ${project.statusDetail}`,
+            `- التقنيات: ${project.technologies.slice(0, 5).join("، ")}`,
             ...(index < profiles.length - 1 ? [""] : [])
           ]
         : [];
     })
+  ].join("\n");
+}
+
+function getArabicProjectExplanation(profile: ProjectGuideProfile) {
+  const project = getProject(profile.slug, "ar");
+
+  if (!project) {
+    return "";
+  }
+
+  return [
+    `${project.name} — ${project.descriptor}`,
+    "",
+    project.summary,
+    "",
+    `- دور عبدالإله: ${project.role}`,
+    `- الحالة: ${project.statusDetail}`,
+    `- التقنيات: ${project.technologies.join("، ")}`,
+    `- النتيجة الموثّقة: ${project.outcome}`,
+    `- أبرز القيود: ${project.limitations[0] ?? ""}`,
+    project.links.github ? "- الكود منشور في مستودع عام على GitHub." : "- لا يوجد كود منشور لهذا المشروع."
   ].join("\n");
 }
 
@@ -314,7 +343,19 @@ function getArabicFallbackAgentResponse(message: string) {
     return `للاستشارات أو الأعمال أو العمل الحر، يمكنك التواصل مع عبدالإله مباشرة عبر ${getContactEmail("business")}. يبني عبدالإله حلول ذكاء اصطناعي تطبيقية ويقدر يحدد الحل المناسب لاحتياجك. كما يمكنك إرسال رسالة عبر نموذج التواصل. ستجد أزرار التواصل بالأسفل.`;
   }
 
-  if (includesAny(normalized, ["تواصل", "اتواصل", "ايميل", "لينكد", "github"])) {
+  if (includesAny(normalized, ["كود", "مستودع", "github", "جيت هب", "المصدر"])) {
+    return [
+      `لدى عبدالإله ${projectCounts.publicRepositories} مشاريع بكود منشور في مستودعات عامة على GitHub:`,
+      "",
+      "- ChatUB: مساعد أكاديمي عربي يعمل محليًا (مشروع تخرج، نموذج أولي عامل)",
+      "- Absher Insight AI: رصد مخاطر سلوكية بقواعد قابلة للتفسير على بيانات اصطناعية (نموذج أولي في هاكاثون)",
+      "- Stadium: مراقبة الحشود عند بوابات الملاعب بالرؤية الحاسوبية (نموذج أولي عامل بناه منفردًا)",
+      "",
+      "أما Althil فكوده غير منشور، وQanouni وVirtual Astronauts وMedad تصوّرات دون كود منشور."
+    ].join("\n");
+  }
+
+  if (includesAny(normalized, ["تواصل", "اتواصل", "ايميل", "لينكد"])) {
     const channel = resolveContactChannel(message);
     const routedEmail = getContactEmail(channel);
     const channelIntro =
@@ -335,69 +376,31 @@ function getArabicFallbackAgentResponse(message: string) {
     ].join("\n");
   }
 
-  if (includesAny(normalized, ["chatub", "شات"])) {
-    return [
-      "ChatUB هو مشروع تخرج قاده عبدالإله لبناء مساعد أكاديمي محلي لطلاب جامعة بيشة.",
-      "",
-      "يركز المشروع على:",
-      "- استخدام المصادر الأكاديمية الرسمية",
-      "- تطبيقات NLP و LLMs",
-      "- البحث الذكي والإجابات المرتبطة بالسياق",
-      "- الخصوصية والموثوقية",
-      "",
-      "أهمية المشروع أنه يوضح قدرة عبدالإله على تحويل احتياج جامعي حقيقي إلى نظام AI عملي."
-    ].join("\n");
-  }
+  const mentioned = getMentionedProjectProfiles(message)[0];
 
-  if (includesAny(normalized, ["althil", "الظل"])) {
-    return [
-      "Althil من أقوى أمثلة عبدالإله في Cloud AI والاستدامة.",
-      "",
-      "يستخدم المشروع خدمات Google Cloud مثل:",
-      "- Cloud Run",
-      "- BigQuery",
-      "- Cloud Storage",
-      "- Vertex AI",
-      "",
-      "الهدف هو دعم قرارات تحسين الراحة الحرارية في المدن باستخدام البيانات والتحليل الذكي."
-    ].join("\n");
-  }
-
-  if (includesAny(normalized, ["absher", "ابشر", "أبشر", "امن", "الأمن"])) {
-    return [
-      "Absher Insight AI هو مفهوم للأمن الرقمي الاستباقي شارك فيه عبدالإله.",
-      "",
-      "يركز على:",
-      "- UEBA وتحليل السلوك",
-      "- اكتشاف الأنماط غير المعتادة",
-      "- توقع المخاطر قبل وقوع الحوادث",
-      "- عرض النتائج في لوحة معلومات تساعد على اتخاذ القرار"
-    ].join("\n");
+  if (mentioned) {
+    return getArabicProjectExplanation(mentioned);
   }
 
   if (includesAny(normalized, ["كلاود", "سحابة", "cloud", "google cloud", "azure"])) {
     return [
-      "لدى عبدالإله خبرة تطبيقية في Cloud AI من خلال مشاريع تستخدم Google Cloud و Azure AI Services.",
+      "أبرز خبرة سحابية لعبدالإله هي Althil، النموذج الأولي الذي بناه مع فريقه في هاكاثون الكوكب الذكي مع Google Cloud.",
       "",
-      "أبرز مثال هو Althil، ويشمل:",
-      "- Cloud Run",
-      "- BigQuery",
-      "- Cloud Storage",
-      "- Vertex AI",
-      "",
-      "كما يضيف مشروع Qanouni خبرة في Azure AI Services وتكامل النماذج."
+      "- جُهّزت الأنظمة الخلفية في حاوية للعمل على Google Cloud Run.",
+      "- تضمّن تصميم الهاكاثون BigQuery وCloud Storage وVertex AI، لكن الكود غير منشور فلا يمكن التحقق منه علنًا.",
+      "- Qanouni تصوّر خُطّط له حول خدمات Azure AI دون تنفيذ منشور."
     ].join("\n");
   }
 
   if (includesAny(normalized, ["اقوي مشروع", "افضل مشروع", "مشاريعه", "مشاريع"])) {
     return [
-      "أقوى نقطة بداية في مشاريع عبدالإله هي:",
+      "أقوى نقطة بداية هي المشاريع الثلاثة التي يمكن التحقق منها في الكود:",
       "",
-      "- ChatUB: مساعد أكاديمي محلي يعتمد على NLP و LLMs",
-      "- Althil: منصة Cloud AI للاستدامة باستخدام Google Cloud",
-      "- Absher Insight AI: مفهوم للأمن الرقمي الاستباقي وتحليل السلوك",
+      "- ChatUB: مساعد أكاديمي عربي يعمل محليًا — مشروع تخرج قاده، ونموذج أولي عامل",
+      "- Stadium: مراقبة الحشود عند البوابات بالرؤية الحاسوبية — نموذج أولي عامل بناه منفردًا",
+      "- Absher Insight AI: رصد مخاطر سلوكية بقواعد قابلة للتفسير — نموذج أولي في هاكاثون",
       "",
-      "هذه المشاريع توضح تنوع خبرته وقدرته على بناء حلول مرتبطة بسياق حقيقي."
+      "ولا يُدّعى أن أيًا منها قيد التشغيل الفعلي؛ حالة كل مشروع وقيوده مذكورة في دراسة الحالة."
     ].join("\n");
   }
 
@@ -417,15 +420,14 @@ function getArabicFallbackAgentResponse(message: string) {
   }
 
   return [
-    "عبدالإله الخثعمي خريج نظم معلومات ومهتم ببناء حلول ذكاء اصطناعي تطبيقية.",
+    "عبدالإله الخثعمي مطوّر منتجات ذكاء اصطناعي في الرياض، وخريج نظم المعلومات من جامعة بيشة.",
     "",
-    "يركز عمله على:",
-    "- أنظمة AI تعليمية مثل ChatUB",
-    "- حلول Cloud AI مثل Althil باستخدام Google Cloud",
-    "- مفاهيم الأمن الرقمي الاستباقي مثل Absher Insight AI",
-    "- تطبيقات NLP و LLMs و AI Agents",
+    `في أعماله ${projectCounts.total} مشاريع تطبيقية: ${projectCounts.prototypes} نماذج أولية عاملة (${projectCounts.publicRepositories} منها بكود منشور) و${projectCounts.concepts} تصوّرات.`,
+    "- ChatUB: مساعد أكاديمي عربي يعمل محليًا (مشروع تخرج قاده)",
+    "- Stadium: مراقبة الحشود بالرؤية الحاسوبية (بناه منفردًا)",
+    "- Absher Insight AI: رصد مخاطر سلوكية قابل للتفسير (هاكاثون)",
     "",
-    "للتوظيف، أفضل نقطة قوة لديه هي أنه يبني نماذج عملية مرتبطة بسياق حقيقي."
+    "ووصل مع فريقه إلى أفضل 30 في برنامج AthkaU من سدايا ومايكروسوفت."
   ].join("\n");
 }
 
@@ -539,7 +541,7 @@ export function getFallbackAgentResponse(
   }
 
   if (wantsBlog && includesAny(normalized, ["chatub", "academic", "university"])) {
-    return `${blogPostSummary("local-ai-systems-and-the-future-of-university-services")} It relates directly to ChatUB, Abdulelah's local AI academic assistant concept for University of Bisha students.`;
+    return `${blogPostSummary("local-ai-systems-and-the-future-of-university-services")} It relates directly to ChatUB, the local Arabic academic assistant prototype Abdulelah led for University of Bisha students.`;
   }
 
   if (
@@ -553,7 +555,7 @@ export function getFallbackAgentResponse(
     wantsBlog &&
     includesAny(normalized, ["absher", "security", "ueba", "risk"])
   ) {
-    return `${blogPostSummary("from-reactive-security-to-predictive-ai-security")} It connects to Absher Insight AI and its privacy-conscious behavioral analytics concept.`;
+    return `${blogPostSummary("from-reactive-security-to-predictive-ai-security")} It connects to Absher Insight AI, his explainable behavioural-risk prototype built on synthetic data.`;
   }
 
   if (wantsBlog && includesAny(normalized, ["student", "students"])) {
@@ -567,8 +569,16 @@ export function getFallbackAgentResponse(
     return `Start with ${blogPostSummary("why-context-matters-more-than-prompts-in-ai-agents")} For a simpler foundation, continue with "From Chatbots to AI Agents: What Actually Changed?" Non-technical readers can begin with "AI for Non-Technical People: A Simple Mental Model."`;
   }
 
+  if (includesAny(normalized, ["github", "code", "repository", "repositories", "source"])) {
+    return "Three projects have public repositories on GitHub: ChatUB (Arabic academic assistant with local generation — graduation project, working prototype), Absher Insight AI (explainable behavioural-risk flags on synthetic data — hackathon prototype) and Stadium (computer-vision gate monitoring — solo working prototype). Althil's code is not public, and Qanouni, Virtual Astronauts and Medad are concepts without public code.";
+  }
+
+  if (includesAny(normalized, ["stadium", "crowd", "gate", "computer vision", "yolo"])) {
+    return `${projectSummary("stadium")} It is a solo working prototype that runs on local video or a webcam; it has not been calibrated for a real venue, and no counting-accuracy figure is claimed.`;
+  }
+
   if (includesAny(normalized, ["chatub", "academic", "university"])) {
-    return `${projectSummary("chatub")} ChatUB uses official university academic content to provide context-aware guidance while emphasizing privacy, reliability, and a local AI architecture. It was Abdulelah's graduation project.`;
+    return `${projectSummary("chatub")} It was Abdulelah's graduation project, which he led: a working prototype that matches Arabic questions to curated FAQ entries and generates the answer with a locally served model. It has not been deployed to students, and no accuracy figure is claimed.`;
   }
 
   if (
@@ -580,11 +590,11 @@ export function getFallbackAgentResponse(
       "sustainability"
     ])
   ) {
-    return `${projectSummary("althil")} Built during the KFUPM x Google Cloud Intelligent Planet Hackathon, Althil is the strongest portfolio example for cloud AI: Cloud Run, BigQuery, Cloud Storage, Vertex AI, maps, heat visualization, image analysis, and conversational insights support urban thermal comfort decisions.`;
+    return `${projectSummary("althil")} It is a hackathon prototype built with a team at the KFUPM x Google Cloud Intelligent Planet Hackathon: sun-path and heat analysis, street-imagery analysis and shade recommendations, with the backend containerised for Cloud Run. The code is not public, so the BigQuery, Cloud Storage and Vertex AI parts of the design cannot be verified here.`;
   }
 
   if (includesAny(normalized, ["absher", "security", "ueba", "risk"])) {
-    return `${projectSummary("absher-insight-ai")} Built during the Absher Tuwaiq Hackathon, the concept focuses on proactive digital security using synthetic data, UEBA, behavioral analytics, anomaly detection, risk prediction, and a decision-support dashboard.`;
+    return `${projectSummary("absher-insight-ai")} It is a hackathon prototype from the Absher Tuwaiq Hackathon with public code: explainable, rule-based risk flags on synthetic data and an operations dashboard. It is not affiliated with Absher or any government entity and is not a deployed system.`;
   }
 
   if (
@@ -596,11 +606,11 @@ export function getFallbackAgentResponse(
   }
 
   if (includesAny(normalized, ["cloud", "azure", "vertex", "bigquery", "cloud run"])) {
-    return "Abdulelah has hands-on cloud AI exposure across Google Cloud and Azure AI Services. Althil is the strongest cloud-native example, using Cloud Run, BigQuery, Cloud Storage, and Vertex AI. Qanouni adds Azure AI Services, NLP, model integration, and cloud deployment planning.";
+    return "Abdulelah's main cloud evidence is Althil, a Google Cloud hackathon prototype whose backend was containerised for Cloud Run; the design also called for BigQuery, Cloud Storage and Vertex AI, but the code is not public. Qanouni is a concept planned around Azure AI Services.";
   }
 
   if (includesAny(normalized, ["nlp", "llm", "ai agent", "generative ai"])) {
-    return "Abdulelah's NLP and LLM work is grounded in applied systems. ChatUB combines NLP, LLM-based response generation, intelligent search, and official academic knowledge. Qanouni uses NLP and Azure AI Services for accessible legal guidance. Althil includes a conversational layer for explaining cloud-generated insights. His portfolio also lists AI Agents as a developing skill area.";
+    return "Abdulelah's clearest NLP and LLM evidence is ChatUB: Arabic preprocessing, multilingual sentence-embedding retrieval over curated FAQs and answer generation with a locally served model (public code, working prototype). Qanouni is a concept designed around Azure AI language services. His skills list AI agents as a developing area.";
   }
 
   if (includesAny(normalized, ["qanouni", "legal", "labor rights"])) {
@@ -639,12 +649,12 @@ export function getFallbackAgentResponse(
   }
 
   if (includesAny(normalized, ["strongest", "best project", "projects", "portfolio"])) {
-    return "Start with three projects: ChatUB for local NLP and LLM-based academic assistance, Althil for Google Cloud and sustainability decision support, and Absher Insight AI for proactive security analytics. Together they show project leadership, cloud AI exposure, and applied problem-solving across distinct domains.";
+    return "Start with the three projects you can verify in code: ChatUB (Arabic academic assistant with local generation — graduation project he led), Stadium (computer-vision gate monitoring — solo working prototype) and Absher Insight AI (explainable security analytics on synthetic data — hackathon prototype). None is claimed to be in production; each case study lists its status and limitations.";
   }
 
   if (includesAny(normalized, ["30 seconds", "quick summary", "summarize", "summary", "who is"])) {
-    return "Abdulelah Alkhathami is a Riyadh-based builder and product thinker (AI Engineer & AI Solutions Specialist). He builds practical AI systems with NLP, LLM applications, cloud services, dashboards, and domain-aware product thinking. His portfolio includes seven applied projects — two with public GitHub source (ChatUB and Absher Insight AI) — and experience from national hackathons, including KFUPM x Google Cloud, Absher x Tuwaiq, and SDAIA x Microsoft programs.";
+    return "Abdulelah Alkhathami is an AI product builder in Riyadh — agents, RAG and Arabic AI — and an Information Systems graduate of the University of Bisha. His portfolio has seven applied AI projects: four working prototypes (three with public code: ChatUB, Absher Insight AI and Stadium) and three concepts. He reached the Top 30 of SDAIA x Microsoft's AthkaU and has built prototypes at national hackathons, including KFUPM x Google Cloud and Absher x Tuwaiq.";
   }
 
-  return "Abdulelah Alkhathami is a builder and product thinker (AI Engineer & AI Solutions Specialist) focused on practical, context-aware AI systems. His portfolio spans seven applied projects across education, cloud sustainability, digital security, legal tech, fintech, immersive learning, and computer-vision safety. A strong starting point is ChatUB, Althil, and Absher Insight AI, followed by the resume page for role-specific CV versions.";
+  return "Abdulelah Alkhathami is an AI product builder focused on practical, context-aware AI. His portfolio spans seven applied projects across education, security, computer vision, sustainability, legal tech, fintech and immersive learning — four working prototypes and three concepts. A strong starting point is ChatUB, Stadium and Absher Insight AI (all with public code), followed by the resume page for the two role-specific CVs.";
 }

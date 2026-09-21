@@ -5,6 +5,11 @@ export type OpenCompanionDetail = {
   prompt?: string;
   /** When true, the prompt is asked immediately; otherwise it is pre-filled. */
   send?: boolean;
+  /**
+   * Where focus should go when the guide closes. Defaults to the element that
+   * had focus when it opened (the button that asked for it).
+   */
+  returnFocusTo?: HTMLElement | null;
 };
 
 /**

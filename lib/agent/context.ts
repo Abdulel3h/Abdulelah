@@ -35,7 +35,8 @@ const AGENT_PROJECT_NAMES = [
   "Absher Insight AI",
   "Qanouni",
   "Medad",
-  "Virtual Astronauts"
+  "Virtual Astronauts",
+  "Stadium"
 ] as const satisfies readonly AgentProjectName[];
 const AGENT_INTENTS = [
   "project_explanation",
@@ -248,6 +249,7 @@ export function getProjectFollowUpKind(
       "tech stack",
       "وش التقنيات",
       "وش تقنياته",
+      "ما التقنيات",
       "التقنيات"
     ])
   ) {
@@ -263,6 +265,8 @@ export function getProjectFollowUpKind(
       "وش دوري فيه",
       "وش دوره فيه",
       "وش كان دوره",
+      "ما دوره",
+      "دوره فيه",
       "دوري فيه"
     ])
   ) {
@@ -291,6 +295,7 @@ export function getProjectFollowUpKind(
       "technically",
       "اشرحها تقنيا",
       "اشرحه تقنيا",
+      "شرح تقني",
       "تقنيا"
     ])
   ) {
@@ -303,7 +308,8 @@ export function getProjectFollowUpKind(
       "recruiter summary",
       "summary for recruiter",
       "عطيني ملخص للريكروتر",
-      "ملخص للريكروتر"
+      "ملخص للريكروتر",
+      "ملخص لمسؤول التوظيف"
     ])
   ) {
     return "recruiter-summary";
@@ -427,13 +433,17 @@ export function buildPortfolioContext() {
           `  Category: ${project.category}`,
           `  Summary: ${project.shortDescription}`,
           `  Role: ${project.role}`,
+          `  Status: ${project.status} — ${project.statusDetail}`,
           `  Technologies: ${list(project.technologies)}`,
+          project.technologiesNote ? `  Technology note: ${project.technologiesNote}` : null,
           `  Approach: ${list(project.technicalApproach)}`,
           project.context ? `  Context: ${project.context}` : null,
-          `  Impact: ${project.impact}`,
+          `  Verified outcome: ${project.impact}`,
+          `  Not claimed: ${project.notClaimed}`,
+          `  Limitations: ${list(project.limitations)}`,
           project.links?.github
             ? `  Source (verified public GitHub repo): ${project.links.github}`
-            : null
+            : "  Source: no public code"
         ]
           .filter(Boolean)
           .join("\n")
@@ -496,7 +506,8 @@ export function buildPortfolioContext() {
     `Location: ${siteConfig.location}`,
     "GitHub profile: available through an action button.",
     "LinkedIn profile: available through an action button.",
-    "Positioning: AI Engineer, AI Solutions Specialist, applied AI builder, project leader, and hackathon-tested AI talent. Lead with the name (Abdulelah Alkhathami) and his work, never with 'Junior'.",
+    "Positioning: AI Product Builder — agents, RAG and Arabic AI. Open to AI engineering roles and applied-AI collaborations. Lead with the name (Abdulelah Alkhathami) and his work, never with 'Junior'.",
+    "Evidence rule: seven applied AI projects — four working prototypes (ChatUB, Absher Insight AI, Stadium, Althil) and three concepts (Qanouni, Virtual Astronauts, Medad). Three have public code (ChatUB, Absher Insight AI, Stadium). Never call any project shipped, launched, deployed, live or in production, and never invent users, accuracy or impact numbers.",
     "",
     "CONTACT ROUTING",
     "Share the email address that matches the visitor's intent. You may write these email addresses directly in your answer text.",

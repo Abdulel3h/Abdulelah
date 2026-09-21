@@ -20,9 +20,9 @@ export const buttonVariants = cva(
       },
       size: {
         default: "h-11 px-5 py-3",
-        sm: "h-9 px-3",
+        sm: "h-10 px-3.5",
         lg: "h-12 px-6",
-        icon: "h-10 w-10 p-0"
+        icon: "h-11 w-11 p-0"
       }
     },
     defaultVariants: {

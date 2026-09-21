@@ -7,7 +7,8 @@ export const siteConfig = {
   name: "Abdulelah Alkhathami",
   arabicName: "عبدالإله الخثعمي",
   brand: "Abdulelah Alkhathami",
-  role: "AI Engineer & Product Builder",
+  role: "AI Product Builder",
+  positioning: "AI Product Builder · Agents, RAG & Arabic AI",
   tagline: "I build intelligent products.",
   location: "Riyadh, Saudi Arabia",
   email: "me@abdulelah.de",
@@ -21,30 +22,28 @@ export const siteConfig = {
   },
   url: siteUrl,
   description:
-    "Abdulelah Alkhathami (عبدالإله الخثعمي) builds intelligent products — AI agents, RAG systems, LLM applications, and Arabic AI systems — across education, security, sustainability, fintech, and legal tech. Based in Riyadh, Saudi Arabia.",
+    "Abdulelah Alkhathami (عبدالإله الخثعمي) is an AI product builder in Riyadh, Saudi Arabia — AI agents, RAG and Arabic AI. Seven applied AI projects across education, security, computer vision and sustainability, each with its status and evidence.",
   keywords: [
     "Abdulelah Alkhathami",
     "عبدالإله الخثعمي",
+    "AI Product Builder",
     "AI Engineer",
     "AI Solutions Specialist",
     "AI Agents",
-    "RAG Systems",
+    "RAG",
     "LLM Applications",
-    "Arabic AI Systems",
-    "NLP",
-    "LLMs",
-    "Cloud AI",
-    "Google Cloud",
-    "Azure AI",
+    "Arabic AI",
+    "Arabic NLP",
+    "Computer Vision",
     "Saudi Arabia",
     "Riyadh",
-    "AI Portfolio",
     "ChatUB",
-    "Althil",
-    "Absher Insight AI"
+    "Absher Insight AI",
+    "Stadium",
+    "Althil"
   ],
   social: {
-    linkedin: "https://linkedin.com/in/abdulelah-alkhathami-853845311",
+    linkedin: "https://www.linkedin.com/in/abdulelah-alkhathami-853845311",
     github: "https://github.com/Abdulel3h"
   },
   assets: {
@@ -57,20 +56,26 @@ export const siteConfig = {
   }
 };
 
-export const contactLink = { label: "Contact", href: "/contact" };
+/** Primary navigation. Labels come from the locale dictionary (`nav.*`). */
+export const primaryNav = [
+  { key: "home", href: "/" },
+  { key: "about", href: "/about" },
+  { key: "projects", href: "/projects" },
+  { key: "resume", href: "/resume" }
+] as const;
 
-export const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Projects", href: "/projects" },
-  { label: "Resume", href: "/resume" }
-];
+/** Pages behind the "More" disclosure. */
+export const moreNav = [
+  { key: "achievements", href: "/achievements" },
+  { key: "skills", href: "/skills" },
+  { key: "notes", href: "/blog" }
+] as const;
 
-export const quickLinks = [
-  ...navLinks,
-  { label: "Achievements", href: "/achievements" },
-  { label: "Skills", href: "/skills" },
-  { label: "Notes", href: "/blog" },
-  contactLink,
-  { label: "Privacy", href: "/privacy" }
-];
+export const footerNav = [
+  ...primaryNav,
+  ...moreNav,
+  { key: "contact", href: "/contact" },
+  { key: "privacy", href: "/privacy" }
+] as const;
+
+export type NavKey = (typeof footerNav)[number]["key"];

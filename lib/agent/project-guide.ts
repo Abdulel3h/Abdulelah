@@ -52,8 +52,33 @@ const projectGuideProfiles: ProjectGuideProfile[] = [
     aliases: ["virtual astronauts", "astronauts", "رواد الفضاء الافتراضيين"],
     bestJobFit: "AI product, educational technology, or immersive learning role",
     recommendedCv: "engineer"
+  },
+  {
+    slug: "stadium",
+    shortName: "Stadium",
+    aliases: ["stadium", "ستاديوم", "الملعب", "مشروع الملعب", "البوابات", "crowd", "yolo"],
+    bestJobFit: "Computer vision, applied ML engineering, or AI operations role",
+    recommendedCv: "engineer"
   }
 ];
+
+const STATUS_LABELS: Record<string, string> = {
+  "working-prototype": "working prototype",
+  "graduation-project": "graduation project (working prototype)",
+  "hackathon-prototype": "hackathon prototype",
+  concept: "concept (no public prototype)",
+  pilot: "pilot",
+  production: "in production",
+  live: "live"
+};
+
+function getStatusLine(project: Project) {
+  const source = project.links.github
+    ? `public code: ${project.links.github}`
+    : "no public code";
+
+  return `${STATUS_LABELS[project.status] ?? project.status} — ${source}`;
+}
 
 const projectGuideBySlug = new Map(
   projectGuideProfiles.map((profile) => [profile.slug, profile])
@@ -198,12 +223,12 @@ export function getPortfolioTourResponse() {
   return [
     "60-second portfolio tour",
     "",
-    "1. Who Abdulelah is: An Information Systems graduate and AI Engineer focused on practical, context-aware AI systems, LLM applications, automation concepts, and cloud AI.",
-    "2. Leadership and local AI: ChatUB is his graduation project, a local academic assistant built around official university knowledge, NLP, LLM applications, intelligent search, privacy, and reliability.",
-    "3. Cloud AI: Althil connects Google Cloud Run, BigQuery, Cloud Storage, Vertex AI, maps, and analysis for urban thermal comfort decisions.",
-    "4. Security AI: Absher Insight AI explores proactive digital security through synthetic data, UEBA, behavioral analytics, anomaly detection, and dashboard thinking.",
-    "5. Supporting projects: Qanouni adds legal-tech guidance, Medad adds AI analytics and dashboards for financial inclusion, and Virtual Astronauts adds immersive AI learning.",
-    "6. Best next action: View the project case studies, download the CV closest to your role, or contact Abdulelah."
+    "1. Who Abdulelah is: an AI product builder in Riyadh — agents, RAG and Arabic AI — and an Information Systems graduate of the University of Bisha.",
+    "2. ChatUB (graduation project he led): a working prototype that answers Arabic academic questions from curated FAQ content with a locally served model. Public code; not deployed to students.",
+    "3. Stadium (solo build): a working computer-vision prototype that monitors gate crowding and recommends staff moves. Public code; not calibrated for a real venue.",
+    "4. Absher Insight AI (hackathon prototype): explainable, rule-based risk flags on synthetic data with an operations dashboard. Public code; not affiliated with Absher.",
+    "5. Also: Althil, a Google Cloud hackathon prototype for shade planning (code not public), and three concepts — Qanouni, Virtual Astronauts (both AthkaU Top 30 ideas) and Medad.",
+    "6. Best next action: open the case studies, download the CV closest to your role, or contact Abdulelah."
   ].join("\n");
 }
 
@@ -218,6 +243,7 @@ export function getProjectExplainerMenuResponse() {
     "- Qanouni",
     "- Medad",
     "- Virtual Astronauts",
+    "- Stadium",
     "",
     "You can ask for a simple explanation, a technical explanation, or a recruiter summary."
   ].join("\n");
@@ -265,8 +291,10 @@ export function getProjectExplanationResponse(
     `- Problem: ${project.problem}`,
     `- Solution: ${project.solution}`,
     `- Abdulelah's role: ${project.role}`,
+    `- Status: ${getStatusLine(project)}`,
     `- Technologies: ${technologySummary}`,
-    `- Why it matters: ${project.impact}`,
+    `- Verified outcome: ${project.impact}`,
+    `- Main limitation: ${project.limitations[0] ?? "Not documented."}`,
     `- Best related job fit: ${profile.bestJobFit}`,
     `- Recommended CV: ${profile.recommendedCv === "engineer" ? "AI Engineer CV" : "AI Specialist CV"}`
   ].join("\n");
@@ -288,7 +316,7 @@ function getComparisonSection(profile: ProjectGuideProfile) {
     `- Problem: ${summarizeComparisonValue(project.problem, 82)}`,
     `- Technical focus: ${summarizeComparisonValue(technicalFocus, 92)}`,
     `- Abdulelah's role: ${summarizeComparisonValue(project.role, 82)}`,
-    `- Best hiring signal: ${summarizeComparisonValue(project.impact, 82)}`,
+    `- Status: ${getStatusLine(project)}`,
     `- Relevant job fit: ${summarizeComparisonValue(profile.bestJobFit, 65)}`
   ].join("\n");
 }
@@ -319,7 +347,7 @@ export function getProjectContextGuide() {
       const project = getProjectBySlug(profile.slug);
 
       return project
-        ? `- ${profile.shortName}: Best job fit: ${profile.bestJobFit}. Recommended CV: ${profile.recommendedCv}.`
+        ? `- ${profile.shortName}: Status: ${getStatusLine(project)}. Best job fit: ${profile.bestJobFit}. Recommended CV: ${profile.recommendedCv}.`
         : "";
     })
     .filter(Boolean)

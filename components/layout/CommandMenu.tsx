@@ -1,156 +1,94 @@
 "use client";
 
-import { Search } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { projects } from "@/data/projects";
-import { contactLink, navLinks } from "@/data/site";
-import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator
-} from "@/components/ui/command";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import dynamic from "next/dynamic";
+import { useEffect, useRef, useState } from "react";
+import type { SearchIndexItem } from "@/lib/search-index";
+import { OPEN_SEARCH_EVENT, type OpenSearchDetail } from "@/lib/ui-events";
+import { whenIdle } from "@/lib/when-idle";
 
-const staticCommands = [
-  ...navLinks,
-  { label: "Achievements", href: "/achievements" },
-  { label: "Skills", href: "/skills" },
-  { label: "Notes", href: "/blog" },
-  contactLink
-];
+const loadSearchDialog = () => import("@/components/layout/SearchDialog");
+const SearchDialog = dynamic(loadSearchDialog, { ssr: false });
 
-export function CommandMenu() {
-  const router = useRouter();
+/**
+ * Site search entry point. Only the keyboard shortcut and open-event
+ * listeners ship with the page; the dialog itself (cmdk + Radix) is fetched
+ * when the browser is idle or on first use, keeping it off the critical path.
+ */
+export function CommandMenu({ index }: { index: SearchIndexItem[] }) {
   const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState("");
-
-  const commands = useMemo(
-    () => [
-      ...staticCommands,
-      ...projects.slice(0, 3).map((project) => ({
-        label: project.title.split(" - ")[0],
-        href: `/projects/${project.slug}`
-      }))
-    ],
-    []
-  );
-
-  const filteredCommands = useMemo(() => {
-    const normalized = query.trim().toLowerCase();
-
-    if (!normalized) {
-      return commands;
-    }
-
-    return commands.filter((command) =>
-      `${command.label} ${command.href}`.toLowerCase().includes(normalized)
-    );
-  }, [commands, query]);
+  const [requested, setRequested] = useState(false);
+  const [ready, setReady] = useState(false);
+  const [pendingQuery, setPendingQuery] = useState("");
+  const returnFocusRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    function onKeyDown(event: KeyboardEvent) {
-      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
-        event.preventDefault();
-        setOpen((value) => !value);
-      }
+    function show(returnFocusTo?: HTMLElement | null) {
+      returnFocusRef.current =
+        returnFocusTo ?? (document.activeElement instanceof HTMLElement ? document.activeElement : null);
+      setRequested(true);
+      setOpen(true);
+    }
 
-      if (event.key === "Escape") {
+    function onOpenEvent(event: Event) {
+      show((event as CustomEvent<OpenSearchDetail>).detail?.returnFocusTo);
+    }
+
+    function onKeyDown(event: KeyboardEvent) {
+      if ((event.ctrlKey || event.metaKey) && !event.altKey && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+
+        if (!open) {
+          show();
+        } else {
+          setOpen(false);
+        }
+      }
+    }
+
+    window.addEventListener(OPEN_SEARCH_EVENT, onOpenEvent);
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      window.removeEventListener(OPEN_SEARCH_EVENT, onOpenEvent);
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
+
+  useEffect(() => whenIdle(() => void loadSearchDialog()), []);
+
+  // Keys typed in the moment between opening and the dialog chunk arriving
+  // are kept and become the dialog's first query.
+  useEffect(() => {
+    if (!open || ready) return;
+
+    function onKey(event: KeyboardEvent) {
+      if (event.ctrlKey || event.metaKey || event.altKey) return;
+
+      if (event.key.length === 1) {
+        event.preventDefault();
+        setPendingQuery((current) => current + event.key);
+      } else if (event.key === "Backspace") {
+        setPendingQuery((current) => current.slice(0, -1));
+      } else if (event.key === "Escape") {
         setOpen(false);
       }
     }
 
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, ready]);
 
-  useEffect(() => {
-    if (!open) {
-      return;
-    }
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [open]);
-
-  function navigate(href: string) {
-    setOpen(false);
-    setQuery("");
-    router.push(href);
-  }
-
-  return (
-    <>
-      <Button
-        type="button"
-        variant="outline"
-        size="sm"
-        className="hidden text-xs text-paper-dim lg:inline-flex"
-        onClick={() => setOpen(true)}
-        aria-label="Open command menu"
-      >
-        <Search className="h-3.5 w-3.5" aria-hidden="true" />
-        Search
-        <span className="rounded-md border border-white/10 bg-white/[0.06] px-1.5 py-0.5 text-[10px] text-paper-dim">
-          Ctrl K
-        </span>
-      </Button>
-
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="top-[12%] max-w-2xl translate-y-0 p-0">
-          <DialogTitle className="sr-only">Command menu</DialogTitle>
-          <Command shouldFilter={false}>
-            <div className="flex items-center pr-12">
-              <CommandInput
-                autoFocus
-                value={query}
-                onValueChange={setQuery}
-                placeholder="Search pages, projects, or case studies..."
-                aria-label="Search pages, projects, or case studies"
-              />
-            </div>
-            <CommandList>
-              <CommandEmpty>No matching page or project found.</CommandEmpty>
-              <CommandGroup heading="Navigation">
-                {filteredCommands.map((command) => (
-                  <CommandItem
-                    key={command.href}
-                    value={`${command.label} ${command.href}`}
-                    onSelect={() => navigate(command.href)}
-                    asChild
-                    className="cursor-pointer"
-                  >
-                    <Link
-                      href={command.href}
-                      onClick={() => {
-                        setOpen(false);
-                        setQuery("");
-                      }}
-                    >
-                      <span>{command.label}</span>
-                      <span className="text-xs text-paper-faint">{command.href}</span>
-                    </Link>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-              <CommandSeparator />
-              <p className="px-4 py-3 text-xs text-paper-faint">
-                Tip: use Ctrl K or Cmd K from anywhere on the site.
-              </p>
-            </CommandList>
-          </Command>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
+  return requested ? (
+    <SearchDialog
+      index={index}
+      open={open}
+      onOpenChange={(next) => {
+        setOpen(next);
+        if (!next) setPendingQuery("");
+      }}
+      returnFocusRef={returnFocusRef}
+      initialQuery={pendingQuery}
+      onReady={() => setReady(true)}
+    />
+  ) : null;
 }

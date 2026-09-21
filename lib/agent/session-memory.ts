@@ -73,6 +73,19 @@ export function recordResumeView() {
   notify();
 }
 
+/** Forgets this visit's memory (used by the guide's Clear button). */
+export function clearSessionMemory() {
+  state = { projects: [], resumeViewed: false, ready: true };
+
+  try {
+    window.sessionStorage.removeItem(STORAGE_KEY);
+  } catch {
+    // sessionStorage unavailable — the in-memory state is already cleared.
+  }
+
+  notify();
+}
+
 function subscribe(listener: () => void) {
   listeners.add(listener);
   hydrate();

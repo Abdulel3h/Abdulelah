@@ -1,114 +1,112 @@
 import Link from "next/link";
-import { ArrowRight, Github, Linkedin, Mail } from "lucide-react";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { ArrowUpRight, Github, Linkedin, Mail } from "lucide-react";
 import { Monogram } from "@/components/ui/Monogram";
-import { Separator } from "@/components/ui/separator";
-import { quickLinks, siteConfig } from "@/data/site";
+import { footerNav, siteConfig } from "@/data/site";
+import { localizeHref, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { format } from "@/lib/i18n/format";
 
-const profileLinks = [
-  { label: "LinkedIn", href: siteConfig.social.linkedin, icon: Linkedin },
-  { label: "GitHub", href: siteConfig.social.github, icon: Github }
-];
+/**
+ * Quiet footer: identity, pages and profiles. It deliberately carries no
+ * call-to-action panel — each page ends with at most one closing section.
+ */
+export function Footer({ locale }: { locale: Locale }) {
+  const dict = getDictionary(locale);
+  const t = dict.footer;
+  const profiles = [
+    { label: dict.nav.linkedin, href: siteConfig.social.linkedin, icon: Linkedin },
+    { label: dict.nav.github, href: siteConfig.social.github, icon: Github }
+  ];
 
-export function Footer() {
   return (
-    <footer className="relative border-t border-white/10 bg-[#0a0a0b]/78">
+    <footer className="relative border-t border-white/10 bg-[#0a0a0b]/80 pb-24 sm:pb-20">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
-      <div className="container-shell pt-14">
-        <div className="premium-panel p-6 sm:p-8 lg:p-10">
-          <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <p className="eyebrow mb-5">Let&apos;s build something</p>
-              <h2 className="max-w-3xl font-display text-3xl font-medium leading-tight text-paper sm:text-4xl">
-                Have an idea worth building?
-              </h2>
-              <p className="mt-4 max-w-2xl text-sm leading-7 text-paper-dim">
-                I&apos;m open to product collaborations, AI work, and good problems
-                worth solving. Tell me what you&apos;re building.
-              </p>
-            </div>
-            <Button asChild variant="gold" className="w-full sm:w-auto">
-              <Link href="/contact">
-                Start a conversation
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </div>
-      <div className="container-shell grid gap-10 py-12 lg:grid-cols-[1.2fr_0.8fr_0.8fr]">
+      <div className="container-shell grid gap-10 py-12 lg:grid-cols-[1.3fr_1fr_0.8fr]">
         <div>
           <Link
-            href="/"
-            className="focus-ring group inline-flex items-center gap-2.5 rounded"
-            aria-label="Abdulelah Alkhathami — home"
+            href={localizeHref("/", locale)}
+            className="focus-ring group inline-flex min-h-11 items-center gap-2.5 rounded"
+            aria-label={dict.common.homeAria}
           >
             <Monogram className="h-6 w-auto text-accent transition-colors group-hover:text-accent-soft" />
-            <span className="font-display text-lg font-medium tracking-tight text-paper">
-              {siteConfig.name}
+            <span className="font-display text-lg font-medium tracking-tight text-paper" aria-hidden="true">
+              {dict.common.name}
             </span>
           </Link>
-          <p className="mt-2 text-sm text-paper-dim" lang="ar">
-            {siteConfig.arabicName}
-          </p>
-          <p className="mt-3 max-w-xl text-sm leading-6 text-paper-dim">
-            Designing and building intelligent products — from AI agents and RAG
-            systems to Arabic AI — across education, security, sustainability,
-            fintech, and legal tech.
-          </p>
+          {locale === "en" ? (
+            <p className="mt-1 text-sm text-paper-dim" lang="ar" dir="rtl">
+              {siteConfig.arabicName}
+            </p>
+          ) : (
+            <p className="mt-1 text-sm text-paper-dim" lang="en" dir="ltr">
+              {siteConfig.name}
+            </p>
+          )}
+          <p className="mt-4 max-w-md text-sm leading-6 text-paper-dim">{t.tagline}</p>
           <a
             href={`mailto:${siteConfig.email}`}
-            className="focus-ring mt-5 inline-flex items-center gap-2 rounded-full text-sm font-medium text-accent transition hover:text-paper"
+            className="focus-ring mt-4 inline-flex min-h-11 items-center gap-2 rounded-full text-sm font-medium text-accent-soft transition hover:text-paper"
           >
             <Mail className="h-4 w-4" aria-hidden="true" />
-            {siteConfig.email}
+            <span dir="ltr">{siteConfig.email}</span>
           </a>
         </div>
 
-        <div>
-          <h2 className="text-sm font-semibold text-paper">Quick links</h2>
-          <div className="mt-4 grid grid-cols-2 gap-2">
-            {quickLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="focus-ring rounded text-sm text-paper-dim transition hover:text-paper"
-              >
-                {link.label}
-              </Link>
+        <nav aria-labelledby="footer-pages">
+          <h2 id="footer-pages" className="text-sm font-semibold text-paper">
+            {t.navTitle}
+          </h2>
+          <ul className="mt-3 grid grid-cols-2 gap-x-4">
+            {footerNav.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={localizeHref(link.href, locale)}
+                  className="focus-ring inline-flex min-h-11 items-center rounded text-sm text-paper-dim transition hover:text-paper"
+                >
+                  {dict.nav[link.key]}
+                </Link>
+              </li>
             ))}
-          </div>
-        </div>
+          </ul>
+        </nav>
 
         <div>
-          <h2 className="text-sm font-semibold text-paper">Profiles</h2>
-          <div className="mt-4 flex flex-wrap gap-3">
-            {profileLinks.map((profile) => {
+          <h2 className="text-sm font-semibold text-paper">{t.profilesTitle}</h2>
+          <ul className="mt-3 flex flex-wrap gap-3">
+            {profiles.map((profile) => {
               const Icon = profile.icon;
 
               return (
-                <a
-                  key={profile.label}
-                  href={profile.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={buttonVariants({
-                    variant: "outline",
-                    size: "sm",
-                    className: "text-paper-dim"
-                  })}
-                  aria-label={`${profile.label} profile`}
-                >
-                  <Icon className="h-4 w-4" aria-hidden="true" />
-                  {profile.label}
-                </a>
+                <li key={profile.href}>
+                  <a
+                    href={profile.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="focus-ring inline-flex min-h-11 items-center gap-2 rounded-full border border-white/[0.12] px-4 text-sm text-paper-dim transition hover:border-accent/40 hover:text-paper"
+                  >
+                    <Icon className="h-4 w-4" aria-hidden="true" />
+                    {profile.label}
+                    <ArrowUpRight className="external-mark" aria-hidden="true" />
+                    <span className="sr-only">({dict.common.opensInNewTab})</span>
+                  </a>
+                </li>
               );
             })}
-          </div>
-          <Separator className="my-6" />
-          <p className="mt-6 text-xs text-paper-faint">
-            Copyright {new Date().getFullYear()} {siteConfig.name}{" "}
-            (<span lang="ar">{siteConfig.arabicName}</span>). All rights reserved.
+          </ul>
+          <p className="mt-8 text-xs leading-6 text-paper-faint">
+            {format(t.copyright, { year: new Date().getFullYear() })}{" "}
+            {locale === "en" ? (
+              <>
+                (
+                <bdi lang="ar" dir="rtl">
+                  {siteConfig.arabicName}
+                </bdi>
+                ).{" "}
+              </>
+            ) : (
+              "· "
+            )}
+            {t.rights}
           </p>
         </div>
       </div>

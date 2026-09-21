@@ -260,7 +260,8 @@ function blockedResponse(
 async function respondToAgentMessage(
   message: string,
   memory: AgentConversationMemory,
-  startedAt: number
+  startedAt: number,
+  locale: "en" | "ar"
 ) {
   const { sessionContext } = memory;
   const safety = classifyAgentMessage(message);
@@ -337,7 +338,8 @@ async function respondToAgentMessage(
     const resolvedMessage = resolveAgentFollowUp(message, sessionContext);
     const completion = await askDeepSeek(message, buildPortfolioContext(), {
       ...memory,
-      resolvedMessage
+      resolvedMessage,
+      locale
     });
     const answer =
       completion.finishReason === "length"
@@ -567,7 +569,14 @@ export async function POST(request: Request) {
     );
   }
 
-  const response = await respondToAgentMessage(message, memory, startedAt);
+  const locale =
+    typeof payload === "object" &&
+    payload !== null &&
+    "locale" in payload &&
+    (payload as { locale: unknown }).locale === "ar"
+      ? "ar"
+      : "en";
+  const response = await respondToAgentMessage(message, memory, startedAt, locale);
 
   if (botCheck.grant) {
     response.headers.append("Set-Cookie", buildHumanGrantCookie(botCheck.grant));

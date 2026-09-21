@@ -1,59 +1,112 @@
-export type Achievement = {
+import type { Locale } from "@/lib/i18n/config";
+
+type AchievementText = {
   title: string;
   organization: string;
-  year: string;
   description: string;
   tags: string[];
 };
 
-export const achievements: Achievement[] = [
+export type Achievement = AchievementText & {
+  year: string;
+};
+
+type AchievementRecord = {
+  year: string;
+  en: AchievementText;
+  ar: AchievementText;
+};
+
+const records: AchievementRecord[] = [
   {
-    title: "Intelligent Planet Hackathon",
-    organization: "KFUPM x Google Cloud",
     year: "2026",
-    description:
-      "Participated in a cloud and AI hackathon focused on environmental and urban challenges. Contributed to Althil, a platform for improving urban thermal comfort using Google Cloud and AI.",
-    tags: ["Google Cloud Run", "BigQuery", "Cloud Storage", "Vertex AI"]
+    en: {
+      title: "Intelligent Planet Hackathon",
+      organization: "KFUPM × Google Cloud",
+      description:
+        "Took part in a cloud and AI hackathon on environmental and urban challenges, and built Althil with the team — a prototype that helps planners place shade where it improves thermal comfort most.",
+      tags: ["Google Cloud", "Urban sustainability", "Hackathon prototype"]
+    },
+    ar: {
+      title: "هاكاثون الكوكب الذكي",
+      organization: "جامعة الملك فهد للبترول والمعادن × Google Cloud",
+      description:
+        "شارك في هاكاثون للحوسبة السحابية والذكاء الاصطناعي حول التحديات البيئية والحضرية، وبنى مع الفريق Althil — نموذجًا أوليًا يساعد المخططين على وضع التظليل حيث يحسّن الراحة الحرارية أكثر.",
+      tags: ["Google Cloud", "الاستدامة الحضرية", "نموذج أولي في هاكاثون"]
+    }
   },
   {
-    title: "Absher Tuwaiq Hackathon",
-    organization: "Absher x Tuwaiq",
     year: "2025",
-    description:
-      "Worked on Absher Insight AI, a proactive AI-driven digital security concept for predicting risks in government digital systems.",
-    tags: ["AI", "UEBA", "Synthetic Data", "Behavioral Analytics", "Dashboards"]
+    en: {
+      title: "Absher Tuwaiq Hackathon",
+      organization: "Absher × Tuwaiq",
+      description:
+        "Worked on Absher Insight AI, an independent prototype for proactive, explainable risk monitoring built entirely on synthetic data.",
+      tags: ["Security analytics", "Synthetic data", "Explainable rules", "Dashboards"]
+    },
+    ar: {
+      title: "هاكاثون أبشر مع طويق",
+      organization: "أبشر × أكاديمية طويق",
+      description:
+        "عمل على Absher Insight AI، وهو نموذج أولي مستقل لرصد المخاطر بشكل استباقي وقابل للتفسير، مبني بالكامل على بيانات اصطناعية.",
+      tags: ["تحليلات الأمن", "بيانات اصطناعية", "قواعد قابلة للتفسير", "لوحات المتابعة"]
+    }
   },
   {
-    title: "#AthkaU Program",
-    organization: "SDAIA x Microsoft",
     year: "2024",
-    description:
-      "Completed the qualifying training program and reached Top 30 out of 80+ teams across Saudi Arabia with two AI ideas: Qanouni and Virtual Astronauts.",
-    tags: ["AI", "Innovation", "Microsoft ecosystem"]
+    en: {
+      title: "#AthkaU Program — Top 30",
+      organization: "SDAIA × Microsoft",
+      description:
+        "Completed the qualifying training program and reached the Top 30 of 80+ teams across Saudi Arabia with two AI ideas: Qanouni and Virtual Astronauts.",
+      tags: ["AI", "Innovation", "Microsoft ecosystem"]
+    },
+    ar: {
+      title: "برنامج ‎#AthkaU‎ — أفضل 30 فريقًا",
+      organization: "سدايا × مايكروسوفت",
+      description:
+        "أكمل برنامج التأهيل ووصل مع فريقه إلى أفضل 30 من أكثر من 80 فريقًا على مستوى المملكة بفكرتين في الذكاء الاصطناعي: Qanouni وVirtual Astronauts.",
+      tags: ["الذكاء الاصطناعي", "الابتكار", "منظومة مايكروسوفت"]
+    }
   },
   {
-    title: "CITC Innovation Hackathon Finalist",
-    organization: "Communications and Information Technology Commission",
-    year: "2023",
-    description:
-      "Finalist in the Innovation Hackathon by the Communications and Information Technology Commission in Saudi Arabia.",
-    tags: ["Innovation", "Pitching", "Digital Solutions"]
-  },
-  {
-    title: "Startup Empowerment Initiative",
-    organization: "Digital entrepreneurship program",
     year: "2025",
-    description:
-      "Selected participant in an initiative focused on digital marketing, AI, and data analytics.",
-    tags: ["Digital Marketing", "AI", "Data Analytics"]
+    en: {
+      title: "Startup Empowerment Initiative",
+      organization: "Digital entrepreneurship program",
+      description:
+        "Selected participant in an initiative focused on digital marketing, AI and data analytics.",
+      tags: ["Digital marketing", "AI", "Data analytics"]
+    },
+    ar: {
+      title: "مبادرة تمكين الشركات الناشئة",
+      organization: "برنامج لريادة الأعمال الرقمية",
+      description: "مشارك مختار في مبادرة تركز على التسويق الرقمي والذكاء الاصطناعي وتحليل البيانات.",
+      tags: ["التسويق الرقمي", "الذكاء الاصطناعي", "تحليل البيانات"]
+    }
+  },
+  {
+    year: "2023",
+    en: {
+      title: "CITC Innovation Hackathon — Finalist",
+      organization: "Communications and Information Technology Commission",
+      description:
+        "Reached the final of the Innovation Hackathon run by Saudi Arabia’s Communications and Information Technology Commission.",
+      tags: ["Innovation", "Pitching", "Digital solutions"]
+    },
+    ar: {
+      title: "هاكاثون الابتكار — التأهل للنهائي",
+      organization: "هيئة الاتصالات وتقنية المعلومات",
+      description:
+        "بلغ المرحلة النهائية في هاكاثون الابتكار الذي نظمته هيئة الاتصالات وتقنية المعلومات في المملكة.",
+      tags: ["الابتكار", "عرض الأفكار", "الحلول الرقمية"]
+    }
   }
 ];
 
-export const metrics = [
-  "6+ AI Projects",
-  "5+ Applied AI Domains",
-  "Top 30 in SDAIA x Microsoft AthkaU",
-  "Multiple National Hackathons",
-  "Cloud AI Experience",
-  "Project Leadership Experience"
-];
+export function getAchievements(locale: Locale = "en"): Achievement[] {
+  return records.map((record) => ({ year: record.year, ...record[locale] }));
+}
+
+/** English facts for the guide's server-side context. */
+export const achievements = getAchievements("en");

@@ -1,51 +1,49 @@
 "use client";
 
-import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
-import { useRef, type ReactNode, type PointerEvent } from "react";
-import { spring } from "@/lib/motion";
+import { useRef, type PointerEvent, type ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 /**
- * Subtle magnetism — the wrapped element eases toward the cursor within its
- * bounds, then springs back. Mouse-only and disabled under reduced motion, so
- * it never interferes with touch or accessibility.
+ * Subtle magnetism: the wrapped element eases toward a mouse pointer within
+ * its bounds, then settles back. Mouse-only and disabled under reduced
+ * motion, so it never affects touch, keyboard or assistive technology.
  */
 export function Magnetic({
   children,
   className,
-  strength = 0.4
+  strength = 0.35
 }: {
   children: ReactNode;
   className?: string;
   strength?: number;
 }) {
-  const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const sx = useSpring(x, spring.magnetic);
-  const sy = useSpring(y, spring.magnetic);
 
   function handleMove(event: PointerEvent<HTMLDivElement>) {
-    if (reduce || event.pointerType !== "mouse" || !ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    x.set((event.clientX - (rect.left + rect.width / 2)) * strength);
-    y.set((event.clientY - (rect.top + rect.height / 2)) * strength);
+    const element = ref.current;
+
+    if (!element || event.pointerType !== "mouse") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const rect = element.getBoundingClientRect();
+    const x = (event.clientX - (rect.left + rect.width / 2)) * strength;
+    const y = (event.clientY - (rect.top + rect.height / 2)) * strength;
+
+    element.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
   }
 
   function reset() {
-    x.set(0);
-    y.set(0);
+    if (ref.current) ref.current.style.transform = "";
   }
 
   return (
-    <motion.div
+    <div
       ref={ref}
       onPointerMove={handleMove}
       onPointerLeave={reset}
-      style={reduce ? undefined : { x: sx, y: sy }}
-      className={className}
+      className={cn("transition-transform duration-300 ease-out motion-reduce:transition-none", className)}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

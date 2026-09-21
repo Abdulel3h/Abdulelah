@@ -25,8 +25,8 @@ export const recruiterRoleProfiles: RecruiterRoleProfile[] = [
     id: "junior-ai-engineer",
     label: "AI Engineer",
     fitSummary:
-      "Abdulelah is a strong early-career AI engineering candidate because he has built applied AI systems using NLP, LLM applications, cloud AI, and intelligent search across multiple domains.",
-    projects: ["ChatUB", "Althil", "Absher Insight AI"],
+      "Abdulelah is a strong early-career AI engineering candidate: he has built working AI prototypes with public code — an Arabic retrieval assistant with local generation (ChatUB), a computer-vision gate monitor (Stadium) and explainable security analytics (Absher Insight AI) — plus cloud work at a Google Cloud hackathon.",
+    projects: ["ChatUB", "Stadium", "Absher Insight AI"],
     skills: [
       "NLP",
       "LLM Applications",
@@ -59,8 +59,8 @@ export const recruiterRoleProfiles: RecruiterRoleProfile[] = [
     id: "ai-solutions-engineer",
     label: "AI Solutions Engineer",
     fitSummary:
-      "Abdulelah is a promising AI solutions engineering candidate because his portfolio combines technical AI integration with cloud architecture, product framing, and explainable user-facing experiences.",
-    projects: ["ChatUB", "Althil", "Qanouni"],
+      "Abdulelah is a promising AI solutions engineering candidate because his portfolio combines working AI prototypes with cloud architecture, product framing, and explainable user-facing experiences.",
+    projects: ["ChatUB", "Absher Insight AI", "Althil"],
     skills: [
       "NLP",
       "LLM Applications",
@@ -70,14 +70,14 @@ export const recruiterRoleProfiles: RecruiterRoleProfile[] = [
       "Problem Solving"
     ],
     recommendedCv: "engineer",
-    nextAction: "Download the AI Engineer CV and review ChatUB, Althil, and Qanouni."
+    nextAction: "Download the AI Engineer CV and review ChatUB, Absher Insight AI, and Althil."
   },
   {
     id: "cloud-ai-data",
     label: "Cloud AI / Data Role",
     fitSummary:
-      "Abdulelah brings practical cloud AI and data exposure through projects that connect backend services, analytics, model capabilities, storage, dashboards, and decision-support interfaces.",
-    projects: ["Althil", "Qanouni", "Medad"],
+      "Abdulelah brings cloud AI and data exposure from a Google Cloud hackathon prototype (Althil), dashboard and analytics concepts, and Python data work in his public prototypes.",
+    projects: ["Althil", "Absher Insight AI", "Medad"],
     skills: [
       "Google Cloud Run",
       "Vertex AI",
@@ -94,7 +94,7 @@ export const recruiterRoleProfiles: RecruiterRoleProfile[] = [
     label: "Internship / COOP",
     fitSummary:
       "Abdulelah is a strong internship or COOP candidate for teams seeking practical AI foundations, fast learning, project leadership, and exposure to varied applied domains.",
-    projects: ["ChatUB", "Althil", "Absher Insight AI"],
+    projects: ["ChatUB", "Stadium", "Absher Insight AI"],
     skills: [
       "Python",
       "NLP",
@@ -110,8 +110,8 @@ export const recruiterRoleProfiles: RecruiterRoleProfile[] = [
     id: "general-hiring-fit",
     label: "General Hiring Fit",
     fitSummary:
-      "Abdulelah is an Information Systems graduate with a recruiter-friendly mix of applied AI projects, cloud exposure, solution design, project leadership, and hackathon-tested delivery across distinct domains.",
-    projects: ["ChatUB", "Althil", "Absher Insight AI"],
+      "Abdulelah is an Information Systems graduate with seven applied AI projects — four working prototypes (three with public code) and three concepts — plus cloud exposure, solution design, project leadership, and hackathon-tested delivery.",
+    projects: ["ChatUB", "Stadium", "Absher Insight AI"],
     skills: [
       "NLP",
       "LLM Applications",

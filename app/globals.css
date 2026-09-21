@@ -2,8 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Thmanyah Sans (Arabic). Declared here instead of through next/font so the
+ * Arabic layout can preload it while English pages never download it.
+ */
+@font-face {
+  font-family: "Thmanyah Sans";
+  src: url("/fonts/thmanyah/thmanyahsans-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Thmanyah Sans";
+  src: url("/fonts/thmanyah/thmanyahsans-Medium.woff2") format("woff2");
+  font-weight: 500 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Thmanyah Sans";
+  src: url("/fonts/thmanyah/thmanyahsans-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   color-scheme: dark;
+  --font-thmanyah: "Thmanyah Sans";
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Height of the sticky header plus breathing room, so focused or
+     anchored content never lands underneath it. */
+  --header-offset: 6.5rem;
 }
 
 * {
@@ -12,6 +45,9 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: var(--header-offset);
+  /* Keeps focused controls clear of the floating guide and back-to-top buttons. */
+  scroll-padding-bottom: 5.5rem;
 }
 
 body {
@@ -27,17 +63,45 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Arabic pages: Thmanyah first (it also carries Latin glyphs, so mixed
+   Arabic/English lines stay consistent), and no tracking — letter-spacing
+   visually breaks connected Arabic letterforms. */
+html[lang="ar"] body {
+  font-family:
+    var(--font-thmanyah), var(--font-inter), ui-sans-serif, system-ui,
+    "Segoe UI", Tahoma, sans-serif;
+}
+
+html[lang="ar"] .font-display {
+  font-family: var(--font-thmanyah), var(--font-fraunces), Georgia, serif;
+}
+
+html[lang="ar"] body,
+html[lang="ar"] body * {
+  letter-spacing: 0 !important;
+}
+
+html[lang="ar"] .italic {
+  font-style: normal;
+}
+
+/* Fraunces italic is its own, non-preloaded face: it only carries a few
+   accent words, so it should never compete with the hero text for bandwidth. */
+.font-display.italic,
+.font-display .italic {
+  font-family: var(--font-fraunces-italic), Georgia, serif;
+}
+
 ::selection {
   background: rgba(201, 167, 92, 0.28);
   color: #fff;
 }
 
-a,
-button,
-input,
-textarea,
-select {
-  outline-color: #c9a75c;
+/* A visible 2px focus indicator for every interactive element, including the
+   ones that do not carry the .focus-ring helper. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid #c9a75c;
+  outline-offset: 3px;
 }
 
 @layer components {
@@ -53,40 +117,33 @@ select {
     @apply border border-white/10 bg-ink-800/70 shadow-glow backdrop-blur-md sm:bg-ink-800/60 sm:backdrop-blur-xl;
     background-image:
       linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.015)),
-      linear-gradient(180deg, rgba(20,20,22,0.74), rgba(10,10,11,0.54));
+      linear-gradient(180deg, rgba(20, 20, 22, 0.74), rgba(10, 10, 11, 0.54));
   }
 
   .subtle-card {
-    @apply border border-white/10 bg-white/[0.04] backdrop-blur-lg;
+    @apply border border-white/10 bg-white/[0.04];
   }
 
   .focus-ring {
     @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4;
   }
 
-  .gradient-text {
-    background: linear-gradient(100deg, #f4f1ea 28%, #d9be82 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
   /* Editorial eyebrow: small, uppercase, generously tracked. */
   .badge {
-    @apply inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[0.68rem] font-medium uppercase tracking-[0.18em] text-paper-dim;
+    @apply inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-[0.72rem] font-medium uppercase tracking-[0.16em] text-paper-dim;
   }
 
   .eyebrow {
-    @apply inline-flex items-center gap-2.5 text-[0.7rem] font-medium uppercase tracking-[0.22em] text-paper-dim;
+    @apply inline-flex items-center gap-2.5 text-[0.72rem] font-medium uppercase tracking-[0.2em] text-paper-dim;
   }
 
   .eyebrow::before {
     content: "";
-    @apply h-px w-7 bg-accent/60;
+    @apply h-px w-7 shrink-0 bg-accent/60;
   }
 
   .accent-rule {
-    @apply h-px w-full bg-gradient-to-r from-accent/40 via-white/10 to-transparent;
+    @apply h-px w-full bg-gradient-to-r from-accent/40 via-white/10 to-transparent rtl:bg-gradient-to-l;
   }
 
   .premium-panel {
@@ -112,21 +169,27 @@ select {
     @apply inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-medium text-paper-dim;
   }
 
-  /* Arabic blog mode: Thmanyah typeface and no letter-spacing, because
-     tracking visually breaks connected Arabic glyphs. */
-  .blog-arabic {
-    font-family:
-      var(--font-thmanyah), var(--font-inter), Inter, ui-sans-serif, system-ui,
-      sans-serif;
-  }
-
-  .blog-arabic,
-  .blog-arabic * {
-    letter-spacing: 0;
+  /* Status badge: text label + shape marker, never colour alone. */
+  .status-badge {
+    @apply inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-xs font-medium leading-none;
   }
 
   .section-band {
     @apply border-y border-white/10 bg-white/[0.025];
+  }
+
+  /* Form controls: a boundary that clears 3:1 against the ink surface. */
+  .field-control {
+    @apply w-full rounded-xl border border-line-control bg-white/[0.04] px-4 text-base text-paper transition placeholder:text-paper-faint hover:border-paper-faint focus-visible:border-accent disabled:cursor-not-allowed disabled:opacity-60 sm:text-sm;
+  }
+
+  .field-control[aria-invalid="true"] {
+    @apply border-[#E5816B];
+  }
+
+  /* Links that leave the site get a consistent trailing marker. */
+  .external-mark {
+    @apply inline-block h-3.5 w-3.5 shrink-0 rtl:-scale-x-100;
   }
 }
 
@@ -138,6 +201,183 @@ select {
   text-wrap: balance;
 }
 
+/* Skip link: off-screen until focused, then pinned above the header. */
+.skip-link {
+  position: absolute;
+  inset-inline-start: 1rem;
+  top: 0.75rem;
+  z-index: 100;
+  transform: translateY(-160%);
+  border-radius: 9999px;
+  background: #c9a75c;
+  color: #0a0a0b;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.75rem 1.25rem;
+  transition: transform 0.15s ease-out;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid #f2efe7;
+  outline-offset: 3px;
+}
+
+main:focus {
+  outline: none;
+}
+
+/*
+ * Scroll reveals. Content is always rendered visible by the server; the
+ * client only hides an element that is still below the fold when it mounts,
+ * and shows it again when it scrolls in, gains focus, or after a fallback
+ * timeout. Without JavaScript nothing is ever hidden.
+ */
+[data-reveal] {
+  transition:
+    opacity 0.7s var(--ease-out),
+    transform 0.7s var(--ease-out);
+  transition-delay: var(--reveal-delay, 0s);
+}
+
+[data-reveal="hidden"] {
+  opacity: 0;
+  transform: translate3d(0, 1.5rem, 0);
+}
+
+/* Route changes only — the first render is never animated. */
+.page-enter {
+  animation: page-enter 0.42s var(--ease-out) both;
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0.35;
+    transform: translate3d(0, 0.5rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Decorative-only entrance used by secondary hero details. */
+.decor-enter {
+  animation: decor-enter 0.9s var(--ease-out) 0.15s both;
+}
+
+@keyframes decor-enter {
+  from {
+    transform: translate3d(0, 0.75rem, 0) scale(0.98);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* Scroll-driven backdrop drift (CSS only; ignored where unsupported). */
+@supports (animation-timeline: scroll()) {
+  .bg-drift-warm {
+    animation: drift-warm linear both;
+    animation-timeline: scroll(root);
+  }
+
+  .bg-drift-cool {
+    animation: drift-cool linear both;
+    animation-timeline: scroll(root);
+  }
+}
+
+@keyframes drift-warm {
+  from {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+  to {
+    transform: translate3d(0, 38%, 0);
+    opacity: 0.62;
+  }
+}
+
+@keyframes drift-cool {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, -30%, 0);
+  }
+}
+
+/* Signature monogram: drawn by default; replays stroke by stroke. */
+.signature path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+.signature-armed path {
+  stroke-dashoffset: 1;
+}
+
+.signature-play path {
+  animation: signature-draw 0.85s var(--ease-out) var(--sig-delay, 0s) both;
+}
+
+@keyframes signature-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Dialog enter/exit (Radix exposes data-state; Presence waits for these). */
+.dialog-overlay[data-state="open"] {
+  animation: fade-in 0.2s ease-out both;
+}
+
+.dialog-overlay[data-state="closed"] {
+  animation: fade-out 0.15s ease-in both;
+}
+
+.dialog-sheet[data-state="open"] {
+  animation: sheet-in 0.32s var(--ease-out) both;
+}
+
+.dialog-sheet[data-state="closed"] {
+  animation: sheet-out 0.18s ease-in both;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.9rem, 0);
+  }
+}
+
+@keyframes sheet-out {
+  to {
+    opacity: 0;
+    transform: translate3d(0, 0.6rem, 0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -147,19 +387,30 @@ select {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
-}
 
-.animate-hero-enter {
-  animation: hero-enter 0.45s ease-out both;
-}
-
-@keyframes hero-enter {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
+  html {
+    scroll-behavior: auto;
   }
-  to {
+
+  [data-reveal="hidden"] {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
+  }
+
+  .bg-drift-warm,
+  .bg-drift-cool,
+  .signature-play path {
+    animation: none !important;
+  }
+
+  .signature-armed path {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media print {
+  [data-reveal="hidden"] {
+    opacity: 1;
+    transform: none;
   }
 }
