@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRef, type PointerEvent } from "react";
-import { Monogram } from "@/components/ui/Monogram";
+import { SignatureMonogram } from "@/components/ui/SignatureMonogram";
 
 /**
  * The portrait with a gentle, mouse-only 3D tilt (plain CSS transforms). It
@@ -62,7 +62,8 @@ export function HeroPortrait({
         </div>
 
         <div className="absolute -bottom-4 start-[-0.75rem] flex items-center gap-2.5 rounded-2xl border border-white/10 bg-[#0a0a0b]/90 px-4 py-2.5 backdrop-blur-xl sm:start-[-1.25rem]">
-          <Monogram className="h-5 w-auto text-accent" />
+          {/* Same stroke as the static <Monogram> it replaced, so the drawn mark is unchanged. */}
+          <SignatureMonogram play strokeWidth={2.4} className="h-5 w-auto text-accent" />
           <span className="leading-tight">
             <span className="block font-display text-sm text-paper" lang="en" dir="ltr">
               {name}

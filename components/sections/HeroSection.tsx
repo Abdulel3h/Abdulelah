@@ -1,5 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { HeroPortrait } from "@/components/sections/HeroPortrait";
 import { HeroStage } from "@/components/sections/HeroStage";
 import { ButtonLink } from "@/components/ui/ButtonLink";
@@ -12,7 +13,9 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
  * First viewport. Everything essential — who, what, where, the evidence and
  * the next step — is plain server-rendered HTML that paints immediately: no
  * opacity:0 start states and no staggered JavaScript entrance. That removes
- * the multi-second render delay that previously held back mobile LCP.
+ * the multi-second render delay that previously held back mobile LCP. The
+ * entrance (name sheen, signal along the rule, proof points) is CSS only and
+ * adds light to text that is already painted (see globals.css).
  */
 export function HeroSection({ locale }: { locale: Locale }) {
   const dict = getDictionary(locale);
@@ -28,8 +31,10 @@ export function HeroSection({ locale }: { locale: Locale }) {
           className="font-display font-medium leading-[0.95] tracking-[-0.02em] text-paper"
           style={{ fontSize: "clamp(2.75rem, 7.2vw, 5.5rem)" }}
         >
-          {dict.common.firstName}
-          <span className="block text-paper/85">{dict.common.lastName}</span>
+          <span className="hero-name-line">{dict.common.firstName}</span>
+          <span className="hero-name-line block text-paper/85" style={{ "--sheen-delay": ".48s" } as CSSProperties}>
+            {dict.common.lastName}
+          </span>
         </h1>
 
         <p className="mt-5 text-base font-semibold text-accent-soft sm:text-lg">{hero.positioning}</p>
@@ -66,17 +71,17 @@ export function HeroSection({ locale }: { locale: Locale }) {
         </div>
 
         <div className="mt-10 max-w-xl">
-          <div className="accent-rule" />
+          <div className="accent-rule signal-rule" />
           <ul
             aria-label={hero.proofLabel}
             className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-paper-dim"
           >
             {hero.proof.map((item, index) => (
-              <li key={item} className="inline-flex items-center gap-4">
+              <li key={item} className="inline-flex items-center gap-4" style={{ "--i": index } as CSSProperties}>
                 {index > 0 ? (
-                  <span className="h-1 w-1 rounded-full bg-accent/70" aria-hidden="true" />
+                  <span className="proof-dot h-1 w-1 rounded-full bg-accent/70" aria-hidden="true" />
                 ) : null}
-                {item}
+                <span className="proof-item">{item}</span>
               </li>
             ))}
           </ul>
