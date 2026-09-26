@@ -702,15 +702,32 @@ main:focus {
 
 /*
  * Hero entrance: CSS only, plays with the first paint and never hides
- * anything. The name is painted through a clipped gradient only while its
- * sheen runs (fill-mode none), so before and after it is plain text.
+ * anything. On screen, with motion allowed, each name line is painted
+ * through a gradient that is its own text colour everywhere except one brass
+ * band; the sheen only slides that band across (background-position), so
+ * before and after it the name keeps its own colour. The clip and fill are
+ * static, not keyframed, because Safari may not apply them from keyframes.
+ * Print, reduced motion and forced colours keep plain text.
  */
-@media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+@media screen and (prefers-reduced-motion: no-preference) and (forced-colors: none) {
   .hero-name-line {
+    background-image: linear-gradient(90deg, currentColor 41%, var(--signal-hot) 48.5%, rgb(var(--signal)) 51.5%, currentColor 59%);
+    background-size: 260% 100%;
+    background-position: 100% 0;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* Room for ink that overhangs the line box, which the clip would
+       otherwise cut: the dots of a final Arabic yaa reach about 0.46em
+       below it. The margin cancels the padding, so nothing moves. */
+    padding-block: 0.3em 0.6em;
+    margin-block: -0.3em -0.6em;
     animation: hero-sheen 1.6s ease-in-out var(--sheen-delay, 0.3s);
   }
 
   [dir="rtl"] .hero-name-line {
+    background-image: linear-gradient(270deg, currentColor 41%, var(--signal-hot) 48.5%, rgb(var(--signal)) 51.5%, currentColor 59%);
+    background-position: 0% 0;
     animation-name: hero-sheen-rtl;
   }
 
@@ -759,18 +776,6 @@ main:focus {
 }
 
 @keyframes hero-sheen {
-  from,
-  to {
-    background-image: linear-gradient(90deg, currentColor 41%, var(--signal-hot) 48.5%, rgb(var(--signal)) 51.5%, currentColor 59%);
-    background-size: 260% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    /* Room for glyphs that overhang the line box (the tail of a final
-       Arabic yaa). Offset by the margin, so nothing moves. */
-    padding-block: 0.3em;
-    margin-block: -0.3em;
-  }
   from {
     background-position: 100% 0;
   }
@@ -780,18 +785,6 @@ main:focus {
 }
 
 @keyframes hero-sheen-rtl {
-  from,
-  to {
-    background-image: linear-gradient(270deg, currentColor 41%, var(--signal-hot) 48.5%, rgb(var(--signal)) 51.5%, currentColor 59%);
-    background-size: 260% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    /* Room for glyphs that overhang the line box (the tail of a final
-       Arabic yaa). Offset by the margin, so nothing moves. */
-    padding-block: 0.3em;
-    margin-block: -0.3em;
-  }
   from {
     background-position: 0% 0;
   }
