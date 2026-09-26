@@ -3,7 +3,9 @@
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { PipelineStage } from "@/components/motion/PipelineStage";
 import { EvidenceTag, StatusBadge } from "@/components/projects/ProjectMeta";
+import { FlowSteps } from "@/components/work/FlowSteps";
 import { ConceptFigure } from "@/components/work/ProductPreview";
 import type { EvidenceType, PreviewKind, ProjectStatus } from "@/data/projects";
 import type { Locale } from "@/lib/i18n/config";
@@ -41,7 +43,8 @@ type Labels = {
  * shows the facts a reviewer scans for (purpose, domain, year, role, status,
  * evidence), so nothing depends on hover. On wide screens, hovering or
  * focusing a row also updates the preview panel; the active row is marked
- * with a bar and an arrow, not colour alone.
+ * with a bar and an arrow, not colour alone. The panel is a pipeline stage:
+ * each newly shown project plays its sketch and flow once.
  */
 export function WorkIndex({
   items,
@@ -123,7 +126,7 @@ export function WorkIndex({
       </ol>
 
       <aside aria-label={labels.previewLabel} className="hidden lg:block">
-        <div className="sticky top-28">
+        <PipelineStage className="sticky top-28" replayKey={active.slug} threshold={0.3}>
           <ConceptFigure
             key={active.slug}
             kind={active.previewKind}
@@ -135,16 +138,7 @@ export function WorkIndex({
           <p className="mt-6 max-w-md font-display text-2xl leading-snug text-paper">{active.name}</p>
           <p className="mt-1 max-w-md text-sm text-paper-dim">{active.descriptor}</p>
 
-          <ol aria-label={labels.architecture} className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-2 text-xs text-paper-dim">
-            {active.flow.map((step, index) => (
-              <li key={step} className="flex items-center gap-2">
-                {index > 0 ? (
-                  <ArrowRight className="h-3 w-3 text-accent/70 rtl:-scale-x-100" aria-hidden="true" />
-                ) : null}
-                <span className="rounded-full border border-white/[0.1] bg-white/[0.03] px-3 py-1">{step}</span>
-              </li>
-            ))}
-          </ol>
+          <FlowSteps steps={active.flow} label={labels.architecture} className="mt-4" />
 
           <Link
             href={active.href}
@@ -157,7 +151,7 @@ export function WorkIndex({
               aria-hidden="true"
             />
           </Link>
-        </div>
+        </PipelineStage>
       </aside>
     </div>
   );
