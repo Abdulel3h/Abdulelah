@@ -827,6 +827,48 @@ main:focus {
   }
 }
 
+/* A visitor-initiated change of the domain spotlight's blurb. */
+.panel-swap {
+  animation: panel-swap 0.45s var(--ease-out);
+}
+
+@keyframes panel-swap {
+  from {
+    opacity: 0.35;
+    transform: translate3d(0, 0.45rem, 0);
+  }
+}
+
+/*
+ * Domain spotlight marker: one brass bar that follows the selected domain.
+ * It stays hidden until the client has placed it; without JavaScript, in
+ * print, in forced colours and under reduced motion the selected domain keeps
+ * its text underline.
+ */
+.domain-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  height: 2px;
+  border-radius: 9999px;
+  background: #c9a75c;
+  pointer-events: none;
+  transition:
+    transform 0.55s var(--ease-out),
+    width 0.55s var(--ease-out);
+}
+
+@media screen and (forced-colors: none) and (prefers-reduced-motion: no-preference) {
+  [data-indicator="on"] > .domain-indicator {
+    display: block;
+  }
+
+  [data-indicator="on"] > li > button {
+    text-decoration-line: none;
+  }
+}
+
 /* Forced colours strip the signal's colours anyway; keep those stages still. */
 @media (forced-colors: active) {
   .pipeline *,
@@ -864,7 +906,8 @@ main:focus {
   .signature-play path,
   .pipeline *,
   .pipeline *::before,
-  .pipeline *::after {
+  .pipeline *::after,
+  .panel-swap {
     animation: none !important;
   }
 
@@ -872,6 +915,9 @@ main:focus {
     stroke-dashoffset: 0;
   }
 
+  .domain-indicator {
+    transition: none !important;
+  }
 }
 
 @media print {
