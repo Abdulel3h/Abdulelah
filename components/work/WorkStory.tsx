@@ -2,14 +2,20 @@ import { ArrowRight, ArrowUpRight, Github } from "lucide-react";
 import Link from "next/link";
 import { EvidenceTag, StatusBadge } from "@/components/projects/ProjectMeta";
 import { TrackedLink } from "@/components/analytics/TrackedLink";
+import { PipelineStage } from "@/components/motion/PipelineStage";
 import { Reveal } from "@/components/ui/Reveal";
+import { FlowSteps } from "@/components/work/FlowSteps";
 import { ConceptFigure } from "@/components/work/ProductPreview";
 import type { LocalizedProject } from "@/data/projects";
 import { localizeHref, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { cn } from "@/lib/utils";
 
-/** One featured project on the homepage — server-rendered and always visible. */
+/**
+ * One featured project on the homepage — server-rendered and always visible.
+ * The whole story is one pipeline stage, so the sketch and the flow steps
+ * light up together, beat by beat.
+ */
 export function WorkStory({
   project,
   index,
@@ -26,7 +32,12 @@ export function WorkStory({
   const headingId = `work-${project.slug}`;
 
   return (
-    <article aria-labelledby={headingId} className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+    <PipelineStage
+      as="article"
+      aria-labelledby={headingId}
+      threshold={0.35}
+      className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16"
+    >
       <Reveal className={cn(flipped && "lg:order-2")}>
         <ConceptFigure
           kind={project.previewKind}
@@ -73,16 +84,7 @@ export function WorkStory({
           </div>
         </dl>
 
-        <ol className="mt-6 flex flex-wrap items-center gap-x-2 gap-y-2 text-xs text-paper-dim" aria-label={dict.caseStudy.sections.architecture}>
-          {project.flow.map((step, stepIndex) => (
-            <li key={step} className="flex items-center gap-2">
-              {stepIndex > 0 ? (
-                <ArrowRight className="h-3 w-3 text-accent/70 rtl:-scale-x-100" aria-hidden="true" />
-              ) : null}
-              <span className="rounded-full border border-white/[0.1] bg-white/[0.03] px-3 py-1">{step}</span>
-            </li>
-          ))}
-        </ol>
+        <FlowSteps steps={project.flow} label={dict.caseStudy.sections.architecture} className="mt-6" />
 
         <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-2">
           <Link
@@ -111,6 +113,6 @@ export function WorkStory({
           ) : null}
         </div>
       </div>
-    </article>
+    </PipelineStage>
   );
 }

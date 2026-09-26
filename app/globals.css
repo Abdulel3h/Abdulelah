@@ -378,6 +378,516 @@ main:focus {
   }
 }
 
+/*
+ * The travelling signal. One brass signal passes through each system on the
+ * page, lights every part as it reaches it, and leaves the scene exactly as it
+ * found it. Activations only ever add light: every keyframe below defines the
+ * lit middle alone, so start and end fall back to the element's own values and
+ * a replay never jumps. The server renders every stage at rest.
+ *
+ * A stage is a `.pipeline` (components/motion/PipelineStage). Inside it,
+ * `data-beat="1"`–`"4"` places an element on the beat grid and
+ * `--beat-offset` nudges it within its beat. Both inherit, so a helper class
+ * inside a beat element plays with it. Nothing moves until the stage switches
+ * to data-pipeline="play".
+ */
+:root {
+  --signal: 201 167 92;
+  --signal-hot: #f3e3b8;
+  --beat-start: 0.2s;
+  --beat-gap: 0.72s;
+  --beat-len: 1.1s;
+}
+
+.pipeline [data-beat="1"] {
+  --beat-at: var(--beat-start);
+}
+
+.pipeline [data-beat="2"] {
+  --beat-at: calc(var(--beat-start) + var(--beat-gap));
+}
+
+.pipeline [data-beat="3"] {
+  --beat-at: calc(var(--beat-start) + var(--beat-gap) * 2);
+}
+
+.pipeline [data-beat="4"] {
+  --beat-at: calc(var(--beat-start) + var(--beat-gap) * 3);
+}
+
+/* Zero specificity, so Tailwind's `absolute` on the same element still wins. */
+:where(.beat-fill, .beat-rise, .beat-rule, .beat-ring) {
+  position: relative;
+}
+
+/* Resting states: every overlay is invisible until its beat. */
+.beat-fill::after,
+.beat-rise::after,
+.beat-rule::before,
+.beat-ring::after {
+  content: "";
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.beat-fill::after {
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgb(var(--signal) / 0.5), var(--signal-hot));
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+[dir="rtl"] .beat-fill::after {
+  background: linear-gradient(270deg, rgb(var(--signal) / 0.5), var(--signal-hot));
+  transform-origin: right center;
+}
+
+.beat-rise::after {
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(0deg, rgb(var(--signal) / 0.45), var(--signal-hot));
+  transform: scaleY(0);
+  transform-origin: center bottom;
+}
+
+.beat-rule::before {
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgb(var(--signal) / 0.35), rgb(var(--signal)) 70%, var(--signal-hot));
+  box-shadow: 0 0 10px rgb(var(--signal) / 0.45);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+[dir="rtl"] .beat-rule::before {
+  background: linear-gradient(270deg, rgb(var(--signal) / 0.35), rgb(var(--signal)) 70%, var(--signal-hot));
+  transform-origin: right center;
+}
+
+.beat-ring::after {
+  inset: -2px;
+  border: 1.5px solid rgb(var(--signal) / 0.85);
+  border-radius: 9999px;
+}
+
+.beat-stop {
+  text-decoration-line: line-through;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+}
+
+.beat-trace {
+  opacity: 0;
+  stroke-dasharray: 0.18 1.2;
+  stroke-dashoffset: 0.18;
+}
+
+.beat-scan {
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 30%, rgb(var(--signal) / 0.1) 82%, rgb(var(--signal) / 0.45) 97%, var(--signal-hot));
+  transform: translateY(-100%);
+}
+
+.beat-critical {
+  --signal: 229 129 107;
+  --signal-hot: #f4b3a1;
+}
+
+.pipeline[data-pipeline="play"] :is(.beat-glow, .beat-text, .beat-text-strong, .beat-key, .beat-stop, .beat-swell, .beat-brighten, .beat-grid, .beat-trace, .beat-scan),
+.pipeline[data-pipeline="play"] :is(.beat-fill, .beat-rise, .beat-ring)::after,
+.pipeline[data-pipeline="play"] .beat-rule::before {
+  animation-duration: var(--beat-len);
+  animation-timing-function: var(--ease-out);
+  animation-delay: calc(var(--beat-at, 0s) + var(--beat-offset, 0s));
+}
+
+.pipeline[data-pipeline="play"] .beat-glow {
+  animation-name: beat-glow;
+}
+
+.pipeline[data-pipeline="play"] .beat-text {
+  animation-name: beat-text;
+}
+
+.pipeline[data-pipeline="play"] .beat-glow.beat-text {
+  animation-name: beat-glow, beat-text;
+}
+
+.pipeline[data-pipeline="play"] .beat-text-strong {
+  animation-name: beat-text-strong;
+}
+
+.pipeline[data-pipeline="play"] .beat-key {
+  animation-name: beat-key;
+}
+
+.pipeline[data-pipeline="play"] .beat-stop {
+  animation-name: beat-stop;
+}
+
+.pipeline[data-pipeline="play"] .beat-fill::after {
+  animation-name: beat-fill;
+}
+
+.pipeline[data-pipeline="play"] .beat-rise::after {
+  animation-name: beat-rise;
+}
+
+.pipeline[data-pipeline="play"] .beat-rule::before {
+  animation-name: beat-rule;
+}
+
+.pipeline[data-pipeline="play"] .beat-ring::after {
+  animation-name: beat-ring;
+}
+
+.pipeline[data-pipeline="play"] .beat-swell {
+  animation-name: beat-swell;
+}
+
+.pipeline[data-pipeline="play"] .beat-brighten {
+  animation-name: beat-brighten;
+}
+
+.pipeline[data-pipeline="play"] .beat-grid {
+  animation-name: beat-grid;
+}
+
+/* Travel reads best at an even pace. */
+.pipeline[data-pipeline="play"] .beat-trace {
+  animation-name: beat-trace;
+  animation-timing-function: ease-in-out;
+}
+
+.pipeline[data-pipeline="play"] .beat-scan {
+  animation-name: beat-scan;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes beat-glow {
+  35% {
+    border-color: rgb(var(--signal) / 0.75);
+    box-shadow:
+      0 0 0 1px rgb(var(--signal) / 0.3),
+      0 0 22px -4px rgb(var(--signal) / 0.55);
+  }
+}
+
+@keyframes beat-text {
+  35% {
+    color: var(--signal-hot);
+  }
+}
+
+/* For text that is already near-white, where a shift to the hot tone would
+   not show: brass with a soft glow (brass still clears AA on ink). */
+@keyframes beat-text-strong {
+  35% {
+    color: rgb(var(--signal));
+    text-shadow: 0 0 16px rgb(var(--signal) / 0.5);
+  }
+}
+
+@keyframes beat-key {
+  35% {
+    color: var(--signal-hot);
+    background-color: rgb(var(--signal) / 0.2);
+    box-shadow: 0 0 0 0.15em rgb(var(--signal) / 0.2);
+  }
+}
+
+/* Dimmed to paper-faint, which still clears AA on the ink surfaces. */
+@keyframes beat-stop {
+  35% {
+    color: #8e897f;
+    text-decoration-color: rgb(var(--signal) / 0.9);
+  }
+}
+
+@keyframes beat-fill {
+  12% {
+    opacity: 1;
+  }
+  55% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  94% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+
+@keyframes beat-rise {
+  12% {
+    opacity: 1;
+  }
+  55% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  94% {
+    transform: scaleY(1);
+    opacity: 0;
+  }
+}
+
+@keyframes beat-rule {
+  12% {
+    opacity: 1;
+  }
+  55% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  94% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+
+@keyframes beat-ring {
+  12% {
+    opacity: 1;
+  }
+  80% {
+    transform: scale(var(--ring-scale, 3));
+    opacity: 0;
+  }
+}
+
+/* The individual `scale` property composes with Tailwind's translate
+   utilities; `--tw-blur` keeps an element's own blur while it brightens. */
+@keyframes beat-swell {
+  40% {
+    scale: 1.05;
+    filter: var(--tw-blur,) brightness(1.3);
+  }
+}
+
+@keyframes beat-brighten {
+  40% {
+    scale: 2.4;
+    background-color: var(--signal-hot);
+    box-shadow: 0 0 6px 1px rgb(var(--signal) / 0.8);
+  }
+}
+
+@keyframes beat-grid {
+  40% {
+    opacity: 0.55;
+  }
+}
+
+/* One dash (pathLength=1) travels from before the start to past the end. */
+@keyframes beat-trace {
+  10% {
+    opacity: 1;
+  }
+  82% {
+    stroke-dashoffset: -1;
+    opacity: 1;
+  }
+  90% {
+    stroke-dashoffset: -1;
+    opacity: 0;
+  }
+}
+
+@keyframes beat-scan {
+  10% {
+    opacity: 1;
+  }
+  85% {
+    transform: translateY(100%);
+    opacity: 1;
+  }
+  92% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+/*
+ * Hero entrance: CSS only, plays with the first paint and never hides
+ * anything. On screen, with motion allowed, each name line is painted
+ * through a gradient that is its own text colour everywhere except one brass
+ * band; the sheen only slides that band across (background-position), so
+ * before and after it the name keeps its own colour. The clip and fill are
+ * static, not keyframed, because Safari may not apply them from keyframes.
+ * Print, reduced motion and forced colours keep plain text.
+ */
+@media screen and (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+  .hero-name-line {
+    background-image: linear-gradient(90deg, currentColor 41%, var(--signal-hot) 48.5%, rgb(var(--signal)) 51.5%, currentColor 59%);
+    background-size: 260% 100%;
+    background-position: 100% 0;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* Room for ink that overhangs the line box, which the clip would
+       otherwise cut: the dots of a final Arabic yaa reach about 0.46em
+       below it. The margin cancels the padding, so nothing moves. */
+    padding-block: 0.3em 0.6em;
+    margin-block: -0.3em -0.6em;
+    animation: hero-sheen 1.6s ease-in-out var(--sheen-delay, 0.3s);
+  }
+
+  [dir="rtl"] .hero-name-line {
+    background-image: linear-gradient(270deg, currentColor 41%, var(--signal-hot) 48.5%, rgb(var(--signal)) 51.5%, currentColor 59%);
+    background-position: 0% 0;
+    animation-name: hero-sheen-rtl;
+  }
+
+  .signal-rule {
+    position: relative;
+    clip-path: inset(-12px 0 -12px 0);
+    /* Keeps the travelling bar out of the page's scrollable width too. */
+    overflow-x: clip;
+  }
+
+  .signal-rule::after {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 22%;
+    height: 3px;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, transparent, rgb(var(--signal)) 65%, var(--signal-hot));
+    box-shadow: 0 0 12px rgb(var(--signal) / 0.55);
+    transform: translateX(-100%);
+    animation: signal-run 1.5s ease-in-out 1s both;
+    pointer-events: none;
+  }
+
+  [dir="rtl"] .signal-rule::after {
+    left: auto;
+    right: 0;
+    background: linear-gradient(270deg, transparent, rgb(var(--signal)) 65%, var(--signal-hot));
+    transform: translateX(100%);
+    animation-name: signal-run-rtl;
+  }
+
+  .proof-item,
+  .proof-dot {
+    animation: 1.1s var(--ease-out) calc(1.15s + var(--i, 0) * 0.42s);
+  }
+
+  .proof-item {
+    animation-name: beat-text;
+  }
+
+  .proof-dot {
+    animation-name: proof-dot;
+  }
+}
+
+@keyframes hero-sheen {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0% 0;
+  }
+}
+
+@keyframes hero-sheen-rtl {
+  from {
+    background-position: 0% 0;
+  }
+  to {
+    background-position: 100% 0;
+  }
+}
+
+@keyframes signal-run {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(455%);
+  }
+}
+
+@keyframes signal-run-rtl {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-455%);
+  }
+}
+
+@keyframes proof-dot {
+  35% {
+    background-color: var(--signal-hot);
+    box-shadow:
+      0 0 0 3px rgb(var(--signal) / 0.18),
+      0 0 10px 1px rgb(var(--signal) / 0.7);
+  }
+}
+
+/* A visitor-initiated change of the domain spotlight's blurb. */
+.panel-swap {
+  animation: panel-swap 0.45s var(--ease-out);
+}
+
+@keyframes panel-swap {
+  from {
+    opacity: 0.35;
+    transform: translate3d(0, 0.45rem, 0);
+  }
+}
+
+/*
+ * Domain spotlight marker: one brass bar that follows the selected domain.
+ * It stays hidden until the client has placed it; without JavaScript, in
+ * print, in forced colours and under reduced motion the selected domain keeps
+ * its text underline.
+ */
+.domain-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  height: 2px;
+  border-radius: 9999px;
+  background: #c9a75c;
+  pointer-events: none;
+  transition:
+    transform 0.55s var(--ease-out),
+    width 0.55s var(--ease-out);
+}
+
+@media screen and (forced-colors: none) and (prefers-reduced-motion: no-preference) {
+  [data-indicator="on"] > .domain-indicator {
+    display: block;
+  }
+
+  [data-indicator="on"] > li > button {
+    text-decoration-line: none;
+  }
+}
+
+/* Forced colours strip the signal's colours anyway; keep those stages still. */
+@media (forced-colors: active) {
+  .pipeline *,
+  .pipeline *::before,
+  .pipeline *::after {
+    animation: none !important;
+  }
+
+  .beat-stop {
+    text-decoration-line: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -399,12 +909,20 @@ main:focus {
 
   .bg-drift-warm,
   .bg-drift-cool,
-  .signature-play path {
+  .signature-play path,
+  .pipeline *,
+  .pipeline *::before,
+  .pipeline *::after,
+  .panel-swap {
     animation: none !important;
   }
 
   .signature-armed path {
     stroke-dashoffset: 0;
+  }
+
+  .domain-indicator {
+    transition: none !important;
   }
 }
 
@@ -412,5 +930,11 @@ main:focus {
   [data-reveal="hidden"] {
     opacity: 1;
     transform: none;
+  }
+
+  .pipeline *,
+  .pipeline *::before,
+  .pipeline *::after {
+    animation: none !important;
   }
 }

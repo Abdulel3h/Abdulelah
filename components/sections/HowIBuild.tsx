@@ -1,7 +1,9 @@
+import { PipelineStage } from "@/components/motion/PipelineStage";
 import { Reveal } from "@/components/ui/Reveal";
 import type { Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 
+/** Four principles in order; the signal hops across them once, rule by rule. */
 export function HowIBuild({ locale }: { locale: Locale }) {
   const t = getDictionary(locale).home.approach;
 
@@ -18,11 +20,16 @@ export function HowIBuild({ locale }: { locale: Locale }) {
           </h2>
         </div>
 
-        <ol className="mt-12 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+        <PipelineStage
+          as="ol"
+          threshold={0.3}
+          replayOnHover={false}
+          className="mt-12 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-4"
+        >
           {t.principles.map((principle, index) => (
             <Reveal as="li" key={principle.title} delay={index * 0.08}>
-              <div className="border-t border-white/[0.12] pt-5">
-                <span className="font-display text-sm text-accent" aria-hidden="true">
+              <div data-beat={Math.min(index + 1, 4)} className="beat-rule border-t border-white/[0.12] pt-5">
+                <span className="beat-text font-display text-sm text-accent" aria-hidden="true">
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <h3 className="mt-3 font-display text-xl font-medium text-paper">{principle.title}</h3>
@@ -30,7 +37,7 @@ export function HowIBuild({ locale }: { locale: Locale }) {
               </div>
             </Reveal>
           ))}
-        </ol>
+        </PipelineStage>
       </div>
     </section>
   );

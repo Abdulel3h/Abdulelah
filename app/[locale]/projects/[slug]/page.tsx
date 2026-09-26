@@ -8,6 +8,7 @@ import { ReadingPath } from "@/components/agent/ReadingPath";
 import { TrackedLink } from "@/components/analytics/TrackedLink";
 import { EvidencePanel } from "@/components/projects/EvidencePanel";
 import { ProjectArchitecture } from "@/components/projects/ProjectArchitecture";
+import { PipelineStage } from "@/components/motion/PipelineStage";
 import { EvidenceTag, StatusBadge } from "@/components/projects/ProjectMeta";
 import { CTASection } from "@/components/sections/CTASection";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -262,12 +263,14 @@ export default async function ProjectDetailPage({ params }: Props) {
               </blockquote>
             ) : null}
           </div>
-          <ConceptFigure
-            kind={project.previewKind}
-            locale={locale}
-            caption={facts.conceptVisualization}
-            note={facts.conceptVisualizationNote}
-          />
+          <PipelineStage>
+            <ConceptFigure
+              kind={project.previewKind}
+              locale={locale}
+              caption={facts.conceptVisualization}
+              note={facts.conceptVisualizationNote}
+            />
+          </PipelineStage>
         </div>
       </section>
 

@@ -11,7 +11,15 @@ const paths = ["M4 37 L14 6 L24 37", "M24 37 L34 6 L44 37", "M8 25 H20", "M28 25
  * when it scrolls into view — or immediately with `play` — and never under
  * reduced motion.
  */
-export function SignatureMonogram({ className, play = false }: { className?: string; play?: boolean }) {
+export function SignatureMonogram({
+  className,
+  play = false,
+  strokeWidth = 2.2
+}: {
+  className?: string;
+  play?: boolean;
+  strokeWidth?: number;
+}) {
   const ref = useRef<SVGSVGElement>(null);
   const [state, setState] = useState<"drawn" | "armed" | "play">(play ? "play" : "drawn");
 
@@ -51,7 +59,7 @@ export function SignatureMonogram({ className, play = false }: { className?: str
       aria-hidden="true"
       className={cn("signature", state === "armed" && "signature-armed", state === "play" && "signature-play", className)}
     >
-      <g stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
+      <g stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
         {paths.map((d, index) => (
           <path key={d} d={d} pathLength={1} style={{ "--sig-delay": `${index * 0.22}s` } as CSSProperties} />
         ))}
