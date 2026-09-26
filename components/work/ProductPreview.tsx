@@ -237,7 +237,7 @@ function SecurityBody({ locale }: { locale: Locale }) {
           <p className="text-[0.7rem] uppercase tracking-[0.14em] text-paper-dim">
             {ar ? "تقييم وفق القواعد" : "Rule-based assessment"}
           </p>
-          <p data-beat="4" className="beat-text mt-1 font-display text-3xl leading-none text-paper">
+          <p data-beat="4" className="beat-text-strong mt-1 font-display text-3xl leading-none text-paper">
             {ar ? "منخفض" : "Low"}
           </p>
         </div>
@@ -344,7 +344,7 @@ function FintechBody({ locale }: { locale: Locale }) {
       <div className="flex items-end justify-between">
         <div>
           <p className="text-[0.7rem] uppercase tracking-[0.14em] text-paper-dim">{ar ? "نظرة شهرية" : "Monthly overview"}</p>
-          <p data-beat="2" className="beat-text mt-1 font-display text-2xl leading-none text-paper">
+          <p data-beat="2" className="beat-text-strong mt-1 font-display text-2xl leading-none text-paper">
             {ar ? "الإنفاق والادخار" : "Spending & saving"}
           </p>
         </div>

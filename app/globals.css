@@ -498,7 +498,7 @@ main:focus {
   --signal-hot: #f4b3a1;
 }
 
-.pipeline[data-pipeline="play"] :is(.beat-glow, .beat-text, .beat-key, .beat-stop, .beat-swell, .beat-brighten, .beat-grid, .beat-trace, .beat-scan),
+.pipeline[data-pipeline="play"] :is(.beat-glow, .beat-text, .beat-text-strong, .beat-key, .beat-stop, .beat-swell, .beat-brighten, .beat-grid, .beat-trace, .beat-scan),
 .pipeline[data-pipeline="play"] :is(.beat-fill, .beat-rise, .beat-ring)::after,
 .pipeline[data-pipeline="play"] .beat-rule::before {
   animation-duration: var(--beat-len);
@@ -516,6 +516,10 @@ main:focus {
 
 .pipeline[data-pipeline="play"] .beat-glow.beat-text {
   animation-name: beat-glow, beat-text;
+}
+
+.pipeline[data-pipeline="play"] .beat-text-strong {
+  animation-name: beat-text-strong;
 }
 
 .pipeline[data-pipeline="play"] .beat-key {
@@ -577,6 +581,15 @@ main:focus {
 @keyframes beat-text {
   35% {
     color: var(--signal-hot);
+  }
+}
+
+/* For text that is already near-white, where a shift to the hot tone would
+   not show: brass with a soft glow (brass still clears AA on ink). */
+@keyframes beat-text-strong {
+  35% {
+    color: rgb(var(--signal));
+    text-shadow: 0 0 16px rgb(var(--signal) / 0.5);
   }
 }
 
