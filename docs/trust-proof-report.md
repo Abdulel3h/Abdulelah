@@ -16,7 +16,7 @@ The homepage claim "7 products shipped" was not supported by the evidence and ha
 | ChatUB | Graduation project (working prototype, not deployed to students) | Public repository + README screenshot |
 | Absher Insight AI | Hackathon prototype (synthetic data, not affiliated with Absher) | Public repository + README screenshots |
 | Stadium | Working prototype (solo, not calibrated for a venue) | Public repository + README screenshot |
-| Althil | Hackathon prototype | Program record; code private, not linked |
+| Althil | Hackathon prototype (team build, not used by a city) | Public repository + README screenshots + program record |
 | Qanouni | Concept (AthkaU Top 30 idea) | Program record |
 | Virtual Astronauts | Concept (AthkaU Top 30 idea) | Program record |
 | Medad | Concept | Private project evidence; nothing linked |
@@ -36,7 +36,7 @@ The `midad-landing`, `example` and `architect-of-intelligence` repositories refe
 | Absher Insight AI | `absher-insight` | 98% | 7.5/10 | https://github.com/Abdulel3h/absher-insight | ✅ Yes |
 | Medad | `midad-landing` | ~85% | not audited | https://github.com/Abdulel3h/midad-landing | ⚠️ Needs verification |
 | Virtual Astronauts | `example` | ~90% (identity) | ~3/10 | https://github.com/Abdulel3h/example | ❌ Not suitable |
-| Althil | — | — | — | — | ❌ No repo found |
+| Althil | `Althil` | 100% | prepared for publication | https://github.com/Abdulel3h/Althil | ✅ Yes |
 | Qanouni | — | — | — | — | ❌ No repo found |
 
 ### ChatUB → ChatUB ✅ LINKED
@@ -58,9 +58,9 @@ The `midad-landing`, `example` and `architect-of-intelligence` repositories refe
 - `example` ("Early Virtual Astronaut static mockup; archive or rebuild as full AI/VR case study") is the same project but is an early static mockup, archive-candidate, with a non-credible repo name.
 - **Action:** rebuild as a real AI/VR case-study repo (rename), or leave unlinked. Do not surface in current state.
 
-### Althil ❌ NO REPO
-- No repository found for the urban thermal-comfort / Google Cloud project.
-- **Action:** if a repo exists privately or under another account, share it; otherwise the project stands on its case study (hackathon: KFUPM × Google Cloud, real).
+### Althil ✅ PUBLISHED (October 2026)
+- Published as https://github.com/Abdulel3h/Althil from the team's hackathon code, with tests, a README that lists every simulated input, and screenshots captured from the running app.
+- Linked from the case study; BigQuery, Cloud Storage and Vertex AI remain design-only and are described that way.
 
 ### Qanouni ❌ NO REPO
 - No repository found for the AI legal advisor (Azure AI) project.
@@ -77,6 +77,6 @@ The `midad-landing`, `example` and `architect-of-intelligence` repositories refe
 1. Confirm Medad → `midad-landing`; then link.
 2. Add a LICENSE (e.g. MIT) to ChatUB and absher-insight — removes legal ambiguity, raises credibility.
 3. Add real screenshots / a short demo GIF to ChatUB and absher-insight READMEs.
-4. Decide on Althil/Qanouni repos (publish or leave as case studies).
+4. Decide on a Qanouni repo (publish or leave as a case study). Althil was published in October 2026.
 5. Consider promoting `Stadium` and `architect-of-intelligence` to portfolio projects (both real, the latter has a live demo).
 6. Rebuild/rename `example` before surfacing Virtual Astronauts source.

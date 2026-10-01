@@ -40,8 +40,8 @@ Browser
 ## Verified capabilities
 
 - Full English and Arabic versions of every public page (`lang`/`dir`, localized metadata, canonical + hreflang, bilingual sitemap)
-- Seven case studies — ChatUB, Absher Insight AI, Stadium, Althil, Qanouni, Virtual Astronauts, Medad — each with a standard evidence panel: status, evidence, what is not claimed, limitations and next steps
-- Evidence-based statuses: four working prototypes (three with public repositories) and three concepts; nothing is presented as shipped or in production
+- Seven case studies — ChatUB, Althil, Absher Insight AI, Stadium, Qanouni, Virtual Astronauts, Medad — each with a standard evidence panel: status, evidence, what is not claimed, limitations and next steps
+- Evidence-based statuses: four working prototypes (all four with public repositories) and three concepts; nothing is presented as shipped or in production
 - Two role-specific CV downloads (AI Engineer, AI Specialist) on the Resume page
 - Abdulelah's guide: a modal, bilingual portfolio assistant grounded in the same data, loaded on demand
 - Site search (Ctrl/⌘ K), a "More" disclosure menu and a mobile menu with correct focus management
@@ -93,7 +93,7 @@ The assistant and contact delivery are optional: without keys the site runs, and
 ## Limitations
 
 - **Project visuals are concept sketches.** The code-drawn previews on the site are labelled "Concept visualization"; real screenshots live in the public project repositories and are linked from each evidence panel.
-- **Althil, Qanouni, Medad and Virtual Astronauts have no public code.** Their case studies say so and link only to program records.
+- **Qanouni, Medad and Virtual Astronauts have no public code.** Their case studies say so and link only to program records.
 - **Lab LCP.** The hero now paints its text immediately (observed LCP equals FCP), but Lighthouse's simulated mobile LCP still charges the framework JavaScript that loads before first paint.
 - **No formatter.** Style is enforced by ESLint; there is no Prettier configuration.
 
