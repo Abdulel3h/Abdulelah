@@ -5,7 +5,7 @@ import type { Locale } from "@/lib/i18n/config";
  * studies, search, metadata and Abdulelah's guide.
  *
  * Evidence rule: a status is never stronger than what can be verified. The
- * three public repositories (ChatUB, absher-insight, Stadium) describe
+ * four public repositories (ChatUB, Althil, absher-insight, Stadium) describe
  * themselves as prototypes, so nothing here is called "shipped", "live" or
  * "in production". Projects without public code say so, and the code-drawn
  * previews are always labelled as concept visualizations.
@@ -290,6 +290,199 @@ const records: ProjectRecord[] = [
         "تجربة محدودة مع مجموعة من الطلاب والمرشدين الأكاديميين"
       ],
       quote: "يبدأ الابتكار الحقيقي حين تحترم التقنية السياق والخصوصية واحتياجات الناس الفعلية."
+    }
+  },
+  {
+    slug: "althil",
+    name: "Althil",
+    year: "2026",
+    status: "hackathon-prototype",
+    evidenceType: "public-repository",
+    featured: true,
+    previewKind: "map",
+    technologies: ["Python", "FastAPI", "OpenCV", "pysolar", "Docker", "Google Cloud Run"],
+    links: { github: "https://github.com/Abdulel3h/Althil" },
+    evidence: [
+      {
+        kind: "repository",
+        href: "https://github.com/Abdulel3h/Althil",
+        label: { en: "Public repository on GitHub", ar: "مستودع عام على GitHub" },
+        detail: {
+          en: "FastAPI backend, analysis services, the Cloud Run Dockerfile and tests, with a plain account of which inputs are simulated.",
+          ar: "الأنظمة الخلفية بـ FastAPI وخدمات التحليل وملف Dockerfile لـ Cloud Run والاختبارات، مع بيان صريح للمدخلات المحاكاة."
+        }
+      },
+      {
+        kind: "screenshots",
+        href: "https://github.com/Abdulel3h/Althil#screenshots",
+        label: { en: "Screenshots in the README", ar: "لقطات شاشة في ملف README" },
+        detail: {
+          en: "Captured from the running app; the README notes that the server clock was pinned to midday so the sun is up.",
+          ar: "ملتقطة من التطبيق أثناء تشغيله، ويذكر ملف README أن ساعة الخادم ثُبّتت على منتصف النهار لتظهر الشمس."
+        }
+      },
+      {
+        kind: "program-record",
+        href: "/achievements",
+        label: {
+          en: "Intelligent Planet Hackathon — program record",
+          ar: "هاكاثون الكوكب الذكي — سجل المشاركة"
+        },
+        detail: {
+          en: "Listed under Recognition: KFUPM × Google Cloud, 2026.",
+          ar: "موثّق في صفحة الإنجازات: جامعة الملك فهد للبترول والمعادن مع Google Cloud، عام 2026."
+        }
+      }
+    ],
+    en: {
+      descriptor: "Urban thermal comfort decision support",
+      summary:
+        "A decision-support prototype that helps urban planners decide where shade interventions belong, from sun position, a heat-exposure score and site-photo analysis.",
+      domain: "Sustainability · Urban planning",
+      role: "Backend developer & cloud architecture contributor",
+      statusDetail:
+        "Built with a team during the Intelligent Planet Hackathon (KFUPM × Google Cloud). A hackathon prototype with public code — not used by a city.",
+      context:
+        "Team project built during the Intelligent Planet Hackathon, hosted by KFUPM in collaboration with Google Cloud.",
+      problem:
+        "Urban planners need to know where shade canopies will actually improve comfort. Heat exposure shifts with the sun’s path across the day and the year, which static plans rarely account for.",
+      constraints: [
+        "Hackathon time limit",
+        "A team build — Abdulelah’s part was the backend, the cloud architecture and the service integration",
+        "No land-cover data, so urban density is simulated",
+        "One container, deployable to Cloud Run"
+      ],
+      solution:
+        "A map-based planning tool served by one FastAPI application. Selecting a point returns the sun’s altitude and azimuth, a 0–100 heat-risk score, a shade type chosen from the sun angle with candidate placements, and a report the planner can download as a PDF. A site photo adds an estimate of vegetation versus hard surface.",
+      responsibilities: [
+        "Built the FastAPI backend and its analysis endpoints",
+        "Integrated the sun-position, heat-scoring, image-analysis and report services into one deployable application",
+        "Packaged the application as one stateless container for Google Cloud Run",
+        "Supported the Google Cloud architecture direction of the design"
+      ],
+      flow: ["Map location", "Sun position & heat score", "Site-photo analysis", "Shade recommendations & report"],
+      approach: [
+        "pysolar computes the sun’s altitude and azimuth for the selected point at the current time",
+        "A rule weights sun altitude and an urban-density factor into a 0–100 heat score with Low, Moderate and High levels",
+        "The sun angle selects the shade type — horizontal canopy, angled shade sail or vertical green wall — and three candidate points are placed around the selection",
+        "OpenCV colour thresholds estimate vegetation and grey-surface coverage in a site photo",
+        "One FastAPI app serves the map, the API and a PDF report, packaged as a container for Cloud Run"
+      ],
+      capabilities: [
+        "Sun-position and heat-risk analysis for any map point",
+        "Shade-type recommendations with candidate placements",
+        "Site-photo surface analysis",
+        "Report page and PDF export"
+      ],
+      technologiesNote:
+        "Cloud Run packaging is in the repository. The hackathon design also called for BigQuery, Cloud Storage and Vertex AI; those integrations are not implemented in the code.",
+      decisions: [
+        {
+          title: "One container, built for Cloud Run",
+          body: "The map, the API and the reports are served by a single stateless FastAPI app packaged for Cloud Run, so the team could deploy the whole system as one unit inside the hackathon. BigQuery, Cloud Storage and Vertex AI stayed in the design, not the code."
+        },
+        {
+          title: "Compute what can be computed, label the rest",
+          body: "The sun’s position is computed exactly with pysolar. Urban density, candidate placements and cooling estimates are simulated or estimated, and the README, the report and the PDF say so."
+        },
+        {
+          title: "Shade type from sun geometry",
+          body: "A high sun calls for horizontal cover and a low sun for vertical screening, so the recommendation is a kind of shade, not only a score."
+        }
+      ],
+      outcome:
+        "A runnable hackathon prototype with public code: one FastAPI app that computes sun position and a heat-risk score for any map point, recommends a shade type with candidate placements, analyses site photos and exports a PDF report, packaged as a container for Cloud Run. Service and API tests were added when the code was published. No city deployment and no measured cooling effect are claimed.",
+      notClaimed:
+        "No city deployment, no measured temperature reduction and no BigQuery, Cloud Storage or Vertex AI integration are claimed.",
+      limitations: [
+        "Urban density is simulated from the coordinates, and candidate placements and cooling figures are estimates.",
+        "Sun position always uses the current time; there is no date picker and no night-time handling.",
+        "Image analysis uses colour thresholds, not a trained model, and the assistant panel gives scripted replies.",
+        "Recommendations have not been validated with planners or with field temperature data."
+      ],
+      next: [
+        "Replace simulated density with land-cover data",
+        "Let planners choose the date and time and compare sun paths",
+        "Implement the designed BigQuery, Cloud Storage and Vertex AI components",
+        "Validate recommendations against measured street temperatures"
+      ],
+      lesson:
+        "This project strengthened my experience in cloud-native design, data-driven decisions and cross-functional collaboration under real constraints."
+    },
+    ar: {
+      descriptor: "دعم القرار للراحة الحرارية في المدن",
+      summary:
+        "نموذج أولي لدعم القرار يساعد المخططين الحضريين على تحديد مواضع التظليل، انطلاقًا من موقع الشمس ودرجة التعرض للحرارة وتحليل صور الموقع.",
+      domain: "الاستدامة · التخطيط الحضري",
+      role: "مطوّر أنظمة خلفية ومساهم في البنية السحابية",
+      statusDetail:
+        "بُني ضمن فريق خلال هاكاثون الكوكب الذكي (جامعة الملك فهد للبترول والمعادن مع Google Cloud). نموذج أولي في هاكاثون بكود منشور — لا تستخدمه أي مدينة.",
+      context:
+        "مشروع فريق بُني خلال هاكاثون الكوكب الذكي الذي نظمته جامعة الملك فهد للبترول والمعادن بالتعاون مع Google Cloud.",
+      problem:
+        "يحتاج المخططون الحضريون إلى معرفة أين يحسّن التظليل الراحة فعلًا. فالتعرض للحرارة يتغير مع مسار الشمس خلال اليوم والسنة، وهو ما نادرًا ما تراعيه المخططات الثابتة.",
+      constraints: [
+        "المدة المحدودة للهاكاثون",
+        "عمل جماعي — تولّى عبدالإله الأنظمة الخلفية والبنية السحابية ودمج الخدمات",
+        "لا توجد بيانات لاستخدامات الأراضي، لذلك تُحاكى الكثافة العمرانية",
+        "حاوية واحدة قابلة للنشر على Cloud Run"
+      ],
+      solution:
+        "أداة تخطيط قائمة على الخريطة يقدّمها تطبيق FastAPI واحد. عند اختيار نقطة يعيد ارتفاع الشمس واتجاهها، ودرجة لخطر الحرارة من 0 إلى 100، ونوع تظليل يُختار حسب زاوية الشمس مع مواقع مرشحة، وتقريرًا يمكن تنزيله بصيغة PDF. وتضيف صورة الموقع تقديرًا لنسبة الغطاء النباتي مقابل الأسطح الصلبة.",
+      responsibilities: [
+        "بنى الأنظمة الخلفية بـ FastAPI ونقاط التحليل فيها",
+        "دمج خدمات موقع الشمس وتقييم الحرارة وتحليل الصور والتقارير في تطبيق واحد قابل للنشر",
+        "جهّز التطبيق في حاوية واحدة بلا حالة للعمل على Google Cloud Run",
+        "دعم توجه البنية على Google Cloud في التصميم"
+      ],
+      flow: ["موقع على الخريطة", "موقع الشمس ودرجة الحرارة", "تحليل صورة الموقع", "توصيات التظليل والتقرير"],
+      approach: [
+        "تحسب مكتبة pysolar ارتفاع الشمس واتجاهها للنقطة المختارة في الوقت الحالي",
+        "تجمع قاعدةٌ ارتفاعَ الشمس وعاملَ الكثافة العمرانية في درجة حرارة من 0 إلى 100 بمستويات منخفض ومتوسط ومرتفع",
+        "تحدد زاوية الشمس نوع التظليل — مظلة أفقية أو شراع مائل أو جدار أخضر عمودي — وتُوضع ثلاث نقاط مرشحة حول النقطة المختارة",
+        "تقدّر عتبات الألوان في OpenCV نسبة الغطاء النباتي والأسطح الرمادية في صورة الموقع",
+        "يقدّم تطبيق FastAPI واحد الخريطة والواجهة البرمجية وتقرير PDF، ضمن حاوية مجهزة لـ Cloud Run"
+      ],
+      capabilities: [
+        "تحليل موقع الشمس وخطر الحرارة لأي نقطة على الخريطة",
+        "توصيات بنوع التظليل مع مواقع مرشحة",
+        "تحليل أسطح الموقع من الصور",
+        "صفحة تقرير وتصدير PDF"
+      ],
+      technologiesNote:
+        "التجهيز لـ Cloud Run موجود في المستودع. وتضمّن تصميم الهاكاثون أيضًا BigQuery وCloud Storage وVertex AI، لكن هذه التكاملات غير منفذة في الكود.",
+      decisions: [
+        {
+          title: "حاوية واحدة مبنية لـ Cloud Run",
+          body: "تُقدَّم الخريطة والواجهة البرمجية والتقارير من تطبيق FastAPI واحد بلا حالة مجهز لـ Cloud Run، ليتمكن الفريق من نشر النظام كاملًا وحدةً واحدة خلال الهاكاثون. وبقيت BigQuery وCloud Storage وVertex AI في التصميم لا في الكود."
+        },
+        {
+          title: "احسب ما يمكن حسابه ووضّح الباقي",
+          body: "يُحسب موقع الشمس بدقة عبر pysolar، أما الكثافة العمرانية والمواقع المرشحة وتقديرات التبريد فهي محاكاة أو تقديرية، ويذكر ذلك ملف README والتقرير وملف PDF."
+        },
+        {
+          title: "نوع التظليل من هندسة الشمس",
+          body: "الشمس العالية تحتاج غطاءً أفقيًا والمنخفضة تحتاج حجبًا عموديًا، لذلك تأتي التوصية بنوع من التظليل لا بدرجة فقط."
+        }
+      ],
+      outcome:
+        "نموذج أولي قابل للتشغيل بكود منشور: تطبيق FastAPI واحد يحسب موقع الشمس ودرجة خطر الحرارة لأي نقطة على الخريطة، ويقترح نوع التظليل مع مواقع مرشحة، ويحلل صور الموقع، ويصدّر تقريرًا بصيغة PDF، ضمن حاوية مجهزة لـ Cloud Run. وأُضيفت اختبارات للخدمات والواجهة البرمجية عند نشر الكود. لا يُدّعى تشغيل في أي مدينة ولا أثر تبريد مقاس.",
+      notClaimed:
+        "لا يُدّعى تشغيل في مدينة ولا انخفاض مقاس في درجات الحرارة ولا تكامل مع BigQuery أو Cloud Storage أو Vertex AI.",
+      limitations: [
+        "الكثافة العمرانية محاكاة من الإحداثيات، والمواقع المرشحة وأرقام التبريد تقديرية.",
+        "يعتمد موقع الشمس دائمًا على الوقت الحالي؛ لا يوجد اختيار للتاريخ ولا معالجة لساعات الليل.",
+        "تحليل الصور يعتمد على عتبات الألوان لا على نموذج مدرَّب، ولوحة المساعد تقدّم ردودًا مُعدّة مسبقًا.",
+        "لم تُختبر التوصيات مع مخططين ولا مقابل قياسات حرارة ميدانية."
+      ],
+      next: [
+        "استبدال الكثافة المحاكاة ببيانات فعلية لاستخدامات الأراضي",
+        "تمكين المخطط من اختيار التاريخ والوقت ومقارنة مسارات الشمس",
+        "تنفيذ مكونات BigQuery وCloud Storage وVertex AI المصممة",
+        "مقارنة التوصيات بقياسات فعلية لحرارة الشوارع"
+      ],
+      lesson:
+        "عمّق هذا المشروع خبرتي في التصميم السحابي واتخاذ القرار المبني على البيانات والتعاون بين التخصصات تحت قيود حقيقية."
     }
   },
   {
@@ -616,171 +809,6 @@ const records: ProjectRecord[] = [
         "قياس دقة العدّ على لقطات موسومة",
         "إضافة اختبارات للعتبات ولواجهة الحالة"
       ]
-    }
-  },
-  {
-    slug: "althil",
-    name: "Althil",
-    year: "2026",
-    status: "hackathon-prototype",
-    evidenceType: "private-evidence",
-    previewKind: "map",
-    technologies: ["Python", "FastAPI", "OpenCV", "pysolar", "Docker", "Google Cloud"],
-    evidence: [
-      {
-        kind: "program-record",
-        href: "/achievements",
-        label: {
-          en: "Intelligent Planet Hackathon — program record",
-          ar: "هاكاثون الكوكب الذكي — سجل المشاركة"
-        },
-        detail: {
-          en: "Listed under Recognition: KFUPM × Google Cloud, 2026.",
-          ar: "موثّق في صفحة الإنجازات: جامعة الملك فهد للبترول والمعادن مع Google Cloud، عام 2026."
-        }
-      },
-      {
-        kind: "private",
-        label: { en: "Private project evidence", ar: "أدلة خاصة غير منشورة" },
-        detail: {
-          en: "The code is not published, so there is no repository or demo link.",
-          ar: "الكود غير منشور، لذلك لا يوجد رابط لمستودع أو عرض تجريبي."
-        }
-      }
-    ],
-    en: {
-      descriptor: "Urban heat and shade planning prototype",
-      summary:
-        "Helps planners see where shade canopies would do the most for thermal comfort, using sun position, heat exposure and street imagery.",
-      domain: "Sustainability · Urban planning",
-      role: "Backend developer & cloud architecture contributor",
-      statusDetail:
-        "Built with a team during the Intelligent Planet Hackathon (KFUPM × Google Cloud). A hackathon prototype — not used by a city.",
-      context:
-        "Team project built during the Intelligent Planet Hackathon, hosted by KFUPM in collaboration with Google Cloud.",
-      problem:
-        "Urban planners need to know where shade canopies will actually improve comfort. Heat exposure shifts with the sun’s path across the day and the year, which static plans rarely account for.",
-      constraints: [
-        "Hackathon time limit",
-        "A team build — Abdulelah owned backend work and the cloud direction",
-        "Designed to run on Google Cloud"
-      ],
-      solution:
-        "A map-based planning tool. The backend computes sun position for a place and time, scores heat exposure, analyses uploaded street imagery and recommends shade-canopy sites, with a report a planner can take away.",
-      responsibilities: [
-        "Built backend services for the analysis",
-        "Supported the Google Cloud architecture direction",
-        "Integrated the analysis services across the platform",
-        "Connected location data, analysis and explanations under hackathon constraints"
-      ],
-      flow: ["Location & date", "Sun path & heat scoring", "Imagery analysis", "Shade recommendations & report"],
-      approach: [
-        "Sun altitude and azimuth are computed for the chosen location and time",
-        "Heat exposure is scored and candidate shade sites are ranked",
-        "Uploaded street imagery is analysed with OpenCV",
-        "A PDF report summarises the recommendations",
-        "The backend is containerised for Google Cloud Run"
-      ],
-      capabilities: [
-        "Sun-path and heat-exposure analysis",
-        "Street-imagery analysis",
-        "Shade-canopy recommendations",
-        "Downloadable analysis report"
-      ],
-      technologiesNote:
-        "The hackathon design also called for BigQuery, Cloud Storage, Vertex AI and a conversational layer; those parts cannot be verified publicly.",
-      decisions: [
-        {
-          title: "Built for Google Cloud from the start",
-          body: "The backend was packaged as a container for Cloud Run so the team could deploy it quickly inside the hackathon, with BigQuery, Cloud Storage and Vertex AI in the wider design."
-        },
-        {
-          title: "Explain, don’t just compute",
-          body: "Recommendations carry the sun-path and heat reasoning behind them, and the design added a conversational layer so planners are not asked to trust a bare score."
-        }
-      ],
-      outcome:
-        "A hackathon prototype that computes sun position and heat exposure for a location, analyses street imagery and proposes shade sites with a downloadable report. No city deployment and no measured cooling effect are claimed.",
-      notClaimed: "No city deployment and no measured temperature reduction are claimed.",
-      limitations: [
-        "The code is not public, so reviewers cannot inspect it.",
-        "The BigQuery, Cloud Storage, Vertex AI and conversational parts are described from the hackathon design and are not independently verifiable here.",
-        "Recommendations have not been validated with planners or with field temperature data."
-      ],
-      next: [
-        "Publish a cleaned-up version of the code",
-        "Validate recommendations against measured street temperatures",
-        "Test the planning workflow with a municipal team"
-      ],
-      lesson:
-        "This project strengthened my experience in cloud-native design, data-driven decisions and cross-functional collaboration under real constraints."
-    },
-    ar: {
-      descriptor: "نموذج أولي لتخطيط الحرارة والتظليل في المدن",
-      summary:
-        "يساعد المخططين على معرفة المواقع التي يحقق فيها التظليل أكبر أثر في الراحة الحرارية، باستخدام موقع الشمس ودرجة التعرض للحرارة وصور الشوارع.",
-      domain: "الاستدامة · التخطيط الحضري",
-      role: "مطوّر أنظمة خلفية ومساهم في البنية السحابية",
-      statusDetail:
-        "بُني ضمن فريق خلال هاكاثون الكوكب الذكي (جامعة الملك فهد للبترول والمعادن مع Google Cloud). نموذج أولي في هاكاثون — لا تستخدمه أي مدينة.",
-      context:
-        "مشروع فريق بُني خلال هاكاثون الكوكب الذكي الذي نظمته جامعة الملك فهد للبترول والمعادن بالتعاون مع Google Cloud.",
-      problem:
-        "يحتاج المخططون الحضريون إلى معرفة أين يحسّن التظليل الراحة فعلًا. فالتعرض للحرارة يتغير مع مسار الشمس خلال اليوم والسنة، وهو ما نادرًا ما تراعيه المخططات الثابتة.",
-      constraints: [
-        "المدة المحدودة للهاكاثون",
-        "عمل جماعي — تولّى عبدالإله الأنظمة الخلفية والتوجه السحابي",
-        "مصمَّم للعمل على Google Cloud"
-      ],
-      solution:
-        "أداة تخطيط قائمة على الخريطة: تحسب الأنظمة الخلفية موقع الشمس لمكان ووقت محددين، وتقيّم التعرض للحرارة، وتحلل صور الشوارع المرفوعة، وتقترح مواقع المظلات، مع تقرير يأخذه المخطط معه.",
-      responsibilities: [
-        "بنى خدمات الأنظمة الخلفية للتحليل",
-        "دعم توجه البنية على Google Cloud",
-        "دمج خدمات التحليل في المنصة",
-        "ربط بيانات الموقع بالتحليل والتفسير ضمن قيود الهاكاثون"
-      ],
-      flow: ["الموقع والتاريخ", "مسار الشمس وتقييم الحرارة", "تحليل الصور", "مواقع التظليل والتقرير"],
-      approach: [
-        "يُحسب ارتفاع الشمس واتجاهها للموقع والوقت المختارين",
-        "يُقيَّم التعرض للحرارة وتُرتَّب مواقع التظليل المرشحة",
-        "تُحلَّل صور الشوارع المرفوعة عبر OpenCV",
-        "يلخّص تقرير PDF التوصيات",
-        "الأنظمة الخلفية مجهزة في حاوية للعمل على Google Cloud Run"
-      ],
-      capabilities: [
-        "تحليل مسار الشمس والتعرض للحرارة",
-        "تحليل صور الشوارع",
-        "اقتراح مواقع المظلات",
-        "تقرير تحليل قابل للتنزيل"
-      ],
-      technologiesNote:
-        "تضمّن تصميم الهاكاثون أيضًا BigQuery وCloud Storage وVertex AI وطبقة محادثة، ولا يمكن التحقق من هذه الأجزاء علنًا.",
-      decisions: [
-        {
-          title: "مبني لـ Google Cloud منذ البداية",
-          body: "جُهّزت الأنظمة الخلفية في حاوية للعمل على Cloud Run ليتمكن الفريق من النشر سريعًا خلال الهاكاثون، مع BigQuery وCloud Storage وVertex AI في التصميم الأشمل."
-        },
-        {
-          title: "التفسير لا الحساب فقط",
-          body: "ترافق كل توصية أسبابُها من مسار الشمس والحرارة، وأضاف التصميم طبقة محادثة حتى لا يُطلب من المخطط الوثوق بدرجة مجردة."
-        }
-      ],
-      outcome:
-        "نموذج أولي في هاكاثون يحسب موقع الشمس والتعرض للحرارة لموقع ما، ويحلل صور الشوارع، ويقترح مواقع للتظليل مع تقرير قابل للتنزيل. لا يُدّعى تشغيل في أي مدينة ولا أثر تبريد مقاس.",
-      notClaimed: "لا يُدّعى تشغيل في مدينة ولا انخفاض مقاس في درجات الحرارة.",
-      limitations: [
-        "الكود غير منشور، فلا يستطيع المراجع فحصه.",
-        "أجزاء BigQuery وCloud Storage وVertex AI والمحادثة موصوفة من تصميم الهاكاثون ولا يمكن التحقق منها هنا بشكل مستقل.",
-        "لم تُختبر التوصيات مع مخططين ولا مقابل قياسات حرارة ميدانية."
-      ],
-      next: [
-        "نشر نسخة منقحة من الكود",
-        "مقارنة التوصيات بقياسات فعلية لحرارة الشوارع",
-        "تجربة سير عمل التخطيط مع فريق بلدي"
-      ],
-      lesson:
-        "عمّق هذا المشروع خبرتي في التصميم السحابي واتخاذ القرار المبني على البيانات والتعاون بين التخصصات تحت قيود حقيقية."
     }
   },
   {

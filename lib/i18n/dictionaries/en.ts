@@ -143,15 +143,15 @@ export const en = {
       secondary: "Choose a CV",
       tertiary: "About me",
       proofLabel: "At a glance",
-      proof: ["7 applied AI projects", "3 with public code", "Top 30 · SDAIA × Microsoft AthkaU"],
+      proof: ["7 applied AI projects", "4 with public code", "Top 30 · SDAIA × Microsoft AthkaU"],
       portraitAlt: "Portrait of Abdulelah Alkhathami"
     },
     work: {
       eyebrow: "Selected work",
       title: "A studio of one.",
-      titleAccent: "Three projects you can verify in code.",
+      titleAccent: "Four projects you can verify in code.",
       intro:
-        "Each began as a real problem — in a university, on a security desk, at a stadium gate — and became a working prototype with a public repository.",
+        "Each began as a real problem — in a university, on a city street, on a security desk, at a stadium gate — and became a working prototype with a public repository.",
       seeAll: "See all seven projects"
     },
     approach: {
@@ -244,7 +244,7 @@ export const en = {
         },
         {
           audience: "Reviewing code",
-          body: "Three projects have public repositories with architecture notes and honest limitations.",
+          body: "Four projects have public repositories with architecture notes and honest limitations.",
           cta: "Open GitHub",
           href: "github"
         }
@@ -259,7 +259,7 @@ export const en = {
     eyebrow: "The work",
     title: "Seven projects. Seven real problems.",
     intro:
-      "Four are working prototypes — three with public code — and three are concepts. Every case study states the role, the evidence and the limits.",
+      "Four are working prototypes, all with public code, and three are concepts. Every case study states the role, the evidence and the limits.",
     instruction: "Select a project to explore the system, role, and evidence.",
     listLabel: "All projects",
     previewLabel: "Project preview",
@@ -366,7 +366,7 @@ export const en = {
       { label: "Based in", value: "Riyadh, Saudi Arabia" },
       { label: "Selected work", value: "Seven applied AI projects: four working prototypes, three concepts" },
       { label: "Recognition", value: "Top 30 — SDAIA × Microsoft AthkaU" },
-      { label: "Code", value: "Public repositories for ChatUB, Absher Insight AI and Stadium" }
+      { label: "Code", value: "Public repositories for ChatUB, Althil, Absher Insight AI and Stadium" }
     ],
     versionsLabel: "Two CVs — choose your angle",
     versions: [

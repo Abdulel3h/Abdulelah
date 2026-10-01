@@ -13,7 +13,7 @@ test.describe("hero", () => {
     await expect(hero.getByText("AI Product Builder · Agents, RAG & Arabic AI")).toBeVisible();
     await expect(hero.getByText(/I design and build/)).toBeVisible();
     await expect(hero.getByRole("link", { name: "View selected work" })).toBeVisible();
-    await expect(hero.getByRole("list", { name: "At a glance" })).toContainText("3 with public code");
+    await expect(hero.getByRole("list", { name: "At a glance" })).toContainText("4 with public code");
 
     for (const selector of ["#hero-title", "section[aria-labelledby='hero-title'] p"]) {
       const opacity = await page.locator(selector).first().evaluate((element) => getComputedStyle(element).opacity);
