@@ -225,10 +225,11 @@ export function getPortfolioTourResponse() {
     "",
     "1. Who Abdulelah is: an AI product builder in Riyadh — agents, RAG and Arabic AI — and an Information Systems graduate of the University of Bisha.",
     "2. ChatUB (graduation project he led): a working prototype that answers Arabic academic questions from curated FAQ content with a locally served model. Public code; not deployed to students.",
-    "3. Stadium (solo build): a working computer-vision prototype that monitors gate crowding and recommends staff moves. Public code; not calibrated for a real venue.",
-    "4. Absher Insight AI (hackathon prototype): explainable, rule-based risk flags on synthetic data with an operations dashboard. Public code; not affiliated with Absher.",
-    "5. Also: Althil, a Google Cloud hackathon prototype for shade planning (code not public), and three concepts — Qanouni, Virtual Astronauts (both AthkaU Top 30 ideas) and Medad.",
-    "6. Best next action: open the case studies, download the CV closest to your role, or contact Abdulelah."
+    "3. Althil (team hackathon prototype, KFUPM x Google Cloud): shade-planning decision support from sun position and heat scoring, served by one FastAPI app packaged for Cloud Run. Abdulelah worked on the backend, cloud architecture and integration. Public code; not used by a city.",
+    "4. Stadium (solo build): a working computer-vision prototype that monitors gate crowding and recommends staff moves. Public code; not calibrated for a real venue.",
+    "5. Absher Insight AI (hackathon prototype): explainable, rule-based risk flags on synthetic data with an operations dashboard. Public code; not affiliated with Absher.",
+    "6. Also: three concepts — Qanouni, Virtual Astronauts (both AthkaU Top 30 ideas) and Medad.",
+    "7. Best next action: open the case studies, download the CV closest to your role, or contact Abdulelah."
   ].join("\n");
 }
 
