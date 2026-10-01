@@ -86,7 +86,7 @@ export default function OpengraphImage() {
             fontFamily: "sans-serif"
           }}
         >
-          <div>7 applied AI projects · 3 with public code · Riyadh</div>
+          <div>7 applied AI projects · 4 with public code · Riyadh</div>
           <div style={{ color: "#c9a75c" }}>abdulelah.de</div>
         </div>
       </div>

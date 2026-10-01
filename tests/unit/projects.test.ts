@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getProjects, projectCounts, projects } from "@/data/projects";
+import { getFeaturedProjects, getProjects, projectCounts, projects } from "@/data/projects";
 import { buildPortfolioContext } from "@/lib/agent/context";
 import { getFallbackAgentResponse } from "@/lib/agent/fallback";
 
@@ -14,8 +14,8 @@ const STATUSES = [
 ];
 
 describe("project evidence", () => {
-  it("counts seven projects: four prototypes, three concepts, three with public code", () => {
-    expect(projectCounts).toEqual({ total: 7, prototypes: 4, concepts: 3, publicRepositories: 3 });
+  it("counts seven projects: four prototypes, three concepts, four with public code", () => {
+    expect(projectCounts).toEqual({ total: 7, prototypes: 4, concepts: 3, publicRepositories: 4 });
   });
 
   it("gives every project a verified status, role, evidence and limits in both languages", () => {
@@ -62,6 +62,15 @@ describe("project evidence", () => {
     }
   });
 
+  it("features the four public prototypes, with Althil after ChatUB", () => {
+    expect(getFeaturedProjects("en").map((project) => project.slug)).toEqual([
+      "chatub",
+      "althil",
+      "absher-insight-ai",
+      "stadium"
+    ]);
+  });
+
   it("keeps the English guide view aligned with the page data", () => {
     const chatub = projects.find((project) => project.slug === "chatub");
 
@@ -87,6 +96,8 @@ describe("project evidence", () => {
     expect(code).toContain("ChatUB");
     expect(code).toContain("Stadium");
     expect(code).toContain("Absher Insight AI");
+    expect(code).toContain("Althil");
+    expect(code).not.toMatch(/Althil's code is not public/);
 
     const arabic = getFallbackAgentResponse("أي المشاريع لها كود منشور؟");
 

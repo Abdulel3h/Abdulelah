@@ -507,7 +507,7 @@ export function buildPortfolioContext() {
     "GitHub profile: available through an action button.",
     "LinkedIn profile: available through an action button.",
     "Positioning: AI Product Builder — agents, RAG and Arabic AI. Open to AI engineering roles and applied-AI collaborations. Lead with the name (Abdulelah Alkhathami) and his work, never with 'Junior'.",
-    "Evidence rule: seven applied AI projects — four working prototypes (ChatUB, Absher Insight AI, Stadium, Althil) and three concepts (Qanouni, Virtual Astronauts, Medad). Three have public code (ChatUB, Absher Insight AI, Stadium). Never call any project shipped, launched, deployed, live or in production, and never invent users, accuracy or impact numbers.",
+    "Evidence rule: seven applied AI projects — four working prototypes (ChatUB, Althil, Absher Insight AI, Stadium) and three concepts (Qanouni, Virtual Astronauts, Medad). All four prototypes have public code; the concepts have none. Never call any project shipped, launched, deployed, live or in production, and never invent users, accuracy or impact numbers.",
     "",
     "CONTACT ROUTING",
     "Share the email address that matches the visitor's intent. You may write these email addresses directly in your answer text.",

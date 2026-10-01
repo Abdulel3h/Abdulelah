@@ -348,10 +348,11 @@ function getArabicFallbackAgentResponse(message: string) {
       `لدى عبدالإله ${projectCounts.publicRepositories} مشاريع بكود منشور في مستودعات عامة على GitHub:`,
       "",
       "- ChatUB: مساعد أكاديمي عربي يعمل محليًا (مشروع تخرج، نموذج أولي عامل)",
+      "- Althil: دعم القرار لمواضع التظليل من موقع الشمس ودرجة الحرارة، بخلفية FastAPI مجهزة لـ Cloud Run (نموذج أولي في هاكاثون ضمن فريق)",
       "- Absher Insight AI: رصد مخاطر سلوكية بقواعد قابلة للتفسير على بيانات اصطناعية (نموذج أولي في هاكاثون)",
       "- Stadium: مراقبة الحشود عند بوابات الملاعب بالرؤية الحاسوبية (نموذج أولي عامل بناه منفردًا)",
       "",
-      "أما Althil فكوده غير منشور، وQanouni وVirtual Astronauts وMedad تصوّرات دون كود منشور."
+      "أما Qanouni وVirtual Astronauts وMedad فتصوّرات دون كود منشور."
     ].join("\n");
   }
 
@@ -387,16 +388,17 @@ function getArabicFallbackAgentResponse(message: string) {
       "أبرز خبرة سحابية لعبدالإله هي Althil، النموذج الأولي الذي بناه مع فريقه في هاكاثون الكوكب الذكي مع Google Cloud.",
       "",
       "- جُهّزت الأنظمة الخلفية في حاوية للعمل على Google Cloud Run.",
-      "- تضمّن تصميم الهاكاثون BigQuery وCloud Storage وVertex AI، لكن الكود غير منشور فلا يمكن التحقق منه علنًا.",
+      "- الكود منشور على GitHub، ويوضح أن BigQuery وCloud Storage وVertex AI بقيت في تصميم الهاكاثون ولم تُنفَّذ في الكود.",
       "- Qanouni تصوّر خُطّط له حول خدمات Azure AI دون تنفيذ منشور."
     ].join("\n");
   }
 
   if (includesAny(normalized, ["اقوي مشروع", "افضل مشروع", "مشاريعه", "مشاريع"])) {
     return [
-      "أقوى نقطة بداية هي المشاريع الثلاثة التي يمكن التحقق منها في الكود:",
+      "أقوى نقطة بداية هي المشاريع الأربعة التي يمكن التحقق منها في الكود:",
       "",
       "- ChatUB: مساعد أكاديمي عربي يعمل محليًا — مشروع تخرج قاده، ونموذج أولي عامل",
+      "- Althil: دعم القرار لمواضع التظليل بخلفية FastAPI مجهزة لـ Cloud Run — نموذج أولي في هاكاثون ضمن فريق",
       "- Stadium: مراقبة الحشود عند البوابات بالرؤية الحاسوبية — نموذج أولي عامل بناه منفردًا",
       "- Absher Insight AI: رصد مخاطر سلوكية بقواعد قابلة للتفسير — نموذج أولي في هاكاثون",
       "",
@@ -424,6 +426,7 @@ function getArabicFallbackAgentResponse(message: string) {
     "",
     `في أعماله ${projectCounts.total} مشاريع تطبيقية: ${projectCounts.prototypes} نماذج أولية عاملة (${projectCounts.publicRepositories} منها بكود منشور) و${projectCounts.concepts} تصوّرات.`,
     "- ChatUB: مساعد أكاديمي عربي يعمل محليًا (مشروع تخرج قاده)",
+    "- Althil: دعم القرار لمواضع التظليل بخلفية مجهزة لـ Google Cloud Run (هاكاثون ضمن فريق)",
     "- Stadium: مراقبة الحشود بالرؤية الحاسوبية (بناه منفردًا)",
     "- Absher Insight AI: رصد مخاطر سلوكية قابل للتفسير (هاكاثون)",
     "",
@@ -570,7 +573,7 @@ export function getFallbackAgentResponse(
   }
 
   if (includesAny(normalized, ["github", "code", "repository", "repositories", "source"])) {
-    return "Three projects have public repositories on GitHub: ChatUB (Arabic academic assistant with local generation — graduation project, working prototype), Absher Insight AI (explainable behavioural-risk flags on synthetic data — hackathon prototype) and Stadium (computer-vision gate monitoring — solo working prototype). Althil's code is not public, and Qanouni, Virtual Astronauts and Medad are concepts without public code.";
+    return "Four projects have public repositories on GitHub: ChatUB (Arabic academic assistant with local generation — graduation project, working prototype), Althil (shade-planning decision support with a FastAPI backend packaged for Cloud Run — team hackathon prototype), Absher Insight AI (explainable behavioural-risk flags on synthetic data — hackathon prototype) and Stadium (computer-vision gate monitoring — solo working prototype). Qanouni, Virtual Astronauts and Medad are concepts without public code.";
   }
 
   if (includesAny(normalized, ["stadium", "crowd", "gate", "computer vision", "yolo"])) {
@@ -590,7 +593,7 @@ export function getFallbackAgentResponse(
       "sustainability"
     ])
   ) {
-    return `${projectSummary("althil")} It is a hackathon prototype built with a team at the KFUPM x Google Cloud Intelligent Planet Hackathon: sun-path and heat analysis, street-imagery analysis and shade recommendations, with the backend containerised for Cloud Run. The code is not public, so the BigQuery, Cloud Storage and Vertex AI parts of the design cannot be verified here.`;
+    return `${projectSummary("althil")} It is a hackathon prototype built with a team at the KFUPM x Google Cloud Intelligent Planet Hackathon, with public code: sun-position and heat scoring, site-photo analysis with OpenCV and shade recommendations, served by one FastAPI app packaged for Cloud Run. Abdulelah worked on the backend, the cloud architecture and the service integration. Urban density is simulated, and BigQuery, Cloud Storage and Vertex AI stayed in the design rather than the code.`;
   }
 
   if (includesAny(normalized, ["absher", "security", "ueba", "risk"])) {
@@ -606,7 +609,7 @@ export function getFallbackAgentResponse(
   }
 
   if (includesAny(normalized, ["cloud", "azure", "vertex", "bigquery", "cloud run"])) {
-    return "Abdulelah's main cloud evidence is Althil, a Google Cloud hackathon prototype whose backend was containerised for Cloud Run; the design also called for BigQuery, Cloud Storage and Vertex AI, but the code is not public. Qanouni is a concept planned around Azure AI Services.";
+    return "Abdulelah's main cloud evidence is Althil, a Google Cloud hackathon prototype with public code: one FastAPI app packaged as a container for Cloud Run. The design also called for BigQuery, Cloud Storage and Vertex AI, which the repository lists as design only. Qanouni is a concept planned around Azure AI Services.";
   }
 
   if (includesAny(normalized, ["nlp", "llm", "ai agent", "generative ai"])) {
@@ -649,12 +652,12 @@ export function getFallbackAgentResponse(
   }
 
   if (includesAny(normalized, ["strongest", "best project", "projects", "portfolio"])) {
-    return "Start with the three projects you can verify in code: ChatUB (Arabic academic assistant with local generation — graduation project he led), Stadium (computer-vision gate monitoring — solo working prototype) and Absher Insight AI (explainable security analytics on synthetic data — hackathon prototype). None is claimed to be in production; each case study lists its status and limitations.";
+    return "Start with the four projects you can verify in code: ChatUB (Arabic academic assistant with local generation — graduation project he led), Althil (shade-planning decision support packaged for Cloud Run — team hackathon prototype), Stadium (computer-vision gate monitoring — solo working prototype) and Absher Insight AI (explainable security analytics on synthetic data — hackathon prototype). None is claimed to be in production; each case study lists its status and limitations.";
   }
 
   if (includesAny(normalized, ["30 seconds", "quick summary", "summarize", "summary", "who is"])) {
-    return "Abdulelah Alkhathami is an AI product builder in Riyadh — agents, RAG and Arabic AI — and an Information Systems graduate of the University of Bisha. His portfolio has seven applied AI projects: four working prototypes (three with public code: ChatUB, Absher Insight AI and Stadium) and three concepts. He reached the Top 30 of SDAIA x Microsoft's AthkaU and has built prototypes at national hackathons, including KFUPM x Google Cloud and Absher x Tuwaiq.";
+    return "Abdulelah Alkhathami is an AI product builder in Riyadh — agents, RAG and Arabic AI — and an Information Systems graduate of the University of Bisha. His portfolio has seven applied AI projects: four working prototypes, all with public code (ChatUB, Althil, Absher Insight AI and Stadium), and three concepts. He reached the Top 30 of SDAIA x Microsoft's AthkaU and has built prototypes at national hackathons, including KFUPM x Google Cloud and Absher x Tuwaiq.";
   }
 
-  return "Abdulelah Alkhathami is an AI product builder focused on practical, context-aware AI. His portfolio spans seven applied projects across education, security, computer vision, sustainability, legal tech, fintech and immersive learning — four working prototypes and three concepts. A strong starting point is ChatUB, Stadium and Absher Insight AI (all with public code), followed by the resume page for the two role-specific CVs.";
+  return "Abdulelah Alkhathami is an AI product builder focused on practical, context-aware AI. His portfolio spans seven applied projects across education, security, computer vision, sustainability, legal tech, fintech and immersive learning — four working prototypes and three concepts. A strong starting point is ChatUB, Althil, Stadium and Absher Insight AI (all with public code), followed by the resume page for the two role-specific CVs.";
 }

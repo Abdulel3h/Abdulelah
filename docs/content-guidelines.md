@@ -16,13 +16,15 @@ Every project in `data/projects.ts` carries one status. Never pick a stronger st
 
 Evidence types shown on cards and case studies:
 
-- **Public repository** — linked GitHub repository (ChatUB, absher-insight, Stadium). Say "public code" or "public repository", never "open source": the repositories have no licence file.
+- **Public repository** — linked GitHub repository (ChatUB, Althil, absher-insight, Stadium). Say "public code" or "public repository", never "open source": the repositories have no licence file.
 - **Program record** — the achievement is documented (e.g. AthkaU Top 30), but no code is public.
 - **Private project evidence** — work exists but is not published; nothing is linked.
 
 Every case study states what is **not claimed** (deployment, users, accuracy). No invented metrics, rankings, users or outcomes. The code-drawn previews are always captioned **Concept visualization** and contain no measured numbers.
 
-Verification sources used for the September 2026 audit: the public READMEs of `Abdulel3h/ChatUB`, `Abdulel3h/absher-insight` and `Abdulel3h/Stadium` (each states "Status: prototype"), `data/achievements.ts` for program records, and the private Althil code, which shows a FastAPI backend containerised for Cloud Run with sun-path, heat and imagery analysis. The BigQuery, Cloud Storage and Vertex AI parts of the Althil design could not be verified and are described as design only.
+Verification sources used for the September 2026 audit: the public READMEs of `Abdulel3h/ChatUB`, `Abdulel3h/absher-insight` and `Abdulel3h/Stadium` (each states "Status: prototype"), `data/achievements.ts` for program records, and the Althil code, which shows a FastAPI backend containerised for Cloud Run with sun-position, heat and site-image analysis. The BigQuery, Cloud Storage and Vertex AI parts of the Althil design are not in the code and are described as design only.
+
+October 2026: Althil was published as `Abdulel3h/Althil` (README states "Status: hackathon prototype" and lists every simulated input), so its evidence type is now a public repository.
 
 ## Terminology
 
