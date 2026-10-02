@@ -5,6 +5,7 @@ import { HeroSection } from "@/components/sections/HeroSection";
 import { HowIBuild } from "@/components/sections/HowIBuild";
 import { ImpactAreas } from "@/components/sections/ImpactAreas";
 import { PhilosophyReveal } from "@/components/sections/PhilosophyReveal";
+import { Recognition } from "@/components/sections/Recognition";
 import { FeaturedWork } from "@/components/work/FeaturedWork";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { resolveLocale } from "@/lib/i18n/server";
@@ -31,6 +32,7 @@ export default async function HomePage({ params }: Props) {
   const chapters: Chapter[] = [
     { id: "identity", label: dict.home.chapters.identity },
     { id: "work", label: dict.home.chapters.work },
+    { id: "recognition", label: dict.home.chapters.recognition },
     { id: "approach", label: dict.home.chapters.approach },
     { id: "range", label: dict.home.chapters.range },
     { id: "belief", label: dict.home.chapters.belief },
@@ -46,6 +48,9 @@ export default async function HomePage({ params }: Props) {
       </div>
       <div id="work" className="scroll-mt-24">
         <FeaturedWork locale={locale} />
+      </div>
+      <div id="recognition" className="scroll-mt-24">
+        <Recognition locale={locale} />
       </div>
       <div id="approach" className="scroll-mt-24">
         <HowIBuild locale={locale} />

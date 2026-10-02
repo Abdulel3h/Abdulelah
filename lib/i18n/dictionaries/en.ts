@@ -125,6 +125,7 @@ export const en = {
       label: "Chapters",
       identity: "Identity",
       work: "Work",
+      recognition: "Recognition",
       approach: "Approach",
       range: "Range",
       belief: "Belief",
@@ -153,6 +154,16 @@ export const en = {
       intro:
         "Each began as a real problem — in a university, on a city street, on a security desk, at a stadium gate — and became a working prototype with a public repository.",
       seeAll: "See all seven projects"
+    },
+    recognition: {
+      eyebrow: "Recognition",
+      title: "Where the work has been tested.",
+      titleAccent: "A Top 30 finish, a CITC innovation final and two hackathon prototypes.",
+      intro:
+        "Each entry is a documented program or competition. Where a project came out of it, its case study is linked.",
+      outcomeLabel: "Outcome",
+      projectsLabel: "Built there",
+      seeAll: "See all recognition"
     },
     approach: {
       eyebrow: "How I build",
