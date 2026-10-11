@@ -6,6 +6,7 @@ const pages = [
   "/about",
   "/projects",
   "/projects/chatub",
+  "/projects/stadium",
   "/projects/qanouni",
   "/resume",
   "/achievements",
@@ -15,10 +16,17 @@ const pages = [
   "/contact",
   "/privacy",
   "/ar",
+  "/ar/about",
   "/ar/projects",
   "/ar/projects/stadium",
+  "/ar/projects/qanouni",
+  "/ar/resume",
+  "/ar/achievements",
+  "/ar/skills",
   "/ar/contact",
-  "/ar/blog"
+  "/ar/privacy",
+  "/ar/blog",
+  "/ar/blog/why-context-matters-more-than-prompts-in-ai-agents"
 ];
 
 test.describe("automated accessibility", () => {
@@ -65,28 +73,49 @@ test.describe("automated accessibility", () => {
   });
 });
 
+test.describe("automated accessibility of the menu", () => {
+  for (const [path, name] of [
+    ["/about", "Menu"],
+    ["/ar/about", "القائمة"]
+  ] as const) {
+    test(`axe: open menu on ${path}`, async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.goto(path);
+      await page.getByRole("button", { name, exact: true }).click();
+      await expect(page.getByRole("dialog")).toBeVisible();
+      await page.waitForTimeout(900);
+
+      const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
+
+      expect(results.violations.map((violation) => violation.id)).toEqual([]);
+    });
+  }
+});
+
 test.describe("reduced motion", () => {
   test.use({ reducedMotion: "reduce" });
 
-  test("every section is visible immediately while scrolling", async ({ page }) => {
-    await page.goto("/");
+  for (const path of ["/", "/ar"]) {
+    test(`every section is visible immediately while scrolling: ${path}`, async ({ page }) => {
+      await page.goto(path);
 
-    const hidden = await page.evaluate(async () => {
-      const found: string[] = [];
+      const hidden = await page.evaluate(async () => {
+        const found: string[] = [];
 
-      for (let y = 0; y < document.body.scrollHeight; y += 500) {
-        window.scrollTo(0, y);
-        await new Promise((resolve) => setTimeout(resolve, 30));
-        document.querySelectorAll<HTMLElement>("[data-reveal]").forEach((element) => {
-          if (getComputedStyle(element).opacity !== "1") found.push(element.className);
-        });
-      }
+        for (let y = 0; y < document.body.scrollHeight; y += 500) {
+          window.scrollTo(0, y);
+          await new Promise((resolve) => setTimeout(resolve, 30));
+          document.querySelectorAll<HTMLElement>("[data-reveal]").forEach((element) => {
+            if (getComputedStyle(element).opacity !== "1") found.push(element.className);
+          });
+        }
 
-      return found;
+        return found;
+      });
+
+      expect(hidden).toEqual([]);
     });
-
-    expect(hidden).toEqual([]);
-  });
+  }
 });
 
 test.describe("links and console", () => {

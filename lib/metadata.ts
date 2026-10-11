@@ -10,15 +10,29 @@ import {
 } from "@/lib/i18n/config";
 import { absoluteUrl } from "@/lib/utils";
 
-export const ogImage = siteConfig.assets.ogImage;
-
-/** The branded, generated share image (app/opengraph-image.tsx). */
-export const shareImage = {
-  url: absoluteUrl("/opengraph-image"),
-  width: 1200,
-  height: 630,
-  alt: "Abdulelah Alkhathami — AI Product Builder: agents, RAG and Arabic AI"
+/**
+ * One share image per language, rendered from the same composition with the
+ * faces the pages use (scripts/generate-og.mjs): Fraunces and Inter in
+ * English, Thmanyah in Arabic.
+ */
+const shareImages: Record<Locale, { url: string; width: number; height: number; alt: string }> = {
+  en: {
+    url: absoluteUrl(siteConfig.assets.shareImages.en),
+    width: 1200,
+    height: 630,
+    alt: "Abdulelah Alkhathami — AI product builder in Riyadh: I turn AI into products people understand."
+  },
+  ar: {
+    url: absoluteUrl(siteConfig.assets.shareImages.ar),
+    width: 1200,
+    height: 630,
+    alt: "عبدالإله الخثعمي — مطوّر منتجات ذكاء اصطناعي في الرياض: أحوّل الذكاء الاصطناعي إلى منتجات يفهمها الناس."
+  }
 };
+
+export function shareImageFor(locale: Locale) {
+  return shareImages[locale];
+}
 
 type PageMetadataOptions = {
   locale: Locale;
@@ -71,6 +85,7 @@ export function createPageMetadata({
   const name = locale === "ar" ? siteConfig.arabicName : siteConfig.name;
   const fullTitle = absoluteTitle || title.includes(name) ? title : `${title} | ${name}`;
   const alternates = localeAlternates(path, locale, singleLocale);
+  const image = shareImageFor(locale);
 
   return {
     title: absoluteTitle ? { absolute: title } : title,
@@ -84,7 +99,7 @@ export function createPageMetadata({
       title: fullTitle,
       description,
       siteName: name,
-      images: [shareImage],
+      images: [image],
       locale: localeTags[locale].og,
       ...(singleLocale ? {} : { alternateLocale: [localeTags[otherLocale(locale)].og] }),
       ...(type === "article"
@@ -98,7 +113,7 @@ export function createPageMetadata({
       card: "summary_large_image",
       title: fullTitle,
       description,
-      images: [shareImage.url]
+      images: [image.url]
     }
   };
 }

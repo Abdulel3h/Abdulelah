@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { BlogIndexContent } from "@/components/blog/BlogIndexContent";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { Notes } from "@/components/site/pages/Notes";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { resolveLocale } from "@/lib/i18n/server";
 import { createPageMetadata } from "@/lib/metadata";
@@ -30,7 +30,7 @@ export default async function BlogPage({ params }: Props) {
           locale
         )}
       />
-      <BlogIndexContent locale={locale} />
+      <Notes locale={locale} />
     </>
   );
 }

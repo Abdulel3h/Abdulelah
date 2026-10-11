@@ -10,10 +10,12 @@ test.describe("hero", () => {
     const hero = page.locator("section[aria-labelledby='hero-title']");
 
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Abdulelah");
-    await expect(hero.getByText("AI Product Builder · Agents, RAG & Arabic AI")).toBeVisible();
-    await expect(hero.getByText(/I design and build/)).toBeVisible();
+    await expect(hero.getByText("AI product builder · Riyadh")).toBeVisible();
+    await expect(hero.getByText(/I turn/)).toBeVisible();
     await expect(hero.getByRole("link", { name: "View selected work" })).toBeVisible();
-    await expect(hero.getByRole("list", { name: "At a glance" })).toContainText("4 with public code");
+    // The margin notes carry the evidence behind the statement.
+    await expect(hero.getByRole("list", { name: "Margin notes" })).toContainText("4 with public code");
+    await expect(hero.getByRole("list", { name: "On this page" }).getByRole("listitem")).toHaveCount(4);
 
     for (const selector of ["#hero-title", "section[aria-labelledby='hero-title'] p"]) {
       const opacity = await page.locator(selector).first().evaluate((element) => getComputedStyle(element).opacity);

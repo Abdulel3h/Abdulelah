@@ -85,7 +85,7 @@ export function blogPostingJsonLd(
       "@type": "WebPage",
       "@id": url
     },
-    image: absoluteUrl(siteConfig.assets.ogImage),
+    image: absoluteUrl(siteConfig.assets.shareImages[locale]),
     datePublished: post.date,
     dateModified: post.date,
     inLanguage: locale,

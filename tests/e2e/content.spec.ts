@@ -3,41 +3,48 @@ import { expect, test } from "@playwright/test";
 const slugs = ["chatub", "absher-insight-ai", "stadium", "althil", "qanouni", "virtual-astronauts", "medad"];
 
 test.describe("projects and evidence", () => {
-  test("the index shows status, evidence and role for all seven projects without hover", async ({ page }) => {
+  test("the index shows status, domain and code for all seven projects without hover", async ({ page }) => {
     await page.goto("/projects");
-    await expect(page.getByText("Select a project to explore the system, role, and evidence.")).toBeVisible();
 
     const list = page.getByRole("list", { name: "All projects" });
 
     await expect(list.getByRole("listitem")).toHaveCount(7);
     await expect(list.locator("[data-status]")).toHaveCount(7);
     await expect(list.locator("[data-status='concept']")).toHaveCount(3);
+    await expect(list.getByText("Code: GitHub")).toHaveCount(4);
     await expect(page.locator("body")).not.toContainText(/shipped|Hover any title/i);
   });
 
   for (const slug of slugs) {
-    test(`case study ${slug} has a standard evidence panel and honest limits`, async ({ page }) => {
+    test(`case study ${slug} answers the brief first and states its evidence and limits`, async ({ page }) => {
       await page.goto(`/projects/${slug}`);
 
-      const evidence = page.locator("#evidence");
-
       await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
-      await expect(evidence.getByRole("heading", { name: "Evidence" })).toBeVisible();
-      await expect(evidence.locator("[data-status]")).toBeVisible();
-      await expect(evidence.getByText("Not claimed", { exact: true })).toBeVisible();
+      await expect(page.locator("header [data-status]").first()).toBeVisible();
 
-      for (const heading of ["Context", "The problem", "Constraints", "Solution", "My responsibility", "Architecture & workflow", "Decisions", "Verified outcome", "Limitations", "What would come next"]) {
+      for (const heading of ["In brief", "How it works", "Decisions that shaped it", "The honest part", "What you can verify"]) {
         await expect(page.getByRole("heading", { level: 2, name: heading })).toBeVisible();
       }
 
+      for (const line of ["The problem", "What was built", "My role", "Outcome"]) {
+        await expect(page.getByRole("region", { name: "In brief" }).getByText(line, { exact: true })).toBeVisible();
+      }
+
+      await expect(page.getByRole("heading", { level: 3, name: "Not claimed" })).toBeVisible();
       await expect(page.getByText("Concept visualization").first()).toBeVisible();
+
+      // The full record is kept, one disclosure away.
+      await page.getByText("The full record").click();
+      await expect(page.getByRole("heading", { level: 3, name: "Constraints" })).toBeVisible();
     });
   }
 
-  test("one H1 per main page", async ({ page }) => {
-    for (const path of ["/", "/about", "/projects", "/resume", "/achievements", "/skills", "/blog", "/contact", "/privacy", "/ar", "/ar/projects/chatub"]) {
-      await page.goto(path);
-      await expect(page.getByRole("heading", { level: 1 }), path).toHaveCount(1);
+  test("one H1 per main page, in both languages", async ({ page }) => {
+    for (const path of ["/", "/about", "/projects", "/resume", "/achievements", "/skills", "/blog", "/contact", "/privacy"]) {
+      for (const url of [path, path === "/" ? "/ar" : `/ar${path}`]) {
+        await page.goto(url);
+        await expect(page.getByRole("heading", { level: 1 }), url).toHaveCount(1);
+      }
     }
   });
 

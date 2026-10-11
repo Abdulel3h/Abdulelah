@@ -92,7 +92,7 @@ The assistant and contact delivery are optional: without keys the site runs, and
 
 ## Limitations
 
-- **Project visuals are concept sketches.** The code-drawn previews on the site are labelled "Concept visualization"; real screenshots live in the public project repositories and are linked from each evidence panel.
+- **Project visuals are concept sketches.** The code-drawn previews on the site are labelled "Concept visualization"; real screenshots live in the public project repositories and are linked from each case study's evidence list.
 - **Qanouni, Medad and Virtual Astronauts have no public code.** Their case studies say so and link only to program records.
 - **Lab LCP.** The hero now paints its text immediately (observed LCP equals FCP), but Lighthouse's simulated mobile LCP still charges the framework JavaScript that loads before first paint.
 - **No formatter.** Style is enforced by ESLint; there is no Prettier configuration.
@@ -101,10 +101,10 @@ The assistant and contact delivery are optional: without keys the site runs, and
 
 ```text
 app/                 App Router pages, API routes, sitemap, robots, errors
-components/          Layout, sections, project UI, agent UI, shared controls
+components/          site/ (every page, in both languages), agent UI, shared controls
 data/                Portfolio facts, projects, skills, achievements, blog data
 lib/                 Metadata, structured data, contact, rate limit, agent logic
-public/              Open Graph images, profile assets, fonts, resume PDFs
+public/              Share images (scripts/generate-og.mjs), profile assets, fonts, resume PDFs
 types/               Shared TypeScript types
 tests/unit           Vitest unit tests
 tests/e2e            Playwright browser, keyboard, accessibility and link tests
@@ -112,7 +112,7 @@ tests/e2e            Playwright browser, keyboard, accessibility and link tests
 
 ## Documentation
 
-[Content guidelines](docs/content-guidelines.md) · [Architecture](docs/architecture.md) · [Case study](docs/case-study.md) · [Engineering principles](docs/engineering-principles.md) · [Technical decisions](docs/technical-decisions.md) · [Reviewer guide](docs/reviewer-guide.md) · [Branding assets](assets/branding/README.md)
+[Content guidelines](docs/content-guidelines.md) · [Design system](docs/design-system.md) · [Architecture](docs/architecture.md) · [Case study](docs/case-study.md) · [Engineering principles](docs/engineering-principles.md) · [Technical decisions](docs/technical-decisions.md) · [Reviewer guide](docs/reviewer-guide.md) · [Branding assets](assets/branding/README.md)
 
 ## License
 

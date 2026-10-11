@@ -1,5 +1,4 @@
-import { Award, Github, Lock } from "lucide-react";
-import type { EvidenceType, ProjectStatus } from "@/data/projects";
+import type { ProjectStatus } from "@/data/projects";
 import { cn } from "@/lib/utils";
 
 /**
@@ -35,25 +34,6 @@ export function StatusBadge({
           isConcept ? "border border-current" : "bg-current"
         )}
       />
-      {label}
-    </span>
-  );
-}
-
-export function EvidenceTag({
-  type,
-  label,
-  className
-}: {
-  type: EvidenceType;
-  label: string;
-  className?: string;
-}) {
-  const Icon = type === "public-repository" ? Github : type === "program-record" ? Award : Lock;
-
-  return (
-    <span className={cn("inline-flex items-center gap-1.5 text-xs text-paper-dim", className)}>
-      <Icon className="h-3.5 w-3.5 shrink-0 text-accent" aria-hidden="true" />
       {label}
     </span>
   );

@@ -8,21 +8,23 @@ import { WebVitalsReporter } from "@/components/analytics/WebVitalsReporter";
 import { LocaleProvider } from "@/components/i18n/LocaleProvider";
 import { BackToTopButton } from "@/components/layout/BackToTopButton";
 import { CommandMenu } from "@/components/layout/CommandMenu";
-import { Footer } from "@/components/layout/Footer";
-import { Navbar } from "@/components/layout/Navbar";
 import { PageFrame } from "@/components/layout/PageFrame";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { SiteFooter } from "@/components/site/layout/SiteFooter";
+import { SiteHeader } from "@/components/site/layout/SiteHeader";
 import { AnimatedBackground } from "@/components/visuals/AnimatedBackground";
 import { siteConfig } from "@/data/site";
 import { getDirection, localeTags, locales, otherLocale } from "@/lib/i18n/config";
 import { pickClientDictionary } from "@/lib/i18n/client-dictionary";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+import { siteCopy } from "@/lib/i18n/experience";
 import { resolveLocale } from "@/lib/i18n/server";
-import { shareImage } from "@/lib/metadata";
+import { shareImageFor } from "@/lib/metadata";
 import { buildSearchIndex } from "@/lib/search-index";
 import { personJsonLd, websiteJsonLd } from "@/lib/structured-data";
 import "../globals.css";
+import "../site.css";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -94,13 +96,13 @@ export async function generateMetadata({
     openGraph: {
       type: "website",
       siteName: dict.common.name,
-      images: [shareImage],
+      images: [shareImageFor(locale)],
       locale: localeTags[locale].og,
       alternateLocale: [localeTags[otherLocale(locale)].og]
     },
     twitter: {
       card: "summary_large_image",
-      images: [shareImage.url]
+      images: [shareImageFor(locale).url]
     }
   };
 }
@@ -114,16 +116,19 @@ export default async function LocaleLayout({
 }) {
   const locale = await resolveLocale(params);
   const dict = getDictionary(locale);
+  const copy = siteCopy(locale);
 
   if (locale === "ar") {
     // Arabic pages set their text in Thmanyah; fetch the regular weight (body
-    // text, including the hero introduction) with the HTML. Heading weights
-    // load from the stylesheet and swap in.
-    preload("/fonts/thmanyah/thmanyahsans-Regular.woff2", {
-      as: "font",
-      type: "font/woff2",
-      crossOrigin: "anonymous"
-    });
+    // text) and the bold weight (the opening name and every page title, the
+    // usual LCP element) with the HTML. Medium loads from the stylesheet.
+    for (const weight of ["Regular", "Bold"]) {
+      preload(`/fonts/thmanyah/thmanyahsans-${weight}.woff2`, {
+        as: "font",
+        type: "font/woff2",
+        crossOrigin: "anonymous"
+      });
+    }
   }
 
   return (
@@ -142,9 +147,10 @@ export default async function LocaleLayout({
         <LocaleProvider locale={locale} dictionary={pickClientDictionary(dict)}>
           <AnimatedBackground />
           <ScrollProgress />
-          <Navbar />
+          {/* One design system for both languages (components/site). */}
+          <SiteHeader copy={{ header: copy.header, menu: copy.menu }} />
           <PageFrame>{children}</PageFrame>
-          <Footer locale={locale} />
+          <SiteFooter locale={locale} />
           <BackToTopButton />
           <AgentPanel />
           <CommandMenu index={buildSearchIndex(locale)} />

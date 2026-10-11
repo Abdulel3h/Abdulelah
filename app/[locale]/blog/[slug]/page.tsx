@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { BlogPostContent } from "@/components/blog/BlogPostContent";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { Note } from "@/components/site/pages/Note";
 import { blogPosts, getBlogPostBySlug, getRelatedBlogPosts } from "@/data/blog";
 import { localizeBlogPost } from "@/data/blog.ar";
 import { locales } from "@/lib/i18n/config";
@@ -72,7 +72,7 @@ export default async function BlogPostPage({ params }: Props) {
           locale
         )}
       />
-      <BlogPostContent post={post} relatedPosts={getRelatedBlogPosts(post)} locale={locale} />
+      <Note post={post} related={getRelatedBlogPosts(post)} locale={locale} />
     </>
   );
 }

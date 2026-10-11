@@ -47,7 +47,11 @@ export const siteConfig = {
     github: "https://github.com/Abdulel3h"
   },
   assets: {
-    ogImage: "/images/og/abdulelah-ai-og.png",
+    // One share image per language, same composition (scripts/generate-og.mjs).
+    shareImages: {
+      en: "/images/og/abdulelah-og-en.png",
+      ar: "/images/og/abdulelah-og-ar.png"
+    },
     profileImage: "/images/profile/abdulelah-profile.png"
   },
   resumes: {
