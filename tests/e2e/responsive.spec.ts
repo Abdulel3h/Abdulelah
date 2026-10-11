@@ -1,11 +1,26 @@
 import { expect, test } from "@playwright/test";
 
-const widths = [320, 375, 390, 768, 1024, 1440];
-const paths = ["/", "/projects", "/projects/absher-insight-ai", "/contact", "/resume", "/ar", "/ar/projects/chatub", "/ar/contact"];
+const widths = [320, 360, 375, 390, 430, 768, 1024, 1280, 1440, 1920];
+const englishPaths = [
+  "/",
+  "/projects",
+  "/projects/absher-insight-ai",
+  "/about",
+  "/contact",
+  "/resume",
+  "/skills",
+  "/achievements",
+  "/blog",
+  "/blog/why-context-matters-more-than-prompts-in-ai-agents",
+  "/privacy"
+];
+// Every English page and its Arabic twin.
+const paths = englishPaths.flatMap((path) => [path, path === "/" ? "/ar" : `/ar${path}`]);
 
 test.describe("responsive layout", () => {
   for (const width of widths) {
     test(`no horizontal overflow at ${width}px`, async ({ page }) => {
+      test.setTimeout(180_000);
       await page.setViewportSize({ width, height: 900 });
 
       for (const path of paths) {
@@ -63,8 +78,8 @@ test.describe("responsive layout", () => {
     await page.setViewportSize({ width: 375, height: 812 });
     await page.goto("/");
 
-    for (const name of ["View selected work", "Choose a CV", "Open menu"]) {
-      const box = await page.getByRole(name === "Open menu" ? "button" : "link", { name }).first().boundingBox();
+    for (const name of ["View selected work", "Choose a CV", "Menu"]) {
+      const box = await page.getByRole(name === "Menu" ? "button" : "link", { name, exact: true }).first().boundingBox();
 
       expect(box?.height ?? 0, name).toBeGreaterThanOrEqual(44);
     }
@@ -74,7 +89,7 @@ test.describe("responsive layout", () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/about");
 
-    const toggle = page.getByRole("button", { name: "Open menu" });
+    const toggle = page.getByRole("button", { name: "Menu", exact: true });
 
     await toggle.click();
 

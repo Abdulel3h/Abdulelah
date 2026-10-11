@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRight, RotateCcw } from "lucide-react";
+import { RotateCcw } from "lucide-react";
 import { useI18n } from "@/components/i18n/LocaleProvider";
+import { directional } from "@/components/site/primitives";
 
 export default function Error({
   reset
@@ -10,33 +11,27 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const { t, href } = useI18n();
+  const { t, href, locale } = useI18n();
+  const { Forward } = directional(locale);
 
   return (
-    <section className="container-shell flex min-h-[72svh] flex-col justify-center py-20" aria-labelledby="error-title">
-      <p className="eyebrow mb-6">{t.error.eyebrow}</p>
-      <h1
-        id="error-title"
-        className="font-display text-5xl font-medium leading-[1] tracking-[-0.01em] text-paper sm:text-6xl lg:text-7xl"
-      >
-        {t.error.title} <span className="italic text-paper/70">{t.error.titleAccent}</span>
+    <section aria-labelledby="error-title" className="ds-shell flex min-h-[70svh] flex-col justify-center py-20">
+      <p className="ds-kicker">{t.error.eyebrow}</p>
+      <h1 id="error-title" className="ds-h1 mt-4 max-w-[18ch]">
+        {t.error.title}
       </h1>
-      <p className="mt-6 max-w-xl text-lg leading-8 text-paper-dim">{t.error.body}</p>
+      <p className="ds-lede mt-5">{t.error.body}</p>
       <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
-        <button
-          type="button"
-          onClick={reset}
-          className="focus-ring inline-flex h-11 items-center gap-2 rounded-full bg-accent px-5 text-sm font-semibold text-ink-900 transition hover:bg-accent-soft"
-        >
+        <button type="button" onClick={reset} className="ds-btn ds-btn-solid focus-ring">
           <RotateCcw className="h-4 w-4" aria-hidden="true" />
           {t.error.retry}
         </button>
         <Link
           href={href("/")}
-          className="focus-ring inline-flex min-h-11 items-center gap-1.5 rounded text-base font-medium text-paper transition-colors hover:text-accent-soft"
+          className="focus-ring group inline-flex min-h-11 items-center gap-2 rounded text-[1.05rem] text-paper transition-colors hover:text-accent-soft"
         >
           {t.error.home}
-          <ArrowUpRight className="h-4 w-4 rtl:-scale-x-100" aria-hidden="true" />
+          <Forward className="ds-forward h-4 w-4 text-accent" aria-hidden="true" />
         </Link>
       </div>
     </section>

@@ -1,0 +1,728 @@
+/*
+ * The site's design system — «متن وحاشية», text and gloss.
+ *
+ * One system for both languages. The idea comes from the Arabic manuscript
+ * page: a short main text set large (المتن) and brass margin notes (الحاشية)
+ * that carry the facts behind it — role, status, code. Every claim sits next
+ * to its evidence. English and Arabic share every token, shape, layout and
+ * motion; only type and direction are set per locale.
+ *
+ *   1. Shared tokens        colour, space, radius, motion, project tint
+ *   2. Locale type          faces, sizes, line heights, tracking, measure
+ *   3. Direction            what the reading direction turns around
+ *   4. Layout primitives    shell, section, arch, strip
+ *   5. Type roles           display → micro, each reading the locale tokens
+ *   6. Script helpers       Latin names, LTR runs, numerals, tones
+ *   7. Controls, gloss, header, project worlds
+ *   8. Motion (none of it under prefers-reduced-motion)
+ *
+ * Classes are `.ds-*` and are only used by components/site. Directional
+ * values use logical properties throughout.
+ */
+
+/* ---------------------------------------------------------- 1. tokens */
+
+:root {
+  --ds-shell: 84rem;
+  --ds-gutter: clamp(1rem, 0.35rem + 3vw, 3rem);
+  --ds-section: clamp(4.5rem, 2.6rem + 6vw, 8.5rem);
+  --ds-radius: 0.875rem;
+
+  --ds-paper: #f2efe7;
+  --ds-paper-soft: #d9d5cb;
+  --ds-paper-dim: #aca79b;
+  --ds-paper-faint: #8e897f;
+  --ds-brass: #c9a75c;
+  --ds-brass-soft: #e6d2a0;
+  --ds-ink: #0a0a0b;
+
+  --ds-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ds-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ds-fast: 0.18s;
+  --ds-ui: 0.32s;
+  --ds-slow: 0.9s;
+
+  /* Project worlds: each project carries one tint (r g b), see
+     components/site/tints.ts. The brass stays the interface accent. */
+  --tint: 201 167 92;
+}
+
+/* ------------------------------------------------------ 2. locale type */
+
+/*
+ * Latin (English). Fraunces carries the display voice — the name, titles,
+ * the statement, quotes — with slight negative tracking at large sizes;
+ * Inter carries everything read at body size. Kickers and labels use small
+ * tracked capitals, the natural Latin eyebrow.
+ */
+:root {
+  --ds-face-display: var(--font-fraunces), Georgia, Cambria, serif;
+  --ds-face-text: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --ds-weight-display: 500;
+  --ds-weight-heading: 500;
+  --ds-weight-quote: 400;
+  --ds-track-display: -0.025em;
+  --ds-track-heading: -0.015em;
+
+  --ds-step-display: clamp(3.1rem, 1.7rem + 7vw, 8.75rem);
+  --ds-step-1: clamp(2.4rem, 1.55rem + 3.8vw, 5rem);
+  --ds-step-2: clamp(1.9rem, 1.4rem + 2.2vw, 3.25rem);
+  --ds-step-3: clamp(1.2rem, 1.06rem + 0.6vw, 1.55rem);
+  --ds-step-statement: clamp(1.6rem, 1.18rem + 1.8vw, 2.75rem);
+  --ds-step-lede: clamp(1.12rem, 1.02rem + 0.45vw, 1.35rem);
+  --ds-step-body: 1.0625rem;
+  --ds-step-small: 0.9375rem;
+  --ds-step-micro: 0.8125rem;
+
+  --ds-lh-display: 0.98;
+  --ds-lh-1: 1.04;
+  --ds-lh-2: 1.1;
+  --ds-lh-3: 1.35;
+  --ds-lh-heading: 1.14;
+  --ds-lh-title: 1.3;
+  --ds-lh-statement: 1.26;
+  --ds-lh-quote: 1.22;
+  --ds-lh-lede: 1.6;
+  --ds-lh-body: 1.7;
+  --ds-lh-text: 1.62;
+  --ds-lh-read: 1.75;
+  --ds-lh-small: 1.6;
+  --ds-lh-micro: 1.5;
+  --ds-measure: 38rem;
+
+  --ds-kicker-size: 0.75rem;
+  --ds-kicker-case: uppercase;
+  --ds-kicker-track: 0.16em;
+  --ds-label-size: 0.72rem;
+  --ds-label-case: uppercase;
+  --ds-label-track: 0.13em;
+  --ds-underline-offset: 0.26em;
+}
+
+/*
+ * Arabic. Thmanyah Sans for everything, with taller line boxes (ascenders
+ * like ا ل and the dots below ي ج reach far past the x-height), slightly
+ * larger steps, no tracking and no uppercase: Arabic has no capitals to carry
+ * an eyebrow, so kickers are brass and medium weight instead.
+ */
+html[lang="ar"] {
+  --ds-face-display: var(--font-thmanyah), system-ui, sans-serif;
+  --ds-face-text: var(--font-thmanyah), var(--font-inter), system-ui, sans-serif;
+  --ds-weight-display: 700;
+  --ds-weight-heading: 700;
+  --ds-weight-quote: 700;
+  --ds-track-display: 0;
+  --ds-track-heading: 0;
+
+  --ds-step-display: clamp(3.9rem, 2.4rem + 7.6vw, 9.25rem);
+  --ds-step-1: clamp(2.45rem, 1.6rem + 3.9vw, 5.25rem);
+  --ds-step-2: clamp(1.9rem, 1.4rem + 2.2vw, 3.35rem);
+  --ds-step-3: clamp(1.3rem, 1.12rem + 0.85vw, 1.8rem);
+  --ds-step-statement: clamp(1.45rem, 1.12rem + 1.55vw, 2.45rem);
+  --ds-step-lede: clamp(1.18rem, 1.05rem + 0.6vw, 1.5rem);
+
+  --ds-lh-display: 1.14;
+  --ds-lh-1: 1.24;
+  --ds-lh-2: 1.32;
+  --ds-lh-3: 1.5;
+  --ds-lh-heading: 1.45;
+  --ds-lh-title: 1.58;
+  --ds-lh-statement: 1.62;
+  --ds-lh-quote: 1.55;
+  --ds-lh-lede: 1.85;
+  --ds-lh-body: 1.95;
+  --ds-lh-text: 1.85;
+  --ds-lh-read: 2;
+  --ds-lh-small: 1.8;
+  --ds-lh-micro: 1.7;
+  --ds-measure: 36rem;
+
+  --ds-kicker-size: 0.9375rem;
+  --ds-kicker-case: none;
+  --ds-kicker-track: 0;
+  --ds-label-size: 0.8125rem;
+  --ds-label-case: none;
+  --ds-label-track: 0;
+  /* Arabic letters hang below the baseline (ي ج ع), so underlines sit lower. */
+  --ds-underline-offset: 0.42em;
+}
+
+/* --------------------------------------------------------- 3. direction */
+
+/* Forward is the reading direction: right in English, left in Arabic. */
+:root {
+  --ds-forward-shift: 0.25rem;
+}
+
+html[dir="rtl"] {
+  --ds-forward-shift: -0.25rem;
+}
+
+/* ------------------------------------------------------------ 4. layout */
+
+.ds-shell {
+  width: 100%;
+  max-width: var(--ds-shell);
+  margin-inline: auto;
+  padding-inline: var(--ds-gutter);
+}
+
+.ds-section {
+  padding-block: var(--ds-section);
+}
+
+/* Project halos and portrait glows reach past their boxes on purpose; on a
+   phone that must never widen the page. `clip` (not `hidden`) keeps sticky
+   children working because it creates no scroll container. */
+#main-content {
+  overflow-x: clip;
+}
+
+/* The one architectural shape of the site: an arched window. */
+.ds-arch {
+  border-start-start-radius: 999px;
+  border-start-end-radius: 999px;
+  border-end-start-radius: 1.25rem;
+  border-end-end-radius: 1.25rem;
+}
+
+/* A swipeable strip (touch first) that snaps to the inline start, and
+   becomes one row of four on wide screens. */
+.ds-strip {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(13.5rem, 72%);
+  gap: 0.75rem;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: inline mandatory;
+  scroll-padding-inline: var(--ds-gutter);
+  padding-inline: var(--ds-gutter);
+  margin-inline: calc(var(--ds-gutter) * -1);
+  padding-block-end: 0.5rem;
+  scrollbar-width: none;
+}
+
+.ds-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.ds-strip > * {
+  scroll-snap-align: start;
+}
+
+@media (min-width: 40rem) {
+  .ds-strip {
+    grid-auto-columns: minmax(13.5rem, 44%);
+  }
+}
+
+@media (min-width: 64rem) {
+  .ds-strip {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    overflow: visible;
+    margin-inline: 0;
+    padding-inline: 0;
+    padding-block-end: 0;
+  }
+}
+
+/* ------------------------------------------------------------ 5. type */
+
+.ds-display,
+.ds-h1,
+.ds-h2,
+.ds-heading,
+.ds-title,
+.ds-quote,
+.ds-statement {
+  font-family: var(--ds-face-display);
+  color: var(--ds-paper);
+}
+
+.ds-display,
+.ds-h1,
+.ds-h2,
+.ds-heading,
+.ds-statement {
+  text-wrap: balance;
+}
+
+.ds-display {
+  font-size: var(--ds-step-display);
+  font-weight: var(--ds-weight-display);
+  line-height: var(--ds-lh-display);
+  letter-spacing: var(--ds-track-display);
+}
+
+.ds-h1 {
+  font-size: var(--ds-step-1);
+  font-weight: var(--ds-weight-heading);
+  line-height: var(--ds-lh-1);
+  letter-spacing: var(--ds-track-heading);
+}
+
+.ds-h2 {
+  font-size: var(--ds-step-2);
+  font-weight: var(--ds-weight-heading);
+  line-height: var(--ds-lh-2);
+  letter-spacing: var(--ds-track-heading);
+}
+
+/* Mid-size headings whose size is set where they are used (article titles,
+   list entries, the menu). */
+.ds-heading {
+  font-weight: var(--ds-weight-heading);
+  line-height: var(--ds-lh-heading);
+  letter-spacing: var(--ds-track-heading);
+}
+
+/* Small item titles: a decision, a principle, a milestone. */
+.ds-title {
+  font-weight: var(--ds-weight-heading);
+  line-height: var(--ds-lh-title);
+}
+
+.ds-quote {
+  font-weight: var(--ds-weight-quote);
+  line-height: var(--ds-lh-quote);
+  letter-spacing: var(--ds-track-heading);
+  text-wrap: balance;
+}
+
+/* The opening statement: between a heading and a lede. */
+.ds-statement {
+  font-size: var(--ds-step-statement);
+  font-weight: var(--ds-weight-quote);
+  line-height: var(--ds-lh-statement);
+  letter-spacing: var(--ds-track-heading);
+}
+
+html[lang="ar"] .ds-statement {
+  font-weight: 500;
+}
+
+/* A subtitle in the text face: a project's descriptor, a section's aside. */
+.ds-h3 {
+  font-family: var(--ds-face-text);
+  font-size: var(--ds-step-3);
+  font-weight: 500;
+  line-height: var(--ds-lh-3);
+  color: var(--ds-paper);
+  text-wrap: balance;
+}
+
+.ds-lede {
+  font-size: var(--ds-step-lede);
+  line-height: var(--ds-lh-lede);
+  color: var(--ds-paper-soft);
+  max-width: var(--ds-measure);
+  text-wrap: pretty;
+}
+
+.ds-body {
+  font-size: var(--ds-step-body);
+  line-height: var(--ds-lh-body);
+  color: var(--ds-paper-dim);
+  max-width: var(--ds-measure);
+  text-wrap: pretty;
+}
+
+/* Running text whose size is set where it is used. */
+.ds-text {
+  line-height: var(--ds-lh-text);
+  text-wrap: pretty;
+}
+
+/* Long-form reading (notes). */
+.ds-read {
+  line-height: var(--ds-lh-read);
+  text-wrap: pretty;
+}
+
+.ds-small {
+  font-size: var(--ds-step-small);
+  line-height: var(--ds-lh-small);
+}
+
+.ds-micro {
+  font-size: var(--ds-step-micro);
+  line-height: var(--ds-lh-micro);
+}
+
+/* The kicker: brass, led by a short rule. Tracked capitals in English;
+   medium weight and untracked in Arabic. */
+.ds-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: var(--ds-kicker-size);
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: var(--ds-kicker-track);
+  text-transform: var(--ds-kicker-case);
+  color: var(--ds-brass);
+}
+
+.ds-kicker::before {
+  content: "";
+  inline-size: 1.75rem;
+  block-size: 1px;
+  flex-shrink: 0;
+  background: currentColor;
+  opacity: 0.7;
+}
+
+.ds-label {
+  font-size: var(--ds-label-size);
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: var(--ds-label-track);
+  text-transform: var(--ds-label-case);
+  color: var(--ds-paper-faint);
+}
+
+/* --------------------------------------------------- 6. script helpers */
+
+/* Latin names (ChatUB, Stadium, the years) in the brand's display face, in
+   both languages. Inside Arabic text they are also isolated left-to-right,
+   so the two scripts read as one system. */
+.ds-latin {
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-weight: 450;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* A large Latin name: a project's title. */
+.ds-name {
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+}
+
+/* Inline technical text (emails, URLs, handles, versions): isolated LTR
+   in the body face, so punctuation never jumps to the wrong side. */
+.ds-ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* One numeral system: Western digits, tabular where they line up. Direction
+   is left to the text: "8:12 م" must keep its Arabic order. */
+.ds-num {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/*
+ * Dimmed text tones, as solid colours. Connected Arabic letters overlap at
+ * their joins; a translucent colour paints those overlaps twice and leaves
+ * visible seams inside a word, so every softened tone is paper already mixed
+ * over ink instead of paper with alpha. English uses the same tones.
+ */
+.ds-tone-85 {
+  color: #cfcdc6;
+}
+
+.ds-tone-80 {
+  color: #c4c1bb;
+}
+
+.ds-tone-62 {
+  color: #9a9893;
+}
+
+.ds-tone-60 {
+  color: #97958f;
+}
+
+.ds-tone-55 {
+  color: #8a8884;
+}
+
+/* --------------------------------------------------------- 7. controls */
+
+.ds-link {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgb(201 167 92 / 0.45);
+  text-underline-offset: var(--ds-underline-offset);
+  transition:
+    color var(--ds-fast) ease,
+    text-decoration-color var(--ds-fast) ease;
+}
+
+.ds-link:hover {
+  color: var(--ds-brass-soft);
+  text-decoration-color: var(--ds-brass);
+}
+
+.ds-btn {
+  display: inline-flex;
+  min-block-size: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  border-radius: var(--ds-radius);
+  padding-inline: 1.35rem;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.4;
+  transition:
+    background-color var(--ds-fast) ease,
+    border-color var(--ds-fast) ease,
+    color var(--ds-fast) ease;
+}
+
+.ds-btn-solid {
+  background: var(--ds-brass);
+  color: var(--ds-ink);
+}
+
+.ds-btn-solid:hover {
+  background: var(--ds-brass-soft);
+}
+
+.ds-btn-quiet {
+  border: 1px solid rgb(242 239 231 / 0.16);
+  color: var(--ds-paper);
+}
+
+.ds-btn-quiet:hover {
+  border-color: rgb(201 167 92 / 0.6);
+}
+
+/* Arrows step forward, in the reading direction, on hover and focus. */
+.ds-forward {
+  transition: transform var(--ds-ui) var(--ds-ease);
+}
+
+:is(a, button):hover > .ds-forward,
+:is(a, button):focus-visible > .ds-forward,
+.group:hover .ds-forward {
+  transform: translateX(var(--ds-forward-shift));
+}
+
+/* -------------------------------------------------------------- gloss */
+
+/* A margin note: brass hairline at the inline start, small type. */
+.ds-gloss {
+  border-inline-start: 1px solid rgb(201 167 92 / 0.45);
+  padding-inline-start: 0.9rem;
+  font-size: var(--ds-step-small);
+  line-height: var(--ds-lh-small);
+  color: var(--ds-paper-dim);
+  transition:
+    color var(--ds-ui) ease,
+    border-color var(--ds-ui) ease;
+}
+
+.ds-gloss-strong {
+  border-inline-start-color: var(--ds-brass);
+}
+
+/* The numbered mark after a glossed word. Raised with position rather than
+   vertical-align so it never opens up the line box. */
+.ds-gloss-mark {
+  position: relative;
+  inset-block-start: -0.8em;
+  margin-inline-start: 0.08em;
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-size: 0.48em;
+  font-weight: 500;
+  line-height: 0;
+  letter-spacing: 0;
+  color: var(--ds-brass);
+  vertical-align: baseline;
+}
+
+/* Hovering a glossed word lights its note, and the note lights the word.
+   Notes are always visible; this only links them for the eye. */
+.ds-glossed {
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgb(201 167 92 / 0.55);
+  text-underline-offset: calc(var(--ds-underline-offset) - 0.04em);
+  transition: color var(--ds-ui) ease;
+}
+
+.ds-hero:has([data-gloss="1"]:hover, [data-note="1"]:hover) :is([data-gloss="1"], [data-note="1"]),
+.ds-hero:has([data-gloss="2"]:hover, [data-note="2"]:hover) :is([data-gloss="2"], [data-note="2"]),
+.ds-hero:has([data-gloss="3"]:hover, [data-note="3"]:hover) :is([data-gloss="3"], [data-note="3"]) {
+  color: var(--ds-brass-soft);
+  border-color: var(--ds-brass);
+}
+
+/* Fields keep dir="auto" so whatever is typed sets its own direction, but an
+   empty input resolves to left-to-right and would set an Arabic placeholder
+   against the wrong edge. Until something is typed, follow the page. */
+html[lang="ar"] :is(input, textarea)[dir="auto"]:placeholder-shown {
+  direction: rtl;
+}
+
+/* ------------------------------------------------------------- header */
+
+.ds-header {
+  transition:
+    background-color var(--ds-ui) ease,
+    border-color var(--ds-ui) ease;
+  border-block-end: 1px solid transparent;
+}
+
+.ds-header[data-scrolled="true"] {
+  background-color: rgb(10 10 11 / 0.92);
+  border-block-end-color: rgb(242 239 231 / 0.08);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .ds-header[data-scrolled="true"] {
+    background-color: rgb(10 10 11 / 0.8);
+    backdrop-filter: blur(14px);
+  }
+}
+
+/* The name as a wordmark, beside the monogram. */
+.ds-wordmark {
+  font-family: var(--ds-face-display);
+  font-size: 1.15rem;
+  font-weight: var(--ds-weight-heading);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--ds-paper);
+}
+
+html[lang="ar"] .ds-wordmark {
+  font-size: 1.05rem;
+  letter-spacing: 0;
+}
+
+/* On phones the header keeps the first name only once the full name no
+   longer fits beside the tools: below 430px in English, where the surname is
+   longer, and only on the narrowest phones in Arabic. */
+@media (max-width: 26.8rem) {
+  html[lang="en"] .ds-name-tail {
+    display: none;
+  }
+}
+
+@media (max-width: 22.49rem) {
+  html[lang="ar"] .ds-name-tail {
+    display: none;
+  }
+}
+
+.ds-nav-link {
+  position: relative;
+}
+
+/* The active and hovered page is underlined, drawn from the inline start. */
+.ds-nav-link::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0.75rem;
+  inset-block-end: 0.45rem;
+  block-size: 1px;
+  background: var(--ds-brass);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--ds-ui) var(--ds-ease);
+}
+
+html[dir="rtl"] .ds-nav-link::after {
+  transform-origin: right;
+}
+
+.ds-nav-link:hover::after,
+.ds-nav-link[aria-current]::after,
+.ds-nav-link[data-active="true"]::after {
+  transform: scaleX(1);
+}
+
+/* ----------------------------------------------------- project worlds */
+
+/* A halo that reaches past the edges of the plate it sits behind (the plate
+   itself is opaque), so the tint reads around the sketch. */
+.ds-tint-wash {
+  background: radial-gradient(closest-side, rgb(var(--tint) / 0.2) 45%, rgb(var(--tint) / 0.06) 75%, transparent 100%);
+  pointer-events: none;
+}
+
+.ds-tint-text {
+  color: rgb(var(--tint));
+}
+
+.ds-tint-dot {
+  background: rgb(var(--tint));
+}
+
+/* ------------------------------------------------------------ 8. motion */
+
+/*
+ * Motion language, the same in both languages:
+ * - Entrance: text paints at once (never hidden); only rules draw and the
+ *   page settles a few pixels.
+ * - Scroll: a plate is revealed once by a wipe in the reading direction —
+ *   from the left edge in English, from the right edge in Arabic.
+ * - Hover: arrows step forward; hairlines draw from the inline start.
+ * - Navigation and exit: short fades (see .page-enter and dialog styles).
+ * Everything here is disabled under reduced motion.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .ds-draw {
+    transform-origin: left center;
+    animation: ds-draw 1.1s var(--ds-ease) 0.2s both;
+  }
+
+  html[dir="rtl"] .ds-draw {
+    transform-origin: right center;
+  }
+
+  .ds-settle {
+    animation: ds-settle 0.8s var(--ds-ease) both;
+    animation-delay: var(--ds-delay, 0s);
+  }
+
+  .ds-wipe[data-reveal] {
+    transition:
+      clip-path 1s var(--ds-ease),
+      opacity 0.6s ease;
+    transition-delay: var(--reveal-delay, 0s);
+  }
+
+  .ds-wipe[data-reveal="hidden"] {
+    opacity: 0.2;
+    transform: none;
+    clip-path: inset(0 100% 0 0);
+  }
+
+  html[dir="rtl"] .ds-wipe[data-reveal="hidden"] {
+    clip-path: inset(0 0 0 100%);
+  }
+
+  .ds-rise[data-reveal="hidden"] {
+    transform: translate3d(0, 1rem, 0);
+  }
+}
+
+@keyframes ds-draw {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/* Movement only — opacity stays at 1 so painted text is never hidden. */
+@keyframes ds-settle {
+  from {
+    transform: translate3d(0, 0.6rem, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-forward,
+  .ds-nav-link::after,
+  .ds-gloss,
+  .ds-glossed {
+    transition: none;
+  }
+}

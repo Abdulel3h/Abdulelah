@@ -81,19 +81,33 @@ test.describe("keyboard", () => {
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("ChatUB");
   });
 
-  test("the More disclosure opens, closes with Escape and restores focus", async ({ page }) => {
+  test("the menu opens from the keyboard, traps focus and restores it on Escape", async ({ page }) => {
+    await page.setViewportSize({ width: 820, height: 900 });
     await page.goto("/");
 
-    const more = page.getByRole("button", { name: "More" });
+    // Located by markup: while the modal is open, everything outside it is
+    // hidden from the accessibility tree, the trigger included.
+    const toggle = page.locator("header button[aria-haspopup='dialog']").filter({ hasText: "Menu" });
 
-    await more.focus();
+    await toggle.focus();
     await page.keyboard.press("Enter");
-    await expect(more).toHaveAttribute("aria-expanded", "true");
-    await page.keyboard.press("Tab");
-    await expect(page.getByRole("list", { name: "More pages" }).getByRole("link", { name: "Recognition" })).toBeFocused();
+
+    const menu = page.getByRole("dialog", { name: "Site menu" });
+
+    await expect(menu).toBeVisible();
+    await expect(toggle).toHaveAttribute("aria-expanded", "true");
+
+    for (let index = 0; index < 20; index += 1) {
+      await page.keyboard.press("Tab");
+
+      const inside = await page.evaluate(() => Boolean(document.activeElement?.closest("[role='dialog']")));
+
+      expect(inside).toBe(true);
+    }
+
     await page.keyboard.press("Escape");
-    await expect(more).toHaveAttribute("aria-expanded", "false");
-    await expect(more).toBeFocused();
+    await expect(menu).toBeHidden();
+    await expect(toggle).toBeFocused();
   });
 
   test("the guide is a modal dialog that traps focus and returns it to the launcher", async ({ page }) => {
