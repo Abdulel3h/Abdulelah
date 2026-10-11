@@ -6,7 +6,7 @@ English (`/...`) and Arabic (`/ar/...`) are one site in two languages. Both use 
 
 The idea comes from the Arabic manuscript page: a short main text (المتن) with brass margin notes (الحاشية) that carry the facts behind it. Here, every page opens with one short statement set large, and the facts sit beside it as glosses: role, status, code and evidence. Every claim sits next to its evidence.
 
-- **Shape:** one architectural shape, the arched window (`.ds-arch`), used for the portrait.
+- **No portrait.** The site carries no personal photo; the name, set large, is the opening, and the facts sit in the margin beside it.
 - **Project worlds:** each project has a tint (`components/site/tints.ts`) for its halo and markers. Brass stays the interface accent; a tint never carries meaning on its own.
 - **Projects first:** the home page opens on the name and one glossed sentence, with a strip of the four working projects. Then come those four projects as chapters, the three concepts, the milestones, one belief and a direct line.
 

@@ -10,7 +10,7 @@
  *   1. Shared tokens        colour, space, radius, motion, project tint
  *   2. Locale type          faces, sizes, line heights, tracking, measure
  *   3. Direction            what the reading direction turns around
- *   4. Layout primitives    shell, section, arch, strip
+ *   4. Layout primitives    shell, section, strip
  *   5. Type roles           display → micro, each reading the locale tokens
  *   6. Script helpers       Latin names, LTR runs, numerals, tones
  *   7. Controls, gloss, header, project worlds
@@ -171,19 +171,11 @@ html[dir="rtl"] {
   padding-block: var(--ds-section);
 }
 
-/* Project halos and portrait glows reach past their boxes on purpose; on a
+/* Project halos reach past their boxes on purpose; on a
    phone that must never widen the page. `clip` (not `hidden`) keeps sticky
    children working because it creates no scroll container. */
 #main-content {
   overflow-x: clip;
-}
-
-/* The one architectural shape of the site: an arched window. */
-.ds-arch {
-  border-start-start-radius: 999px;
-  border-start-end-radius: 999px;
-  border-end-start-radius: 1.25rem;
-  border-end-end-radius: 1.25rem;
 }
 
 /* A swipeable strip (touch first) that snaps to the inline start, and

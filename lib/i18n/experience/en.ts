@@ -100,7 +100,6 @@ export const enCopy: SiteCopy = {
     notesLabel: "Margin notes",
     primary: "View selected work",
     secondary: "Choose a CV",
-    portraitAlt: "Portrait of Abdulelah Alkhathami",
     stripLabel: "On this page",
     work: {
       kicker: "Selected work",
@@ -181,7 +180,6 @@ export const enCopy: SiteCopy = {
     kicker: "About",
     title: "I build things that didn’t exist yesterday.",
     lede: "I’m Abdulelah, from Riyadh. I take a messy, real problem and turn it into something people can use.",
-    portraitAlt: "Portrait of Abdulelah Alkhathami",
     facts: [
       { label: "Education", value: "Information Systems — University of Bisha, 2026" },
       { label: "Focus", value: "LLM · Agents · RAG · Arabic NLP" },

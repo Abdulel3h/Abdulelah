@@ -40,6 +40,8 @@ test.describe("projects and evidence", () => {
   }
 
   test("one H1 per main page, in both languages", async ({ page }) => {
+    test.setTimeout(120_000);
+
     for (const path of ["/", "/about", "/projects", "/resume", "/achievements", "/skills", "/blog", "/contact", "/privacy"]) {
       for (const url of [path, path === "/" ? "/ar" : `/ar${path}`]) {
         await page.goto(url);

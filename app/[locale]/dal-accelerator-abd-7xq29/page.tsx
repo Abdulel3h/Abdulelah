@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import {
@@ -233,16 +232,6 @@ export default async function DalAcceleratorProfilePage({
           </div>
 
           <aside className="subtle-card rounded-3xl p-6 sm:p-8">
-            <div className="relative mb-7 aspect-[4/3] overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
-              <Image
-                src={siteConfig.assets.profileImage}
-                alt="Portrait of Abdulelah Alkhathami"
-                fill
-                priority
-                sizes="(min-width: 1024px) 34vw, 100vw"
-                className="object-cover object-[50%_18%]"
-              />
-            </div>
             <p className="eyebrow mb-6">Reviewer Snapshot</p>
             <div className="space-y-5">
               {quickFacts.map((fact) => {

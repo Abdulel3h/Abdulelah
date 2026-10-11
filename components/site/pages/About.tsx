@@ -1,5 +1,4 @@
 import { Github, Linkedin } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { CompanionCue } from "@/components/agent/CompanionCue";
 import { mixer } from "@/components/site/mixed";
@@ -14,8 +13,8 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { siteCopy } from "@/lib/i18n/experience";
 
 /**
- * About: personality and direction, not a CV. One line on who he is, the
- * facts as margin notes beside the arched portrait, four short principles,
+ * About: personality and direction, not a CV. One line on who he is with the
+ * facts as margin notes beside it, four short principles,
  * the path from 2023 to now on one line, the tools he reaches for first, and
  * where to find him.
  */
@@ -33,7 +32,7 @@ export function About({ locale }: { locale: Locale }) {
 
   return (
     <>
-      <header className="ds-shell grid gap-12 pt-12 sm:pt-16 lg:grid-cols-12 lg:gap-14 lg:pt-24">
+      <header className="ds-shell grid gap-10 pt-12 sm:pt-16 lg:grid-cols-12 lg:gap-14 lg:pt-24">
         <div className="lg:col-span-7">
           <p className="ds-kicker">{copy.kicker}</p>
           <h1 id="about-title" className="ds-h1 mt-5 max-w-[14ch]">
@@ -41,44 +40,18 @@ export function About({ locale }: { locale: Locale }) {
           </h1>
           <div aria-hidden="true" className="ds-draw mt-7 h-px w-24 bg-accent" />
           <p className="ds-lede mt-7">{copy.lede}</p>
-
-          <dl className="mt-10 grid gap-4 sm:grid-cols-[1fr_1.35fr_0.6fr] sm:gap-6">
-            {copy.facts.map((fact) => (
-              <div key={fact.label} className="ds-gloss">
-                <dt className="ds-label">{fact.label}</dt>
-                <dd className="ds-text mt-1 text-[1rem] text-paper">{mix(fact.value)}</dd>
-              </div>
-            ))}
-          </dl>
         </div>
 
-        <figure className="relative mx-auto w-full max-w-[22rem] lg:col-span-5 lg:max-w-none">
-          <div
-            aria-hidden="true"
-            className="absolute -inset-10 -z-10"
-            style={{ background: "radial-gradient(closest-side, rgba(201,167,92,0.13), transparent 72%)" }}
-          />
-          <div className="ds-arch relative aspect-[4/5.2] overflow-hidden border border-white/[0.14] bg-paper">
-            <Image
-              src={siteConfig.assets.profileImage}
-              alt={copy.portraitAlt}
-              fill
-              priority
-              sizes="(min-width: 1024px) 34vw, 22rem"
-              className="object-cover object-top"
-            />
-          </div>
-          {/* The name in the other script. */}
-          <figcaption className="mt-4 text-paper-faint">
-            {locale === "ar" ? (
-              <Latin className="text-[0.95rem]">{siteConfig.name}</Latin>
-            ) : (
-              <span lang="ar" dir="rtl" className="text-[0.95rem]">
-                {siteConfig.arabicName}
-              </span>
-            )}
-          </figcaption>
-        </figure>
+        {/* The facts in the margin: beside the text on wide screens, a row of
+            notes below it on smaller ones. */}
+        <dl className="grid gap-4 sm:grid-cols-[1fr_1.35fr_0.6fr] sm:gap-6 lg:col-span-4 lg:col-start-9 lg:grid-cols-1 lg:self-end lg:pb-1">
+          {copy.facts.map((fact) => (
+            <div key={fact.label} className="ds-gloss">
+              <dt className="ds-label">{fact.label}</dt>
+              <dd className="ds-text mt-1 text-[1rem] text-paper">{mix(fact.value)}</dd>
+            </div>
+          ))}
+        </dl>
       </header>
 
       <section aria-labelledby="think-title" className="ds-shell ds-section">

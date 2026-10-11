@@ -112,7 +112,6 @@ export const arCopy = {
     notesLabel: "حواشٍ",
     primary: "استعرض المشاريع",
     secondary: "السيرة الذاتية",
-    portraitAlt: "صورة شخصية لعبدالإله الخثعمي",
     stripLabel: "في هذه الصفحة",
     work: {
       kicker: "أعمال مختارة",
@@ -193,7 +192,6 @@ export const arCopy = {
     kicker: "عنّي",
     title: "أبني ما لم يكن موجودًا بالأمس.",
     lede: "أنا عبدالإله، من الرياض. آخذ مشكلة حقيقية متشابكة، وأحوّلها إلى شيء يستطيع الناس استخدامه.",
-    portraitAlt: "صورة شخصية لعبدالإله الخثعمي",
     facts: [
       { label: "التخصص", value: "نظم المعلومات — جامعة بيشة، 2026" },
       { label: "التركيز", value: "LLM · Agents · RAG · Arabic NLP" },

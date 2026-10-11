@@ -51,8 +51,7 @@ export const siteConfig = {
     shareImages: {
       en: "/images/og/abdulelah-og-en.png",
       ar: "/images/og/abdulelah-og-ar.png"
-    },
-    profileImage: "/images/profile/abdulelah-profile.png"
+    }
   },
   resumes: {
     engineer: "/resume/Abdulelah_AI_Engineer_CV.pdf",
