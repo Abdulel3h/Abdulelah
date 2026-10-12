@@ -1,5 +1,32 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+
+/**
+ * Resolves once every finite animation and transition running on the page
+ * has finished (a dialog's entrance, a reveal's movement), so axe reads
+ * settled colours. A real signal from the Web Animations API, not a sleep:
+ * it waits exactly as long as the motion takes on this machine. Only
+ * time-based motion counts: infinite or paused animations never finish, and
+ * scroll-driven ones (the background drift, `animation-timeline: scroll()`)
+ * follow the scroll position rather than the clock.
+ */
+async function motionSettled(page: Page) {
+  await page.evaluate(() =>
+    Promise.all(
+      document
+        .getAnimations()
+        .filter(
+          (animation) =>
+            animation.timeline === document.timeline &&
+            animation.playState === "running" &&
+            animation.effect?.getComputedTiming().iterations !== Infinity
+        )
+        .map((animation) => animation.finished.catch(() => undefined))
+    ).then(() => undefined)
+  );
+}
+
+const WCAG = ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"];
 
 const pages = [
   "/",
@@ -58,21 +85,82 @@ test.describe("automated accessibility", () => {
     });
   }
 
-  test("axe: open search dialog and guide", async ({ page }) => {
+  // One full-page scan per test: two in one test could outlast its time
+  // budget when every worker is scanning at once.
+  test("axe: open search dialog", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: /^Search/ }).click();
+
+    const search = page.getByRole("dialog");
+
+    await expect(search).toBeVisible();
+    await expect(search.getByRole("combobox")).toBeFocused();
     await page.keyboard.type("ai");
+    await expect(search.getByRole("option").first()).toBeVisible();
+    // The dialog fades in (sheet-in); scan it once it has.
+    await motionSettled(page);
 
-    let results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
+    const results = await new AxeBuilder({ page }).withTags(WCAG).analyze();
 
-    expect(results.violations.map((violation) => violation.id)).toEqual([]);
-
-    await page.keyboard.press("Escape");
-    await page.getByRole("button", { name: /Ask Abdulelah/ }).click();
-    await page.waitForTimeout(500);
-    results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
     expect(results.violations.map((violation) => violation.id)).toEqual([]);
   });
+
+  test("axe: open guide", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: /Ask Abdulelah/ }).click();
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await motionSettled(page);
+
+    const results = await new AxeBuilder({ page }).withTags(WCAG).analyze();
+
+    expect(results.violations.map((violation) => violation.id)).toEqual([]);
+  });
+});
+
+test.describe("scroll reveals", () => {
+  // Text that rises into view stays fully opaque at every moment, so its
+  // contrast never depends on when it is measured. It used to fade from
+  // opacity 0 (the hidden state in globals.css), and an axe scan that
+  // overlapped a fade failed color-contrast at random (see .ds-rise in
+  // site.css).
+  for (const path of ["/", "/ar"]) {
+    test(`rising text moves but never fades: ${path}`, async ({ page }) => {
+      await page.addInitScript(() => {
+        const properties: string[] = [];
+
+        (window as unknown as { __rise: string[] }).__rise = properties;
+        document.addEventListener(
+          "transitionrun",
+          (event) => {
+            if ((event.target as Element).matches?.(".ds-rise[data-reveal]")) {
+              properties.push((event as TransitionEvent).propertyName);
+            }
+          },
+          true
+        );
+      });
+      await page.goto(path);
+
+      const rising = page.locator(".ds-rise[data-reveal]");
+      const hidden = page.locator('.ds-rise[data-reveal="hidden"]');
+
+      // Below the fold the milestones wait out of place, but fully opaque…
+      await expect(hidden.first()).toBeAttached();
+      expect(Array.from(new Set(await hidden.evaluateAll((items) => items.map((item) => getComputedStyle(item).opacity))))).toEqual([
+        "1"
+      ]);
+
+      // …and rise into place once they scroll in.
+      for (const item of await rising.all()) await item.scrollIntoViewIfNeeded();
+      await expect(hidden).toHaveCount(0);
+      await motionSettled(page);
+
+      const properties = await page.evaluate(() => (window as unknown as { __rise: string[] }).__rise);
+
+      expect(properties).toContain("transform");
+      expect(properties).not.toContain("opacity");
+    });
+  }
 });
 
 test.describe("automated accessibility of the menu", () => {
@@ -118,6 +206,43 @@ test.describe("reduced motion", () => {
       expect(hidden).toEqual([]);
     });
   }
+
+  test("the search dialog passes axe with motion reduced, and nothing waits to appear", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: /^Search/ }).click();
+
+    const search = page.getByRole("dialog");
+
+    await expect(search).toBeVisible();
+    await page.keyboard.type("ai");
+    await expect(search.getByRole("option").first()).toBeVisible();
+
+    // Hydrated (the dialog opened), yet nothing is held back for a scroll,
+    // and no entrance is still running.
+    await expect(page.locator('[data-reveal="hidden"]')).toHaveCount(0);
+    expect(
+      await page.evaluate(
+        () =>
+          document
+            .getAnimations()
+            .filter((animation) => animation.timeline === document.timeline && animation.playState === "running").length
+      )
+    ).toBe(0);
+
+    const results = await new AxeBuilder({ page }).withTags(WCAG).analyze();
+
+    expect(results.violations.map((violation) => violation.id)).toEqual([]);
+  });
+
+  test("the guide passes axe with motion reduced", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: /Ask Abdulelah/ }).click();
+    await expect(page.getByRole("dialog")).toBeVisible();
+
+    const results = await new AxeBuilder({ page }).withTags(WCAG).analyze();
+
+    expect(results.violations.map((violation) => violation.id)).toEqual([]);
+  });
 });
 
 test.describe("links and console", () => {
