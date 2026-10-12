@@ -44,6 +44,8 @@ export type EvidenceItem = {
 };
 
 /** A documented figure: the number as written in the source, and what it counts. */
+export type BoundaryRow = { label: string; value: string; code?: boolean; tone?: "deny" | "allow" };
+
 export type StoryFigure = { value: string; label: string };
 
 /**
@@ -72,9 +74,23 @@ export type ProjectStory = {
   boundary?: {
     title: string;
     intro: string;
-    rows: { label: string; value: string; code?: boolean; tone?: "deny" | "allow" }[];
+    rows: BoundaryRow[];
     body: string;
     counterpart: string;
+    /**
+     * The same boundary as a two-scenario explorer: the captured denial in
+     * `rows`, and its allowed counterpart here. Rows run in the order the
+     * evidence prints them: message, proposal, decision, then what followed.
+     */
+    gate?: {
+      legend: string;
+      proposes: string;
+      decides: string;
+      note: string;
+      replay: string;
+      allowed: { choice: string; detail: string; verdict: string; rows: BoundaryRow[] };
+      denied: { choice: string; detail: string; verdict: string };
+    };
   };
   evaluation?: {
     title: string;
@@ -394,7 +410,30 @@ const records: ProjectRecord[] = [
             }
           ],
           body: "The model asked for the order. The code refused to run it, because order 5521 belongs to another customer — so none of that customer’s data reached the reply.",
-          counterpart: "The same check let order 1024 through, because the session owns it, and a live return on it completed as R-1001."
+          counterpart: "The same check let order 1024 through, because the session owns it, and a live return on it completed as R-1001.",
+          // TOOL_CALLING.md, "Final LIVE evidence": both lookups ran against
+          // DeepSeek in the executed notebook. Only 5521's message and reply
+          // were printed, so 1024's are described, not quoted.
+          gate: {
+            legend: "Choose a captured scenario",
+            proposes: "The model proposes",
+            decides: "The application decides",
+            note: "Both lookups were captured in the live DeepSeek run. This replays them; nothing here calls a model.",
+            replay: "Replay",
+            allowed: {
+              choice: "Order 1024",
+              detail: "This session’s own order",
+              verdict: "Allowed",
+              rows: [
+                { label: "Message", value: "A question about order 1024, which this session owns" },
+                { label: "Model proposed", value: 'lookup_order({"order_id": "1024"})', code: true },
+                { label: "Application decided", value: "Allowed — the session owns order 1024", tone: "allow" },
+                { label: "Executed", value: "lookup_order, run by the application", tone: "allow" },
+                { label: "Reply", value: "The model answered from the tool’s result" }
+              ]
+            },
+            denied: { choice: "Order 5521", detail: "Another customer’s order", verdict: "Denied" }
+          }
         },
         evaluation: {
           title: "Evaluation",
@@ -589,7 +628,27 @@ const records: ProjectRecord[] = [
             }
           ],
           body: "طلب النموذج الطلب، ورفض الكود تنفيذه لأن الطلب 5521 لعميل آخر، فلم تصل بيانات ذلك العميل إلى الرد.",
-          counterpart: "والفحص نفسه سمح بالطلب 1024 لأن الجلسة تملكه، واكتمل عليه إرجاع حيّ برقم R-1001."
+          counterpart: "والفحص نفسه سمح بالطلب 1024 لأن الجلسة تملكه، واكتمل عليه إرجاع حيّ برقم R-1001.",
+          gate: {
+            legend: "اختر سيناريو موثّقًا",
+            proposes: "النموذج يقترح",
+            decides: "التطبيق يقرّر",
+            note: "الاستعلامان موثّقان من التشغيل الحي على DeepSeek. هذا عرض لهما، ولا يستدعي أي نموذج.",
+            replay: "أعد العرض",
+            allowed: {
+              choice: "الطلب 1024",
+              detail: "طلب هذه الجلسة",
+              verdict: "سُمح",
+              rows: [
+                { label: "الرسالة", value: "سؤال عن الطلب 1024، وهو طلب تملكه هذه الجلسة" },
+                { label: "اقترح النموذج", value: 'lookup_order({"order_id": "1024"})', code: true },
+                { label: "قرر التطبيق", value: "سُمح: الجلسة تملك الطلب 1024", tone: "allow" },
+                { label: "ما نُفّذ", value: "lookup_order، نفّذه التطبيق", tone: "allow" },
+                { label: "الرد", value: "أجاب النموذج من نتيجة الأداة" }
+              ]
+            },
+            denied: { choice: "الطلب 5521", detail: "طلب عميل آخر", verdict: "رُفض" }
+          }
         },
         evaluation: {
           title: "التقييم",

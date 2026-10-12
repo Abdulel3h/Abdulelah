@@ -1,3 +1,4 @@
+import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 const REPOSITORY = "https://github.com/Abdulel3h/llm-application-engineering-Raqmi";
@@ -109,4 +110,109 @@ test.describe("Raqmi", () => {
       await page.keyboard.press("Escape");
     }
   });
+});
+
+test.describe("Raqmi authorization gate", () => {
+  const DENIED_CALL = 'lookup_order({"order_id": "5521"})';
+  const ALLOWED_CALL = 'lookup_order({"order_id": "1024"})';
+
+  test("opens on the captured denial and lets the reader run the allowed lookup, by keyboard or click", async ({
+    page
+  }) => {
+    await page.goto("/projects/raqmi");
+
+    const boundary = page.getByRole("region", { name: "The moment that matters" });
+    const denied = boundary.getByRole("radio", { name: /Order 5521/ });
+    const allowed = boundary.getByRole("radio", { name: /Order 1024/ });
+
+    await expect(denied).toBeChecked();
+    await expect(boundary.getByText(DENIED_CALL)).toBeVisible();
+    await expect(boundary.getByText(ALLOWED_CALL)).toBeHidden();
+
+    // Native radios: the arrow keys choose, in either reading direction.
+    await denied.focus();
+    await page.keyboard.press("ArrowUp");
+    await expect(allowed).toBeChecked();
+    await expect(allowed).toBeFocused();
+    await expect(boundary.getByText(ALLOWED_CALL)).toBeVisible();
+    await expect(boundary.getByText("Allowed — the session owns order 1024")).toBeVisible();
+    await expect(boundary.getByText(DENIED_CALL)).toBeHidden();
+    // The signal replays for the chosen scenario.
+    await expect.poll(() => boundary.locator(".ds-gate").evaluate((gate) => gate.getAnimations({ subtree: true }).length)).toBeGreaterThan(0);
+
+    // The whole option is the target, for a finger as much as a pointer.
+    await boundary.getByText("Order 5521", { exact: true }).click();
+    await expect(denied).toBeChecked();
+    await expect(boundary.getByText("DENIED · authorization_denied")).toBeVisible();
+    await expect(boundary.getByText(/captured in the live DeepSeek run/)).toBeVisible();
+  });
+
+  test("reads the same in Arabic, with code kept whole and left to right", async ({ page }) => {
+    await page.goto("/ar/projects/raqmi");
+
+    const boundary = page.getByRole("region", { name: "اللحظة الفاصلة" });
+
+    await boundary.getByRole("radio", { name: /الطلب 1024/ }).check();
+    await expect(boundary.getByText("سُمح: الجلسة تملك الطلب 1024")).toBeVisible();
+    await expect(boundary.getByText(ALLOWED_CALL)).toHaveAttribute("dir", "ltr");
+    // "lookup_order" inside Arabic is one isolate, so RTL never reorders it.
+    await expect(boundary.locator('[data-scenario="allowed"] span[lang="en"][dir="ltr"]', { hasText: /^lookup_order$/ })).toHaveCount(1);
+  });
+
+  test("switches with CSS alone when JavaScript is off", async ({ browser }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+
+    await page.goto("/projects/raqmi");
+
+    const boundary = page.locator("section[aria-labelledby='boundary']");
+
+    await expect(boundary.getByText(DENIED_CALL)).toBeVisible();
+    await boundary.getByText("Order 1024", { exact: true }).click();
+    await expect(boundary.getByText(ALLOWED_CALL)).toBeVisible();
+    await expect(boundary.getByText(DENIED_CALL)).toBeHidden();
+    await context.close();
+  });
+
+  test("under reduced motion the switch is instant, nothing plays and there is nothing to replay", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/projects/raqmi");
+
+    const gate = page.locator(".ds-gate");
+
+    await gate.scrollIntoViewIfNeeded();
+    await gate.getByText("Order 1024", { exact: true }).click();
+    await expect(gate.getByText(ALLOWED_CALL)).toBeVisible();
+    expect(
+      await gate.evaluate(
+        (element) => element.getAnimations({ subtree: true }).filter((animation) => animation.playState === "running").length
+      )
+    ).toBe(0);
+    await expect(gate.getByRole("button", { name: "Replay" })).toBeHidden();
+  });
+
+  // The signal only raises a value's brightness, or dims it to a tone that
+  // still clears AA, so the gate passes axe at any moment of its motion —
+  // scanned right after a switch, without waiting.
+  for (const [path, choice] of [
+    ["/projects/raqmi", "Order 1024"],
+    ["/ar/projects/raqmi", "الطلب 1024"]
+  ] as const) {
+    test(`axe passes mid-signal with either scenario chosen: ${path}`, async ({ page }) => {
+      await page.goto(path);
+
+      const gate = page.locator(".ds-gate");
+
+      for (const label of [choice, choice.replace("1024", "5521")]) {
+        await gate.getByText(label, { exact: true }).click();
+
+        const results = await new AxeBuilder({ page })
+          .include(".ds-gate")
+          .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
+          .analyze();
+
+        expect(results.violations.map((violation) => violation.id), label).toEqual([]);
+      }
+    });
+  }
 });

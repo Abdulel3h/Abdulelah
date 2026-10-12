@@ -235,19 +235,18 @@ main:focus {
   transform: translate3d(0, 1.5rem, 0);
 }
 
-/* Route changes only — the first render is never animated. */
+/* Route changes only — the first render is never animated, and neither is
+   a language switch (PageFrame keys <main> on the path without its locale).
+   Movement only: the new page settles into place but never fades, so its
+   text is never shown at a contrast below its own (see .ds-rise in
+   site.css). */
 .page-enter {
-  animation: page-enter 0.42s var(--ease-out) both;
+  animation: page-enter 0.32s var(--ease-out) both;
 }
 
 @keyframes page-enter {
   from {
-    opacity: 0.35;
     transform: translate3d(0, 0.5rem, 0);
-  }
-  to {
-    opacity: 1;
-    transform: none;
   }
 }
 

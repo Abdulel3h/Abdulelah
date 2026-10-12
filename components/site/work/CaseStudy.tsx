@@ -211,7 +211,7 @@ export function CaseStudy({ project, locale }: { project: LocalizedProject; loca
         </div>
       </section>
 
-      {story?.boundary ? <BoundaryCase story={story.boundary} locale={locale} /> : null}
+      {story?.boundary ? <BoundaryCase story={story.boundary} locale={locale} project={project.slug} /> : null}
       {story ? <Capabilities items={project.capabilities} title={copy.capabilities} locale={locale} /> : null}
       {story?.evaluation ? <Evaluation story={story.evaluation} locale={locale} scopeLabel={copy.scope} /> : null}
       {story?.failures ? <Failures story={story.failures} locale={locale} /> : null}

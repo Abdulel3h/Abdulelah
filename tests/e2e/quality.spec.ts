@@ -163,6 +163,30 @@ test.describe("scroll reveals", () => {
   }
 });
 
+test.describe("page transitions", () => {
+  // A page change settles half a rem into place but never fades, so its text
+  // is never shown below its own contrast (see .page-enter in globals.css).
+  test("a page change moves into place without fading its text", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Projects" }).click();
+    await expect(page).toHaveURL(/\/projects$/);
+
+    const main = page.locator("main.page-enter");
+
+    await expect(main).toHaveCount(1);
+
+    const properties = await main.evaluate((element) =>
+      element.getAnimations().flatMap((animation) =>
+        (animation.effect as KeyframeEffect).getKeyframes().flatMap((frame) => Object.keys(frame))
+      )
+    );
+
+    expect(properties).toContain("transform");
+    expect(properties).not.toContain("opacity");
+    await expect(main).toHaveCSS("opacity", "1");
+  });
+});
+
 test.describe("automated accessibility of the menu", () => {
   for (const [path, name] of [
     ["/about", "Menu"],

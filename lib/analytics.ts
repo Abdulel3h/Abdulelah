@@ -12,6 +12,7 @@ export type AnalyticsEvent =
   | "project_opened"
   | "evidence_opened"
   | "announcement_opened"
+  | "signature_interaction_used"
   | "cv_downloaded"
   | "contact_submitted"
   | "email_copied"
