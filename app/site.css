@@ -637,6 +637,91 @@ html[dir="rtl"] .ds-nav-link::after {
   transform: scaleX(1);
 }
 
+/* ------------------------------------------------------------- notice */
+
+/* The featured-project notice above the hero name. It is made of the strip
+   cards' material — hairline, faint fill, the project's tint on hover — and is
+   one link. On a phone it is as wide as the buttons below it, in two rows (the
+   name and an arrow, then the line); from 40rem the "explore" label joins the
+   line; from 64rem it is one row, with a hairline before the line. */
+.ds-notice {
+  display: inline-grid;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "head cta"
+    "line line";
+  align-items: center;
+  column-gap: 1.25rem;
+  row-gap: 0.2rem;
+  border: 1px solid rgb(242 239 231 / 0.09);
+  border-radius: var(--ds-radius);
+  background: rgb(242 239 231 / 0.02);
+  padding: 0.7rem 1rem 0.75rem;
+  transition:
+    background-color var(--ds-fast) ease,
+    border-color var(--ds-fast) ease;
+}
+
+.ds-notice:hover,
+.ds-notice:focus-visible {
+  border-color: rgb(var(--tint) / 0.55);
+  background: rgb(242 239 231 / 0.04);
+}
+
+/* Pressed: the feedback a touch screen gets instead of hover. */
+.ds-notice:active {
+  background: rgb(242 239 231 / 0.07);
+}
+
+.ds-notice .ds-label {
+  color: var(--ds-brass);
+}
+
+.ds-notice-head {
+  grid-area: head;
+  display: flex;
+  min-inline-size: 0;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.ds-notice-line {
+  grid-area: line;
+  text-wrap: balance;
+}
+
+.ds-notice-cta {
+  grid-area: cta;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (min-width: 40rem) {
+  .ds-notice {
+    inline-size: auto;
+    grid-template-columns: auto auto;
+    grid-template-areas:
+      "head head"
+      "line cta";
+  }
+}
+
+@media (min-width: 64rem) {
+  .ds-notice {
+    grid-template-columns: auto auto auto;
+    grid-template-areas: "head line cta";
+    padding-block: 0.55rem;
+  }
+
+  .ds-notice-line {
+    border-inline-start: 1px solid rgb(242 239 231 / 0.12);
+    padding-inline-start: 1.25rem;
+  }
+}
+
 /* ----------------------------------------------------- project worlds */
 
 /* A halo that reaches past the edges of the plate it sits behind (the plate
@@ -717,6 +802,7 @@ html[dir="rtl"] .ds-nav-link::after {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .ds-notice,
   .ds-forward,
   .ds-nav-link::after,
   .ds-gloss,

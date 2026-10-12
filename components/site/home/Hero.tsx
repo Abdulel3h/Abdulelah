@@ -1,9 +1,10 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
+import { TrackedLink } from "@/components/analytics/TrackedLink";
 import { mixed } from "@/components/site/mixed";
-import { Down, Latin, pad, ProjectName } from "@/components/site/primitives";
+import { directional, Down, Latin, pad, ProjectName } from "@/components/site/primitives";
 import { tintOf } from "@/components/site/tints";
-import { getFeaturedProjects, projectCounts } from "@/data/projects";
+import { getFeaturedProjects, getProject, projectCounts } from "@/data/projects";
 import { localizeHref, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { siteCopy } from "@/lib/i18n/experience";
@@ -16,8 +17,9 @@ import { format } from "@/lib/i18n/format";
  * evidence, set in the margin beside it on wide screens and below it on a
  * phone. Hovering a word lights its note and the other way round (CSS only,
  * see .ds-hero in site.css); the notes are always visible, so touch and
- * screen readers lose nothing. Below, the four working projects are one swipe
- * away on a phone and one row on a desktop.
+ * screen readers lose nothing. Below, the working projects are one swipe
+ * away on a phone and one row on a desktop. Above the name, one quiet line
+ * points to the newest project (see Notice).
  */
 export function Hero({ locale }: { locale: Locale }) {
   const dict = getDictionary(locale);
@@ -34,8 +36,10 @@ export function Hero({ locale }: { locale: Locale }) {
 
   return (
     <section className="ds-hero relative" aria-labelledby="hero-title">
-      <div className="ds-shell grid gap-y-7 pb-10 pt-8 sm:pt-12 lg:grid-cols-12 lg:gap-x-12 lg:gap-y-9 lg:pb-14 lg:pt-14">
+      <div className="ds-shell grid gap-y-7 pb-10 pt-6 sm:pt-10 lg:grid-cols-12 lg:gap-x-12 lg:gap-y-9 lg:pb-14 lg:pt-11">
         <div className="lg:col-span-12">
+          <Notice locale={locale} />
+
           <p className="ds-kicker">{copy.kicker}</p>
 
           <h1 id="hero-title" className="ds-display mt-7 lg:mt-9">
@@ -127,5 +131,47 @@ export function Hero({ locale }: { locale: Locale }) {
         </ol>
       </div>
     </section>
+  );
+}
+
+/** The project the notice above the name points to. */
+const NOTICE_PROJECT = "raqmi";
+
+/**
+ * A featured-project notice: one link, made of the strip cards' material, that
+ * names the project and its idea and opens its case study. Two rows on a
+ * phone (the arrow alone stands for "explore"), one line on a desktop. It
+ * settles in once with the hero and never moves again; there is nothing to
+ * dismiss. The label says "new" for now and can say "featured" later.
+ */
+function Notice({ locale }: { locale: Locale }) {
+  const project = getProject(NOTICE_PROJECT, locale);
+  const copy = siteCopy(locale).home.notice;
+  const { Forward } = directional(locale);
+
+  if (!project) return null;
+
+  return (
+    <div className="mb-8 flex lg:mb-9" style={{ "--tint": tintOf(project.slug) } as CSSProperties}>
+      <TrackedLink
+        href={localizeHref(`/projects/${project.slug}`, locale)}
+        event="announcement_opened"
+        props={{ project: project.slug, source: "hero" }}
+        className="ds-notice ds-settle focus-ring group"
+      >
+        <span className="ds-notice-head">
+          <span className="ds-label">{copy.label}</span>
+          <span aria-hidden="true" className="ds-tint-dot h-1.5 w-1.5 shrink-0 rounded-full" />
+          <span className="sr-only">: </span>
+          <ProjectName className="text-[1.15rem] leading-none text-paper" name={project.name} />
+          <span className="sr-only">. </span>
+        </span>
+        <span className="ds-notice-line ds-small text-paper-dim">{copy.line} </span>
+        <span className="ds-notice-cta ds-small font-medium text-accent-soft">
+          <span className="max-sm:sr-only">{copy.cta}</span>
+          <Forward className="ds-forward h-4 w-4 shrink-0" aria-hidden="true" />
+        </span>
+      </TrackedLink>
+    </div>
   );
 }

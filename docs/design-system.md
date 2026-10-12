@@ -8,7 +8,8 @@ The idea comes from the Arabic manuscript page: a short main text (المتن) w
 
 - **No portrait.** The site carries no personal photo; the name, set large, is the opening, and the facts sit in the margin beside it.
 - **Project worlds:** each project has a tint (`components/site/tints.ts`) for its halo and markers. Brass stays the interface accent; a tint never carries meaning on its own.
-- **Projects first:** the home page opens on the name and one glossed sentence, with a strip of the four working projects. Then come those four projects as chapters, the three concepts, the milestones, one belief and a direct line.
+- **Projects first:** the home page opens on the name and one glossed sentence, with a strip of the working projects. Then come those projects as chapters, the three concepts, the milestones, one belief and a direct line.
+- **Featured-project notice:** one quiet link above the name, made from the strip cards' material, points to the newest project (`Notice` in `Hero.tsx`, `.ds-notice`). It is not a popup, a banner or a toast, and it has nothing to dismiss. It settles in once with the hero. Its label reads "New project" for now. When the project is no longer new, change the label to "Featured project", or remove it, and the notice still works without a redesign.
 
 ## Architecture
 

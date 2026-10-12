@@ -120,6 +120,11 @@ export const arCopy = {
     primary: "استعرض المشاريع",
     secondary: "السيرة الذاتية",
     stripLabel: "في هذه الصفحة",
+    notice: {
+      label: "مشروع جديد",
+      line: "النموذج يقترح، والنظام يقرّر.",
+      cta: "استكشف المشروع"
+    },
     work: {
       kicker: "أعمال مختارة",
       title: "خمسة نماذج تعمل.",
