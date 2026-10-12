@@ -52,10 +52,10 @@ test.describe("English and Arabic", () => {
     await expect(dialog.getByRole("textbox", { name: "اطرح سؤالًا على دليل عبدالإله" })).toHaveAttribute("dir", "auto");
   });
 
-  test("the Arabic home leads with the four working projects", async ({ page }) => {
+  test("the Arabic home leads with the five working projects", async ({ page }) => {
     await page.goto("/ar");
 
-    for (const name of ["ChatUB", "Althil", "Absher Insight AI", "Stadium"]) {
+    for (const name of ["رقمي", "ChatUB", "Althil", "Absher Insight AI", "Stadium"]) {
       await expect(page.getByRole("heading", { level: 3, name })).toBeVisible();
     }
 
@@ -69,12 +69,12 @@ test.describe("English and Arabic", () => {
 
     const list = page.getByRole("list", { name: "قائمة المشاريع" });
 
-    await expect(list.getByRole("listitem")).toHaveCount(7);
+    await expect(list.getByRole("listitem")).toHaveCount(8);
     await page.getByRole("button", { name: "تصوّرات" }).click();
     await expect(list.getByRole("listitem")).toHaveCount(3);
     await expect(page.getByRole("button", { name: "تصوّرات" })).toHaveAttribute("aria-pressed", "true");
     await page.getByRole("button", { name: "تعمل بكود منشور" }).click();
-    await expect(list.getByRole("listitem")).toHaveCount(4);
+    await expect(list.getByRole("listitem")).toHaveCount(5);
   });
 
   test("the Arabic case study answers problem, build, role and result first", async ({ page }) => {
@@ -107,10 +107,10 @@ test.describe("English and Arabic", () => {
     await expect(toggle).toBeFocused();
   });
 
-  test("the English home leads with the same four working projects", async ({ page }) => {
+  test("the English home leads with the same five working projects", async ({ page }) => {
     await page.goto("/");
 
-    for (const name of ["ChatUB", "Althil", "Absher Insight AI", "Stadium"]) {
+    for (const name of ["Raqmi", "ChatUB", "Althil", "Absher Insight AI", "Stadium"]) {
       await expect(page.getByRole("heading", { level: 3, name })).toBeVisible();
     }
 
@@ -122,12 +122,12 @@ test.describe("English and Arabic", () => {
 
     const list = page.getByRole("list", { name: "All projects" });
 
-    await expect(list.getByRole("listitem")).toHaveCount(7);
+    await expect(list.getByRole("listitem")).toHaveCount(8);
     await page.getByRole("button", { name: "Concepts" }).click();
     await expect(list.getByRole("listitem")).toHaveCount(3);
     await expect(page.getByRole("button", { name: "Concepts" })).toHaveAttribute("aria-pressed", "true");
     await page.getByRole("button", { name: "Working, with public code" }).click();
-    await expect(list.getByRole("listitem")).toHaveCount(4);
+    await expect(list.getByRole("listitem")).toHaveCount(5);
   });
 
   test("the English case study walks into the same next project", async ({ page }) => {
@@ -156,6 +156,7 @@ test.describe("English and Arabic", () => {
       "/",
       "/projects",
       "/projects/stadium",
+      "/projects/raqmi",
       "/about",
       "/contact",
       "/resume",

@@ -88,12 +88,12 @@ export const en = {
   home: {
     metaTitle: "Abdulelah Alkhathami — AI Product Builder · Agents, RAG & Arabic AI",
     metaDescription:
-      "Abdulelah Alkhathami is an AI product builder in Riyadh — agents, RAG and Arabic AI. Explore seven applied AI projects, the evidence behind each, and two role-specific CVs."
+      "Abdulelah Alkhathami is an AI product builder in Riyadh — agents, RAG and Arabic AI. Explore eight applied AI projects, the evidence behind each, and two role-specific CVs."
   },
   projectsPage: {
     metaTitle: "Projects",
     metaDescription:
-      "Seven applied AI projects by Abdulelah Alkhathami — four working prototypes and three concepts — each with its role, status and evidence."
+      "Eight applied AI projects by Abdulelah Alkhathami — five working prototypes and three concepts — each with its role, status and evidence."
   },
   caseStudy: {
     notFoundTitle: "Project not found"
@@ -101,7 +101,7 @@ export const en = {
   about: {
     metaTitle: "About",
     metaDescription:
-      "Abdulelah Alkhathami is an AI product builder from Riyadh — how he thinks, how he works, and the path from his first hackathon to seven applied AI projects.",
+      "Abdulelah Alkhathami is an AI product builder from Riyadh — how he thinks, how he works, and the path from his first hackathon to eight applied AI projects.",
     cueTitle: "Prefer the two-minute version?",
     cueBody: "Ask the guide how Abdulelah thinks, what he cares about and where he’s strongest.",
     cuePrompt: "Give me the two-minute overview of who Abdulelah is, how he thinks, and where he’s strongest.",
@@ -116,9 +116,9 @@ export const en = {
       { label: "Looking for", value: "AI engineering roles and applied-AI collaborations" },
       { label: "Education", value: "Information Systems — University of Bisha, 2026" },
       { label: "Based in", value: "Riyadh, Saudi Arabia" },
-      { label: "Selected work", value: "Seven applied AI projects: four working prototypes, three concepts" },
+      { label: "Selected work", value: "Eight applied AI projects: five working prototypes, three concepts" },
       { label: "Recognition", value: "Top 30 — SDAIA × Microsoft AthkaU" },
-      { label: "Code", value: "Public repositories for ChatUB, Althil, Absher Insight AI and Stadium" }
+      { label: "Code", value: "Public repositories for Raqmi, ChatUB, Althil, Absher Insight AI and Stadium" }
     ],
     versions: [
       {

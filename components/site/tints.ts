@@ -5,6 +5,8 @@
  * 4.5:1 as text on the ink surface.
  */
 export const projectTints: Record<string, string> = {
+  // A muted take on the teal of Raqmi’s own branding: the threshold.
+  raqmi: "106 192 174",
   // A local Arabic assistant: the brass of the page itself.
   chatub: "201 167 92",
   // Midday sun over a street.

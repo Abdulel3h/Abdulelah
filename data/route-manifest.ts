@@ -5,6 +5,7 @@
  * note data so the two never drift apart.
  */
 export const projectRouteSlugs = [
+  "raqmi",
   "chatub",
   "absher-insight-ai",
   "stadium",

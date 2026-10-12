@@ -5,7 +5,7 @@ import { useState, type CSSProperties } from "react";
 import { PipelineStage } from "@/components/motion/PipelineStage";
 import { StatusBadge } from "@/components/projects/ProjectMeta";
 import { mixer } from "@/components/site/mixed";
-import { directional, Latin, Ltr, pad } from "@/components/site/primitives";
+import { directional, Latin, Ltr, pad, ProjectName } from "@/components/site/primitives";
 import { Flow } from "@/components/site/work/Flow";
 import { ConceptFigure } from "@/components/work/ProductPreview";
 import type { PreviewKind, ProjectStatus } from "@/data/projects";
@@ -89,7 +89,7 @@ export function ProjectIndex({ items, labels, locale }: { items: IndexItem[]; la
           );
         })}
         <p role="status" className="ds-micro ms-auto text-paper-faint">
-          {labels.count.replace("{n}", String(visible.length))}
+          {labels.count.replace("{n}", String(visible.length)).replace("{total}", String(items.length))}
         </p>
       </div>
 
@@ -119,7 +119,7 @@ export function ProjectIndex({ items, labels, locale }: { items: IndexItem[]; la
 
                   <span className="min-w-0">
                     <span className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                      <Latin className="ds-name text-[clamp(1.85rem,1.4rem+2vw,2.9rem)] text-paper">{item.name}</Latin>
+                      <ProjectName className="ds-name text-[clamp(1.85rem,1.4rem+2vw,2.9rem)] text-paper" name={item.name} />
                       <span className="ds-small text-paper-dim">{mix(item.descriptor)}</span>
                     </span>
                     <span className="ds-small mt-2 block max-w-xl ds-tone-80">{mix(item.line)}</span>
@@ -168,7 +168,7 @@ export function ProjectIndex({ items, labels, locale }: { items: IndexItem[]; la
                 />
               </div>
               <p className="mt-7 text-[1.9rem] text-paper">
-                <Latin className="ds-name">{active.name}</Latin>
+                <ProjectName className="ds-name" name={active.name} />
               </p>
               <Flow steps={active.flow} label={labels.howItWorks} locale={locale} className="mt-3" />
               <Link

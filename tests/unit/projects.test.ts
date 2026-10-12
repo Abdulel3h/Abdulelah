@@ -14,8 +14,8 @@ const STATUSES = [
 ];
 
 describe("project evidence", () => {
-  it("counts seven projects: four prototypes, three concepts, four with public code", () => {
-    expect(projectCounts).toEqual({ total: 7, prototypes: 4, concepts: 3, publicRepositories: 4 });
+  it("counts eight projects: five prototypes, three concepts, five with public code", () => {
+    expect(projectCounts).toEqual({ total: 8, prototypes: 5, concepts: 3, publicRepositories: 5 });
   });
 
   it("gives every project a verified status, role, evidence and limits in both languages", () => {
@@ -62,8 +62,9 @@ describe("project evidence", () => {
     }
   });
 
-  it("features the four public prototypes, with Althil after ChatUB", () => {
+  it("features the five public prototypes, Raqmi first and Althil after ChatUB", () => {
     expect(getFeaturedProjects("en").map((project) => project.slug)).toEqual([
+      "raqmi",
       "chatub",
       "althil",
       "absher-insight-ai",
@@ -93,6 +94,7 @@ describe("project evidence", () => {
   it("answers code and summary questions without overclaiming", () => {
     const code = getFallbackAgentResponse("Which projects have public code?");
 
+    expect(code).toContain("Raqmi");
     expect(code).toContain("ChatUB");
     expect(code).toContain("Stadium");
     expect(code).toContain("Absher Insight AI");

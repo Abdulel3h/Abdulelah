@@ -5,10 +5,12 @@ import type { Locale } from "@/lib/i18n/config";
  * studies, search, metadata and Abdulelah's guide.
  *
  * Evidence rule: a status is never stronger than what can be verified. The
- * four public repositories (ChatUB, Althil, absher-insight, Stadium) describe
- * themselves as prototypes, so nothing here is called "shipped", "live" or
- * "in production". Projects without public code say so, and the code-drawn
- * previews are always labelled as concept visualizations.
+ * five public repositories (Raqmi, ChatUB, Althil, absher-insight, Stadium)
+ * describe themselves as prototypes or case studies, so nothing here is called
+ * "shipped", "live" or "in production". Projects without public code say so,
+ * and the code-drawn previews are always labelled as concept visualizations.
+ * Every figure restates its source with its scope (Raqmi: the executed
+ * notebook and the evaluation, tool-calling and guardrail reports).
  */
 
 export type ProjectStatus =
@@ -30,14 +32,73 @@ export type PreviewKind =
   | "legal"
   | "fintech"
   | "vr"
-  | "vision";
+  | "vision"
+  | "gate";
 
 export type EvidenceItem = {
-  kind: "repository" | "screenshots" | "program-record" | "private";
+  kind: "repository" | "document" | "screenshots" | "program-record" | "private";
   /** Internal routes are locale-free; external links are absolute. */
   href?: string;
   label: Record<Locale, string>;
   detail: Record<Locale, string>;
+};
+
+/** A documented figure: the number as written in the source, and what it counts. */
+export type StoryFigure = { value: string; label: string };
+
+/**
+ * The longer engineering story a flagship case study tells beyond the
+ * standard sections. Every block is optional and the case study renders only
+ * the blocks a project has; figures always travel with their scope.
+ */
+export type ProjectStory = {
+  /** The problem as a few real requests, from a question to a refusal. */
+  requests?: {
+    title: string;
+    intro: string;
+    items: { text: string; outcome: string; tone: "answer" | "action" | "refuse" }[];
+    question: string;
+  };
+  /** One principle, set as two short lines. */
+  principle?: { kicker: string; lines: [string, string]; body: string };
+  /** The architecture in groups of steps; the decisive group is marked. */
+  architecture?: {
+    groups: { label: string; steps: string[]; decisive?: boolean }[];
+    outcomesLabel: string;
+    outcomes: string[];
+    note: string;
+  };
+  /** One captured moment, row by row, as the evidence printed it. */
+  boundary?: {
+    title: string;
+    intro: string;
+    rows: { label: string; value: string; code?: boolean; tone?: "deny" | "allow" }[];
+    body: string;
+    counterpart: string;
+  };
+  evaluation?: {
+    title: string;
+    intro: string;
+    passed: number;
+    total: number;
+    passedLabel: string;
+    failedLabel: string;
+    figures: StoryFigure[];
+    providers: string;
+    scope: string;
+  };
+  failures?: { title: string; body: string; casesLabel: string; cases: string[] };
+  guardrails?: { title: string; intro: string; layers: string[]; figures: StoryFigure[]; scope: string };
+  checks?: {
+    title: string;
+    intro: string;
+    subject: string;
+    steps: string[];
+    outcomes: [string, string];
+    figures: StoryFigure[];
+    scope: string;
+  };
+  providers?: { title: string; items: { name: string; body: string }[]; note: string };
 };
 
 type ProjectText = {
@@ -68,11 +129,18 @@ type ProjectText = {
   technologiesNote?: string;
   lesson?: string;
   quote?: string;
+  /** Up to four short margin notes for the opening (the first three on the homepage). */
+  highlights?: string[];
+  story?: ProjectStory;
 };
 
 type ProjectRecord = {
   slug: string;
   name: string;
+  /** A name in another script, where the project has one (Raqmi → رقمي). */
+  localName?: Partial<Record<Locale, string>>;
+  /** Extra search and metadata terms, in both languages. */
+  keywords?: string[];
   year: string;
   status: ProjectStatus;
   evidenceType: EvidenceType;
@@ -87,7 +155,11 @@ type ProjectRecord = {
 
 export type LocalizedProject = ProjectText & {
   slug: string;
+  /** The name as this locale shows it. */
   name: string;
+  /** The same name in the other script, when the project has one. */
+  altName?: string;
+  keywords: string[];
   /** "ChatUB — Local Arabic academic assistant" */
   title: string;
   year: string;
@@ -127,6 +199,463 @@ const NO_PUBLIC_CODE: EvidenceItem = {
 };
 
 const records: ProjectRecord[] = [
+  {
+    slug: "raqmi",
+    name: "Raqmi",
+    localName: { ar: "رقمي" },
+    keywords: [
+      "Raqmi",
+      "رقمي",
+      "LLM",
+      "authorization",
+      "tool calling",
+      "function calling",
+      "guardrails",
+      "Golden Set",
+      "evaluation",
+      "SDAIA Academy",
+      "أكاديمية سدايا",
+      "customer support",
+      "retail",
+      "خدمة العملاء",
+      "الصلاحيات"
+    ],
+    year: "2026",
+    status: "working-prototype",
+    evidenceType: "public-repository",
+    featured: true,
+    previewKind: "gate",
+    technologies: ["Python", "Pydantic", "DeepSeek API", "ALLaM-7B", "vLLM", "Native tool calling", "Google Colab"],
+    links: { github: "https://github.com/Abdulel3h/llm-application-engineering-Raqmi" },
+    evidence: [
+      {
+        kind: "repository",
+        href: "https://github.com/Abdulel3h/llm-application-engineering-Raqmi",
+        label: { en: "Public repository on GitHub", ar: "مستودع عام على GitHub" },
+        detail: {
+          en: "Source, the native tool module, 240 recorded local tests and every report.",
+          ar: "الكود، ووحدة الأدوات، و240 اختبارًا محليًا مسجّلًا، وكل التقارير."
+        }
+      },
+      {
+        kind: "document",
+        href: "https://github.com/Abdulel3h/llm-application-engineering-Raqmi/blob/main/Raqmi_Capstone.ipynb",
+        label: { en: "The executed notebook", ar: "الدفتر المنفَّذ" },
+        detail: {
+          en: "87 cells, all 47 code cells run in one captured Colab session — the evidence of record.",
+          ar: "87 خلية، نُفّذت خلايا الكود الـ47 كلها في جلسة Colab واحدة موثّقة، وهو مرجع الأدلة."
+        }
+      },
+      {
+        kind: "document",
+        href: "https://github.com/Abdulel3h/llm-application-engineering-Raqmi/blob/main/EVALUATION_REPORT.md",
+        label: { en: "Evaluation report", ar: "تقرير التقييم" },
+        detail: {
+          en: "The Golden Set on both models, the failed cases, structured output and judge calibration, with live and deterministic results kept apart.",
+          ar: "مجموعة Golden Set على النموذجين، والحالات الفاشلة، والمخرجات المهيكلة، ومعايرة المُحكِّم، مع فصل النتائج الحية عن الحتمية."
+        }
+      },
+      {
+        kind: "document",
+        href: "https://github.com/Abdulel3h/llm-application-engineering-Raqmi/blob/main/TOOL_CALLING.md",
+        label: { en: "Native tool calling", ar: "استدعاء الأدوات الأصلي" },
+        detail: {
+          en: "The protocol, the authorization boundary and the denied cross-user lookup.",
+          ar: "البروتوكول، وحدّ الصلاحيات، والاستعلام المرفوض عن طلب عميل آخر."
+        }
+      }
+    ],
+    en: {
+      descriptor: "Bilingual AI retail support",
+      summary:
+        "An Arabic-first support assistant for a fictional Saudi store — grounded answers, order lookups, returns and escalation — where the model proposes a tool call and application code decides whether it runs.",
+      domain: "LLM application engineering · Retail support",
+      role: "Design, build and evaluation",
+      statusDetail:
+        "Capstone for LLM Application Engineering at SDAIA Academy, September 2026 — a working prototype over fictional in-memory data, with a captured evaluation. Not a deployed product.",
+      context:
+        "The capstone of SDAIA Academy’s LLM Application Engineering programme (SDA-AIE-213), Track D — Retail Order Support. Built as one executed Colab notebook for a fictional Saudi store, with a public repository of tests, evaluation reports and provenance.",
+      problem:
+        "Retail support mixes questions with account-sensitive actions. “What is the return policy?” needs a grounded answer; “Where is my order?” reads account data; “Return this item” changes it; and “Show me another customer’s order” must be refused. A language model is flexible enough for the conversation, but it should never be the one deciding who may read or change an order.",
+      constraints: [
+        "Arabic first, with English alongside",
+        "Fictional in-memory catalogue, customers, orders and returns",
+        "One executed notebook as the evidence of record",
+        "Two model backends behind one boundary: DeepSeek, and ALLaM served locally by vLLM"
+      ],
+      solution:
+        "A router sends each message to a bounded workflow — a grounded answer, an order lookup, a return or an escalation — and a separate native tool loop accepts tool calls issued by the provider. Before any tool runs, application code validates the arguments, resolves the catalogue identity and checks that the current session owns the order. Inbound and outbound guards wrap the whole path.",
+      responsibilities: [
+        "Designed the router, the tool contracts and the authorization boundary",
+        "Built the native tool loop, with strict argument schemas and idempotent returns",
+        "Built the five-stage guard pipeline and its attack and legitimate corpora",
+        "Built the 56-case Golden Set, the failed-case reporter and the structured-output evaluation",
+        "Ran and captured the live evaluation on DeepSeek and ALLaM, and documented every limit"
+      ],
+      flow: ["Arabic or English message", "Inbound guards", "Model proposes a tool call", "Application allows or denies"],
+      approach: [
+        "Provider tool calls are reduced to four fields, then checked against a whitelist of three tools: lookup_order, create_return and escalate_to_human",
+        "Arguments pass strict Pydantic schemas that forbid unknown fields, so a user ID or consent flag supplied by the model is rejected",
+        "Products resolve to one catalogue identity before authorization, so a casing variant cannot create a second return",
+        "Session.authorize_order() checks ownership in application code before any read or change",
+        "One open return per customer, order and product keeps retries idempotent; the application mints the return ID"
+      ],
+      capabilities: [
+        "Answer catalogue and policy questions from the supplied store facts",
+        "Look up an order the session owns",
+        "Create a bounded return after validation and ownership checks",
+        "Escalate to a human when an answer cannot be verified",
+        "Refuse access to another customer’s data"
+      ],
+      decisions: [
+        {
+          title: "A router first, not an open agent",
+          body: "Retail requests fall into a few stable intents. A router sends each one to a bounded workflow; an open-ended agent loop would add latency and failure modes without evidence the domain needs them."
+        },
+        {
+          title: "One boundary for every model",
+          body: "DeepSeek and ALLaM sit behind the same client interface, so business logic and authorization never depend on one provider."
+        },
+        {
+          title: "Escalate rather than guess",
+          body: "When an answer cannot be verified against the store facts, Raqmi hands the case to a human instead of inventing one. In the captured run, all five of DeepSeek’s failed cases were escalations like this — safe, but scored as misses."
+        }
+      ],
+      outcome:
+        "A working prototype with a captured evaluation. On the 56-case Golden Set, DeepSeek and ALLaM each passed 51 of 56 exact-case checks, including all 24 high-risk cases. A live cross-user lookup was denied by application authorization, and a live authorized return completed with one return created. Everything runs on fictional data; nothing is deployed.",
+      notClaimed:
+        "No deployment, no real store or customer data, no measured business outcome, and no claim that the guards stop every attack. The pass rate is an exact-case harness score from one captured run, not model accuracy.",
+      limitations: [
+        "Fictional in-memory data, a narrow catalogue and local escalation — no real store or help-desk integration.",
+        "One captured environment and an exact-case metric; five FAQ cases failed for each model.",
+        "The guards are lexical: new phrasing can get past them, and PII masking covers only Saudi mobile numbers and e-mail addresses.",
+        "ALLaM’s native tool calling is untested — the live tool evidence is DeepSeek only.",
+        "No provider billing, measured throughput or production cost figures."
+      ],
+      next: [
+        "Fix the five FAQ misses, so a verified fact is quoted instead of escalated",
+        "Test native tool calling on ALLaM",
+        "Add a semantic safety layer and wider PII coverage",
+        "Evaluate on real, consented support conversations before any pilot"
+      ],
+      technologiesNote:
+        "DeepSeek (deepseek-v4-flash) through its API; ALLaM (humain-ai/ALLaM-7B-Instruct-preview) served by vLLM on a Colab T4.",
+      lesson:
+        "Building an AI application isn’t mostly about the prompt. The model works inside a system that owns authorization, validation, evaluation and a clear way to fail.",
+      highlights: [
+        "Arabic and English",
+        "56-case Golden Set: 51 passed, 5 failed",
+        "Authorization outside the model",
+        "SDAIA Academy capstone"
+      ],
+      story: {
+        requests: {
+          title: "Not every request is a question",
+          intro: "Support mixes answers with actions on someone’s account. The risk sits where one becomes the other.",
+          items: [
+            { text: "“What is the return policy?”", outcome: "Answer from the store’s own facts", tone: "answer" },
+            { text: "“Where is my order?”", outcome: "Read — only if the session owns it", tone: "action" },
+            { text: "“Return this item.”", outcome: "Change — after validation, ownership and consent", tone: "action" },
+            { text: "“Show me another customer’s order.”", outcome: "Refuse — whatever the model proposes", tone: "refuse" }
+          ],
+          question: "The real problem: keep the model’s flexibility without handing it the authority to decide."
+        },
+        principle: {
+          kicker: "The principle",
+          lines: ["The model proposes.", "The system decides."],
+          body: "A language model may propose a tool call. Application code checks the session, ownership, the tool, the schema, the arguments, the item and consent — and only then allows or denies it."
+        },
+        architecture: {
+          groups: [
+            { label: "Inbound", steps: ["Arabic or English message", "Normalize, detect injection, mask PII, classify"] },
+            { label: "Model", steps: ["Router, or the native tool loop", "DeepSeek or ALLaM proposes"] },
+            {
+              label: "System",
+              steps: ["Validate the schema and arguments", "Authorize against the session", "Run the tool"],
+              decisive: true
+            },
+            { label: "Outbound", steps: ["Check the reply for leaks", "Verified result"] }
+          ],
+          outcomesLabel: "Every message ends as",
+          outcomes: ["A grounded answer", "A tool action", "A refusal", "An escalation"],
+          note: "The Golden Set measures the router path. Native tool calling has its own captured DeepSeek transcripts."
+        },
+        boundary: {
+          title: "The moment that matters",
+          intro: "In the captured live run, the session asked about order 5521, which belongs to another customer.",
+          rows: [
+            { label: "Message", value: "“Where is order 5521?”" },
+            { label: "Model proposed", value: 'lookup_order({"order_id": "5521"})', code: true },
+            { label: "Application decided", value: "DENIED · authorization_denied", code: true, tone: "deny" },
+            { label: "Executed", value: "Nothing", tone: "deny" },
+            {
+              label: "Reply",
+              value: "“I cannot execute a request that bypasses account permissions or safety controls. I can help with your own orders.”"
+            }
+          ],
+          body: "The model asked for the order. The code refused to run it, because order 5521 belongs to another customer — so none of that customer’s data reached the reply.",
+          counterpart: "The same check let order 1024 through, because the session owns it, and a live return on it completed as R-1001."
+        },
+        evaluation: {
+          title: "Evaluation",
+          intro: "The same 56-case Golden Set ran on both models in one captured run. A case passes only when the blocked status, the intent and a required fact in the answer all match.",
+          passed: 51,
+          total: 56,
+          passedLabel: "passed",
+          failedLabel: "failed",
+          figures: [
+            { value: "29", label: "Arabic cases" },
+            { value: "27", label: "English cases" },
+            { value: "24", label: "high-risk cases" },
+            { value: "24 / 24", label: "high-risk cases passed, on both models" }
+          ],
+          providers: "DeepSeek and ALLaM each passed 51 of 56.",
+          scope: "An exact-case harness score from one captured run — not model accuracy, and not a claim about inputs outside the set."
+        },
+        failures: {
+          title: "What failed",
+          body: "Five FAQ cases failed for each model, none of them high-risk. DeepSeek escalated all five to a human instead of quoting the fact the case required — safe, but the harness counts it as a miss. ALLaM sent two to the order-status path, answered two without the required figure and escalated one.",
+          casesLabel: "DeepSeek’s five",
+          cases: [
+            "كم مدة التوصيل؟",
+            "كم سعر السماعة؟",
+            "كم ضمان الساعة الذكية؟",
+            "How long does delivery take?",
+            "Can a defective product be returned?"
+          ]
+        },
+        guardrails: {
+          title: "Guardrails, and their limits",
+          intro: "Five stages wrap the model: four before it, one after.",
+          layers: ["Normalize", "Detect injection", "Mask PII", "Classify", "Check outbound"],
+          figures: [
+            { value: "32 / 32", label: "attacks blocked" },
+            { value: "0 / 32", label: "legitimate requests blocked" },
+            { value: "0 / 56", label: "Golden Set answers changed" }
+          ],
+          scope: "Measured offline on the documented deterministic corpus. It does not show that the guards stop every attack: the classifier is lexical, and a paraphrased leak can pass. Authorization is the boundary that does not depend on them."
+        },
+        checks: {
+          title: "A return is more than JSON",
+          intro: "When the model extracts a return request, its output is a proposal too. It runs only after:",
+          subject: "ReturnRequest",
+          steps: ["Schema", "Evidence", "Ownership", "Catalogue identity", "Consent"],
+          outcomes: ["Execute", "Escalate"],
+          figures: [
+            { value: "20", label: "live DeepSeek cases, 10 Arabic and 10 English" },
+            { value: "20 / 20", label: "matched the designed outcome" }
+          ],
+          scope: "In each language, 5 were valid on the first pass, 1 after repair and 4 escalated by design. A correct escalation counts as the designed outcome — this is not 20 valid returns. No order, product, reason or owner was invented."
+        },
+        providers: {
+          title: "Two model paths, one boundary",
+          items: [
+            { name: "DeepSeek", body: "Commercial backend through its API. It carries the live native tool-calling evidence." },
+            {
+              name: "ALLaM",
+              body: "Open-weight backend, served locally by vLLM on a Colab T4 and evaluated on the same Golden Set. Its native tool calling is untested."
+            }
+          ],
+          note: "Validation and authorization live in application code, so neither depends on which model is answering."
+        }
+      }
+    },
+    ar: {
+      descriptor: "مساعد خدمة عملاء ذكي بلغتين",
+      summary:
+        "مساعد دعم عربي أولًا لمتجر سعودي خيالي: إجابات من بيانات المتجر، واستعلام عن الطلبات، وإرجاع، وتحويل لموظف — يقترح فيه النموذج استدعاء الأداة، ويقرر كود التطبيق هل يُنفَّذ.",
+      domain: "هندسة تطبيقات LLM · خدمة عملاء المتاجر",
+      role: "التصميم والبناء والتقييم",
+      statusDetail:
+        "مشروع ختامي في برنامج LLM Application Engineering بأكاديمية سدايا، سبتمبر 2026 — نموذج أولي عامل على بيانات خيالية في الذاكرة، مع تقييم موثّق. ليس منتجًا منشورًا.",
+      context:
+        "المشروع الختامي لبرنامج LLM Application Engineering في أكاديمية سدايا (SDA-AIE-213)، المسار D — دعم طلبات التجزئة. بُني في دفتر Colab واحد منفَّذ لمتجر سعودي خيالي، مع مستودع عام يضم الاختبارات وتقارير التقييم ومصدر النتائج.",
+      problem:
+        "خدمة العملاء في المتاجر تجمع أسئلة وإجراءات على حساب العميل. «وش سياسة الإرجاع؟» تحتاج إجابة من بيانات المتجر، و«وين طلبي؟» تقرأ بيانات الحساب، و«أبي أرجّع هذا المنتج» تغيّرها، أما «اعرض لي طلب عميل ثاني» فلا بد أن تُرفض. النموذج اللغوي مرن بما يكفي للمحادثة، لكن لا يصح أن يكون هو من يقرر من يقرأ الطلب أو يعدّله.",
+      constraints: [
+        "العربية أولًا، والإنجليزية معها",
+        "بيانات خيالية في الذاكرة: كتالوج وعملاء وطلبات وإرجاعات",
+        "دفتر منفَّذ واحد هو مرجع الأدلة",
+        "نموذجان خلف واجهة واحدة: DeepSeek، وALLaM عبر vLLM محليًا"
+      ],
+      solution:
+        "يرسل الموجّه كل رسالة إلى مسار محدد: إجابة من بيانات المتجر، أو استعلام عن طلب، أو إرجاع، أو تحويل لموظف، ويستقبل مسار منفصل استدعاءات الأدوات التي يصدرها النموذج. وقبل تشغيل أي أداة يتحقق كود التطبيق من المدخلات، ويوحّد هوية المنتج من الكتالوج، ويتأكد أن الجلسة الحالية تملك الطلب. وتحيط حمايات المدخل والمخرج بالمسار كله.",
+      responsibilities: [
+        "صمّم الموجّه وعقود الأدوات وحدّ الصلاحيات",
+        "بنى حلقة الأدوات الأصلية بمخططات صارمة للمدخلات وإرجاع لا يتكرر",
+        "بنى خط الحماية بمراحله الخمس ومجموعتي الهجمات والطلبات المشروعة",
+        "بنى Golden Set من 56 حالة، وتقرير الحالات الفاشلة، وتقييم المخرجات المهيكلة",
+        "شغّل التقييم الحي على DeepSeek وALLaM ووثّقه، ووثّق كل قيد"
+      ],
+      flow: ["رسالة بالعربية أو الإنجليزية", "حمايات المدخل", "النموذج يقترح استدعاء أداة", "التطبيق يسمح أو يرفض"],
+      approach: [
+        "تُختصر استدعاءات الأدوات القادمة من المزوّد في أربعة حقول، ثم تُطابَق مع قائمة من ثلاث أدوات فقط: lookup_order وcreate_return وescalate_to_human",
+        "تمر المدخلات بمخططات Pydantic صارمة ترفض أي حقل غير معروف، فيُرفض أي معرّف مستخدم أو موافقة يرسلها النموذج",
+        "يُوحَّد المنتج في هوية واحدة من الكتالوج قبل التحقق من الصلاحية، فلا يُنشئ اختلاف الكتابة إرجاعًا ثانيًا",
+        "تتحقق Session.authorize_order() من الملكية في كود التطبيق قبل أي قراءة أو تعديل",
+        "إرجاع مفتوح واحد لكل عميل وطلب ومنتج، فتعيد المحاولة الإرجاع نفسه، ورقم الإرجاع يصدره التطبيق"
+      ],
+      capabilities: [
+        "الإجابة عن أسئلة الكتالوج والسياسات من بيانات المتجر",
+        "الاستعلام عن طلب تملكه الجلسة",
+        "إنشاء إرجاع محدود بعد التحقق من المدخلات والملكية",
+        "التحويل لموظف حين لا يمكن التحقق من الإجابة",
+        "رفض الوصول إلى بيانات عميل آخر"
+      ],
+      decisions: [
+        {
+          title: "موجّه أولًا، لا وكيل مفتوح",
+          body: "طلبات المتجر تنحصر في نوايا ثابتة قليلة. يرسل الموجّه كل طلب إلى مسار محدد، وحلقة وكيل مفتوحة كانت ستضيف وقتًا ونقاط فشل دون دليل على حاجة المجال لها."
+        },
+        {
+          title: "واجهة واحدة لكل نموذج",
+          body: "DeepSeek وALLaM خلف الواجهة نفسها، فلا يعتمد منطق المتجر ولا الصلاحيات على مزوّد واحد."
+        },
+        {
+          title: "التحويل بدل التخمين",
+          body: "حين لا يمكن التحقق من الإجابة من بيانات المتجر، يحوّل رقمي الحالة لموظف بدل أن يختلق معلومة. وفي التشغيل الموثّق كانت إخفاقات DeepSeek الخمسة كلها من هذا النوع: آمنة، لكنها تُحسب إخفاقًا."
+        }
+      ],
+      outcome:
+        "نموذج أولي عامل بتقييم موثّق. على Golden Set من 56 حالة اجتاز كلٌّ من DeepSeek وALLaM ‏51 من 56 حالة، ومنها الحالات عالية الخطورة الـ24 كلها. ورُفض استعلام حيّ عن طلب عميل آخر بقرار من التطبيق، واكتمل إرجاع حيّ مصرّح به بإنشاء إرجاع واحد. كل ذلك على بيانات خيالية، ولا شيء منشور.",
+      notClaimed:
+        "لا تشغيل فعلي، ولا متجر أو بيانات عملاء حقيقية، ولا أثر تجاري مقاس، ولا ادّعاء بأن الحمايات توقف كل هجوم. ونسبة الاجتياز درجة اختبار حالات محددة من تشغيل واحد، وليست دقة النموذج.",
+      limitations: [
+        "بيانات خيالية في الذاكرة، وكتالوج ضيق، وتحويل محلي، بلا ربط بمتجر أو نظام دعم حقيقي.",
+        "بيئة تشغيل واحدة ومقياس حالات محددة، وفشلت خمس حالات من الأسئلة الشائعة لكل نموذج.",
+        "الحمايات معجمية: صياغة جديدة قد تتجاوزها، وإخفاء البيانات الشخصية يغطي أرقام الجوال السعودية والبريد الإلكتروني فقط.",
+        "استدعاء الأدوات الأصلي في ALLaM لم يُختبر، وأدلة الأدوات الحية من DeepSeek فقط.",
+        "لا فواتير مزوّد، ولا قياس للأداء تحت الضغط، ولا أرقام لتكلفة تشغيل فعلي."
+      ],
+      next: [
+        "معالجة إخفاقات الأسئلة الشائعة الخمسة لتُقتبس المعلومة الموثّقة بدل التحويل",
+        "اختبار استدعاء الأدوات الأصلي على ALLaM",
+        "إضافة طبقة حماية دلالية وتغطية أوسع للبيانات الشخصية",
+        "تقييمه على محادثات دعم حقيقية بموافقة أصحابها قبل أي تجربة"
+      ],
+      technologiesNote:
+        "DeepSeek ‏(deepseek-v4-flash) عبر واجهته البرمجية، وALLaM ‏(humain-ai/ALLaM-7B-Instruct-preview) عبر vLLM على Colab T4.",
+      lesson:
+        "بناء تطبيق ذكاء اصطناعي ليس تحسين Prompt فقط. النموذج يعمل داخل نظام يملك الصلاحيات والتحقق والتقييم، وطريقة واضحة للفشل.",
+      highlights: [
+        "عربي وإنجليزي",
+        "Golden Set من 56 حالة: 51 نجحت و5 فشلت",
+        "الصلاحيات خارج النموذج",
+        "مشروع ختامي في أكاديمية سدايا"
+      ],
+      story: {
+        requests: {
+          title: "ليس كل طلب سؤالًا",
+          intro: "خدمة العملاء تخلط الإجابات بإجراءات على حساب أحد، والخطر في المسافة بينهما.",
+          items: [
+            { text: "«وش سياسة الإرجاع؟»", outcome: "إجابة من بيانات المتجر نفسها", tone: "answer" },
+            { text: "«وين طلبي؟»", outcome: "قراءة — إذا كانت الجلسة تملك الطلب", tone: "action" },
+            { text: "«أبي أرجّع هذا المنتج»", outcome: "تعديل — بعد التحقق والملكية والموافقة", tone: "action" },
+            { text: "«اعرض لي طلب عميل ثاني»", outcome: "رفض — مهما اقترح النموذج", tone: "refuse" }
+          ],
+          question: "المشكلة الحقيقية: كيف نستفيد من مرونة النموذج دون أن نعطيه سلطة القرار؟"
+        },
+        principle: {
+          kicker: "المبدأ",
+          lines: ["النموذج يقترح.", "النظام يقرّر."],
+          body: "يحق للنموذج اللغوي أن يقترح استدعاء أداة. أما كود التطبيق فيتحقق من الجلسة والملكية والأداة والمخطط والمدخلات والمنتج والموافقة، وبعدها فقط يسمح أو يرفض."
+        },
+        architecture: {
+          groups: [
+            { label: "المدخل", steps: ["رسالة بالعربية أو الإنجليزية", "توحيد النص، وكشف الحقن، وإخفاء البيانات الشخصية، والتصنيف"] },
+            { label: "النموذج", steps: ["الموجّه، أو حلقة الأدوات الأصلية", "DeepSeek أو ALLaM يقترح"] },
+            {
+              label: "النظام",
+              steps: ["التحقق من المخطط والمدخلات", "التحقق من الصلاحية مقابل الجلسة", "تشغيل الأداة"],
+              decisive: true
+            },
+            { label: "المخرج", steps: ["فحص الرد من أي تسريب", "نتيجة موثّقة"] }
+          ],
+          outcomesLabel: "تنتهي كل رسالة إلى",
+          outcomes: ["إجابة من البيانات", "إجراء بأداة", "رفض", "تحويل لموظف"],
+          note: "يقيس Golden Set مسار الموجّه، ولاستدعاء الأدوات الأصلي سجلات DeepSeek حية خاصة به."
+        },
+        boundary: {
+          title: "اللحظة الفاصلة",
+          intro: "في التشغيل الحي الموثّق، سألت الجلسة عن الطلب 5521، وهو لعميل آخر.",
+          rows: [
+            { label: "الرسالة", value: "“Where is order 5521?”" },
+            { label: "اقترح النموذج", value: 'lookup_order({"order_id": "5521"})', code: true },
+            { label: "قرر التطبيق", value: "DENIED · authorization_denied", code: true, tone: "deny" },
+            { label: "ما نُفّذ", value: "لا شيء", tone: "deny" },
+            {
+              label: "الرد",
+              value: "“I cannot execute a request that bypasses account permissions or safety controls. I can help with your own orders.”"
+            }
+          ],
+          body: "طلب النموذج الطلب، ورفض الكود تنفيذه لأن الطلب 5521 لعميل آخر، فلم تصل بيانات ذلك العميل إلى الرد.",
+          counterpart: "والفحص نفسه سمح بالطلب 1024 لأن الجلسة تملكه، واكتمل عليه إرجاع حيّ برقم R-1001."
+        },
+        evaluation: {
+          title: "التقييم",
+          intro: "شُغّلت مجموعة Golden Set نفسها من 56 حالة على النموذجين في تشغيل واحد موثّق. ولا تُحسب الحالة ناجحة إلا إذا طابقت حالة الحظر والنية ومعلومة مطلوبة في الإجابة.",
+          passed: 51,
+          total: 56,
+          passedLabel: "نجحت",
+          failedLabel: "فشلت",
+          figures: [
+            { value: "29", label: "حالة عربية" },
+            { value: "27", label: "حالة إنجليزية" },
+            { value: "24", label: "حالة عالية الخطورة" },
+            { value: "24 / 24", label: "حالة عالية الخطورة نجحت، في النموذجين" }
+          ],
+          providers: "اجتاز كلٌّ من DeepSeek وALLaM ‏51 من 56.",
+          scope: "درجة اختبار لحالات محددة من تشغيل واحد موثّق — ليست دقة النموذج، ولا تنطبق على مدخلات خارج المجموعة."
+        },
+        failures: {
+          title: "ما الذي لم ينجح",
+          body: "فشلت خمس حالات من الأسئلة الشائعة لكل نموذج، ولا واحدة منها عالية الخطورة. حوّل DeepSeek الخمس كلها لموظف بدل أن يقتبس المعلومة المطلوبة، وهذا سلوك آمن لكن الاختبار يعدّه إخفاقًا. أما ALLaM فوجّه حالتين إلى مسار حالة الطلب، وأجاب عن اثنتين دون الرقم المطلوب، وحوّل واحدة.",
+          casesLabel: "إخفاقات DeepSeek الخمسة",
+          cases: [
+            "كم مدة التوصيل؟",
+            "كم سعر السماعة؟",
+            "كم ضمان الساعة الذكية؟",
+            "How long does delivery take?",
+            "Can a defective product be returned?"
+          ]
+        },
+        guardrails: {
+          title: "الحمايات، وحدودها",
+          intro: "خمس مراحل تحيط بالنموذج: أربع قبله وواحدة بعده.",
+          layers: ["توحيد النص", "كشف الحقن", "إخفاء البيانات الشخصية", "التصنيف", "فحص المخرج"],
+          figures: [
+            { value: "32 / 32", label: "هجومًا مُنع" },
+            { value: "0 / 32", label: "طلبًا مشروعًا مُنع" },
+            { value: "0 / 56", label: "إجابة في Golden Set تغيّرت" }
+          ],
+          scope: "قيست دون اتصال على مجموعة الاختبار الحتمية الموثّقة. ولا تعني أن الحمايات تمنع كل هجوم: المصنّف معجمي، والتسريب المعاد صياغته قد يمر. والحدّ الذي لا يعتمد عليها هو التحقق من الصلاحية."
+        },
+        checks: {
+          title: "الإرجاع أكثر من JSON",
+          intro: "حين يستخرج النموذج طلب إرجاع، فمخرجاته اقتراح أيضًا، ولا تُنفَّذ إلا بعد:",
+          subject: "ReturnRequest",
+          steps: ["المخطط", "الدليل", "الملكية", "هوية المنتج في الكتالوج", "الموافقة"],
+          outcomes: ["تنفيذ", "تحويل"],
+          figures: [
+            { value: "20", label: "حالة حيّة على DeepSeek: 10 عربية و10 إنجليزية" },
+            { value: "20 / 20", label: "طابقت النتيجة المصمَّمة" }
+          ],
+          scope: "في كل لغة: 5 صحيحة من أول مرة، و1 بعد الإصلاح، و4 حُوّلت كما صُمّم. والتحويل الصحيح يُحسب نتيجة مصمَّمة — فهذه ليست 20 عملية إرجاع صحيحة. ولم يُختلق أي طلب أو منتج أو سبب أو مالك."
+        },
+        providers: {
+          title: "مساران للنموذج، وحدّ واحد",
+          items: [
+            { name: "DeepSeek", body: "نموذج تجاري عبر واجهته البرمجية، ومنه أدلة استدعاء الأدوات الحية." },
+            {
+              name: "ALLaM",
+              body: "نموذج مفتوح الأوزان يعمل محليًا عبر vLLM على Colab T4، وقُيّم على Golden Set نفسها. واستدعاء الأدوات الأصلي فيه لم يُختبر."
+            }
+          ],
+          note: "التحقق والصلاحيات في كود التطبيق، فلا يعتمدان على النموذج الذي يجيب."
+        }
+      }
+    }
+  },
   {
     slug: "chatub",
     name: "ChatUB",
@@ -1210,12 +1739,17 @@ const records: ProjectRecord[] = [
 
 function localize(record: ProjectRecord, locale: Locale): LocalizedProject {
   const text = record[locale];
+  const name = record.localName?.[locale] ?? record.name;
+  const names = [record.name, ...Object.values(record.localName ?? {})];
+  const altName = names.find((candidate) => candidate !== name);
 
   return {
     ...text,
     slug: record.slug,
-    name: record.name,
-    title: `${record.name} — ${text.descriptor}`,
+    name,
+    altName,
+    keywords: record.keywords ?? [],
+    title: `${name} — ${text.descriptor}`,
     year: record.year,
     status: record.status,
     evidenceType: record.evidenceType,

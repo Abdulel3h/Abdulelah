@@ -23,6 +23,10 @@ The idea comes from the Arabic manuscript page: a short main text (المتن) w
 
 Each route renders the same composition for both languages, for example `<CaseStudy project={project} locale={locale} />`. Facts come from `data/*`; the briefs only restate them.
 
+## Flagship case studies
+
+A project can tell a longer story than the standard case study through optional `story` blocks in `data/projects.ts`: the problem as real requests, one principle, a grouped architecture, a captured moment, an evaluation with its failures, guardrails, checks and model paths. `components/site/work/Story.tsx` renders whichever blocks a project has, in both languages, between the standard sections. Raqmi is the first project to use them. Every figure in a block travels with its scope, as its source states it.
+
 ## What changes with the locale
 
 `app/site.css` keeps one set of shared tokens (colour, spacing, radius, motion, container width, project tint) and sets type per language:

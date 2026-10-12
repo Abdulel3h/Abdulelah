@@ -14,8 +14,8 @@ test.describe("hero", () => {
     await expect(hero.getByText(/I turn/)).toBeVisible();
     await expect(hero.getByRole("link", { name: "View selected work" })).toBeVisible();
     // The margin notes carry the evidence behind the statement.
-    await expect(hero.getByRole("list", { name: "Margin notes" })).toContainText("4 with public code");
-    await expect(hero.getByRole("list", { name: "On this page" }).getByRole("listitem")).toHaveCount(4);
+    await expect(hero.getByRole("list", { name: "Margin notes" })).toContainText("5 with public code");
+    await expect(hero.getByRole("list", { name: "On this page" }).getByRole("listitem")).toHaveCount(5);
 
     for (const selector of ["#hero-title", "section[aria-labelledby='hero-title'] p"]) {
       const opacity = await page.locator(selector).first().evaluate((element) => getComputedStyle(element).opacity);

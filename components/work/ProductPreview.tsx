@@ -1,5 +1,5 @@
-import { ArrowUp, FileText, Play, Scale, Wallet } from "lucide-react";
-import type { CSSProperties } from "react";
+import { ArrowUp, Check, FileText, Play, Scale, Wallet, X } from "lucide-react";
+import { Fragment, type CSSProperties } from "react";
 import type { PreviewKind } from "@/data/projects";
 import type { Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
@@ -13,7 +13,8 @@ const labels: Record<PreviewKind, { title: string; sub: Copy }> = {
   legal: { title: "Qanouni", sub: { en: "Labour rights", ar: "الحقوق العمالية" } },
   fintech: { title: "Medad", sub: { en: "Inclusive banking", ar: "خدمات مصرفية شاملة" } },
   vr: { title: "Virtual Astronauts", sub: { en: "Immersive learning", ar: "تعلّم غامر" } },
-  vision: { title: "Stadium", sub: { en: "Gate monitor", ar: "مراقبة البوابات" } }
+  vision: { title: "Stadium", sub: { en: "Gate monitor", ar: "مراقبة البوابات" } },
+  gate: { title: "Raqmi", sub: { en: "Authorization boundary", ar: "حدّ الصلاحيات" } }
 };
 
 /** Shifts a part within its beat, in seconds (see the beat grid in globals.css). */
@@ -55,6 +56,7 @@ export function ProductPreview({ kind, locale = "en" }: { kind: PreviewKind; loc
         {kind === "fintech" ? <FintechBody locale={locale} /> : null}
         {kind === "vr" ? <VrBody locale={locale} /> : null}
         {kind === "vision" ? <VisionBody locale={locale} /> : null}
+        {kind === "gate" ? <GateBody locale={locale} /> : null}
       </div>
     </div>
   );
@@ -482,6 +484,91 @@ function VisionBody({ locale }: { locale: Locale }) {
         <span className="beat-ring mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#c85c3a]" />
         {ar ? "البوابة C حرجة — انقل موظفين من البوابة D." : "Gate C is critical — move staff from Gate D."}
       </div>
+    </div>
+  );
+}
+
+function GateBody({ locale }: { locale: Locale }) {
+  const ar = locale === "ar";
+  // Two proposals reach the same gate: the session owns order 1024, and
+  // order 5521 belongs to another customer (the captured live run).
+  const lanes = [
+    { order: "1024", allowed: true, label: ar ? "سُمح · نُفّذ" : "Allowed · executed" },
+    { order: "5521", allowed: false, label: ar ? "رُفض · لم يُنفَّذ" : "Denied · not run" }
+  ];
+  const guards = ar ? ["توحيد", "كشف", "إخفاء", "تصنيف"] : ["Normalize", "Detect", "Mask", "Classify"];
+
+  return (
+    <div className="space-y-4">
+      <div
+        data-beat="1"
+        className="beat-glow me-auto w-fit max-w-[88%] rounded-2xl rounded-ss-sm border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-paper"
+      >
+        {ar ? "وين الطلب 5521؟" : "Where is order 5521?"}
+      </div>
+
+      <div className="flex flex-wrap gap-1.5">
+        {guards.map((guard, index) => (
+          <span
+            key={guard}
+            data-beat="2"
+            style={offset(index * 0.1)}
+            className="beat-glow rounded-full border border-white/[0.08] px-2 py-0.5 text-[0.68rem] text-paper-dim"
+          >
+            {guard}
+          </span>
+        ))}
+      </div>
+
+      <div className="rounded-xl border border-white/[0.08] bg-ink-900/60 p-3">
+        <div className="flex items-center justify-between text-[0.66rem] uppercase tracking-[0.12em] text-paper-dim">
+          <span>{ar ? "النموذج يقترح" : "Model proposes"}</span>
+          <span className="text-accent-soft">{ar ? "النظام يقرّر" : "System decides"}</span>
+        </div>
+        {/* One grid for both lanes, so the gates line up. */}
+        <div className="mt-3 grid grid-cols-[auto_minmax(0.75rem,1fr)_auto] items-center gap-x-2 gap-y-2.5">
+          {lanes.map((lane, index) => (
+            <Fragment key={lane.order}>
+              <code
+                dir="ltr"
+                data-beat="3"
+                style={offset(index * 0.18)}
+                className="beat-glow rounded-md border border-white/10 bg-white/[0.04] px-2 py-1 font-mono text-[0.68rem] text-paper"
+              >
+                lookup_order(&quot;{lane.order}&quot;)
+              </code>
+              {/* The proposal travels along the track to the gate at its end. */}
+              <span
+                data-beat="4"
+                style={offset(index * 0.18)}
+                className={cn("beat-fill h-0.5 rounded-full bg-white/[0.08]", !lane.allowed && "beat-critical")}
+              >
+                <span
+                  className={cn(
+                    "absolute -end-0.5 top-1/2 h-4 w-0.5 -translate-y-1/2 rounded-full",
+                    lane.allowed ? "bg-accent/80" : "bg-[#e5816b]"
+                  )}
+                />
+              </span>
+              <span
+                data-beat="4"
+                style={offset(0.35 + index * 0.18)}
+                className={cn(
+                  "beat-text flex items-center gap-1 text-[0.72rem]",
+                  lane.allowed ? "text-accent-soft" : "beat-critical text-[#e5816b]"
+                )}
+              >
+                {lane.allowed ? <Check className="h-3 w-3" /> : <X className="h-3 w-3" />}
+                {lane.label}
+              </span>
+            </Fragment>
+          ))}
+        </div>
+      </div>
+
+      <p data-beat="4" style={offset(0.6)} className="beat-text text-[0.75rem] text-paper-dim">
+        {ar ? "الملكية يتحقق منها الكود، لا النموذج." : "Ownership is checked by code, never by the model."}
+      </p>
     </div>
   );
 }

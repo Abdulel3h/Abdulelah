@@ -33,6 +33,25 @@ export function Latin({ children, className }: { children: ReactNode; className?
   );
 }
 
+const ARABIC = new RegExp("[\u0600-\u06FF]");
+
+/**
+ * A project's name as the page shows it: a Latin name (ChatUB, Stadium) in
+ * the brand's Latin display face, an Arabic one («رقمي») in the Arabic
+ * display face, each in its own direction.
+ */
+export function ProjectName({ name, className }: { name: string; className?: string }) {
+  if (ARABIC.test(name)) {
+    return (
+      <span lang="ar" dir="rtl" className={cn("ds-arabic-name", className)}>
+        {name}
+      </span>
+    );
+  }
+
+  return <Latin className={className}>{name}</Latin>;
+}
+
 /**
  * Technical inline text in the body face (emails, handles, URLs, shortcuts,
  * brand names such as GitHub), isolated left-to-right and announced in English.

@@ -1,17 +1,17 @@
 import { expect, test } from "@playwright/test";
 
-const slugs = ["chatub", "absher-insight-ai", "stadium", "althil", "qanouni", "virtual-astronauts", "medad"];
+const slugs = ["raqmi", "chatub", "absher-insight-ai", "stadium", "althil", "qanouni", "virtual-astronauts", "medad"];
 
 test.describe("projects and evidence", () => {
-  test("the index shows status, domain and code for all seven projects without hover", async ({ page }) => {
+  test("the index shows status, domain and code for all eight projects without hover", async ({ page }) => {
     await page.goto("/projects");
 
     const list = page.getByRole("list", { name: "All projects" });
 
-    await expect(list.getByRole("listitem")).toHaveCount(7);
-    await expect(list.locator("[data-status]")).toHaveCount(7);
+    await expect(list.getByRole("listitem")).toHaveCount(8);
+    await expect(list.locator("[data-status]")).toHaveCount(8);
     await expect(list.locator("[data-status='concept']")).toHaveCount(3);
-    await expect(list.getByText("Code: GitHub")).toHaveCount(4);
+    await expect(list.getByText("Code: GitHub")).toHaveCount(5);
     await expect(page.locator("body")).not.toContainText(/shipped|Hover any title/i);
   });
 

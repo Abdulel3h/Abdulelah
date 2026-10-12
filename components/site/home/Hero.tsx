@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { mixed } from "@/components/site/mixed";
-import { Down, Latin, pad } from "@/components/site/primitives";
+import { Down, Latin, pad, ProjectName } from "@/components/site/primitives";
 import { tintOf } from "@/components/site/tints";
 import { getFeaturedProjects, projectCounts } from "@/data/projects";
 import { localizeHref, type Locale } from "@/lib/i18n/config";
@@ -116,8 +116,8 @@ export function Hero({ locale }: { locale: Locale }) {
                 href={`#${project.slug}`}
                 className="focus-ring group flex h-full min-h-[5.5rem] flex-col justify-between gap-3 rounded-[var(--ds-radius)] border border-white/[0.09] bg-white/[0.02] p-4 transition-colors hover:border-[rgb(var(--tint)/0.55)] hover:bg-white/[0.04]"
               >
-                <span className="flex items-center justify-between gap-3">
-                  <Latin className="text-[1.45rem] leading-none text-paper">{project.name}</Latin>
+                <span className="flex items-start justify-between gap-3">
+                  <ProjectName className="text-[1.45rem] leading-none text-paper lg:text-[1.2rem] xl:text-[1.3rem]" name={project.name} />
                   <Latin className="ds-tint-text text-sm">{pad(index + 1)}</Latin>
                 </span>
                 <span className="ds-micro text-paper-dim">{project.domain}</span>

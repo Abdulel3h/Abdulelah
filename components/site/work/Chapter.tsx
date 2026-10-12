@@ -4,9 +4,10 @@ import { TrackedLink } from "@/components/analytics/TrackedLink";
 import { PipelineStage } from "@/components/motion/PipelineStage";
 import { StatusBadge } from "@/components/projects/ProjectMeta";
 import { mixer } from "@/components/site/mixed";
-import { directional, Latin, Ltr, pad, tintStyle } from "@/components/site/primitives";
+import { directional, Latin, Ltr, pad, ProjectName, tintStyle } from "@/components/site/primitives";
 import { tintOf } from "@/components/site/tints";
 import { Flow } from "@/components/site/work/Flow";
+import { Highlights } from "@/components/site/work/Story";
 import { Reveal } from "@/components/ui/Reveal";
 import { ConceptFigure } from "@/components/work/ProductPreview";
 import type { LocalizedProject } from "@/data/projects";
@@ -56,10 +57,13 @@ export function Chapter({ project, index, locale }: { project: LocalizedProject;
           {/* In Arabic the heading stays right-to-left with the name as an
               inline isolate, so a wrapped Latin name still aligns with the page. */}
           <h3 id={headingId} className="mt-6 text-[clamp(2.6rem,1.9rem+3vw,4.25rem)] leading-[1.08] text-paper">
-            <Latin className="ds-name">{project.name}</Latin>
+            <ProjectName className="ds-name" name={project.name} />
           </h3>
           <p className="ds-h3 mt-3 ds-tone-80">{mix(project.descriptor)}</p>
           <p className="ds-body mt-4 text-paper">{mix(brief.line)}</p>
+          {project.highlights?.length ? (
+            <Highlights items={project.highlights.slice(0, 3)} locale={locale} className="mt-6 sm:grid-cols-1" />
+          ) : null}
 
           <dl className="mt-7 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-white/[0.09] pt-6">
             <div className="col-span-2">

@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: project.summary,
     path: `/projects/${project.slug}`,
     type: "article",
-    keywords: [project.name, project.domain, ...project.technologies]
+    keywords: [project.name, ...(project.altName ? [project.altName] : []), project.domain, ...project.technologies]
   });
 }
 
