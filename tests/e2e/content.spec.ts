@@ -56,3 +56,46 @@ test.describe("projects and evidence", () => {
     await expect(page.locator("footer")).not.toContainText("Have an idea worth building?");
   });
 });
+
+test.describe("brass labels", () => {
+  const BRASS = "rgb(201, 167, 92)";
+  const FAINT = "rgb(142, 137, 127)";
+
+  // site.css loads after Tailwind's utilities, so a role's colour must not
+  // outrank `text-accent` on the same element (see section 5 of site.css).
+  for (const [path, brass] of [
+    ["/projects/chatub", ["Not claimed", "Limits today", "If it continued", "Context", "Engineering notes"]],
+    ["/ar/projects/raqmi", ["ما لا أدّعيه", "حدوده الآن", "لو استمر", "النطاق", "السياق"]],
+    ["/blog/why-context-matters-more-than-prompts-in-ai-agents", ["Takeaway"]],
+    ["/ar/blog/why-context-matters-more-than-prompts-in-ai-agents", ["الخلاصة"]]
+  ] as const) {
+    test(`labels meant to be brass are brass, the rest stay faint: ${path}`, async ({ page }) => {
+      await page.goto(path);
+
+      const labels = await page.locator(".ds-label").evaluateAll((elements) =>
+        elements.map((element) => ({
+          text: element.textContent?.trim() ?? "",
+          accent: element.classList.contains("text-accent"),
+          color: getComputedStyle(element).color
+        }))
+      );
+
+      for (const text of brass) {
+        expect(labels.find((label) => label.text === text), text).toMatchObject({ accent: true, color: BRASS });
+      }
+
+      for (const label of labels.filter((item) => !item.accent)) {
+        expect(label.color, label.text).toBe(FAINT);
+      }
+    });
+  }
+
+  test("Raqmi's principle sets its second line in soft brass", async ({ page }) => {
+    await page.goto("/projects/raqmi");
+
+    const lines = page.locator("#principle + p .ds-h1");
+
+    await expect(lines.first()).toHaveCSS("color", "rgb(242, 239, 231)");
+    await expect(lines.nth(1)).toHaveCSS("color", "rgb(230, 210, 160)");
+  });
+});
