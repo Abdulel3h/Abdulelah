@@ -3,8 +3,10 @@ import type { Locale } from "@/lib/i18n/config";
 
 // A run of Latin words: names, technologies, programs ("Absher Insight AI",
 // "Google Cloud", "AthkaU", "#AthkaU"), with the spaces, dots and hyphens
-// between them, but never a trailing space or punctuation.
-const LATIN_RUN = /#?[A-Za-z][A-Za-z0-9+#&'’.\-]*(?:[ \-/][A-Za-z0-9][A-Za-z0-9+#&'’.\-]*)*/g;
+// between them, but never a trailing space or punctuation. Code identifiers
+// stay whole: underscores join a word ("lookup_order"), and an empty call
+// ("authorize_order()") keeps its parentheses; other parentheses stay out.
+const LATIN_RUN = /#?[A-Za-z][A-Za-z0-9_+#&'’.\-]*(?:[ \-/][A-Za-z0-9][A-Za-z0-9_+#&'’.\-]*)*(?:\(\))?/g;
 // A run of Arabic words (letters, Arabic punctuation and the spaces between).
 const ARABIC_RUN = /[\u0600-\u06FF](?:[\u0600-\u06FF\s]*[\u0600-\u06FF])?/g;
 // Arabic one-letter proclitics written joined to the next word: و ف ب ل ك.

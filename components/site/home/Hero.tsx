@@ -118,7 +118,7 @@ export function Hero({ locale }: { locale: Locale }) {
             <li key={project.slug} style={{ "--tint": tintOf(project.slug) } as CSSProperties}>
               <a
                 href={`#${project.slug}`}
-                className="focus-ring group flex h-full min-h-[5.5rem] flex-col justify-between gap-3 rounded-[var(--ds-radius)] border border-white/[0.09] bg-white/[0.02] p-4 transition-colors hover:border-[rgb(var(--tint)/0.55)] hover:bg-white/[0.04]"
+                className="focus-ring group flex h-full min-h-[5.5rem] flex-col justify-between gap-3 rounded-[var(--ds-radius)] border border-white/[0.09] bg-white/[0.02] p-4 transition-colors hover:border-[rgb(var(--tint)/0.55)] hover:bg-white/[0.04] active:bg-white/[0.07]"
               >
                 <span className="flex items-start justify-between gap-3">
                   <ProjectName className="text-[1.45rem] leading-none text-paper lg:text-[1.2rem] xl:text-[1.3rem]" name={project.name} />

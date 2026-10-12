@@ -88,6 +88,13 @@ describe("mixed-script text", () => {
     expect(single).not.toContain(NNBSP);
   });
 
+  it("keeps code identifiers whole, so RTL never reorders their parts", () => {
+    const html = renderToStaticMarkup(mixed("يتحقق Session.authorize_order() ثم lookup_order، نفّذه التطبيق", "ar") as never);
+
+    expect(html).toContain('<span lang="en" dir="ltr">Session.authorize_order()</span>');
+    expect(html).toContain('<span lang="en" dir="ltr">lookup_order</span>،');
+  });
+
   it("leaves pure Arabic untouched and keeps punctuation outside the isolate", () => {
     expect(mixed("نموذج أولي عامل", "ar")).toBe("نموذج أولي عامل");
 

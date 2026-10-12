@@ -67,6 +67,26 @@ describe("Raqmi", () => {
     }
   });
 
+  it("explores the boundary with captured scenarios only, and never quotes what was not printed", () => {
+    for (const locale of locales) {
+      const boundary = getProject("raqmi", locale)!.story!.boundary!;
+      const gate = boundary.gate!;
+
+      // The denial is the captured print itself (notebook cell raqmi-tools-live).
+      expect(boundary.rows[1].value).toBe('lookup_order({"order_id": "5521"})');
+      // TOOL_CALLING.md, "Final LIVE evidence": order 1024's lookup was issued
+      // and executed live, but its message and reply were not printed — so
+      // they are described, never put in quotation marks.
+      expect(gate.allowed.rows[1].value).toBe('lookup_order({"order_id": "1024"})');
+      for (const row of gate.allowed.rows.filter((item) => !item.code)) {
+        expect(row.value, row.label).not.toMatch(/[“”"«»]/);
+      }
+      // Same rows, same order, in both scenarios.
+      expect(gate.allowed.rows.map((row) => row.label)).toEqual(boundary.rows.map((row) => row.label));
+      expect(gate.note).toMatch(/DeepSeek/);
+    }
+  });
+
   it("never overclaims", () => {
     for (const locale of locales) {
       const text = JSON.stringify(getProject("raqmi", locale));

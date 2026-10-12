@@ -2,6 +2,7 @@ import { Check, X } from "lucide-react";
 import { PipelineStage } from "@/components/motion/PipelineStage";
 import { mixed, phrase } from "@/components/site/mixed";
 import { directional, Latin, pad } from "@/components/site/primitives";
+import { GateExplorer } from "@/components/site/work/GateExplorer";
 import { Reveal } from "@/components/ui/Reveal";
 import type { ProjectStory, StoryFigure } from "@/data/projects";
 import type { Locale } from "@/lib/i18n/config";
@@ -161,7 +162,7 @@ export function Architecture({ story, locale, label }: Block<"architecture"> & {
 }
 
 /** One captured moment, row by row, beside the story it tells. */
-export function BoundaryCase({ story, locale }: Block<"boundary">) {
+export function BoundaryCase({ story, locale, project }: Block<"boundary"> & { project: string }) {
   return (
     <section aria-labelledby="boundary" className="ds-shell grid gap-10 pt-[var(--ds-section)] lg:grid-cols-12 lg:gap-14">
       <div className="lg:col-span-5">
@@ -172,25 +173,31 @@ export function BoundaryCase({ story, locale }: Block<"boundary">) {
         <p className="ds-body mt-6 text-paper">{mixed(story.body, locale)}</p>
         <p className="ds-gloss mt-6">{mixed(story.counterpart, locale)}</p>
       </div>
-      <dl className="self-start overflow-hidden rounded-[var(--ds-radius)] border border-white/[0.1] bg-ink-900/60 lg:col-span-7">
-        {story.rows.map((row) => (
-          <div
-            key={row.label}
-            className="grid gap-1.5 border-b border-white/[0.07] px-5 py-4 last:border-b-0 sm:grid-cols-[9.5rem_1fr] sm:gap-6"
-          >
-            <dt className="ds-label">{row.label}</dt>
-            <dd className={cn("min-w-0 text-[0.98rem] leading-relaxed", row.tone === "deny" ? DENY : "text-paper")}>
-              {row.code ? (
-                <code lang="en" dir="ltr" className="inline-block max-w-full break-words font-mono text-[0.86rem]">
-                  {row.value}
-                </code>
-              ) : (
-                phrase(row.value, locale)
-              )}
-            </dd>
-          </div>
-        ))}
-      </dl>
+      {story.gate ? (
+        <div className="self-start lg:col-span-7">
+          <GateExplorer id="boundary" project={project} rows={story.rows} gate={story.gate} locale={locale} />
+        </div>
+      ) : (
+        <dl className="self-start overflow-hidden rounded-[var(--ds-radius)] border border-white/[0.1] bg-ink-900/60 lg:col-span-7">
+          {story.rows.map((row) => (
+            <div
+              key={row.label}
+              className="grid gap-1.5 border-b border-white/[0.07] px-5 py-4 last:border-b-0 sm:grid-cols-[9.5rem_1fr] sm:gap-6"
+            >
+              <dt className="ds-label">{row.label}</dt>
+              <dd className={cn("min-w-0 text-[0.98rem] leading-relaxed", row.tone === "deny" ? DENY : "text-paper")}>
+                {row.code ? (
+                  <code lang="en" dir="ltr" className="inline-block max-w-full break-words font-mono text-[0.86rem]">
+                    {row.value}
+                  </code>
+                ) : (
+                  phrase(row.value, locale)
+                )}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      )}
     </section>
   );
 }

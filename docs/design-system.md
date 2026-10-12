@@ -41,6 +41,31 @@ A project can tell a longer story than the standard case study through optional 
 
 Direction-specific rules live in one place: forward arrows point and step in the reading direction, rules draw from the inline start, and plates wipe in from the reading side. Everything else uses logical properties.
 
+## Motion
+
+Motion explains, it does not decorate. Every movement has one job: show a state change, show cause and effect, keep the reader oriented, or tell a project's idea. If a movement has none of those jobs, it is removed.
+
+- **Tokens.**
+  - Easing is `--ds-ease` (enter) and `--ds-ease-in` (exit). `--ease-out` in `globals.css` is the same curve as `--ds-ease`.
+  - Durations are `--ds-fast` (0.18s, colour and press feedback), `--ds-ui` (0.32s: arrows, hairlines, the page settling) and `--ds-slow` (0.9s).
+  - The project signal runs on the beat grid: `--beat-start`, `--beat-gap` and `--beat-len` in `globals.css`.
+- **Ladder: CSS, then Motion for React, then GSAP, then Rive.** Use the lowest rung that does the job.
+  - Today everything is CSS, plus small client hooks: `Reveal` and `PipelineStage`, both using `IntersectionObserver`, and `requestAnimationFrame` for scroll position.
+  - Motion, GSAP, Rive and Lenis were all evaluated (October 2026). None was needed, so none is installed.
+- **Text never fades.**
+  - On load, on scroll and on navigation, text keeps opacity 1 and only moves: `.ds-settle`, `.ds-rise` and `.page-enter`. A fade would show text below its own contrast for a moment, and that is exactly how an axe test used to fail at random.
+  - Only plates (`.ds-wipe`, decorative) and dialogs, which have their own surface, fade.
+- **Direction.**
+  - Forward motion follows the reading direction: `--ds-forward-shift`, `directional(locale)`, hairlines drawn from the inline start, and the RTL variants of the beat fills.
+  - A flow drawn top to bottom needs no mirroring. Code, brand marks and media never flip.
+  - Arabic text moves as whole words or blocks, never as split letters. For example, `Belief` lights words.
+- **Signature interactions.** At most one per project, placed next to the project's own component. Every project drawing acts out its four-step flow with the travelling signal (`PipelineStage`, `data-beat` 1–4).
+  - **Raqmi** goes further, with an authorization gate (`components/site/work/GateExplorer.tsx`). The reader picks a captured scenario: order 1024 is allowed and run, order 5521 is denied and not run. The signal carries the model's proposal to the gate and crosses only when the application allows it.
+  - The choice uses native radios switched by CSS `:has()`, so it works without JavaScript. The decision is drawn in static styles; motion only carries the signal.
+- **Reduced motion** turns every animation and transition into an instant change (`globals.css`). `Reveal` and `PipelineStage` never hide or play anything, and the gate switches instantly with its Replay button hidden. No information depends on motion.
+- **Not used, on purpose:** custom cursors, scroll-jacking, pinned scroll scenes (rejected as a direction), parallax, endless loops, glow pulses and page wipes.
+- **Testing.** Wait for motion with a real signal (`motionSettled()` in `tests/e2e/quality.spec.ts`, using the Web Animations API), never with a sleep.
+
 ## Rules worth keeping
 
 - **Same density.** Where Arabic says one short line, English says one short line. English copy is natural English, not a translation.
@@ -49,5 +74,5 @@ Direction-specific rules live in one place: forward arrows point and step in the
 - **No logical margins on LTR isolates.** On a `dir="ltr"` element inside Arabic, `ms-*`/`me-*` resolve in its own direction. Space such elements with the parent's `gap`. Keep Latin names inline inside RTL blocks, so that wrapped lines align right.
 - **Icons by meaning** (`directional(locale)` in `primitives.tsx`). Forward (open, next) points the way the page reads, back points the other way, and leaving the site is ↗ in English and ↖ in Arabic. Brand marks, play, search, mail and download never flip.
 - **Numerals.** Western digits everywhere, in both languages.
-- **Motion.** Text is never hidden on load. Plates wipe in once from the reading side, rules draw from the inline start, and arrows step forward on hover. All of it is off under `prefers-reduced-motion`.
+- **Motion.** See the Motion section above: text never fades, motion follows the reading direction, and none of it runs under `prefers-reduced-motion`.
 - **Language switch.** It keeps the reader on the same page in the other language (`switchLocaleHref`). It is a full page load, because direction and typeface change.

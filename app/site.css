@@ -737,6 +737,116 @@ html[dir="rtl"] .ds-nav-link::after {
   }
 }
 
+/* --------------------------------------------------------------- gate */
+
+/*
+ * Raqmi's authorization gate (components/site/work/GateExplorer). Two native
+ * radios choose the scenario and :has(:checked) shows it, so the switch works
+ * without JavaScript; browsers without :has show both scenarios, one after
+ * the other. Each scenario runs top to bottom, so nothing needs mirroring.
+ */
+.ds-gate:has(input[value="allowed"]:checked) [data-scenario="denied"],
+.ds-gate:has(input[value="denied"]:checked) [data-scenario="allowed"] {
+  display: none;
+}
+
+/* Side by side to compare; stacked on the narrowest phones. */
+.ds-gate-choices {
+  display: grid;
+  gap: 0.625rem;
+}
+
+@media (min-width: 22.5rem) {
+  .ds-gate-choices {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.ds-gate-choice {
+  display: flex;
+  min-block-size: 3.5rem;
+  align-items: flex-start;
+  gap: 0.65rem;
+  border: 1px solid rgb(242 239 231 / 0.1);
+  border-radius: calc(var(--ds-radius) - 0.25rem);
+  padding: 0.7rem 0.85rem;
+  cursor: pointer;
+  transition:
+    border-color var(--ds-fast) ease,
+    background-color var(--ds-fast) ease;
+}
+
+.ds-gate-choice:hover {
+  border-color: rgb(242 239 231 / 0.22);
+}
+
+/* Pressed: the feedback a touch screen gets instead of hover. */
+.ds-gate-choice:active {
+  background: rgb(242 239 231 / 0.07);
+}
+
+.ds-gate-choice:has(:checked) {
+  border-color: rgb(201 167 92 / 0.6);
+  background: rgb(242 239 231 / 0.04);
+}
+
+.ds-gate-choice:has(:focus-visible) {
+  outline: 2px solid var(--ds-brass);
+  outline-offset: 3px;
+}
+
+.ds-gate-choice input {
+  flex-shrink: 0;
+  inline-size: 1rem;
+  block-size: 1rem;
+  margin-block-start: 0.2rem;
+  accent-color: var(--ds-brass);
+}
+
+/* The track the signal travels, at the inline start of each side. */
+.ds-gate-zone {
+  position: relative;
+  padding-inline-start: 0.75rem;
+}
+
+.ds-gate-track {
+  position: absolute;
+  inset-block: 0.6rem;
+  inset-inline-start: 1rem;
+  inline-size: 1px;
+  background: rgb(242 239 231 / 0.14);
+}
+
+/* Downward: the signal falls from the message towards the gate. */
+.ds-gate-track.beat-rise::after {
+  transform-origin: center top;
+  background: linear-gradient(180deg, rgb(var(--signal) / 0.45), var(--signal-hot));
+}
+
+/* After the gate: solid where the call went through, broken where it stopped. */
+[data-scenario="allowed"] .ds-gate-after .ds-gate-track {
+  background: rgb(201 167 92 / 0.5);
+}
+
+[data-scenario="denied"] .ds-gate-after .ds-gate-track {
+  background: repeating-linear-gradient(180deg, rgb(229 129 107 / 0.55) 0 4px, transparent 4px 9px);
+}
+
+/* Width and style only: the colour (brass or coral) comes from the markup. */
+.ds-gate-bar {
+  border-block-width: 1px;
+  border-block-style: solid;
+  padding-inline-start: 0.75rem;
+  background: rgb(242 239 231 / 0.025);
+}
+
+/* Nothing to replay when motion is reduced: the switch is already instant. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-gate-replay {
+    display: none;
+  }
+}
+
 /* ----------------------------------------------------- project worlds */
 
 /* A halo that reaches past the edges of the plate it sits behind (the plate
@@ -765,7 +875,8 @@ html[dir="rtl"] .ds-nav-link::after {
  *   (.ds-rise) only rises into place: it stays fully opaque, so it never
  *   passes through a low-contrast frame.
  * - Hover: arrows step forward; hairlines draw from the inline start.
- * - Navigation and exit: short fades (see .page-enter and dialog styles).
+ * - Navigation: the new page settles half a rem (.page-enter, no fade); a
+ *   language switch does not animate. Dialogs fade in and out quickly.
  * Everything here is disabled under reduced motion.
  */
 @media (prefers-reduced-motion: no-preference) {
