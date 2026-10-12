@@ -761,7 +761,9 @@ html[dir="rtl"] .ds-nav-link::after {
  * - Entrance: text paints at once (never hidden); only rules draw and the
  *   page settles a few pixels.
  * - Scroll: a plate is revealed once by a wipe in the reading direction —
- *   from the left edge in English, from the right edge in Arabic.
+ *   from the left edge in English, from the right edge in Arabic. Text
+ *   (.ds-rise) only rises into place: it stays fully opaque, so it never
+ *   passes through a low-contrast frame.
  * - Hover: arrows step forward; hairlines draw from the inline start.
  * - Navigation and exit: short fades (see .page-enter and dialog styles).
  * Everything here is disabled under reduced motion.
@@ -798,7 +800,11 @@ html[dir="rtl"] .ds-nav-link::after {
     clip-path: inset(0 0 0 100%);
   }
 
+  /* Movement only. The legacy [data-reveal="hidden"] rule in globals.css
+     fades to opacity 0, so text in mid-transition fell below its contrast
+     ratio (and an axe scan that overlapped it failed at random). */
   .ds-rise[data-reveal="hidden"] {
+    opacity: 1;
     transform: translate3d(0, 1rem, 0);
   }
 }
