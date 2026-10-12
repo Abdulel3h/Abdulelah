@@ -58,6 +58,35 @@ export function mixed(text: string, locale: Locale = "ar"): ReactNode {
   return <Fragment>{parts}</Fragment>;
 }
 
+const HAS_ARABIC = new RegExp(ARABIC_RUN.source);
+const HAS_LATIN = /[A-Za-z]/;
+
+/**
+ * A whole phrase written entirely in the other script (a quoted English
+ * question on an Arabic page, an Arabic question on an English one) is
+ * isolated as one unit, so its own punctuation stays on its own side.
+ * Anything else goes through `mixed`.
+ */
+export function phrase(text: string, locale: Locale): ReactNode {
+  if (locale === "ar" && !HAS_ARABIC.test(text)) {
+    return (
+      <span lang="en" dir="ltr">
+        {text}
+      </span>
+    );
+  }
+
+  if (locale === "en" && HAS_ARABIC.test(text) && !HAS_LATIN.test(text)) {
+    return (
+      <span lang="ar" dir="rtl">
+        {text}
+      </span>
+    );
+  }
+
+  return mixed(text, locale);
+}
+
 /** `mixed` bound to one locale, for components that set a lot of text. */
 export function mixer(locale: Locale) {
   return (text: string) => mixed(text, locale);

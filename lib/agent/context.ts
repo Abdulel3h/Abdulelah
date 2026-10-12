@@ -30,6 +30,7 @@ export const MAX_AGENT_HISTORY_TURNS = 8;
 const MAX_HISTORY_MESSAGE_LENGTH = 600;
 const MAX_ROLE_INTEREST_LENGTH = 120;
 const AGENT_PROJECT_NAMES = [
+  "Raqmi",
   "ChatUB",
   "Althil",
   "Absher Insight AI",
@@ -507,7 +508,8 @@ export function buildPortfolioContext() {
     "GitHub profile: available through an action button.",
     "LinkedIn profile: available through an action button.",
     "Positioning: AI Product Builder — agents, RAG and Arabic AI. Open to AI engineering roles and applied-AI collaborations. Lead with the name (Abdulelah Alkhathami) and his work, never with 'Junior'.",
-    "Evidence rule: seven applied AI projects — four working prototypes (ChatUB, Althil, Absher Insight AI, Stadium) and three concepts (Qanouni, Virtual Astronauts, Medad). All four prototypes have public code; the concepts have none. Never call any project shipped, launched, deployed, live or in production, and never invent users, accuracy or impact numbers.",
+    "Evidence rule: eight applied AI projects — five working prototypes (Raqmi, ChatUB, Althil, Absher Insight AI, Stadium) and three concepts (Qanouni, Virtual Astronauts, Medad). All five prototypes have public code; the concepts have none. Never call any project shipped, launched, deployed, live or in production, and never invent users, accuracy or impact numbers.",
+    "Raqmi rule: Raqmi is Abdulelah's SDAIA Academy LLM Application Engineering capstone — bilingual retail support for a fictional store, on fictional in-memory data, not deployed and with no real users. Its principle: the model proposes a tool call; application code decides whether it runs. Give its figures only with their scope and as counts, never as percentages or as accuracy: in one captured run DeepSeek and ALLaM each passed 51 of 56 exact-case Golden Set checks (five FAQ cases failed per model; 24 of 24 in the high-risk slice); a live DeepSeek lookup of another customer's order (5521) was denied by application authorization; the guardrail figures (32 of 32 attacks blocked, 0 of 32 legitimate requests blocked) come from a deterministic offline corpus and do not mean every attack is stopped; native tool-calling evidence is DeepSeek only, and ALLaM's native tool calling is untested.",
     "",
     "CONTACT ROUTING",
     "Share the email address that matches the visitor's intent. You may write these email addresses directly in your answer text.",

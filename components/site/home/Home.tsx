@@ -5,7 +5,7 @@ import { Belief } from "@/components/site/home/Belief";
 import { Hero } from "@/components/site/home/Hero";
 import { Milestones } from "@/components/site/home/Milestones";
 import { mixed } from "@/components/site/mixed";
-import { directional, Latin, Ltr, SectionHead } from "@/components/site/primitives";
+import { directional, Ltr, ProjectName, SectionHead } from "@/components/site/primitives";
 import { tintOf } from "@/components/site/tints";
 import { Chapter } from "@/components/site/work/Chapter";
 import { CopyEmailButton } from "@/components/ui/CopyEmailButton";
@@ -70,9 +70,7 @@ export function Home({ locale }: { locale: Locale }) {
                   >
                     <span className="flex items-center gap-2.5">
                       <span aria-hidden="true" className="ds-tint-dot h-1.5 w-1.5 rounded-full" />
-                      <Latin className="ds-name text-[1.65rem] text-paper transition-colors group-hover:text-accent-soft">
-                        {project.name}
-                      </Latin>
+                      <ProjectName className="ds-name text-[1.65rem] text-paper transition-colors group-hover:text-accent-soft" name={project.name} />
                     </span>
                     <span className="ds-small text-paper-dim">{mixed(briefs[project.slug].line, locale)}</span>
                     <span className="ds-micro mt-auto inline-flex items-center gap-1.5 text-paper-faint transition-colors group-hover:text-accent-soft">

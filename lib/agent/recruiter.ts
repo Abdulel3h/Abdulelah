@@ -25,8 +25,8 @@ export const recruiterRoleProfiles: RecruiterRoleProfile[] = [
     id: "junior-ai-engineer",
     label: "AI Engineer",
     fitSummary:
-      "Abdulelah is a strong early-career AI engineering candidate: he has built working AI prototypes with public code — an Arabic retrieval assistant with local generation (ChatUB), a computer-vision gate monitor (Stadium) and explainable security analytics (Absher Insight AI) — plus a Google Cloud hackathon prototype with public code (Althil) whose FastAPI backend is packaged for Cloud Run.",
-    projects: ["ChatUB", "Stadium", "Absher Insight AI"],
+      "Abdulelah is a strong early-career AI engineering candidate: he has built working AI prototypes with public code — bilingual retail support where application code authorizes every tool call the model proposes, with a captured evaluation (Raqmi), an Arabic retrieval assistant with local generation (ChatUB), a computer-vision gate monitor (Stadium) and explainable security analytics (Absher Insight AI) — plus a Google Cloud hackathon prototype with public code (Althil) whose FastAPI backend is packaged for Cloud Run.",
+    projects: ["Raqmi", "ChatUB", "Stadium"],
     skills: [
       "NLP",
       "LLM Applications",
@@ -110,7 +110,7 @@ export const recruiterRoleProfiles: RecruiterRoleProfile[] = [
     id: "general-hiring-fit",
     label: "General Hiring Fit",
     fitSummary:
-      "Abdulelah is an Information Systems graduate with seven applied AI projects — four working prototypes (all with public code) and three concepts — plus cloud exposure, solution design, project leadership, and hackathon-tested delivery.",
+      "Abdulelah is an Information Systems graduate with eight applied AI projects — five working prototypes (all with public code) and three concepts — plus cloud exposure, solution design, project leadership, and hackathon-tested delivery.",
     projects: ["ChatUB", "Stadium", "Absher Insight AI"],
     skills: [
       "NLP",

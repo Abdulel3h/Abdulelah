@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { mixer } from "@/components/site/mixed";
-import { directional, Latin, PageHead } from "@/components/site/primitives";
+import { directional, Latin, PageHead, ProjectName } from "@/components/site/primitives";
 import { Reveal } from "@/components/ui/Reveal";
 import { getAchievementsByYear } from "@/data/achievements";
 import { getProject, type LocalizedProject } from "@/data/projects";
@@ -57,7 +57,7 @@ export function Achievements({ locale }: { locale: Locale }) {
                               href={localizeHref(`/projects/${project.slug}`, locale)}
                               className="focus-ring group inline-flex min-h-11 items-center gap-2 rounded text-accent-soft transition-colors hover:text-accent"
                             >
-                              <Latin className="text-[1.2rem]">{project.name}</Latin>
+                              <ProjectName className="text-[1.2rem]" name={project.name} />
                               <Forward className="ds-forward h-4 w-4" aria-hidden="true" />
                             </Link>
                           </li>

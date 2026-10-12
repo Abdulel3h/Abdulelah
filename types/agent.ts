@@ -35,6 +35,7 @@ export type AgentHistoryMessage = {
 };
 
 export type AgentProjectName =
+  | "Raqmi"
   | "ChatUB"
   | "Althil"
   | "Absher Insight AI"

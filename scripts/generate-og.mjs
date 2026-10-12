@@ -13,7 +13,7 @@
  * from public/fonts; Fraunces and Inter come from Google Fonts, so the
  * English render needs a network connection. Run it again after changing a
  * line below. Fraunces is requested without its optical-size axis, as
- * next/font loads it for the pages. The figures restate data/projects.ts (7 projects, 4 with code).
+ * next/font loads it for the pages. The figures restate data/projects.ts (8 projects, 5 with code).
  */
 import { mkdirSync, readFileSync } from "node:fs";
 import path from "node:path";
@@ -38,7 +38,7 @@ const images = {
     first: "Abdulelah",
     last: "Alkhathami",
     line: "I turn AI into products people understand.",
-    note: "7 projects, 4 with public code",
+    note: "8 projects, 5 with public code",
     url: "abdulelah.de"
   },
   ar: {
@@ -59,7 +59,7 @@ const images = {
     first: "عبدالإله",
     last: "الخثعمي",
     line: "أحوّل الذكاء الاصطناعي إلى منتجات يفهمها الناس.",
-    note: "7 مشاريع، 4 منها بكود منشور",
+    note: "8 مشاريع، 5 منها بكود منشور",
     url: "abdulelah.de/ar"
   }
 };

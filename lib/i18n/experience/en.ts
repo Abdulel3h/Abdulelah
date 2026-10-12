@@ -10,6 +10,13 @@
 import type { ProjectBrief, SiteCopy } from "./ar";
 
 export const enBriefs: Record<string, ProjectBrief> = {
+  raqmi: {
+    line: "Bilingual retail support where the model can propose an action, but application code decides whether it may run.",
+    problem: "Support mixes questions with actions on someone’s account, and a language model should not decide who may read or change an order.",
+    built: "A router and a native tool loop over fictional store data, with strict schemas and an ownership check in code before any tool runs.",
+    role: "I designed, built and evaluated it as my SDAIA Academy capstone, from the tool contracts to the captured evaluation.",
+    result: "51 of 56 Golden Set cases passed on both models, all 24 high-risk ones included; a live cross-user lookup was denied. Not deployed."
+  },
   chatub: {
     line: "An Arabic academic assistant for University of Bisha students, with every step running on a local machine.",
     problem: "University rules are spread across documents and offices, and the answer can depend on who you ask.",
@@ -103,7 +110,7 @@ export const enCopy: SiteCopy = {
     stripLabel: "On this page",
     work: {
       kicker: "Selected work",
-      title: "Four working prototypes.",
+      title: "Five working prototypes.",
       titleSoft: "Public code, limits in writing.",
       role: "Role",
       status: "Status",
@@ -139,11 +146,11 @@ export const enCopy: SiteCopy = {
   },
   projects: {
     kicker: "Projects",
-    title: "Seven projects.",
-    titleSoft: "Four working, three concepts.",
+    title: "Eight projects.",
+    titleSoft: "Five working, three concepts.",
     filterLabel: "Filter projects",
     filters: { all: "All", working: "Working, with public code", concept: "Concepts" },
-    count: "{n} of 7",
+    count: "{n} of {total}",
     listLabel: "All projects",
     previewLabel: "Project preview",
     open: "Open the case study"
@@ -174,7 +181,9 @@ export const enCopy: SiteCopy = {
     discuss: "Discuss similar work",
     year: "Year",
     code: "Code",
-    stages: ["Input", "Processing", "Intelligence", "Output"]
+    stages: ["Input", "Processing", "Intelligence", "Output"],
+    capabilities: "What it can do",
+    scope: "Scope"
   },
   about: {
     kicker: "About",
@@ -193,7 +202,7 @@ export const enCopy: SiteCopy = {
       { title: "Honest about limits", body: "I call a prototype a prototype, and a concept a concept." }
     ],
     pathKicker: "The path",
-    pathTitle: "From a first hackathon final to seven projects.",
+    pathTitle: "From a first hackathon final to eight projects.",
     toolsKicker: "What I work with",
     toolsTitle: "The tools, when the work calls for them.",
     toolsCore: "Strongest",
@@ -210,7 +219,7 @@ export const enCopy: SiteCopy = {
     glanceLabel: "At a glance",
     versionsKicker: "Two CVs",
     evidenceTitle: "Evidence before the CV",
-    evidenceBody: "Four projects with public code say more than any page.",
+    evidenceBody: "Five projects with public code say more than any page.",
     evidenceCta: "See the projects"
   },
   contact: {

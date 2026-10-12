@@ -1,4 +1,4 @@
-import { Award, Camera, Github, Lock } from "lucide-react";
+import { Award, Camera, FileText, Github, Lock } from "lucide-react";
 import Link from "next/link";
 import { ProjectViewRecorder } from "@/components/agent/ProjectViewRecorder";
 import { ReadingPath } from "@/components/agent/ReadingPath";
@@ -6,9 +6,22 @@ import { TrackedLink } from "@/components/analytics/TrackedLink";
 import { PipelineStage } from "@/components/motion/PipelineStage";
 import { StatusBadge } from "@/components/projects/ProjectMeta";
 import { mixer } from "@/components/site/mixed";
-import { directional, Latin, Ltr, pad, tintStyle } from "@/components/site/primitives";
+import { directional, Latin, Ltr, pad, ProjectName, tintStyle } from "@/components/site/primitives";
 import { tintOf } from "@/components/site/tints";
 import { Pipeline } from "@/components/site/work/Pipeline";
+import {
+  Architecture,
+  BoundaryCase,
+  Capabilities,
+  Checks,
+  Evaluation,
+  Failures,
+  Guardrails,
+  Highlights,
+  Principle,
+  Providers,
+  Requests
+} from "@/components/site/work/Story";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Reveal } from "@/components/ui/Reveal";
 import { ConceptFigure } from "@/components/work/ProductPreview";
@@ -19,6 +32,7 @@ import { projectBriefs, siteCopy } from "@/lib/i18n/experience";
 
 const evidenceIcons = {
   repository: Github,
+  document: FileText,
   screenshots: Camera,
   "program-record": Award,
   private: Lock
@@ -57,6 +71,7 @@ export function CaseStudy({ project, locale }: { project: LocalizedProject; loca
   const position = all.findIndex((item) => item.slug === project.slug);
   const next = all[(position + 1) % all.length];
   const previous = all[(position - 1 + all.length) % all.length];
+  const story = project.story;
   const lines = [
     { label: copy.problem, text: brief.problem },
     { label: copy.built, text: brief.built },
@@ -85,10 +100,17 @@ export function CaseStudy({ project, locale }: { project: LocalizedProject; loca
             {project.domain} · <span className="ds-num">{project.year}</span>
           </p>
           <h1 id="project-title" className="mt-5 text-[clamp(3.2rem,2rem+5.4vw,7rem)] leading-[1.02] text-paper">
-            <Latin className="ds-name">{project.name}</Latin>
+            <ProjectName className="ds-name" name={project.name} />
           </h1>
+          {/* The name in the other script, once, where the project has one. */}
+          {project.altName ? (
+            <p className="mt-2 text-[1.1rem] text-paper-faint">
+              <ProjectName name={project.altName} />
+            </p>
+          ) : null}
           <p className="ds-h3 mt-5 ds-tone-85">{mix(project.descriptor)}</p>
           <p className="ds-lede mt-5">{mix(brief.line)}</p>
+          {project.highlights?.length ? <Highlights items={project.highlights} locale={locale} className="mt-8" /> : null}
         </div>
 
         <div className="lg:col-span-5 lg:pt-6">
@@ -173,14 +195,29 @@ export function CaseStudy({ project, locale }: { project: LocalizedProject; loca
         </ol>
       </section>
 
-      <section aria-labelledby="how" className="ds-shell">
+      {story?.requests ? <Requests story={story.requests} locale={locale} /> : null}
+      {story?.principle ? <Principle story={story.principle} locale={locale} /> : null}
+
+      <section aria-labelledby="how" className={story?.principle ? "ds-shell pt-[var(--ds-section)]" : "ds-shell"}>
         <h2 id="how" className="ds-h2">
           {copy.how}
         </h2>
         <div className="mt-10">
-          <Pipeline steps={project.flow} stages={copy.stages} label={copy.how} />
+          {story?.architecture ? (
+            <Architecture story={story.architecture} locale={locale} label={copy.how} />
+          ) : (
+            <Pipeline steps={project.flow} stages={copy.stages} label={copy.how} />
+          )}
         </div>
       </section>
+
+      {story?.boundary ? <BoundaryCase story={story.boundary} locale={locale} /> : null}
+      {story ? <Capabilities items={project.capabilities} title={copy.capabilities} locale={locale} /> : null}
+      {story?.evaluation ? <Evaluation story={story.evaluation} locale={locale} scopeLabel={copy.scope} /> : null}
+      {story?.failures ? <Failures story={story.failures} locale={locale} /> : null}
+      {story?.guardrails ? <Guardrails story={story.guardrails} locale={locale} scopeLabel={copy.scope} /> : null}
+      {story?.checks ? <Checks story={story.checks} locale={locale} scopeLabel={copy.scope} /> : null}
+      {story?.providers ? <Providers story={story.providers} locale={locale} /> : null}
 
       <section aria-labelledby="decisions" className="ds-shell ds-section">
         <h2 id="decisions" className="ds-h2">
@@ -359,7 +396,7 @@ export function CaseStudy({ project, locale }: { project: LocalizedProject; loca
           <span className="relative mt-4 flex items-end justify-between gap-6">
             <span className="min-w-0">
               <span className="block text-[clamp(2.4rem,1.6rem+3.6vw,4.6rem)] text-paper">
-                <Latin className="ds-name">{next.name}</Latin>
+                <ProjectName className="ds-name" name={next.name} />
               </span>
               <span className="ds-small mt-3 block max-w-xl text-paper-dim">{mix(briefs[next.slug].line)}</span>
             </span>
@@ -372,7 +409,7 @@ export function CaseStudy({ project, locale }: { project: LocalizedProject; loca
             className="focus-ring group inline-flex min-h-11 items-center gap-2 rounded text-[0.98rem] text-paper-dim transition-colors hover:text-paper"
           >
             <Back className="h-4 w-4" aria-hidden="true" />
-            {copy.previousProject}: <Ltr>{previous.name}</Ltr>
+            {copy.previousProject}: <ProjectName name={previous.name} />
           </Link>
           <Link
             href={localizeHref("/projects", locale)}

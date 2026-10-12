@@ -7,6 +7,7 @@ const pages = [
   "/projects",
   "/projects/chatub",
   "/projects/stadium",
+  "/projects/raqmi",
   "/projects/qanouni",
   "/resume",
   "/achievements",
@@ -19,6 +20,7 @@ const pages = [
   "/ar/about",
   "/ar/projects",
   "/ar/projects/stadium",
+  "/ar/projects/raqmi",
   "/ar/projects/qanouni",
   "/ar/resume",
   "/ar/achievements",
@@ -95,7 +97,7 @@ test.describe("automated accessibility of the menu", () => {
 test.describe("reduced motion", () => {
   test.use({ reducedMotion: "reduce" });
 
-  for (const path of ["/", "/ar"]) {
+  for (const path of ["/", "/ar", "/projects/raqmi", "/ar/projects/raqmi"]) {
     test(`every section is visible immediately while scrolling: ${path}`, async ({ page }) => {
       await page.goto(path);
 

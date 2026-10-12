@@ -16,7 +16,7 @@ type EvaluateAgentAnswerOptions = {
 };
 
 const PORTFOLIO_ANCHORS =
-  /\b(abdulelah|portfolio|chatub|althil|absher|qanouni|medad|virtual astronauts?|resume|cv|github|linkedin|university of bisha|ai engineer|ai solutions specialist|projects?|skills?|contact)\b|عبد\s?ال[اإ]له|مشاريع?|مهارات?|السيرة|التواصل/i;
+  /\b(abdulelah|portfolio|raqmi|chatub|althil|absher|qanouni|medad|virtual astronauts?|resume|cv|github|linkedin|university of bisha|ai engineer|ai solutions specialist|projects?|skills?|contact)\b|عبد\s?ال[اإ]له|مشاريع?|مهارات?|السيرة|التواصل/i;
 
 const BLOG_ANCHORS = /\b(blog|article|insights?|context engineering)\b/i;
 
@@ -43,11 +43,16 @@ const UNRELATED_ADVICE_PATTERNS = [
 const EXAGGERATED_CLAIM_PATTERNS = [
   /\b(senior engineer|expert|founder|chief|ceo)\b/i,
   /\b(worked|works|employed)\s+(?:at|for)\b/i,
-  /\b(client|customer)s?\b/i,
+  // Claims of having clients or customers — not the customers a support
+  // prototype such as Raqmi talks about ("another customer's order").
+  /\b(?:his|abdulelah(?:['’]s)?|paying|freelance|enterprise)\s+(?:clients?|customers?)\b/i,
+  /\b(?:used|trusted|adopted)\s+by\s+(?:real\s+|paying\s+)?(?:clients|customers|users)\b/i,
+  /\bclients\b/i,
   /\b\d+(?:\.\d+)?%\b/
 ];
 
 const PROJECT_EVIDENCE_REQUIREMENTS = [
+  { answerPattern: /\braqmi\b/i, href: "/projects/raqmi" },
   { answerPattern: /\bchatub\b/i, href: "/projects/chatub" },
   { answerPattern: /\balthil\b/i, href: "/projects/althil" },
   { answerPattern: /\babsher(?: insight ai)?\b/i, href: "/projects/absher-insight-ai" },

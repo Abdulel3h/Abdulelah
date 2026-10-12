@@ -25,6 +25,11 @@ import { containsArabic } from "@/lib/text-direction";
 import type { AgentAction } from "@/types/agent";
 
 const actions = {
+  raqmi: {
+    label: "View Raqmi",
+    href: "/projects/raqmi",
+    type: "internal"
+  },
   chatub: {
     label: "View ChatUB",
     href: "/projects/chatub",
@@ -183,6 +188,7 @@ const recruiterRoleActions = [
 ];
 
 const projectViewActions: Record<string, AgentAction> = {
+  raqmi: actions.raqmi,
   chatub: actions.chatub,
   althil: actions.althil,
   "absher-insight-ai": actions.absher,
@@ -349,6 +355,10 @@ function normalizeActionText(message: string) {
 
 const MAX_EVIDENCE_ACTIONS = 5;
 const projectEvidenceMatchers = [
+  {
+    action: actions.raqmi,
+    terms: ["raqmi", "رقمي", "tool calling", "authorization", "golden set", "allam", "retail support"]
+  },
   {
     action: actions.chatub,
     terms: ["chatub", "local ai", "academic", "university", "nlp", "llm"]
@@ -580,6 +590,22 @@ export function getAgentActions(message: string): AgentAction[] {
     add(actions.blog);
   }
 
+  if (
+    includesAny(normalized, [
+      "raqmi",
+      "مشروع رقمي",
+      "tool calling",
+      "function calling",
+      "authorization",
+      "golden set",
+      "allam",
+      "sdaia academy",
+      "retail"
+    ])
+  ) {
+    add(actions.raqmi);
+  }
+
   if (includesAny(normalized, ["chatub", "academic", "university"])) {
     add(actions.chatub);
   }
@@ -629,7 +655,7 @@ export function getAgentActions(message: string): AgentAction[] {
   }
 
   if (includesAny(normalized, ["github", "code", "repository", "كود", "مستودع"])) {
-    add(actions.chatub, actions.absher, actions.stadium, actions.github);
+    add(actions.raqmi, actions.chatub, actions.absher, actions.stadium, actions.github);
   }
 
   if (includesAny(normalized, ["linkedin"])) {

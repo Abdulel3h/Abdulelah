@@ -5,6 +5,7 @@ const englishPaths = [
   "/",
   "/projects",
   "/projects/absher-insight-ai",
+  "/projects/raqmi",
   "/about",
   "/contact",
   "/resume",

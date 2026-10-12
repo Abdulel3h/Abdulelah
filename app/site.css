@@ -179,7 +179,7 @@ html[dir="rtl"] {
 }
 
 /* A swipeable strip (touch first) that snaps to the inline start, and
-   becomes one row of four on wide screens. */
+   becomes one row of equal columns on wide screens, however many items. */
 .ds-strip {
   display: grid;
   grid-auto-flow: column;
@@ -211,8 +211,7 @@ html[dir="rtl"] {
 
 @media (min-width: 64rem) {
   .ds-strip {
-    grid-auto-flow: row;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-columns: minmax(0, 1fr);
     overflow: visible;
     margin-inline: 0;
     padding-inline: 0;
@@ -385,6 +384,13 @@ html[lang="ar"] .ds-statement {
   font-weight: 450;
   direction: ltr;
   unicode-bidi: isolate;
+}
+
+/* A project name written in Arabic («رقمي»), in the Arabic display face. */
+.ds-arabic-name {
+  font-family: var(--font-thmanyah), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0;
 }
 
 /* A large Latin name: a project's title. */

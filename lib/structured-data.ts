@@ -106,14 +106,22 @@ export function blogPostingJsonLd(
 }
 
 export function projectJsonLd(
-  project: { name: string; title: string; summary: string; year: string; slug: string; links: { github?: string } },
+  project: {
+    name: string;
+    altName?: string;
+    title: string;
+    summary: string;
+    year: string;
+    slug: string;
+    links: { github?: string };
+  },
   locale: Locale
 ) {
   return {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
     name: project.title,
-    alternateName: project.name,
+    alternateName: project.altName ? [project.name, project.altName] : project.name,
     description: project.summary,
     url: absoluteUrl(localizeHref(`/projects/${project.slug}`, locale)),
     dateCreated: project.year,

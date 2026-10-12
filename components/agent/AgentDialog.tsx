@@ -26,6 +26,7 @@ import type {
 
 const MAX_HISTORY_MESSAGES = 8;
 const PROJECT_SLUGS: Record<NonNullable<AgentSessionContext["lastProject"]>, string> = {
+  Raqmi: "raqmi",
   ChatUB: "chatub",
   Althil: "althil",
   "Absher Insight AI": "absher-insight-ai",

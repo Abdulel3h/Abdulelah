@@ -347,6 +347,7 @@ function getArabicFallbackAgentResponse(message: string) {
     return [
       `لدى عبدالإله ${projectCounts.publicRepositories} مشاريع بكود منشور في مستودعات عامة على GitHub:`,
       "",
+      "- Raqmi (رقمي): دعم عملاء بلغتين لمتجر خيالي، يقترح فيه النموذج استدعاء الأداة ويقرر كود التطبيق هل يُنفَّذ (مشروع ختامي في أكاديمية سدايا، نموذج أولي عامل)",
       "- ChatUB: مساعد أكاديمي عربي يعمل محليًا (مشروع تخرج، نموذج أولي عامل)",
       "- Althil: دعم القرار لمواضع التظليل من موقع الشمس ودرجة الحرارة، بخلفية FastAPI مجهزة لـ Cloud Run (نموذج أولي في هاكاثون ضمن فريق)",
       "- Absher Insight AI: رصد مخاطر سلوكية بقواعد قابلة للتفسير على بيانات اصطناعية (نموذج أولي في هاكاثون)",
@@ -377,6 +378,17 @@ function getArabicFallbackAgentResponse(message: string) {
     ].join("\n");
   }
 
+  if (includesAny(normalized, ["raqmi", "مشروع رقمي", "tool calling", "الصلاحيات", "golden set", "allam"])) {
+    return [
+      "رقمي (Raqmi) مشروع عبدالإله الختامي في برنامج LLM Application Engineering بأكاديمية سدايا: دعم عملاء بالعربية والإنجليزية لمتجر سعودي خيالي.",
+      "",
+      "- الفكرة: النموذج يقترح استدعاء الأداة، وكود التطبيق يقرر هل يُنفَّذ بعد التحقق من الجلسة والملكية والمدخلات.",
+      "- في تشغيل حيّ موثّق، طلب DeepSeek طلبًا لعميل آخر (5521) فرفضه التطبيق ولم يُنفَّذ شيء.",
+      "- في تقييم موثّق واحد اجتاز DeepSeek وALLaM كلٌّ منهما 51 من 56 حالة في Golden Set، ونجحت الحالات عالية الخطورة الـ24 كلها، وفشلت خمس حالات من الأسئلة الشائعة.",
+      "- نموذج أولي على بيانات خيالية في الذاكرة، غير منشور، والكود منشور على GitHub."
+    ].join("\n");
+  }
+
   const mentioned = getMentionedProjectProfiles(message)[0];
 
   if (mentioned) {
@@ -395,8 +407,9 @@ function getArabicFallbackAgentResponse(message: string) {
 
   if (includesAny(normalized, ["اقوي مشروع", "افضل مشروع", "مشاريعه", "مشاريع"])) {
     return [
-      "أقوى نقطة بداية هي المشاريع الأربعة التي يمكن التحقق منها في الكود:",
+      "أقوى نقطة بداية هي المشاريع الخمسة التي يمكن التحقق منها في الكود:",
       "",
+      "- Raqmi (رقمي): دعم عملاء بلغتين تقرر فيه الصلاحيات في الكود لا في النموذج — مشروع ختامي في أكاديمية سدايا، مع تقييم موثّق",
       "- ChatUB: مساعد أكاديمي عربي يعمل محليًا — مشروع تخرج قاده، ونموذج أولي عامل",
       "- Althil: دعم القرار لمواضع التظليل بخلفية FastAPI مجهزة لـ Cloud Run — نموذج أولي في هاكاثون ضمن فريق",
       "- Stadium: مراقبة الحشود عند البوابات بالرؤية الحاسوبية — نموذج أولي عامل بناه منفردًا",
@@ -425,6 +438,7 @@ function getArabicFallbackAgentResponse(message: string) {
     "عبدالإله الخثعمي مطوّر منتجات ذكاء اصطناعي في الرياض، وخريج نظم المعلومات من جامعة بيشة.",
     "",
     `في أعماله ${projectCounts.total} مشاريع تطبيقية: ${projectCounts.prototypes} نماذج أولية عاملة (${projectCounts.publicRepositories} منها بكود منشور) و${projectCounts.concepts} تصوّرات.`,
+    "- Raqmi (رقمي): دعم عملاء بلغتين، النموذج يقترح والنظام يقرّر (مشروع ختامي في أكاديمية سدايا)",
     "- ChatUB: مساعد أكاديمي عربي يعمل محليًا (مشروع تخرج قاده)",
     "- Althil: دعم القرار لمواضع التظليل بخلفية مجهزة لـ Google Cloud Run (هاكاثون ضمن فريق)",
     "- Stadium: مراقبة الحشود بالرؤية الحاسوبية (بناه منفردًا)",
@@ -573,7 +587,22 @@ export function getFallbackAgentResponse(
   }
 
   if (includesAny(normalized, ["github", "code", "repository", "repositories", "source"])) {
-    return "Four projects have public repositories on GitHub: ChatUB (Arabic academic assistant with local generation — graduation project, working prototype), Althil (shade-planning decision support with a FastAPI backend packaged for Cloud Run — team hackathon prototype), Absher Insight AI (explainable behavioural-risk flags on synthetic data — hackathon prototype) and Stadium (computer-vision gate monitoring — solo working prototype). Qanouni, Virtual Astronauts and Medad are concepts without public code.";
+    return "Five projects have public repositories on GitHub: Raqmi (bilingual retail support where application code authorizes every tool call the model proposes — SDAIA Academy capstone, working prototype on fictional data), ChatUB (Arabic academic assistant with local generation — graduation project, working prototype), Althil (shade-planning decision support with a FastAPI backend packaged for Cloud Run — team hackathon prototype), Absher Insight AI (explainable behavioural-risk flags on synthetic data — hackathon prototype) and Stadium (computer-vision gate monitoring — solo working prototype). Qanouni, Virtual Astronauts and Medad are concepts without public code.";
+  }
+
+  if (
+    includesAny(normalized, [
+      "raqmi",
+      "tool calling",
+      "function calling",
+      "authorization",
+      "golden set",
+      "allam",
+      "sdaia academy",
+      "retail support"
+    ])
+  ) {
+    return `${projectSummary("raqmi")} It was Abdulelah's capstone for LLM Application Engineering at SDAIA Academy: a working prototype on fictional data, not a deployed product. The model proposes a tool call; application code checks the session, ownership and arguments, then decides whether it runs. In one captured evaluation, DeepSeek and ALLaM each passed 51 of 56 exact-case Golden Set checks, all 24 high-risk cases included, with five FAQ cases failing per model; and a live lookup of another customer's order was denied by application authorization.`;
   }
 
   if (includesAny(normalized, ["stadium", "crowd", "gate", "computer vision", "yolo"])) {
@@ -613,7 +642,7 @@ export function getFallbackAgentResponse(
   }
 
   if (includesAny(normalized, ["nlp", "llm", "ai agent", "generative ai"])) {
-    return "Abdulelah's clearest NLP and LLM evidence is ChatUB: Arabic preprocessing, multilingual sentence-embedding retrieval over curated FAQs and answer generation with a locally served model (public code, working prototype). Qanouni is a concept designed around Azure AI language services. His skills list AI agents as a developing area.";
+    return "Abdulelah's clearest LLM-application evidence is Raqmi: a router and a native tool loop where the model proposes tool calls and application code validates and authorizes them, with a captured evaluation on DeepSeek and ALLaM (public code, working prototype on fictional data). For Arabic NLP and retrieval, ChatUB adds Arabic preprocessing, multilingual sentence-embedding retrieval over curated FAQs and local generation. Qanouni is a concept designed around Azure AI language services.";
   }
 
   if (includesAny(normalized, ["qanouni", "legal", "labor rights"])) {
@@ -652,12 +681,12 @@ export function getFallbackAgentResponse(
   }
 
   if (includesAny(normalized, ["strongest", "best project", "projects", "portfolio"])) {
-    return "Start with the four projects you can verify in code: ChatUB (Arabic academic assistant with local generation — graduation project he led), Althil (shade-planning decision support packaged for Cloud Run — team hackathon prototype), Stadium (computer-vision gate monitoring — solo working prototype) and Absher Insight AI (explainable security analytics on synthetic data — hackathon prototype). None is claimed to be in production; each case study lists its status and limitations.";
+    return "Start with the five projects you can verify in code: Raqmi (bilingual retail support where application code authorizes every tool call — SDAIA Academy capstone with a captured evaluation), ChatUB (Arabic academic assistant with local generation — graduation project he led), Althil (shade-planning decision support packaged for Cloud Run — team hackathon prototype), Stadium (computer-vision gate monitoring — solo working prototype) and Absher Insight AI (explainable security analytics on synthetic data — hackathon prototype). None is claimed to be in production; each case study lists its status and limitations.";
   }
 
   if (includesAny(normalized, ["30 seconds", "quick summary", "summarize", "summary", "who is"])) {
-    return "Abdulelah Alkhathami is an AI product builder in Riyadh — agents, RAG and Arabic AI — and an Information Systems graduate of the University of Bisha. His portfolio has seven applied AI projects: four working prototypes, all with public code (ChatUB, Althil, Absher Insight AI and Stadium), and three concepts. He reached the Top 30 of SDAIA x Microsoft's AthkaU and has built prototypes at national hackathons, including KFUPM x Google Cloud and Absher x Tuwaiq.";
+    return "Abdulelah Alkhathami is an AI product builder in Riyadh — agents, RAG and Arabic AI — and an Information Systems graduate of the University of Bisha. His portfolio has eight applied AI projects: five working prototypes, all with public code (Raqmi, ChatUB, Althil, Absher Insight AI and Stadium), and three concepts. He reached the Top 30 of SDAIA x Microsoft's AthkaU and has built prototypes at national hackathons, including KFUPM x Google Cloud and Absher x Tuwaiq.";
   }
 
-  return "Abdulelah Alkhathami is an AI product builder focused on practical, context-aware AI. His portfolio spans seven applied projects across education, security, computer vision, sustainability, legal tech, fintech and immersive learning — four working prototypes and three concepts. A strong starting point is ChatUB, Althil, Stadium and Absher Insight AI (all with public code), followed by the resume page for the two role-specific CVs.";
+  return "Abdulelah Alkhathami is an AI product builder focused on practical, context-aware AI. His portfolio spans eight applied projects across retail support, education, security, computer vision, sustainability, legal tech, fintech and immersive learning — five working prototypes and three concepts. A strong starting point is Raqmi, ChatUB, Althil, Stadium and Absher Insight AI (all with public code), followed by the resume page for the two role-specific CVs.";
 }

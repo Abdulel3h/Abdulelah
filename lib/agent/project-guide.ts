@@ -12,6 +12,15 @@ export type ProjectGuideProfile = {
 
 const projectGuideProfiles: ProjectGuideProfile[] = [
   {
+    slug: "raqmi",
+    shortName: "Raqmi",
+    // Not the bare word «رقمي»: it also means "my number", and it is part of
+    // «الرقمية» ("digital").
+    aliases: ["raqmi", "مشروع رقمي", "مساعد رقمي"],
+    bestJobFit: "LLM application engineering, AI engineering with tool use and evaluation, or an applied Arabic AI role",
+    recommendedCv: "engineer"
+  },
+  {
     slug: "chatub",
     shortName: "ChatUB",
     aliases: ["chatub", "مشروع chatub"],
@@ -224,12 +233,13 @@ export function getPortfolioTourResponse() {
     "60-second portfolio tour",
     "",
     "1. Who Abdulelah is: an AI product builder in Riyadh — agents, RAG and Arabic AI — and an Information Systems graduate of the University of Bisha.",
-    "2. ChatUB (graduation project he led): a working prototype that answers Arabic academic questions from curated FAQ content with a locally served model. Public code; not deployed to students.",
-    "3. Althil (team hackathon prototype, KFUPM x Google Cloud): shade-planning decision support from sun position and heat scoring, served by one FastAPI app packaged for Cloud Run. Abdulelah worked on the backend, cloud architecture and integration. Public code; not used by a city.",
-    "4. Stadium (solo build): a working computer-vision prototype that monitors gate crowding and recommends staff moves. Public code; not calibrated for a real venue.",
-    "5. Absher Insight AI (hackathon prototype): explainable, rule-based risk flags on synthetic data with an operations dashboard. Public code; not affiliated with Absher.",
-    "6. Also: three concepts — Qanouni, Virtual Astronauts (both AthkaU Top 30 ideas) and Medad.",
-    "7. Best next action: open the case studies, download the CV closest to your role, or contact Abdulelah."
+    "2. Raqmi (SDAIA Academy LLM Application Engineering capstone): bilingual retail support for a fictional store where the model proposes a tool call and application code decides whether it runs. In one captured evaluation it passed 51 of 56 Golden Set cases on both DeepSeek and ALLaM, and a live cross-user lookup was denied by authorization. Public code; fictional data, not deployed.",
+    "3. ChatUB (graduation project he led): a working prototype that answers Arabic academic questions from curated FAQ content with a locally served model. Public code; not deployed to students.",
+    "4. Althil (team hackathon prototype, KFUPM x Google Cloud): shade-planning decision support from sun position and heat scoring, served by one FastAPI app packaged for Cloud Run. Abdulelah worked on the backend, cloud architecture and integration. Public code; not used by a city.",
+    "5. Stadium (solo build): a working computer-vision prototype that monitors gate crowding and recommends staff moves. Public code; not calibrated for a real venue.",
+    "6. Absher Insight AI (hackathon prototype): explainable, rule-based risk flags on synthetic data with an operations dashboard. Public code; not affiliated with Absher.",
+    "7. Also: three concepts — Qanouni, Virtual Astronauts (both AthkaU Top 30 ideas) and Medad.",
+    "8. Best next action: open the case studies, download the CV closest to your role, or contact Abdulelah."
   ].join("\n");
 }
 
@@ -238,6 +248,7 @@ export function getProjectExplainerMenuResponse() {
     "Project explainer",
     "",
     "Choose a project from Abdulelah's portfolio:",
+    "- Raqmi",
     "- ChatUB",
     "- Althil",
     "- Absher Insight AI",
@@ -255,6 +266,7 @@ export function getProjectComparisonMenuResponse() {
     "Project comparison",
     "",
     "Choose a comparison from Abdulelah's portfolio:",
+    "- Compare Raqmi and ChatUB",
     "- Compare ChatUB and Althil",
     "- Compare ChatUB and Absher Insight AI",
     "- Compare Althil and Absher Insight AI",

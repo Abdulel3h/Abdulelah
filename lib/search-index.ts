@@ -35,6 +35,8 @@ export function buildSearchIndex(locale: Locale): SearchIndexItem[] {
     label: project.name,
     hint: `${project.descriptor} · ${dict.status[project.status]}`,
     keywords: [
+      project.altName ?? "",
+      project.keywords.join(" "),
       project.domain,
       project.technologies.join(" "),
       project.links.github ? "github code repository public كود مستودع" : "",
