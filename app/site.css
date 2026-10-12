@@ -221,6 +221,14 @@ html[dir="rtl"] {
 
 /* ------------------------------------------------------------ 5. type */
 
+/*
+ * A role's colour is its default, not a rule. site.css loads after Tailwind's
+ * utilities, so a plain `.ds-label { color }` would beat `text-accent` on the
+ * same element (equal specificity, later wins) and a brass label would turn
+ * grey. Set inside :where(), the colour has zero specificity: a colour
+ * utility on the element always wins, whatever the load order, and an
+ * element without one keeps the role's colour.
+ */
 .ds-display,
 .ds-h1,
 .ds-h2,
@@ -229,6 +237,9 @@ html[dir="rtl"] {
 .ds-quote,
 .ds-statement {
   font-family: var(--ds-face-display);
+}
+
+:where(.ds-display, .ds-h1, .ds-h2, .ds-heading, .ds-title, .ds-quote, .ds-statement) {
   color: var(--ds-paper);
 }
 
@@ -371,6 +382,10 @@ html[lang="ar"] .ds-statement {
   line-height: 1.6;
   letter-spacing: var(--ds-label-track);
   text-transform: var(--ds-label-case);
+}
+
+/* Faint by default; `text-accent` makes a brass label (see section 5). */
+:where(.ds-label) {
   color: var(--ds-paper-faint);
 }
 
