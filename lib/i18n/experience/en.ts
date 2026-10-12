@@ -108,6 +108,13 @@ export const enCopy: SiteCopy = {
     primary: "View selected work",
     secondary: "Choose a CV",
     stripLabel: "On this page",
+    // The featured-project notice above the name. Change `label` to
+    // "Featured project" once it is no longer new; nothing else moves.
+    notice: {
+      label: "New project",
+      line: "The model proposes. The system decides.",
+      cta: "Explore the project"
+    },
     work: {
       kicker: "Selected work",
       title: "Five working prototypes.",

@@ -36,6 +36,64 @@ test.describe("hero", () => {
     expect(html).not.toContain('data-reveal="hidden"');
   });
 
+  for (const [path, name, href, title] of [
+    ["/", /^New project\s*:\s*Raqmi\s*\./, "/projects/raqmi", "Raqmi"],
+    ["/ar", /^مشروع جديد\s*:\s*رقمي\s*\./, "/ar/projects/raqmi", "رقمي"]
+  ] as const) {
+    test(`a notice above the name opens Raqmi, by keyboard too: ${path}`, async ({ page }) => {
+      await page.goto(path);
+
+      const hero = page.locator("section[aria-labelledby='hero-title']");
+      // Named "New project: Raqmi. The model proposes…" — the hidden
+      // punctuation gives a screen reader its pauses.
+      const notice = hero.getByRole("link", { name });
+
+      // One link, part of the hero: no dialog, nothing to dismiss.
+      await expect(notice).toHaveCount(1);
+      await expect(notice).toBeVisible();
+      await expect(notice).toHaveAttribute("href", href);
+      await expect(page.getByRole("dialog")).toHaveCount(0);
+
+      const [noticeBox, titleBox] = await Promise.all([notice.boundingBox(), page.locator("#hero-title").boundingBox()]);
+
+      expect(noticeBox!.y + noticeBox!.height).toBeLessThan(titleBox!.y);
+
+      // It is the first stop in the page's content for a keyboard.
+      let presses = 0;
+
+      while (presses < 30 && !(await notice.evaluate((element) => element === document.activeElement))) {
+        await page.keyboard.press("Tab");
+        presses += 1;
+      }
+
+      await expect(notice).toBeFocused();
+      expect(await notice.evaluate((element) => element.matches(":focus-visible"))).toBe(true);
+      await page.keyboard.press("Enter");
+      // The case study is the longest page; give its navigation room under a busy run.
+      await expect(page).toHaveURL(new RegExp(`${href}$`), { timeout: 20_000 });
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(title);
+    });
+  }
+
+  test("the notice fits a 320px phone as a comfortable touch target, and holds still under reduced motion", async ({
+    page
+  }) => {
+    await page.setViewportSize({ width: 320, height: 700 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+
+    for (const path of ["/", "/ar"]) {
+      await page.goto(path);
+
+      const notice = page.locator(".ds-notice");
+      const box = (await notice.boundingBox())!;
+
+      expect(box.x, path).toBeGreaterThanOrEqual(0);
+      expect(box.x + box.width, path).toBeLessThanOrEqual(320);
+      expect(box.height, path).toBeGreaterThanOrEqual(44);
+      expect(await notice.evaluate((element) => getComputedStyle(element).animationName), path).toBe("none");
+    }
+  });
+
   test("the primary action and CV choice are reachable in two steps", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("link", { name: "Choose a CV" }).first().click();

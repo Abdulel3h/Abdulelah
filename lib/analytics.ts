@@ -11,6 +11,7 @@ import { track } from "@vercel/analytics";
 export type AnalyticsEvent =
   | "project_opened"
   | "evidence_opened"
+  | "announcement_opened"
   | "cv_downloaded"
   | "contact_submitted"
   | "email_copied"
