@@ -12,20 +12,6 @@ export type TimelineEvent = TimelineText & {
 
 const records: { year: string; en: TimelineText; ar: TimelineText }[] = [
   {
-    year: "2023",
-    en: {
-      title: "CITC Innovation Hackathon finalist",
-      description:
-        "Reached the final of a national innovation hackathon focused on digital solutions in Saudi Arabia.",
-      tags: ["Innovation", "Hackathon", "Digital solutions"]
-    },
-    ar: {
-      title: "التأهل لنهائي هاكاثون هيئة الاتصالات وتقنية المعلومات",
-      description: "بلغ المرحلة النهائية في هاكاثون وطني للابتكار يركز على الحلول الرقمية في المملكة.",
-      tags: ["الابتكار", "هاكاثون", "الحلول الرقمية"]
-    }
-  },
-  {
     year: "2024",
     en: {
       title: "Qanouni, Virtual Astronauts and AthkaU",

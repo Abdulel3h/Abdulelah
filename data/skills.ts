@@ -34,11 +34,7 @@ const records: { title: string; titleAr: string; skills: SkillRecord[] }[] = [
     title: "Cloud & Deployment",
     titleAr: "الحوسبة السحابية والنشر",
     skills: [
-      { name: "Azure AI Services", level: "Practical Experience" },
       { name: "Google Cloud Run", level: "Practical Experience" },
-      { name: "Vertex AI", level: "Practical Experience" },
-      { name: "BigQuery", level: "Practical Experience" },
-      { name: "Cloud Storage", level: "Practical Experience" },
       { name: "Model Deployment", ar: "نشر النماذج", level: "Familiar" },
       { name: "Cloud Architecture", ar: "البنية السحابية", level: "Practical Experience" }
     ]

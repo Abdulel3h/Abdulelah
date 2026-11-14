@@ -209,7 +209,7 @@ export const enCopy: SiteCopy = {
       { title: "Honest about limits", body: "I call a prototype a prototype, and a concept a concept." }
     ],
     pathKicker: "The path",
-    pathTitle: "From a first hackathon final to eight projects.",
+    pathTitle: "From first concepts to eight projects.",
     toolsKicker: "What I work with",
     toolsTitle: "The tools, when the work calls for them.",
     toolsCore: "Strongest",

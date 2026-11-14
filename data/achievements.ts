@@ -100,25 +100,6 @@ const records: AchievementRecord[] = [
       description: "مشارك مختار في مبادرة تركز على التسويق الرقمي والذكاء الاصطناعي وتحليل البيانات.",
       tags: ["التسويق الرقمي", "الذكاء الاصطناعي", "تحليل البيانات"]
     }
-  },
-  {
-    year: "2023",
-    en: {
-      title: "CITC Innovation Hackathon — Finalist",
-      organization: "Communications and Information Technology Commission",
-      outcome: "Reached the final round",
-      description:
-        "Reached the final of the Innovation Hackathon run by Saudi Arabia’s Communications and Information Technology Commission.",
-      tags: ["Innovation", "Pitching", "Digital solutions"]
-    },
-    ar: {
-      title: "هاكاثون الابتكار — التأهل للنهائي",
-      organization: "هيئة الاتصالات وتقنية المعلومات",
-      outcome: "بلغ المرحلة النهائية",
-      description:
-        "بلغ المرحلة النهائية في هاكاثون الابتكار الذي نظمته هيئة الاتصالات وتقنية المعلومات في المملكة.",
-      tags: ["الابتكار", "عرض الأفكار", "الحلول الرقمية"]
-    }
   }
 ];
 

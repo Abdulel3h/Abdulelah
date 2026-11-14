@@ -145,7 +145,7 @@ export const en = {
   achievements: {
     metaTitle: "Recognition",
     metaDescription:
-      "Where Abdulelah Alkhathami’s work has been tested — national hackathons, the SDAIA × Microsoft AthkaU Top 30 and a CITC innovation final."
+      "Where Abdulelah Alkhathami’s work has been tested — national hackathons and the SDAIA × Microsoft AthkaU Top 30."
   },
   skills: {
     metaTitle: "Skills",

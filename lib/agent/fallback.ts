@@ -426,7 +426,7 @@ function getArabicFallbackAgentResponse(message: string) {
       "من أبرز مهاراته:",
       "- Python وتكامل واجهات API",
       "- NLP و LLM Applications",
-      "- Cloud AI باستخدام Google Cloud و Azure AI Services",
+      "- تجهيز تطبيقات FastAPI للنشر على Google Cloud Run",
       "- AI Agents والبحث الذكي",
       "- تحليل البيانات ولوحات المعلومات",
       "",
@@ -646,7 +646,7 @@ export function getFallbackAgentResponse(
   }
 
   if (includesAny(normalized, ["qanouni", "legal", "labor rights"])) {
-    return `${projectSummary("qanouni")} Qanouni helps private sector employees understand labor rights and legal procedures through accessible AI guidance using Azure AI Services, NLP, model integration, and cloud deployment planning.`;
+    return `${projectSummary("qanouni")} Qanouni is a concept, not a built system: an advisor to help private-sector employees understand labour rights and legal procedures in plain language, planned around Azure AI language services.`;
   }
 
   if (includesAny(normalized, ["medad", "fintech", "financial inclusion", "banking"])) {
