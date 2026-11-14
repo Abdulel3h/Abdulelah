@@ -31,8 +31,7 @@ export const personJsonLd = {
     "Arabic Natural Language Processing",
     "Computer Vision",
     "Security Analytics",
-    "Google Cloud",
-    "Azure AI"
+    "Google Cloud"
   ]
 };
 

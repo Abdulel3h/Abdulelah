@@ -15,7 +15,7 @@ import { siteCopy } from "@/lib/i18n/experience";
 /**
  * About: personality and direction, not a CV. One line on who he is with the
  * facts as margin notes beside it, four short principles,
- * the path from 2023 to now on one line, the tools he reaches for first, and
+ * the path so far on one line, the tools he reaches for first, and
  * where to find him.
  */
 export function About({ locale }: { locale: Locale }) {

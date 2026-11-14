@@ -31,7 +31,6 @@ export const recruiterRoleProfiles: RecruiterRoleProfile[] = [
       "NLP",
       "LLM Applications",
       "Google Cloud",
-      "Azure AI Services",
       "Python",
       "API Integration"
     ],
@@ -48,7 +47,6 @@ export const recruiterRoleProfiles: RecruiterRoleProfile[] = [
       "AI-Driven Insights",
       "Dashboard Design",
       "Data Visualization",
-      "Azure AI Services",
       "Analytical Thinking",
       "Communication"
     ],
@@ -66,7 +64,6 @@ export const recruiterRoleProfiles: RecruiterRoleProfile[] = [
       "LLM Applications",
       "API Integration",
       "Cloud Architecture",
-      "Azure AI Services",
       "Problem Solving"
     ],
     recommendedCv: "engineer",
@@ -80,11 +77,10 @@ export const recruiterRoleProfiles: RecruiterRoleProfile[] = [
     projects: ["Althil", "Absher Insight AI", "Medad"],
     skills: [
       "Google Cloud Run",
-      "Vertex AI",
-      "BigQuery",
-      "Cloud Storage",
-      "Azure AI Services",
-      "SQL"
+      "Python",
+      "SQL",
+      "Dashboard Design",
+      "Data Visualization"
     ],
     recommendedCv: "engineer",
     nextAction: "Download the AI Engineer CV and start with the Althil case study."

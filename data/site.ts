@@ -43,7 +43,7 @@ export const siteConfig = {
     "Althil"
   ],
   social: {
-    linkedin: "https://www.linkedin.com/in/abdulelah-alkhathami-853845311",
+    linkedin: "https://www.linkedin.com/in/abdulelahalkhathami",
     github: "https://github.com/Abdulel3h"
   },
   assets: {
