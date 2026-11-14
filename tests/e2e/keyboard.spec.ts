@@ -141,7 +141,7 @@ test.describe("keyboard", () => {
         status: 200,
         contentType: "application/json",
         body: JSON.stringify({
-          answer: "Abdulelah is an AI product builder in Riyadh.",
+          answer: "Abdulelah is an Applied AI Engineer in Riyadh.",
           actions: [{ label: "View All Projects", href: "/projects", type: "internal" }],
           mode: "fallback",
           scopeJudgeAllowed: true,
@@ -155,7 +155,7 @@ test.describe("keyboard", () => {
     const cue = page.getByRole("button", { name: /Prefer the two-minute version/ });
 
     await cue.click();
-    await expect(page.getByText("Abdulelah is an AI product builder in Riyadh.")).toBeVisible();
+    await expect(page.getByText("Abdulelah is an Applied AI Engineer in Riyadh.")).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(cue).toBeFocused();
   });

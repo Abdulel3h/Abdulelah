@@ -90,7 +90,7 @@ export const enCopy: SiteCopy = {
     readOther: "اقرأ بالعربية"
   },
   home: {
-    kicker: "AI product builder · Riyadh",
+    kicker: "Applied AI engineer · Riyadh",
     statement: {
       before: "I turn",
       gloss1: "AI",

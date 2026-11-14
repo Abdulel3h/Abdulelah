@@ -20,13 +20,13 @@ const shareImages: Record<Locale, { url: string; width: number; height: number; 
     url: absoluteUrl(siteConfig.assets.shareImages.en),
     width: 1200,
     height: 630,
-    alt: "Abdulelah Alkhathami — AI product builder in Riyadh: I turn AI into products people understand."
+    alt: "Abdulelah Alkhathami — Applied AI Engineer in Riyadh: I turn AI into products people understand."
   },
   ar: {
     url: absoluteUrl(siteConfig.assets.shareImages.ar),
     width: 1200,
     height: 630,
-    alt: "عبدالإله الخثعمي — مطوّر منتجات ذكاء اصطناعي في الرياض: أحوّل الذكاء الاصطناعي إلى منتجات يفهمها الناس."
+    alt: "عبدالإله الخثعمي — مهندس ذكاء اصطناعي تطبيقي في الرياض: أحوّل الذكاء الاصطناعي إلى منتجات يفهمها الناس."
   }
 };
 

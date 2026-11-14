@@ -6,7 +6,7 @@ test.describe("English and Arabic", () => {
     await expect(page.locator("html")).toHaveAttribute("lang", "ar");
     await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("عبدالإله");
-    await expect(page).toHaveTitle("عبدالإله الخثعمي — مطوّر منتجات الذكاء الاصطناعي");
+    await expect(page).toHaveTitle("عبدالإله الخثعمي — مهندس ذكاء اصطناعي تطبيقي");
   });
 
   test("English pages are left-to-right and mark embedded Arabic correctly", async ({ page }) => {

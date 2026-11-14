@@ -102,7 +102,7 @@ export const arCopy = {
     readOther: "Read in English"
   },
   home: {
-    kicker: "مطوّر منتجات ذكاء اصطناعي · الرياض",
+    kicker: "مهندس ذكاء اصطناعي تطبيقي · الرياض",
     statement: {
       before: "أحوّل",
       gloss1: "الذكاء الاصطناعي",

@@ -24,6 +24,8 @@ Every case study states what is **not claimed** (deployment, users, accuracy). N
 
 Verification sources used for the September 2026 audit: the public READMEs of `Abdulel3h/ChatUB`, `Abdulel3h/absher-insight` and `Abdulel3h/Stadium` (each states "Status: prototype"), `data/achievements.ts` for program records, and the Althil code, which shows a FastAPI backend containerised for Cloud Run with sun-position, heat and site-image analysis. The BigQuery, Cloud Storage and Vertex AI parts of the Althil design are not in the code and are described as design only.
 
+November 2026, AthkaU date: SDAIA's training completion certificate ("The Preparatory Program for the Athka U Competition") states the period 28 October – 7 November 2024, so the program and the two concepts stay under 2024. No dated document for the Top 30 announcement exists in the repository; do not move the entry to another year without one.
+
 October 2026: Althil was published as `Abdulel3h/Althil` (README states "Status: hackathon prototype" and lists every simulated input), so its evidence type is now a public repository.
 
 ## Terminology
@@ -31,7 +33,7 @@ October 2026: Althil was published as `Abdulel3h/Althil` (README states "Status:
 - **Resume** names the page and its navigation item. **CV** names the two downloadable documents: *AI Engineer CV* and *AI Specialist CV*. "Résumé" is not used.
 - **Abdulelah's guide** / **دليل عبدالإله** is the AI assistant; its launcher reads **Ask Abdulelah** / **اسأل عبدالإله**.
 - **Notes** / **ملاحظات** is the blog; its URL stays `/blog`.
-- Positioning line: **AI Product Builder · Agents, RAG & Arabic AI**.
+- Positioning line: **Applied AI Engineer · Arabic-first LLM applications & AI agents**.
 - Availability: **Open to AI engineering roles & collaborations**.
 
 ## Arabic

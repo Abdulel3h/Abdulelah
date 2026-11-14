@@ -71,7 +71,7 @@ const records: AchievementRecord[] = [
       organization: "SDAIA × Microsoft",
       outcome: "Top 30 of 80+ teams nationwide",
       description:
-        "Completed the qualifying training program and reached the Top 30 of 80+ teams across Saudi Arabia with two AI ideas: Qanouni and Virtual Astronauts.",
+        "Completed the qualifying training program and, with his team, reached the Top 30 of 80+ teams across Saudi Arabia with two AI ideas: Qanouni and Virtual Astronauts.",
       tags: ["AI", "Innovation", "Microsoft ecosystem"]
     },
     ar: {

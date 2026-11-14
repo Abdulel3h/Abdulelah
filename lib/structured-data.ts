@@ -13,7 +13,7 @@ export const personJsonLd = {
   alternateName: [siteConfig.arabicName, "Abdulelah Ali Alkhathami"],
   url: siteConfig.url,
   email: `mailto:${siteConfig.email}`,
-  jobTitle: ["AI Product Builder", "AI Engineer", "AI Solutions Specialist"],
+  jobTitle: "Applied AI Engineer",
   address: {
     "@type": "PostalAddress",
     addressLocality: "Riyadh",

@@ -36,7 +36,7 @@ const records: { title: string; titleAr: string; skills: SkillRecord[] }[] = [
     skills: [
       { name: "Google Cloud Run", level: "Practical Experience" },
       { name: "Model Deployment", ar: "نشر النماذج", level: "Familiar" },
-      { name: "Cloud Architecture", ar: "البنية السحابية", level: "Practical Experience" }
+      { name: "Docker", level: "Practical Experience" }
     ]
   },
   {

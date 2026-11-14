@@ -232,10 +232,10 @@ export function getPortfolioTourResponse() {
   return [
     "60-second portfolio tour",
     "",
-    "1. Who Abdulelah is: an AI product builder in Riyadh — agents, RAG and Arabic AI — and an Information Systems graduate of the University of Bisha.",
+    "1. Who Abdulelah is: an Applied AI Engineer in Riyadh — Arabic-first LLM applications and AI agents — and an Information Systems graduate of the University of Bisha.",
     "2. Raqmi (SDAIA Academy LLM Application Engineering capstone): bilingual retail support for a fictional store where the model proposes a tool call and application code decides whether it runs. In one captured evaluation it passed 51 of 56 Golden Set cases on both DeepSeek and ALLaM, and a live cross-user lookup was denied by authorization. Public code; fictional data, not deployed.",
     "3. ChatUB (graduation project he led): a working prototype that answers Arabic academic questions from curated FAQ content with a locally served model. Public code; not deployed to students.",
-    "4. Althil (team hackathon prototype, KFUPM x Google Cloud): shade-planning decision support from sun position and heat scoring, served by one FastAPI app packaged for Cloud Run. Abdulelah worked on the backend, cloud architecture and integration. Public code; not used by a city.",
+    "4. Althil (team hackathon prototype, KFUPM x Google Cloud): shade-planning decision support from sun position and heat scoring, served by one FastAPI app packaged for Cloud Run. Abdulelah worked on the backend, Cloud Run packaging and integration. Public code; not used by a city.",
     "5. Stadium (solo build): a working computer-vision prototype that monitors gate crowding and recommends staff moves. Public code; not calibrated for a real venue.",
     "6. Absher Insight AI (hackathon prototype): explainable, rule-based risk flags on synthetic data with an operations dashboard. Public code; not affiliated with Absher.",
     "7. Also: three concepts — Qanouni, Virtual Astronauts (both AthkaU Top 30 ideas) and Medad.",

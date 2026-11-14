@@ -57,13 +57,13 @@ export const recruiterRoleProfiles: RecruiterRoleProfile[] = [
     id: "ai-solutions-engineer",
     label: "AI Solutions Engineer",
     fitSummary:
-      "Abdulelah is a promising AI solutions engineering candidate because his portfolio combines working AI prototypes with cloud architecture, product framing, and explainable user-facing experiences.",
+      "Abdulelah is a promising AI solutions engineering candidate because his portfolio combines working AI prototypes with a containerised backend packaged for Cloud Run, product framing, and explainable user-facing experiences.",
     projects: ["ChatUB", "Absher Insight AI", "Althil"],
     skills: [
       "NLP",
       "LLM Applications",
       "API Integration",
-      "Cloud Architecture",
+      "Google Cloud Run",
       "Problem Solving"
     ],
     recommendedCv: "engineer",
@@ -111,7 +111,7 @@ export const recruiterRoleProfiles: RecruiterRoleProfile[] = [
     skills: [
       "NLP",
       "LLM Applications",
-      "Cloud Architecture",
+      "Google Cloud Run",
       "Dashboard Design",
       "Problem Solving",
       "Communication"
