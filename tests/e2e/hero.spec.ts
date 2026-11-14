@@ -10,7 +10,7 @@ test.describe("hero", () => {
     const hero = page.locator("section[aria-labelledby='hero-title']");
 
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Abdulelah");
-    await expect(hero.getByText("AI product builder · Riyadh")).toBeVisible();
+    await expect(hero.getByText("Applied AI engineer · Riyadh")).toBeVisible();
     await expect(hero.getByText(/I turn/)).toBeVisible();
     await expect(hero.getByRole("link", { name: "View selected work" })).toBeVisible();
     // The margin notes carry the evidence behind the statement.

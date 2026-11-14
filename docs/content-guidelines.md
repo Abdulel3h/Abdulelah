@@ -31,7 +31,7 @@ October 2026: Althil was published as `Abdulel3h/Althil` (README states "Status:
 - **Resume** names the page and its navigation item. **CV** names the two downloadable documents: *AI Engineer CV* and *AI Specialist CV*. "Résumé" is not used.
 - **Abdulelah's guide** / **دليل عبدالإله** is the AI assistant; its launcher reads **Ask Abdulelah** / **اسأل عبدالإله**.
 - **Notes** / **ملاحظات** is the blog; its URL stays `/blog`.
-- Positioning line: **AI Product Builder · Agents, RAG & Arabic AI**.
+- Positioning line: **Applied AI Engineer · Arabic-first LLM applications & AI agents**.
 - Availability: **Open to AI engineering roles & collaborations**.
 
 ## Arabic

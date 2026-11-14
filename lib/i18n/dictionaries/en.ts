@@ -86,9 +86,9 @@ export const en = {
     conceptVisualizationNote: "Illustrative sketch of the idea — not a product screenshot."
   },
   home: {
-    metaTitle: "Abdulelah Alkhathami — AI Product Builder · Agents, RAG & Arabic AI",
+    metaTitle: "Abdulelah Alkhathami — Applied AI Engineer · Arabic-first LLM apps & AI agents",
     metaDescription:
-      "Abdulelah Alkhathami is an AI product builder in Riyadh — agents, RAG and Arabic AI. Explore eight applied AI projects, the evidence behind each, and two role-specific CVs."
+      "Abdulelah Alkhathami is an Applied AI Engineer in Riyadh — Arabic-first LLM applications and AI agents. Explore eight applied AI projects, the evidence behind each, and two role-specific CVs."
   },
   projectsPage: {
     metaTitle: "Projects",
@@ -101,7 +101,7 @@ export const en = {
   about: {
     metaTitle: "About",
     metaDescription:
-      "Abdulelah Alkhathami is an AI product builder from Riyadh — how he thinks, how he works, and the path from his first hackathon to eight applied AI projects.",
+      "Abdulelah Alkhathami is an Applied AI Engineer from Riyadh — how he thinks, how he works, and the path from his first hackathon to eight applied AI projects.",
     cueTitle: "Prefer the two-minute version?",
     cueBody: "Ask the guide how Abdulelah thinks, what he cares about and where he’s strongest.",
     cuePrompt: "Give me the two-minute overview of who Abdulelah is, how he thinks, and where he’s strongest.",
@@ -112,7 +112,7 @@ export const en = {
     metaDescription:
       "Abdulelah Alkhathami at a glance — focus, education, evidence and recognition — plus two role-specific CVs to download.",
     glance: [
-      { label: "Now", value: "AI product builder — agents, RAG and Arabic AI" },
+      { label: "Now", value: "Applied AI Engineer — Arabic-first LLM applications and AI agents" },
       { label: "Looking for", value: "AI engineering roles and applied-AI collaborations" },
       { label: "Education", value: "Information Systems — University of Bisha, 2026" },
       { label: "Based in", value: "Riyadh, Saudi Arabia" },

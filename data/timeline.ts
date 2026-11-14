@@ -16,7 +16,7 @@ const records: { year: string; en: TimelineText; ar: TimelineText }[] = [
     en: {
       title: "Qanouni, Virtual Astronauts and AthkaU",
       description:
-        "Developed the Qanouni and Virtual Astronauts concepts in SDAIA × Microsoft’s AthkaU program and reached the Top 30 of 80+ teams.",
+        "Developed the Qanouni and Virtual Astronauts concepts in SDAIA × Microsoft’s AthkaU program and reached the Top 30 of 80+ teams with his team.",
       tags: ["Legal tech", "VR", "SDAIA × Microsoft", "Top 30"]
     },
     ar: {

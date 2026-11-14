@@ -34,7 +34,7 @@ const images = {
       .name { font-family: Fraunces, serif; font-size: 116px; font-weight: 500; line-height: .98; letter-spacing: -.025em; }
       .line { font-family: Fraunces, serif; font-size: 42px; font-weight: 400; line-height: 1.25; letter-spacing: -.01em; }
     `,
-    kicker: "AI product builder · Riyadh",
+    kicker: "Applied AI engineer · Riyadh",
     first: "Abdulelah",
     last: "Alkhathami",
     line: "I turn AI into products people understand.",
@@ -55,7 +55,7 @@ const images = {
       .name { font-size: 112px; font-weight: 700; line-height: 1.16; }
       .line { font-size: 38px; font-weight: 500; line-height: 1.6; }
     `,
-    kicker: "مطوّر منتجات ذكاء اصطناعي · الرياض",
+    kicker: "مهندس ذكاء اصطناعي تطبيقي · الرياض",
     first: "عبدالإله",
     last: "الخثعمي",
     line: "أحوّل الذكاء الاصطناعي إلى منتجات يفهمها الناس.",

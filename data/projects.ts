@@ -927,7 +927,7 @@ const records: ProjectRecord[] = [
       summary:
         "A decision-support prototype that helps urban planners decide where shade interventions belong, from sun position, a heat-exposure score and site-photo analysis.",
       domain: "Sustainability · Urban planning",
-      role: "Backend developer & cloud architecture contributor",
+      role: "Backend developer · FastAPI service and Cloud Run packaging",
       statusDetail:
         "Built with a team during the Intelligent Planet Hackathon (KFUPM × Google Cloud). A hackathon prototype with public code — not used by a city.",
       context:
@@ -936,7 +936,7 @@ const records: ProjectRecord[] = [
         "Urban planners need to know where shade canopies will actually improve comfort. Heat exposure shifts with the sun’s path across the day and the year, which static plans rarely account for.",
       constraints: [
         "Hackathon time limit",
-        "A team build — Abdulelah’s part was the backend, the cloud architecture and the service integration",
+        "A team build — Abdulelah’s part was the backend, the Cloud Run packaging and the service integration",
         "No land-cover data, so urban density is simulated",
         "One container, deployable to Cloud Run"
       ],
@@ -1002,7 +1002,7 @@ const records: ProjectRecord[] = [
       summary:
         "نموذج أولي لدعم القرار يساعد المخططين الحضريين على تحديد مواضع التظليل، انطلاقًا من موقع الشمس ودرجة التعرض للحرارة وتحليل صور الموقع.",
       domain: "الاستدامة · التخطيط الحضري",
-      role: "مطوّر أنظمة خلفية ومساهم في البنية السحابية",
+      role: "مطوّر أنظمة خلفية · خدمة FastAPI وتجهيزها لـ Cloud Run",
       statusDetail:
         "بُني ضمن فريق خلال هاكاثون الكوكب الذكي (جامعة الملك فهد للبترول والمعادن مع Google Cloud). نموذج أولي في هاكاثون بكود منشور — لا تستخدمه أي مدينة.",
       context:
@@ -1011,7 +1011,7 @@ const records: ProjectRecord[] = [
         "يحتاج المخططون الحضريون إلى معرفة أين يحسّن التظليل الراحة فعلًا. فالتعرض للحرارة يتغير مع مسار الشمس خلال اليوم والسنة، وهو ما نادرًا ما تراعيه المخططات الثابتة.",
       constraints: [
         "المدة المحدودة للهاكاثون",
-        "عمل جماعي — تولّى عبدالإله الأنظمة الخلفية والبنية السحابية ودمج الخدمات",
+        "عمل جماعي — تولّى عبدالإله الأنظمة الخلفية وتجهيز التطبيق لـ Cloud Run ودمج الخدمات",
         "لا توجد بيانات لاستخدامات الأراضي، لذلك تُحاكى الكثافة العمرانية",
         "حاوية واحدة قابلة للنشر على Cloud Run"
       ],

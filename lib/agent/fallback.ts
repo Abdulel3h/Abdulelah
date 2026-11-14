@@ -435,7 +435,7 @@ function getArabicFallbackAgentResponse(message: string) {
   }
 
   return [
-    "عبدالإله الخثعمي مطوّر منتجات ذكاء اصطناعي في الرياض، وخريج نظم المعلومات من جامعة بيشة.",
+    "عبدالإله الخثعمي مهندس ذكاء اصطناعي تطبيقي في الرياض، وخريج نظم المعلومات من جامعة بيشة.",
     "",
     `في أعماله ${projectCounts.total} مشاريع تطبيقية: ${projectCounts.prototypes} نماذج أولية عاملة (${projectCounts.publicRepositories} منها بكود منشور) و${projectCounts.concepts} تصوّرات.`,
     "- Raqmi (رقمي): دعم عملاء بلغتين، النموذج يقترح والنظام يقرّر (مشروع ختامي في أكاديمية سدايا)",
@@ -622,7 +622,7 @@ export function getFallbackAgentResponse(
       "sustainability"
     ])
   ) {
-    return `${projectSummary("althil")} It is a hackathon prototype built with a team at the KFUPM x Google Cloud Intelligent Planet Hackathon, with public code: sun-position and heat scoring, site-photo analysis with OpenCV and shade recommendations, served by one FastAPI app packaged for Cloud Run. Abdulelah worked on the backend, the cloud architecture and the service integration. Urban density is simulated, and BigQuery, Cloud Storage and Vertex AI stayed in the design rather than the code.`;
+    return `${projectSummary("althil")} It is a hackathon prototype built with a team at the KFUPM x Google Cloud Intelligent Planet Hackathon, with public code: sun-position and heat scoring, site-photo analysis with OpenCV and shade recommendations, served by one FastAPI app packaged for Cloud Run. Abdulelah worked on the backend, the Cloud Run packaging and the service integration. Urban density is simulated, and BigQuery, Cloud Storage and Vertex AI stayed in the design rather than the code.`;
   }
 
   if (includesAny(normalized, ["absher", "security", "ueba", "risk"])) {
@@ -685,8 +685,8 @@ export function getFallbackAgentResponse(
   }
 
   if (includesAny(normalized, ["30 seconds", "quick summary", "summarize", "summary", "who is"])) {
-    return "Abdulelah Alkhathami is an AI product builder in Riyadh — agents, RAG and Arabic AI — and an Information Systems graduate of the University of Bisha. His portfolio has eight applied AI projects: five working prototypes, all with public code (Raqmi, ChatUB, Althil, Absher Insight AI and Stadium), and three concepts. He reached the Top 30 of SDAIA x Microsoft's AthkaU and has built prototypes at national hackathons, including KFUPM x Google Cloud and Absher x Tuwaiq.";
+    return "Abdulelah Alkhathami is an Applied AI Engineer in Riyadh — Arabic-first LLM applications and AI agents — and an Information Systems graduate of the University of Bisha. His portfolio has eight applied AI projects: five working prototypes, all with public code (Raqmi, ChatUB, Althil, Absher Insight AI and Stadium), and three concepts. He reached the Top 30 of SDAIA x Microsoft's AthkaU with his team and has built prototypes at national hackathons, including KFUPM x Google Cloud and Absher x Tuwaiq.";
   }
 
-  return "Abdulelah Alkhathami is an AI product builder focused on practical, context-aware AI. His portfolio spans eight applied projects across retail support, education, security, computer vision, sustainability, legal tech, fintech and immersive learning — five working prototypes and three concepts. A strong starting point is Raqmi, ChatUB, Althil, Stadium and Absher Insight AI (all with public code), followed by the resume page for the two role-specific CVs.";
+  return "Abdulelah Alkhathami is an Applied AI Engineer focused on practical, context-aware AI. His portfolio spans eight applied projects across retail support, education, security, computer vision, sustainability, legal tech, fintech and immersive learning — five working prototypes and three concepts. A strong starting point is Raqmi, ChatUB, Althil, Stadium and Absher Insight AI (all with public code), followed by the resume page for the two role-specific CVs.";
 }
