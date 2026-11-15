@@ -10,9 +10,10 @@ test.describe("hero", () => {
     const hero = page.locator("section[aria-labelledby='hero-title']");
 
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Abdulelah");
-    await expect(hero.getByText("Applied AI engineer · Riyadh")).toBeVisible();
+    await expect(hero.getByText("Applied AI Engineer · Arabic-first LLM applications & AI agents")).toBeVisible();
     await expect(hero.getByText(/I turn/)).toBeVisible();
-    await expect(hero.getByRole("link", { name: "View selected work" })).toBeVisible();
+    // Without JavaScript the shell's chips are plain links.
+    await expect(hero.getByRole("link", { name: "Selected work", exact: true })).toHaveAttribute("href", "#work");
     // The margin notes carry the evidence behind the statement.
     await expect(hero.getByRole("list", { name: "Margin notes" })).toContainText("5 with public code");
     await expect(hero.getByRole("list", { name: "On this page" }).getByRole("listitem")).toHaveCount(5);
@@ -94,13 +95,24 @@ test.describe("hero", () => {
     }
   });
 
-  test("the primary action and CV choice are reachable in two steps", async ({ page }) => {
+  test("the CV choice is reachable in two steps from the opening", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("link", { name: "Choose a CV" }).first().click();
-    await expect(page).toHaveURL(/\/resume$/);
-    await expect(page.getByRole("link", { name: /Download the Engineer CV/ })).toHaveAttribute(
+
+    const hero = page.locator("section[aria-labelledby='hero-title']");
+
+    // The Resume chip runs `cv` in the shell: both files, one press away.
+    await hero.getByRole("link", { name: "Resume", exact: true }).click();
+
+    const log = hero.getByRole("log", { name: "Terminal output" });
+
+    await expect(log.getByRole("link", { name: /AI Engineer CV/ })).toHaveAttribute(
       "href",
       "/resume/Abdulelah_AI_Engineer_CV.pdf"
     );
+    await expect(log.getByRole("link", { name: /AI Specialist CV/ })).toHaveAttribute(
+      "href",
+      "/resume/Abdulelah_AI_Specialist_CV.pdf"
+    );
+    await expect(page).toHaveURL(/\/$/);
   });
 });

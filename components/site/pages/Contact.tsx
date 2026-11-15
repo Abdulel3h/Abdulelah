@@ -24,30 +24,39 @@ export function Contact({ locale }: { locale: Locale }) {
 
   return (
     <>
-      <PageHead id="contact-title" kicker={copy.kicker} title={copy.title} lede={copy.lede} />
+      <PageHead id="contact-title" path="~/contact" kicker={copy.kicker} title={copy.title} lede={copy.lede} />
 
       <section
         aria-label={copy.kicker}
         className="ds-shell grid gap-16 pb-[var(--ds-section)] pt-14 lg:grid-cols-12 lg:gap-14 lg:pt-20"
       >
         <div className="lg:col-span-5">
-          <h2 className="ds-label">{copy.direct}</h2>
-          <a
-            href={`mailto:${siteConfig.email}`}
-            className="ds-link focus-ring mt-3 inline-block rounded text-[clamp(1.7rem,1.25rem+2vw,2.6rem)] font-medium text-paper"
-          >
-            <Ltr>{siteConfig.email}</Ltr>
-          </a>
-          <div className="mt-5">
-            <CopyEmailButton
-              email={siteConfig.email}
-              labels={{
-                copy: dict.common.copy,
-                copied: dict.common.copied,
-                failed: dict.common.copyFailed,
-                aria: dict.common.copyEmail
-              }}
-            />
+          {/* The direct line, as the command it is: the fastest way in. */}
+          <div className="sh-window">
+            <p className="sh-window-bar" aria-hidden="true" dir="ltr">
+              <span className="sh-ps">~ $</span>
+              <span>mail {siteConfig.email}</span>
+            </p>
+            <div className="p-5 sm:p-6">
+              <h2 className="ds-label">{copy.direct}</h2>
+              <a
+                href={`mailto:${siteConfig.email}`}
+                className="ds-link focus-ring mt-3 inline-block rounded text-[clamp(1.6rem,1.2rem+1.8vw,2.4rem)] font-medium text-paper"
+              >
+                <Ltr>{siteConfig.email}</Ltr>
+              </a>
+              <div className="mt-5">
+                <CopyEmailButton
+                  email={siteConfig.email}
+                  labels={{
+                    copy: dict.common.copy,
+                    copied: dict.common.copied,
+                    failed: dict.common.copyFailed,
+                    aria: dict.common.copyEmail
+                  }}
+                />
+              </div>
+            </div>
           </div>
 
           <h2 className="ds-label mt-14">{copy.elsewhere}</h2>
@@ -92,11 +101,17 @@ export function Contact({ locale }: { locale: Locale }) {
           </div>
         </div>
 
-        <div id="contact-form" className="scroll-mt-28 lg:col-span-7">
-          <h2 className="ds-title text-[1.35rem]">{copy.formTitle}</h2>
-          <p className="ds-micro mt-1 text-paper-faint">{dict.contact.form.requiredHint}</p>
-          <div className="mt-7">
-            <ContactForm copy={dict.contact.form} locale={locale} email={siteConfig.email} />
+        <div id="contact-form" className="sh-window scroll-mt-28 lg:col-span-7">
+          <p className="sh-window-bar" aria-hidden="true" dir="ltr">
+            <span className="sh-ps">~ $</span>
+            <span>compose --to me</span>
+          </p>
+          <div className="p-5 sm:p-7">
+            <h2 className="ds-title text-[1.35rem]">{copy.formTitle}</h2>
+            <p className="ds-micro mt-1 text-paper-faint">{dict.contact.form.requiredHint}</p>
+            <div className="mt-7">
+              <ContactForm copy={dict.contact.form} locale={locale} email={siteConfig.email} />
+            </div>
           </div>
         </div>
       </section>

@@ -89,6 +89,54 @@ export const enCopy: SiteCopy = {
     elsewhere: "Elsewhere",
     readOther: "اقرأ بالعربية"
   },
+  shell: {
+    role: "Applied AI Engineer · Arabic-first LLM applications & AI agents",
+    inputLabel: "Type a command",
+    placeholder: "type a command, or help",
+    run: "Run",
+    logLabel: "Terminal output",
+    chipsLabel: "Quick commands",
+    hint: "↑↓ history · Tab completes",
+    chips: {
+      work: "Selected work",
+      raqmi: "Raqmi",
+      about: "About",
+      resume: "Resume",
+      contact: "Contact",
+      ask: "Ask the guide"
+    },
+    helpTitle: "Commands",
+    help: {
+      whoami: "who I am",
+      projects: "every project and its status",
+      open: "open a case study, e.g. open raqmi",
+      work: "jump to the selected work",
+      about: "how I think",
+      skills: "what I build with",
+      recognition: "where the work was tested",
+      cv: "the two CVs",
+      contact: "how to reach me",
+      ask: "ask my guide, e.g. ask what is Raqmi?",
+      lang: "اقرأ بالعربية",
+      clear: "clear the screen"
+    },
+    notFound: "command not found: {cmd}. Type help for the list.",
+    openUsage: "Name a project after open, e.g. open raqmi",
+    openNotFound: "No project called “{name}”. Type projects.",
+    opening: "Opening {path}…",
+    jumping: "Jumping to the selected work…",
+    projectsSummary: "{total} projects · {working} working, with public code · {concepts} concepts",
+    projectsHint: "Open any of them: open <name>",
+    skillsCore: "Strongest",
+    skillsPractical: "Used in projects",
+    cvLine: "Two versions. Pick the one that fits the role.",
+    contactLine: "I reply to every message personally.",
+    asking: "Opening the guide with your question…",
+    askUsage: "Put your question after ask, e.g. ask what is Raqmi?",
+    sudo: "Proposal noted. The decision stays with a human: write to me.",
+    switching: "Switching to Arabic…",
+    more: "More"
+  },
   home: {
     kicker: "Applied AI engineer · Riyadh",
     statement: {
@@ -245,7 +293,17 @@ export const enCopy: SiteCopy = {
     title: "What I build with — and how far.",
     lede: "No bars, no percentages. An honest read: where I’m strongest, what I’ve actually used, and what I’m still learning.",
     closing: "Skills show in the work.",
-    closingCta: "See the projects"
+    closingCta: "See the projects",
+    filterLabel: "Show level",
+    filterAll: "All",
+    stackKicker: "In the code",
+    stackTitle: "What the five working projects are built with.",
+    stackNote: "Read from each project’s listed technologies. Concepts are left out.",
+    stackLabel: "Technologies by project",
+    stackTech: "Technology",
+    usedIn: "{n} of {total}",
+    used: "Used",
+    unused: "Not used"
   },
   achievements: {
     kicker: "Recognition",

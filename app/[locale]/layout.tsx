@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Fraunces, Geist_Mono, Inter } from "next/font/google";
 import type { ReactNode } from "react";
 import { preload } from "react-dom";
 import { Analytics } from "@vercel/analytics/next";
@@ -25,6 +25,7 @@ import { buildSearchIndex } from "@/lib/search-index";
 import { personJsonLd, websiteJsonLd } from "@/lib/structured-data";
 import "../globals.css";
 import "../site.css";
+import "../shell.css";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -49,6 +50,18 @@ const frauncesItalic = Fraunces({
   style: ["italic"],
   preload: false,
   variable: "--font-fraunces-italic"
+});
+
+// The system voice: commands, paths, labels and metadata. The same mono as the
+// GitHub profile's Signature Terminal, so both read as one system. Latin only;
+// Arabic system text stays in Thmanyah. Not preloaded, so it never competes
+// with the name's face (the page's largest paint) for bandwidth; next/font's
+// metric-matched fallback keeps the short swap from moving anything.
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  preload: false,
+  variable: "--font-mono"
 });
 
 // Only emitted on Vercel, where /_vercel/insights exists. Elsewhere (local
@@ -135,7 +148,7 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       dir={getDirection(locale)}
-      className={`dark ${inter.variable} ${fraunces.variable} ${frauncesItalic.variable}`}
+      className={`dark ${inter.variable} ${fraunces.variable} ${frauncesItalic.variable} ${geistMono.variable}`}
       data-scroll-behavior="smooth"
     >
       <body>

@@ -6,7 +6,7 @@ import { TrackedLink } from "@/components/analytics/TrackedLink";
 import { PipelineStage } from "@/components/motion/PipelineStage";
 import { StatusBadge } from "@/components/projects/ProjectMeta";
 import { mixer } from "@/components/site/mixed";
-import { directional, Latin, Ltr, pad, ProjectName, tintStyle } from "@/components/site/primitives";
+import { directional, Kicker, Latin, Ltr, pad, ProjectName, tintStyle } from "@/components/site/primitives";
 import { tintOf } from "@/components/site/tints";
 import { Pipeline } from "@/components/site/work/Pipeline";
 import {
@@ -96,9 +96,9 @@ export function CaseStudy({ project, locale }: { project: LocalizedProject; loca
 
       <header className="ds-shell grid gap-10 pt-8 lg:grid-cols-12 lg:gap-14 lg:pt-12">
         <div className="lg:col-span-7">
-          <p className="ds-kicker">
+          <Kicker path={`~/projects/${project.slug}`}>
             {project.domain} · <span className="ds-num">{project.year}</span>
-          </p>
+          </Kicker>
           <h1 id="project-title" className="mt-5 text-[clamp(3.2rem,2rem+5.4vw,7rem)] leading-[1.02] text-paper">
             <ProjectName className="ds-name" name={project.name} />
           </h1>
@@ -114,30 +114,37 @@ export function CaseStudy({ project, locale }: { project: LocalizedProject; loca
         </div>
 
         <div className="lg:col-span-5 lg:pt-6">
-          <dl className="grid grid-cols-2 gap-x-6 gap-y-6 border-t border-white/[0.1] pt-6">
-            <div className="col-span-2">
-              <dt className="ds-label">{work.role}</dt>
-              <dd className="ds-text mt-1.5 text-[1.02rem] text-paper">{mix(project.role)}</dd>
-            </div>
-            <div>
-              <dt className="ds-label">{work.status}</dt>
-              <dd className="mt-2">
-                <StatusBadge status={project.status} label={dict.status[project.status]} />
-              </dd>
-            </div>
-            <div>
-              <dt className="ds-label">{copy.year}</dt>
-              <dd className="mt-1.5 text-[1.02rem] text-paper">
-                <span className="ds-num">{project.year}</span>
-              </dd>
-            </div>
-            <div className="col-span-2">
-              <dt className="ds-label">{copy.code}</dt>
-              <dd className="mt-1.5 break-words text-[1.02rem] text-paper">
-                {project.links.github ? <Ltr>{project.links.github.replace("https://", "")}</Ltr> : work.noCode}
-              </dd>
-            </div>
-          </dl>
+          {/* The facts, printed by the system voice: what a reviewer checks first. */}
+          <div className="sh-window">
+            <p className="sh-window-bar" aria-hidden="true" dir="ltr">
+              <span className="sh-ps">~ $</span>
+              <span>cat ~/projects/{project.slug}/facts</span>
+            </p>
+            <dl className="grid grid-cols-2 gap-x-6 gap-y-6 p-5 sm:p-6">
+              <div className="col-span-2">
+                <dt className="ds-label">{work.role}</dt>
+                <dd className="ds-text mt-1.5 text-[1.02rem] text-paper">{mix(project.role)}</dd>
+              </div>
+              <div>
+                <dt className="ds-label">{work.status}</dt>
+                <dd className="mt-2">
+                  <StatusBadge status={project.status} label={dict.status[project.status]} />
+                </dd>
+              </div>
+              <div>
+                <dt className="ds-label">{copy.year}</dt>
+                <dd className="mt-1.5 text-[1.02rem] text-paper">
+                  <span className="ds-num">{project.year}</span>
+                </dd>
+              </div>
+              <div className="col-span-2">
+                <dt className="ds-label">{copy.code}</dt>
+                <dd className="mt-1.5 break-words text-[1.02rem] text-paper">
+                  {project.links.github ? <Ltr>{project.links.github.replace("https://", "")}</Ltr> : work.noCode}
+                </dd>
+              </div>
+            </dl>
+          </div>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             {project.links.github ? (

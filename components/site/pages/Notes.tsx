@@ -47,7 +47,7 @@ export function Notes({ locale }: { locale: Locale }) {
 
   return (
     <>
-      <PageHead id="notes-title" kicker={copy.kicker} title={copy.title} lede={copy.lede} />
+      <PageHead id="notes-title" path="~/notes" kicker={copy.kicker} title={copy.title} lede={copy.lede} />
 
       <section aria-labelledby="notes-featured" className="ds-shell pt-14 lg:pt-20">
         <h2 id="notes-featured" className="ds-label">

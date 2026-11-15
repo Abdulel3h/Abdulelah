@@ -24,7 +24,7 @@ export function Milestones({ locale }: { locale: Locale }) {
     <section aria-labelledby="milestones-title" className="ds-section border-t border-white/[0.08]">
       <div className="ds-shell">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <SectionHead id="milestones-title" kicker={copy.kicker} title={copy.title} />
+          <SectionHead id="milestones-title" path="~/milestones" kicker={copy.kicker} title={copy.title} />
           <Link
             href={localizeHref("/achievements", locale)}
             className="focus-ring group inline-flex min-h-11 items-center gap-2 self-start rounded text-[1.02rem] font-medium text-paper transition-colors hover:text-accent-soft md:self-auto"
