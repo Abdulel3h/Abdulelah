@@ -73,7 +73,10 @@ const securityHeaders = [
           value: "max-age=31536000; includeSubDomains"
         }
       ]
-    : [])
+    : []),
+  // Preview deployments render on their *.vercel.app address (see proxy.ts),
+  // so they must never be indexed.
+  ...(process.env.VERCEL_ENV === "preview" ? [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] : [])
 ];
 
 // Belt and braces on top of the signed-grant check: even if a private URL is

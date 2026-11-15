@@ -31,7 +31,12 @@ export async function proxy(request: NextRequest) {
   // The Vercel deployment domain must not behave as a second, indexable copy
   // of the site. Cloning nextUrl (rather than composing a string) keeps the
   // destination host fixed, so a crafted path can never redirect off-site.
-  if (host === "abdulelah.vercel.app" || host.endsWith(".vercel.app")) {
+  // Preview deployments are exempt: they sit behind Vercel's deployment
+  // protection and are sent with `X-Robots-Tag: noindex` (next.config.mjs),
+  // and redirecting them would make every branch preview show production.
+  const preview = process.env.VERCEL_ENV === "preview";
+
+  if (!preview && (host === "abdulelah.vercel.app" || host.endsWith(".vercel.app"))) {
     const canonicalUrl = request.nextUrl.clone();
 
     canonicalUrl.protocol = "https:";
