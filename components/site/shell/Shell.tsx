@@ -17,7 +17,25 @@ import {
 import { mixed } from "@/components/site/mixed";
 import { trackEvent } from "@/lib/analytics";
 import { openCompanion } from "@/lib/agent/companion";
-import { complete, parse, run, type ShellData, type ShellLine, type ShellResult } from "@/lib/shell/commands";
+import type { ShellData, ShellLine, ShellResult } from "@/lib/shell/commands";
+
+type Engine = typeof import("@/lib/shell/commands");
+
+let engine: Engine | null = null;
+let loading: Promise<Engine> | null = null;
+
+/**
+ * The command engine stays out of the page's first load: it is fetched the
+ * first time a visitor points at, focuses or touches the shell, so it is
+ * ready by the time they press a key or a chip.
+ */
+function loadEngine() {
+  if (engine) return Promise.resolve(engine);
+
+  loading ??= import("@/lib/shell/commands").then((module) => (engine = module));
+
+  return loading;
+}
 
 export type ShellChip = {
   /** What runs when the chip is pressed (typed into the line first). */
@@ -166,11 +184,12 @@ export function Shell({
   );
 
   const execute = useCallback(
-    (input: string) => {
+    async (input: string) => {
       const line = input.trim();
 
       if (!line) return;
 
+      const { run, parse } = await loadEngine();
       const result = run(data, line);
       // Only the recognised command name is recorded, never what was typed.
       const { command } = parse(data, line);
@@ -195,7 +214,7 @@ export function Shell({
       if (busy) return;
 
       if (reducedMotion()) {
-        execute(command);
+        void execute(command);
         return;
       }
 
@@ -206,7 +225,7 @@ export function Shell({
         later(() => setValue(command.slice(0, index + 1)), TYPE_MS * (index + 1));
       }
       later(() => {
-        execute(command);
+        void execute(command);
         setBusy(false);
       }, TYPE_MS * command.length + 140);
     },
@@ -216,7 +235,7 @@ export function Shell({
   function onSubmit(event: FormEvent) {
     event.preventDefault();
 
-    if (!busy) execute(value);
+    if (!busy) void execute(value);
   }
 
   function onKeyDown(event: KeyboardEvent<HTMLInputElement>) {
@@ -237,9 +256,10 @@ export function Shell({
         setCursor(next);
         setValue(history[next]);
       }
-    } else if (event.key === "Tab" && !event.shiftKey && value.trim()) {
-      // Only take Tab when there is something to complete; otherwise it moves focus.
-      const completed = complete(data, value);
+    } else if (event.key === "Tab" && !event.shiftKey && value.trim() && engine) {
+      // Only take Tab when there is something to complete; otherwise it moves
+      // focus. (The engine is loaded by the time anything has been typed.)
+      const completed = engine.complete(data, value);
 
       if (completed !== value) {
         event.preventDefault();
@@ -260,7 +280,14 @@ export function Shell({
   }
 
   return (
-    <div ref={shellRef} className="sh-shell" data-ready={ready ? "true" : "false"}>
+    <div
+      ref={shellRef}
+      className="sh-shell"
+      data-ready={ready ? "true" : "false"}
+      onPointerEnter={() => void loadEngine()}
+      onTouchStart={() => void loadEngine()}
+      onFocusCapture={() => void loadEngine()}
+    >
       <div
         ref={logRef}
         role="log"

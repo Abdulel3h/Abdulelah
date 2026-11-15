@@ -135,6 +135,7 @@ html[dir="rtl"] .sh-command {
 }
 
 .sh-typed {
+  position: relative;
   display: inline-block;
   color: var(--ds-paper);
 }
@@ -1067,10 +1068,16 @@ html[lang="ar"] .ac-org {
 /* ----------------------------------------------------------- 6 motion */
 
 @media (prefers-reduced-motion: no-preference) {
-  /* `whoami` types itself once (it is decorative and hidden from readers). */
-  .sh-type .sh-typed {
-    clip-path: inset(0 100% 0 0);
-    animation: sh-type 0.42s steps(6, end) 0.12s forwards;
+  /* `whoami` types itself once (it is decorative and hidden from readers): a
+     cover in the page's ink withdraws a letter at a time. Transform only, so
+     it runs on the compositor and never repaints the line. */
+  .sh-type .sh-typed::after {
+    content: "";
+    position: absolute;
+    inset: -0.15em -0.2em;
+    background: var(--ds-ink);
+    transform-origin: 100% 50%;
+    animation: sh-type 0.42s steps(6, end) 0.12s both;
   }
 
   /*
@@ -1137,8 +1144,12 @@ html[lang="ar"] .ac-org {
 }
 
 @keyframes sh-type {
+  from {
+    transform: scaleX(1);
+  }
+
   to {
-    clip-path: inset(0 0 0 0);
+    transform: scaleX(0);
   }
 }
 
