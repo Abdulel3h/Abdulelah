@@ -31,7 +31,7 @@ export function Projects({ locale }: { locale: Locale }) {
 
   return (
     <>
-      <PageHead id="projects-title" kicker={copy.kicker} title={copy.title} titleSoft={copy.titleSoft} />
+      <PageHead id="projects-title" path="~/projects" kicker={copy.kicker} title={copy.title} titleSoft={copy.titleSoft} />
 
       <section aria-labelledby="projects-title" className="ds-shell pb-[var(--ds-section)] pt-14 lg:pt-20">
         <ProjectIndex

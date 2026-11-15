@@ -30,6 +30,9 @@ export type IndexItem = {
 
 type Filter = "all" | "working" | "concept";
 
+/** Each filter as the flag it would be on the command line. */
+const flags: Record<Filter, string> = { all: "-a", working: "--working", concept: "--concepts" };
+
 type Labels = {
   filterLabel: string;
   filters: Record<Filter, string>;
@@ -65,8 +68,12 @@ export function ProjectIndex({ items, labels, locale }: { items: IndexItem[]; la
       <div
         role="group"
         aria-label={labels.filterLabel}
-        className="flex flex-wrap items-center gap-1 border-b border-white/[0.09] pb-4"
+        className="flex flex-wrap items-center gap-2 border-b border-white/[0.09] pb-4"
       >
+        {/* The filter reads as the command it is: `ls ~/projects --working`. */}
+        <span aria-hidden="true" className="sh-ls-cmd me-2" dir="ltr">
+          <span className="sh-ps">~ $</span> ls ~/projects
+        </span>
         {(Object.keys(labels.filters) as Filter[]).map((key) => {
           const pressed = filter === key;
 
@@ -76,15 +83,12 @@ export function ProjectIndex({ items, labels, locale }: { items: IndexItem[]; la
               type="button"
               aria-pressed={pressed}
               onClick={() => setFilter(key)}
-              className={cn(
-                "focus-ring relative inline-flex min-h-11 items-center rounded-lg px-3.5 text-[0.98rem] transition-colors",
-                pressed ? "bg-white/[0.06] text-paper" : "text-paper-dim hover:text-paper"
-              )}
+              className="sh-chip sh-flag focus-ring"
             >
+              <span aria-hidden="true" className="sh-chip-cmd" dir="ltr">
+                {flags[key]}
+              </span>
               {labels.filters[key]}
-              {pressed ? (
-                <span aria-hidden="true" className="absolute inset-x-3.5 bottom-1.5 h-px bg-accent" />
-              ) : null}
             </button>
           );
         })}

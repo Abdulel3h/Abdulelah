@@ -79,8 +79,14 @@ test.describe("responsive layout", () => {
     await page.setViewportSize({ width: 375, height: 812 });
     await page.goto("/");
 
-    for (const name of ["View selected work", "Choose a CV", "Menu"]) {
-      const box = await page.getByRole(name === "Menu" ? "button" : "link", { name, exact: true }).first().boundingBox();
+    const hero = page.locator("section[aria-labelledby='hero-title']");
+
+    for (const name of ["Selected work", "Resume", "Menu"]) {
+      const control =
+        name === "Menu"
+          ? page.getByRole("button", { name, exact: true })
+          : hero.getByRole("link", { name, exact: true });
+      const box = await control.first().boundingBox();
 
       expect(box?.height ?? 0, name).toBeGreaterThanOrEqual(44);
     }

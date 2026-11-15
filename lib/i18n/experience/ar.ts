@@ -101,6 +101,57 @@ export const arCopy = {
     elsewhere: "في مكان آخر",
     readOther: "Read in English"
   },
+  // The opening's shell («الطرفية»). Commands stay Latin, as code does in both
+  // languages, and also answer to Arabic words (lib/shell/data.ts); everything
+  // they print is Arabic.
+  shell: {
+    role: "مهندس ذكاء اصطناعي تطبيقي · تطبيقات النماذج اللغوية والوكلاء الأذكياء، بالعربية أولًا",
+    inputLabel: "اكتب أمرًا",
+    placeholder: "اكتب أمرًا، أو help",
+    run: "تنفيذ",
+    logLabel: "مخرجات الطرفية",
+    chipsLabel: "أوامر سريعة",
+    hint: "↑↓ السجل · Tab للإكمال",
+    chips: {
+      work: "الأعمال المختارة",
+      raqmi: "رقمي",
+      about: "نبذة",
+      resume: "السيرة الذاتية",
+      contact: "تواصل",
+      ask: "اسأل الدليل"
+    },
+    helpTitle: "الأوامر المتاحة",
+    help: {
+      whoami: "من أنا",
+      projects: "كل المشاريع وحالة كل منها",
+      open: "افتح دراسة حالة، مثل: open raqmi",
+      work: "انتقل إلى الأعمال المختارة",
+      about: "كيف أفكر",
+      skills: "ما أبني به",
+      recognition: "حيث اختُبر العمل",
+      cv: "نسختا السيرة الذاتية",
+      contact: "طرق التواصل",
+      ask: "اسأل دليلي سؤالًا، مثل: ask ما هو رقمي؟",
+      lang: "Read in English",
+      clear: "امسح الشاشة"
+    },
+    notFound: "أمر غير معروف: {cmd}. اكتب help لعرض الأوامر.",
+    openUsage: "اكتب اسم المشروع بعد open، مثل: open raqmi",
+    openNotFound: "لا يوجد مشروع باسم «{name}». اكتب projects.",
+    opening: "فتح {path}…",
+    jumping: "الانتقال إلى الأعمال المختارة…",
+    projectsSummary: "{total} مشاريع · {working} تعمل بكود منشور · {concepts} تصوّرات",
+    projectsHint: "افتح أيًّا منها: open <الاسم>",
+    skillsCore: "الأقوى",
+    skillsPractical: "استخدمتها في مشاريع",
+    cvLine: "نسختان، اختر ما يناسب الدور. الملفات بالإنجليزية.",
+    contactLine: "أرد بنفسي على كل رسالة.",
+    asking: "فتح الدليل بسؤالك…",
+    askUsage: "اكتب سؤالك بعد ask، مثل: ask ما هو رقمي؟",
+    sudo: "سُجّل اقتراحك. القرار يبقى لإنسان: راسلني.",
+    switching: "التحويل إلى الإنجليزية…",
+    more: "المزيد"
+  },
   home: {
     kicker: "مهندس ذكاء اصطناعي تطبيقي · الرياض",
     statement: {
@@ -255,7 +306,17 @@ export const arCopy = {
     title: "بماذا أبني، وإلى أي حد.",
     lede: "بلا أشرطة ولا نسب. قراءة صريحة: أين أنا أقوى، وما استخدمته فعلًا، وما زلت أتعلمه.",
     closing: "المهارات تظهر في العمل.",
-    closingCta: "استعرض المشاريع"
+    closingCta: "استعرض المشاريع",
+    filterLabel: "اعرض المستوى",
+    filterAll: "الكل",
+    stackKicker: "في الكود",
+    stackTitle: "بماذا بُنيت النماذج الخمسة العاملة.",
+    stackNote: "من التقنيات المذكورة لكل مشروع في بياناته، ولا تشمل التصوّرات.",
+    stackLabel: "التقنيات حسب المشروع",
+    stackTech: "التقنية",
+    usedIn: "{n} من {total}",
+    used: "مستخدمة",
+    unused: "غير مستخدمة"
   },
   achievements: {
     kicker: "الإنجازات",

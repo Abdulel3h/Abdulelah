@@ -2,7 +2,7 @@ import { Github, Linkedin } from "lucide-react";
 import Link from "next/link";
 import { CompanionCue } from "@/components/agent/CompanionCue";
 import { mixer } from "@/components/site/mixed";
-import { directional, Latin, Ltr, pad } from "@/components/site/primitives";
+import { directional, Kicker, Latin, Ltr, pad } from "@/components/site/primitives";
 import { Reveal } from "@/components/ui/Reveal";
 import { SignatureMonogram } from "@/components/ui/SignatureMonogram";
 import { getSkillGroups } from "@/data/skills";
@@ -34,7 +34,7 @@ export function About({ locale }: { locale: Locale }) {
     <>
       <header className="ds-shell grid gap-10 pt-12 sm:pt-16 lg:grid-cols-12 lg:gap-14 lg:pt-24">
         <div className="lg:col-span-7">
-          <p className="ds-kicker">{copy.kicker}</p>
+          <Kicker path="~/about">{copy.kicker}</Kicker>
           <h1 id="about-title" className="ds-h1 mt-5 max-w-[14ch]">
             {copy.title}
           </h1>
@@ -42,27 +42,37 @@ export function About({ locale }: { locale: Locale }) {
           <p className="ds-lede mt-7">{copy.lede}</p>
         </div>
 
-        {/* The facts in the margin: beside the text on wide screens, a row of
-            notes below it on smaller ones. */}
-        <dl className="grid gap-4 sm:grid-cols-[1fr_1.35fr_0.6fr] sm:gap-6 lg:col-span-4 lg:col-start-9 lg:grid-cols-1 lg:self-end lg:pb-1">
-          {copy.facts.map((fact) => (
-            <div key={fact.label} className="ds-gloss">
-              <dt className="ds-label">{fact.label}</dt>
-              <dd className="ds-text mt-1 text-[1rem] text-paper">{mix(fact.value)}</dd>
-            </div>
-          ))}
-        </dl>
+        {/* The facts in the margin, printed by the system voice: beside the
+            text on wide screens, below it on smaller ones. */}
+        <div className="sh-window lg:col-span-4 lg:col-start-9 lg:self-end">
+          <p className="sh-window-bar" aria-hidden="true" dir="ltr">
+            <span className="sh-ps">~ $</span>
+            <span>cat profile</span>
+          </p>
+          <dl className="grid gap-4 p-5 sm:grid-cols-3 sm:gap-6 lg:grid-cols-1 lg:gap-4">
+            {copy.facts.map((fact) => (
+              <div key={fact.label}>
+                <dt className="ds-label">{fact.label}</dt>
+                <dd className="ds-text mt-1 text-[1rem] text-paper">{mix(fact.value)}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
       </header>
 
       <section aria-labelledby="think-title" className="ds-shell ds-section">
         <h2 id="think-title" className="ds-kicker">
-          {copy.thinkKicker}
+          <span aria-hidden="true" className="sh-path">
+            ~/about/principles
+          </span>
+          <span>{copy.thinkKicker}</span>
         </h2>
-        <ol className="mt-10 grid gap-x-10 gap-y-10 sm:grid-cols-2 xl:grid-cols-4">
+        {/* Four principles as one pipeline: each step hands on to the next. */}
+        <ol className="ab-pipe mt-10">
           {copy.think.map((item, index) => (
-            <Reveal as="li" key={item.title} delay={index * 0.06} className="ds-rise border-t border-white/[0.1] pt-5">
-              <Latin className="text-sm text-accent">{pad(index + 1)}</Latin>
-              <h3 className="ds-title mt-3 text-[1.35rem]">{item.title}</h3>
+            <Reveal as="li" key={item.title} delay={index * 0.06} className="ds-rise ab-step">
+              <Latin className="ab-step-index">{pad(index + 1)}</Latin>
+              <h3 className="ds-title mt-4 text-[1.35rem]">{item.title}</h3>
               <p className="ds-small mt-2 text-paper-dim">{item.body}</p>
             </Reveal>
           ))}
@@ -71,7 +81,7 @@ export function About({ locale }: { locale: Locale }) {
 
       <section aria-labelledby="path-title" className="border-y border-white/[0.08] bg-white/[0.015]">
         <div className="ds-shell py-16 lg:py-24">
-          <p className="ds-kicker">{copy.pathKicker}</p>
+          <Kicker path="~/about/path">{copy.pathKicker}</Kicker>
           <h2 id="path-title" className="ds-h2 mt-4">
             {copy.pathTitle}
           </h2>
@@ -108,7 +118,7 @@ export function About({ locale }: { locale: Locale }) {
 
       <section aria-labelledby="tools-title" className="ds-shell ds-section grid gap-12 lg:grid-cols-12">
         <div className="lg:col-span-5">
-          <p className="ds-kicker">{copy.toolsKicker}</p>
+          <Kicker path="~/skills">{copy.toolsKicker}</Kicker>
           <h2 id="tools-title" className="ds-h2 mt-4">
             {copy.toolsTitle}
           </h2>

@@ -79,6 +79,7 @@ export function PageHead({
   title,
   titleSoft,
   lede,
+  path,
   children,
   className
 }: {
@@ -87,12 +88,13 @@ export function PageHead({
   title: ReactNode;
   titleSoft?: ReactNode;
   lede?: ReactNode;
+  path?: string;
   children?: ReactNode;
   className?: string;
 }) {
   return (
     <header className={cn("ds-shell pt-12 sm:pt-16 lg:pt-24", className)}>
-      <p className="ds-kicker">{kicker}</p>
+      <Kicker path={path}>{kicker}</Kicker>
       <h1 id={id} className="ds-h1 mt-5 max-w-[18ch]">
         {title}
         {titleSoft ? <span className="block ds-tone-55">{titleSoft}</span> : null}
@@ -104,23 +106,42 @@ export function PageHead({
   );
 }
 
+/**
+ * A kicker in the shell's voice: the section's path (`~/work`), then its name.
+ * The path is decoration — a reader hears only the name.
+ */
+export function Kicker({ path, children, className }: { path?: string; children: ReactNode; className?: string }) {
+  return (
+    <p className={cn("ds-kicker", className)}>
+      {path ? (
+        <span aria-hidden="true" className="sh-path">
+          {path}
+        </span>
+      ) : null}
+      <span>{children}</span>
+    </p>
+  );
+}
+
 /** A section title in the gloss layout: kicker above, title below. */
 export function SectionHead({
   id,
   kicker,
   title,
   titleSoft,
+  path,
   className
 }: {
   id: string;
   kicker: string;
   title: ReactNode;
   titleSoft?: ReactNode;
+  path?: string;
   className?: string;
 }) {
   return (
     <div className={className}>
-      <p className="ds-kicker">{kicker}</p>
+      <Kicker path={path}>{kicker}</Kicker>
       <h2 id={id} className="ds-h2 mt-4 max-w-[22ch]">
         {title}
         {titleSoft ? <span className="block ds-tone-55">{titleSoft}</span> : null}

@@ -24,6 +24,9 @@ export const AgentLauncher = forwardRef<
   <button
     ref={ref}
     type="button"
+    // A hook for the opening's shell, which carries its own "Ask the guide"
+    // chip: on a phone the floating launcher steps aside while the shell is in view.
+    data-agent-launcher=""
     aria-label={ariaLabel}
     aria-haspopup="dialog"
     tabIndex={hidden ? -1 : undefined}

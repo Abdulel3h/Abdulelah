@@ -5,9 +5,9 @@ import { Belief } from "@/components/site/home/Belief";
 import { Hero } from "@/components/site/home/Hero";
 import { Milestones } from "@/components/site/home/Milestones";
 import { mixed } from "@/components/site/mixed";
-import { directional, Ltr, ProjectName, SectionHead } from "@/components/site/primitives";
+import { directional, Kicker, Ltr, ProjectName, SectionHead } from "@/components/site/primitives";
 import { tintOf } from "@/components/site/tints";
-import { Chapter } from "@/components/site/work/Chapter";
+import { StackedChapters } from "@/components/site/work/StackedChapters";
 import { CopyEmailButton } from "@/components/ui/CopyEmailButton";
 import { getFeaturedProjects, getProjects } from "@/data/projects";
 import { siteConfig } from "@/data/site";
@@ -34,12 +34,16 @@ export function Home({ locale }: { locale: Locale }) {
 
       <section id="work" aria-labelledby="work-title" className="ds-section scroll-mt-16">
         <div className="ds-shell">
-          <SectionHead id="work-title" kicker={copy.work.kicker} title={copy.work.title} titleSoft={copy.work.titleSoft} />
+          <SectionHead
+            id="work-title"
+            path="~/work"
+            kicker={copy.work.kicker}
+            title={copy.work.title}
+            titleSoft={copy.work.titleSoft}
+          />
 
-          <div className="mt-16 grid gap-28 lg:mt-24 lg:gap-40">
-            {featured.map((project, index) => (
-              <Chapter key={project.slug} project={project} index={index} locale={locale} />
-            ))}
+          <div className="mt-12 lg:mt-16">
+            <StackedChapters projects={featured} locale={locale} />
           </div>
 
           <div className="mt-28 border-t border-white/[0.09] pt-12 lg:mt-36">
@@ -92,7 +96,7 @@ export function Home({ locale }: { locale: Locale }) {
       <section aria-labelledby="home-closing-title" className="ds-section border-t border-white/[0.08]">
         <div className="ds-shell grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-7">
-            <p className="ds-kicker">{copy.closing.kicker}</p>
+            <Kicker path="~/contact">{copy.closing.kicker}</Kicker>
             <h2 id="home-closing-title" className="ds-h1 mt-5">
               {copy.closing.title}
               <span className="block ds-tone-55">{copy.closing.titleSoft}</span>

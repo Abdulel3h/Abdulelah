@@ -26,7 +26,7 @@ export function Resume({ locale }: { locale: Locale }) {
   return (
     <>
       <ResumeViewRecorder />
-      <PageHead id="resume-title" kicker={copy.kicker} title={copy.title} lede={copy.lede} />
+      <PageHead id="resume-title" path="~/resume" kicker={copy.kicker} title={copy.title} lede={copy.lede} />
 
       <section aria-labelledby="resume-glance" className="ds-shell pt-14 lg:pt-20">
         <h2 id="resume-glance" className="sr-only">
@@ -47,35 +47,38 @@ export function Resume({ locale }: { locale: Locale }) {
 
       <section aria-labelledby="cv-versions" className="ds-shell ds-section">
         <h2 id="cv-versions" className="ds-kicker">
-          {copy.versionsKicker}
+          <span aria-hidden="true" className="sh-path">
+            ~/resume/*.pdf
+          </span>
+          <span>{copy.versionsKicker}</span>
         </h2>
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
           {t.versions.map((version) => {
             const cv = version.key === "engineer" ? "engineer" : "specialist";
 
             return (
-              <article
-                key={version.key}
-                aria-labelledby={`cv-${cv}`}
-                className="flex flex-col rounded-[var(--ds-radius)] border border-white/[0.1] p-6 sm:p-8"
-              >
-                <h3 id={`cv-${cv}`} className="text-[clamp(1.9rem,1.5rem+1.6vw,2.6rem)] text-paper">
-                  <Latin className="ds-name">{roleNames[cv]}</Latin>
-                </h3>
-                <p className="ds-small mt-4 flex-1 text-paper-dim">{mix(version.positioning)}</p>
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
-                  <ResumeDownloadButton
-                    href={siteConfig.resumes[cv]}
-                    cv={cv}
-                    source="resume-page"
-                    meta={t.fileMeta}
-                    className="h-auto min-h-11 whitespace-normal rounded-[var(--ds-radius)] py-2.5 text-center text-[0.98rem] font-medium"
-                  >
-                    {version.button}
-                  </ResumeDownloadButton>
-                  <span className="ds-micro text-paper-faint" aria-hidden="true">
-                    {t.fileMeta}
-                  </span>
+              <article key={version.key} aria-labelledby={`cv-${cv}`} className="sh-window flex flex-col">
+                {/* The file as it is: its real name and the size the page states. */}
+                <p className="sh-window-bar" aria-hidden="true">
+                  <span dir="ltr">{siteConfig.resumes[cv].split("/").pop()}</span>
+                  <span className="sh-window-end">{t.fileMeta}</span>
+                </p>
+                <div className="flex flex-1 flex-col p-6 sm:p-8">
+                  <h3 id={`cv-${cv}`} className="text-[clamp(1.9rem,1.5rem+1.6vw,2.6rem)] text-paper">
+                    <Latin className="ds-name">{roleNames[cv]}</Latin>
+                  </h3>
+                  <p className="ds-small mt-4 flex-1 text-paper-dim">{mix(version.positioning)}</p>
+                  <div className="mt-8">
+                    <ResumeDownloadButton
+                      href={siteConfig.resumes[cv]}
+                      cv={cv}
+                      source="resume-page"
+                      meta={t.fileMeta}
+                      className="h-auto min-h-11 whitespace-normal rounded-[var(--ds-radius)] py-2.5 text-center text-[0.98rem] font-medium"
+                    >
+                      {version.button}
+                    </ResumeDownloadButton>
+                  </div>
                 </div>
               </article>
             );

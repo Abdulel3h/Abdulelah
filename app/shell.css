@@ -1,0 +1,1195 @@
+/*
+ * The Signature Terminal — «المتن والطرفية», statement and shell.
+ *
+ * Layered on top of the design system in site.css (load order: globals.css,
+ * site.css, shell.css). The site speaks in two voices: the human voice
+ * (Fraunces / Thmanyah Bold) states; the system voice (Geist Mono /
+ * Thmanyah Medium) prints the evidence. It is the manuscript gloss made live,
+ * the thesis of Raqmi ("the model proposes, the system decides") made
+ * visible, and the same Signature Terminal as the GitHub profile: one mono,
+ * one brass, one `whoami`.
+ *
+ *   1 tokens        surfaces, lines, the system face, decision colours
+ *   2 system voice  kickers, labels and badges speak mono in English
+ *   3 opening       prompt, name read-head, role, shell, `ls ~/work`
+ *   4 stack         the working projects as stacked chapters
+ *   5 surfaces      windows and logs reused by the inner pages
+ *   6 motion        type, read, settle, recede — none under reduced motion
+ *
+ * Classes are `.sh-*` (shell) and `.stack-*`. Logical properties throughout;
+ * code, paths and commands are Latin isolates and never flip.
+ */
+
+/* ----------------------------------------------------------- 1 tokens */
+
+:root {
+  --sh-mono: var(--font-mono), ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace, var(--font-thmanyah);
+  --ds-face-system: var(--sh-mono);
+  --sh-surface: #101012;
+  --sh-surface-2: #151518;
+  --sh-line: #232327;
+  --sh-line-strong: #34343a;
+  /* Decision colours, from Raqmi's gate: allowed and denied. Both clear
+     4.5:1 as text on the surfaces. */
+  --sh-allow: 106 192 174;
+  --sh-deny: 229 129 107;
+  /* Where stacked chapters stick: under the header, then a step per card. */
+  --stack-top: 5.25rem;
+  --stack-step: 0.9rem;
+}
+
+html[lang="ar"] {
+  --ds-face-system: var(--font-thmanyah), var(--font-inter), system-ui, sans-serif;
+}
+
+/* ----------------------------------------------------- 2 system voice */
+
+.ds-kicker,
+.ds-label,
+.status-badge {
+  font-family: var(--ds-face-system);
+}
+
+html[lang="en"] {
+  --ds-kicker-size: 0.72rem;
+  --ds-kicker-track: 0.12em;
+  --ds-label-size: 0.68rem;
+  --ds-label-track: 0.1em;
+}
+
+/* The kicker's rule becomes the shell's prompt mark: a small brass block. */
+.ds-kicker::before {
+  inline-size: 0.45rem;
+  block-size: 0.45rem;
+  opacity: 1;
+  border-radius: 1px;
+}
+
+/* A path printed before a kicker: `~/work  Selected work`. Code never flips. */
+.sh-path {
+  font-family: var(--sh-mono);
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ds-paper-faint);
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.status-badge {
+  white-space: nowrap;
+}
+
+html[lang="en"] .status-badge {
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ---------------------------------------------------------- 3 opening */
+
+.sh-hero {
+  isolation: isolate;
+}
+
+/* A faint grid of character cells behind the opening: the shell's paper.
+   Static, masked to fade long before the edges. */
+.sh-hero::before {
+  content: "";
+  position: absolute;
+  inset: -6rem 0 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.03) 1px, transparent 1px);
+  background-size: 2.25rem 2.25rem;
+  -webkit-mask-image: radial-gradient(75% 60% at 28% 32%, #000 15%, transparent 72%);
+  mask-image: radial-gradient(75% 60% at 28% 32%, #000 15%, transparent 72%);
+}
+
+html[dir="rtl"] .sh-hero::before {
+  -webkit-mask-image: radial-gradient(75% 60% at 72% 32%, #000 15%, transparent 72%);
+  mask-image: radial-gradient(75% 60% at 72% 32%, #000 15%, transparent 72%);
+}
+
+.sh-ps {
+  color: var(--ds-brass);
+  font-family: var(--sh-mono);
+  white-space: nowrap;
+}
+
+/* `~ $ whoami` — a Latin isolate at the page's start edge in both languages. */
+.sh-command {
+  display: flex;
+  gap: 0.6rem;
+  font-family: var(--sh-mono);
+  font-size: clamp(0.88rem, 0.82rem + 0.25vw, 1rem);
+  line-height: 1.6;
+  color: var(--ds-paper-dim);
+}
+
+html[dir="rtl"] .sh-command {
+  justify-content: flex-end;
+}
+
+.sh-typed {
+  position: relative;
+  display: inline-block;
+  color: var(--ds-paper);
+}
+
+/* The role, printed under the name: the system voice in brass. */
+.sh-role {
+  font-family: var(--sh-mono);
+  font-size: clamp(0.9rem, 0.82rem + 0.4vw, 1.1rem);
+  line-height: 1.6;
+  color: var(--ds-brass-soft);
+}
+
+html[lang="ar"] .sh-role {
+  /* The name's tails (ي) hang far below its line box; clear them. */
+  margin-block-start: clamp(1.75rem, 0.6rem + 3vw, 3.4rem);
+  font-family: var(--ds-face-text);
+  font-weight: 500;
+  font-size: clamp(1.02rem, 0.94rem + 0.4vw, 1.24rem);
+  line-height: 1.8;
+}
+
+.sh-decode-soft {
+  color: #9a9893;
+}
+
+/* Each line of the name carries its own read-head (section 6), so the line
+   is exactly as wide as its text and the head crosses the name, no further. */
+.sh-decode {
+  position: relative;
+  inline-size: fit-content;
+}
+
+/* The command line: one framed surface, the only box in the opening. */
+.sh-shell {
+  container-type: inline-size;
+  max-inline-size: 60rem;
+  border: 1px solid var(--sh-line);
+  border-radius: 1rem;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.025), transparent 3rem),
+    var(--sh-surface);
+  box-shadow: 0 30px 80px -40px rgb(0 0 0 / 0.9);
+}
+
+.sh-log {
+  max-block-size: min(46vh, 25rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0.25rem 1.1rem 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--sh-line-strong) transparent;
+}
+
+.sh-log[data-empty="true"] {
+  display: none;
+}
+
+.sh-entry {
+  padding: 0.85rem 0 0.95rem;
+}
+
+.sh-entry + .sh-entry {
+  border-top: 1px dashed var(--sh-line);
+}
+
+.sh-echo {
+  display: flex;
+  gap: 0.6rem;
+  font-family: var(--sh-mono);
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: var(--ds-paper-dim);
+}
+
+.sh-out {
+  margin-block-start: 0.35rem;
+  font-family: var(--sh-mono);
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--ds-paper);
+  overflow-wrap: anywhere;
+}
+
+html[lang="ar"] .sh-out {
+  font-family: var(--ds-face-text);
+  font-size: 0.98rem;
+  line-height: 1.85;
+}
+
+.sh-out[data-tone="dim"] {
+  color: var(--ds-paper-dim);
+}
+
+.sh-out[data-tone="accent"] {
+  color: var(--ds-brass-soft);
+}
+
+.sh-out[data-tone="error"] {
+  color: rgb(var(--sh-deny));
+}
+
+.sh-pair {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 1rem;
+}
+
+.sh-key {
+  min-inline-size: 7.5rem;
+  color: var(--ds-paper-faint);
+}
+
+.sh-cmd {
+  min-block-size: 1.75rem;
+  min-inline-size: 7.5rem;
+  border-radius: 0.3rem;
+  font-family: var(--sh-mono);
+  text-align: start;
+  color: var(--ds-brass-soft);
+  text-decoration: underline dotted rgb(201 167 92 / 0.6);
+  text-underline-offset: 0.3em;
+  transition: color var(--ds-fast) ease;
+}
+
+.sh-cmd:hover {
+  color: var(--ds-paper);
+}
+
+.sh-link {
+  border-radius: 0.2rem;
+  color: var(--ds-brass-soft);
+  text-decoration: underline;
+  text-decoration-color: rgb(201 167 92 / 0.45);
+  text-underline-offset: var(--ds-underline-offset);
+  transition: color var(--ds-fast) ease;
+}
+
+.sh-link:hover {
+  color: var(--ds-paper);
+}
+
+.sh-meta {
+  color: var(--ds-paper-faint);
+}
+
+.sh-project {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+  column-gap: 1rem;
+  padding-block: 0.15rem;
+}
+
+.sh-project-name {
+  justify-self: start;
+  border-radius: 0.2rem;
+  color: var(--ds-paper);
+  text-decoration: underline;
+  text-decoration-color: rgb(255 255 255 / 0.25);
+  text-underline-offset: var(--ds-underline-offset);
+}
+
+.sh-project-name:hover {
+  color: var(--ds-brass-soft);
+}
+
+.sh-status {
+  color: rgb(var(--sh-allow));
+}
+
+.sh-project[data-concept="true"] .sh-status {
+  color: var(--ds-paper-dim);
+}
+
+.sh-year {
+  display: none;
+  color: var(--ds-paper-faint);
+}
+
+.sh-project-line {
+  grid-column: 1 / -1;
+  color: var(--ds-paper-dim);
+}
+
+@container (min-width: 44rem) {
+  .sh-project {
+    grid-template-columns: 11rem 12rem 3rem minmax(0, 1fr);
+  }
+
+  .sh-year {
+    display: block;
+  }
+
+  .sh-project-line {
+    grid-column: auto;
+  }
+}
+
+/* The input line. The field owns focus; the frame shows it. */
+.sh-line {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding-block: 0.55rem;
+  padding-inline: 1.1rem 0.55rem;
+  border-radius: 1rem 1rem 0 0;
+}
+
+.sh-log[data-empty="false"] + .sh-line {
+  border-top: 1px solid var(--sh-line);
+  border-radius: 0;
+}
+
+
+.sh-line .sh-ps {
+  font-size: 0.95rem;
+}
+
+.sh-input {
+  flex: 1;
+  min-inline-size: 0;
+  min-block-size: 2.75rem;
+  border: 0;
+  background: transparent;
+  font-family: var(--sh-mono);
+  font-size: 1rem;
+  color: var(--ds-paper);
+  caret-color: var(--ds-brass);
+  /* The line is a terminal in both languages: text starts at the prompt,
+     while dir="auto" still orders Arabic words right to left. */
+  text-align: left;
+}
+
+/* The site's focus ring, drawn just inside the line. */
+.sh-input:focus-visible {
+  outline: 2px solid var(--ds-brass);
+  outline-offset: 2px;
+  border-radius: 0.35rem;
+}
+
+.sh-input::placeholder {
+  color: var(--ds-paper-faint);
+  opacity: 1;
+}
+
+html[lang="ar"] .sh-input::placeholder {
+  font-family: var(--ds-face-text);
+}
+
+.sh-enter {
+  display: grid;
+  place-items: center;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+  flex-shrink: 0;
+  border: 1px solid var(--sh-line-strong);
+  border-radius: 0.65rem;
+  font-family: var(--sh-mono);
+  color: var(--ds-paper-dim);
+  transition:
+    color var(--ds-fast) ease,
+    border-color var(--ds-fast) ease;
+}
+
+.sh-enter:hover {
+  border-color: var(--ds-brass);
+  color: var(--ds-brass-soft);
+}
+
+.sh-hint {
+  padding: 0 1.1rem 0.6rem;
+  font-family: var(--sh-mono);
+  font-size: 0.7rem;
+  line-height: 1.5;
+  color: var(--ds-paper-faint);
+}
+
+html[lang="ar"] .sh-hint {
+  font-family: var(--ds-face-text);
+  font-size: 0.8rem;
+}
+
+@media (pointer: coarse) {
+  .sh-hint {
+    display: none;
+  }
+}
+
+.sh-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.85rem 1.1rem 1rem;
+  border-top: 1px solid var(--sh-line);
+}
+
+.sh-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-block-size: 2.75rem;
+  padding-inline: 0.95rem;
+  border: 1px solid var(--sh-line-strong);
+  border-radius: 0.6rem;
+  background: rgb(255 255 255 / 0.015);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--ds-paper);
+  transition:
+    border-color var(--ds-fast) ease,
+    background-color var(--ds-fast) ease,
+    transform var(--ds-fast) ease;
+}
+
+.sh-chip:hover {
+  border-color: rgb(201 167 92 / 0.6);
+  background: rgb(201 167 92 / 0.06);
+}
+
+.sh-chip:active {
+  transform: translateY(1px);
+  background: rgb(201 167 92 / 0.12);
+}
+
+.sh-chip-cmd {
+  font-family: var(--sh-mono);
+  font-size: 0.74rem;
+  font-weight: 400;
+  color: var(--ds-brass);
+}
+
+/* The first chip is the opening's main action. */
+.sh-chips > li:first-child .sh-chip {
+  border-color: var(--ds-brass);
+  background: var(--ds-brass);
+  color: var(--ds-ink);
+}
+
+.sh-chips > li:first-child .sh-chip:hover {
+  border-color: var(--ds-brass-soft);
+  background: var(--ds-brass-soft);
+}
+
+.sh-chips > li:first-child .sh-chip-cmd {
+  color: #3a301a;
+}
+
+/* A filter as a command-line flag; pressed is the flag that is set. */
+.sh-flag {
+  min-block-size: 2.5rem;
+  font-size: 0.92rem;
+  color: var(--ds-paper-dim);
+}
+
+.sh-flag[aria-pressed="true"] {
+  border-color: var(--ds-brass);
+  background: rgb(201 167 92 / 0.1);
+  color: var(--ds-paper);
+}
+
+/* On a phone the floating guide launcher steps aside while the shell — which
+   has its own "Ask the guide" chip — is on screen, so it never covers a chip. */
+@media (max-width: 39.99rem) {
+  html[data-shell-in-view="true"] [data-agent-launcher] {
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+
+/* `ls ~/work`: the strip of working projects, as files. */
+.sh-ls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 1rem;
+}
+
+.sh-ls-cmd {
+  display: inline-flex;
+  gap: 0.5rem;
+  font-family: var(--sh-mono);
+  font-size: 0.8rem;
+  color: var(--ds-paper-faint);
+}
+
+.sh-file {
+  display: flex;
+  block-size: 100%;
+  min-block-size: 5.5rem;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid rgb(255 255 255 / 0.09);
+  border-radius: var(--ds-radius);
+  background: rgb(255 255 255 / 0.02);
+  transition:
+    border-color var(--ds-fast) ease,
+    background-color var(--ds-fast) ease;
+}
+
+.sh-file:hover {
+  border-color: rgb(var(--tint) / 0.55);
+  background: rgb(255 255 255 / 0.04);
+}
+
+.sh-file:active {
+  background: rgb(255 255 255 / 0.07);
+}
+
+.sh-file-index {
+  font-family: var(--sh-mono);
+  font-size: 0.78rem;
+  color: rgb(var(--tint));
+}
+
+/* ------------------------------------------------------------ 4 stack */
+
+/*
+ * The working projects as chapters that stack. Each card is a sticky list
+ * item; the next one slides over it and the one beneath recedes a little
+ * (scale and shade, from --p set by StackedChapters). Without JavaScript the
+ * list is an ordinary column: [data-armed] turns stacking on only after each
+ * card's sticking point is measured, so a card taller than the screen sticks
+ * by its end and is never pinned with content out of reach.
+ */
+.stack {
+  display: grid;
+  gap: clamp(2.5rem, 2rem + 4vh, 5rem);
+}
+
+.stack-card {
+  position: relative;
+  scroll-margin-top: var(--stack-top);
+}
+
+/* `top` (each card's measured sticking point), `transform` and the shade's
+   opacity are written by StackController as plain properties, never as
+   custom properties, which would restyle every element inside the card. */
+.stack[data-armed="true"] .stack-card {
+  position: sticky;
+  top: var(--stack-top);
+  transform-origin: 50% 0;
+}
+
+.stack-surface {
+  position: relative;
+  /* clip, not hidden: it rounds the corners without becoming a scroll
+     container, so the title bar can stick on smaller screens. */
+  overflow: clip;
+  border: 1px solid var(--sh-line);
+  border-radius: 1.25rem;
+  background:
+    radial-gradient(60rem 26rem at 85% -10%, rgb(var(--tint) / 0.08), transparent 60%),
+    var(--sh-surface);
+  box-shadow:
+    0 -1px 0 rgb(255 255 255 / 0.04),
+    0 40px 90px -50px rgb(0 0 0 / 0.95);
+  transition: border-color var(--ds-ui) var(--ds-ease);
+}
+
+html[dir="rtl"] .stack-surface {
+  background:
+    radial-gradient(60rem 26rem at 15% -10%, rgb(var(--tint) / 0.08), transparent 60%),
+    var(--sh-surface);
+}
+
+/* The shade over a card as the next one covers it. Decorative: it only ever
+   darkens a card that is already beneath the next. */
+.stack-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: #050506;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .stack-card:hover .stack-surface,
+  .stack-card:focus-within .stack-surface {
+    border-color: rgb(var(--tint) / 0.42);
+  }
+}
+
+/* The card's title bar: index, path, domain and year, like a window tab. */
+.stack-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  min-block-size: 3rem;
+  padding: 0.6rem 1.25rem;
+  border-bottom: 1px solid var(--sh-line);
+  font-family: var(--sh-mono);
+  font-size: 0.78rem;
+  color: var(--ds-paper-faint);
+}
+
+/* Phones and tablets: a card is taller than the screen, so the cards do not
+   stack; each card's title bar sticks under the header instead, and the next
+   chapter's bar takes its place. CSS only. */
+@media (max-width: 63.99rem) {
+  .stack-bar {
+    position: sticky;
+    top: calc(var(--header-h, 4.3rem) - 1px);
+    z-index: 2;
+    background: var(--sh-surface-2);
+  }
+
+  /* Focus and anchors land below the header and a stuck bar, never under them. */
+  html:has(.stack) {
+    scroll-padding-top: calc(var(--header-offset) + 3rem);
+  }
+}
+
+.stack-bar-index {
+  color: rgb(var(--tint));
+}
+
+.stack-bar-rule {
+  flex: 1;
+  min-inline-size: 1rem;
+  block-size: 1px;
+  background: var(--sh-line);
+}
+
+.stack-bar-meta {
+  font-family: var(--ds-face-text);
+  font-size: 0.82rem;
+  color: var(--ds-paper-dim);
+  text-align: end;
+}
+
+@media (max-width: 39.99rem) {
+  .stack-bar-path {
+    display: none;
+  }
+}
+
+.stack-body {
+  display: grid;
+  gap: 2rem;
+  padding: 1.5rem 1.25rem 1.75rem;
+}
+
+@media (min-width: 64rem) {
+  .stack-body {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: center;
+    gap: 3.5rem;
+    padding: 2.25rem 2.5rem 2.5rem;
+  }
+}
+
+/* A project's flow in one line of the system voice: step → step → step. */
+.stack-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.55rem;
+  font-family: var(--sh-mono);
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: var(--ds-paper-dim);
+}
+
+html[lang="ar"] .stack-flow {
+  font-family: var(--ds-face-text);
+  font-size: 0.92rem;
+}
+
+.stack-flow-arrow {
+  color: rgb(var(--tint));
+}
+
+/* --------------------------------------------------------- 5 surfaces */
+
+/* A window frame for inner pages: the same surface as the opening's shell. */
+.sh-window {
+  border: 1px solid var(--sh-line);
+  border-radius: 1rem;
+  background: var(--sh-surface);
+}
+
+.sh-window-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-block-size: 2.75rem;
+  padding: 0.5rem 1.1rem;
+  border-bottom: 1px solid var(--sh-line);
+  font-family: var(--sh-mono);
+  font-size: 0.76rem;
+  color: var(--ds-paper-faint);
+}
+
+.sh-window-bar > .sh-window-end {
+  margin-inline-start: auto;
+}
+
+/* Skills: the level filter. Native radios, switched by :has(); the chosen
+   level stays in full tone and the others drop to a still-readable tone. */
+.sk-filter {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-inline-size: 0;
+}
+
+.sk-choice {
+  cursor: pointer;
+}
+
+.sk-choice:has(:checked) {
+  border-color: var(--ds-brass);
+  background: rgb(201 167 92 / 0.1);
+  color: var(--ds-paper);
+}
+
+.sk-choice:has(:focus-visible) {
+  outline: 2px solid var(--ds-brass);
+  outline-offset: 3px;
+}
+
+/* A level is a shape and a word, never a colour alone. */
+.sk-mark {
+  display: inline-block;
+  inline-size: 0.6rem;
+  block-size: 0.6rem;
+  flex-shrink: 0;
+  border-radius: 999px;
+  border: 1px solid var(--ds-brass);
+}
+
+.sk-mark[data-level="core"] {
+  background: var(--ds-brass);
+}
+
+.sk-mark[data-level="practical"] {
+  background: linear-gradient(90deg, transparent 50%, var(--ds-brass) 50%);
+}
+
+.sk-mark[data-level="familiar"] {
+  border-color: var(--ds-paper-faint);
+}
+
+.sk-skill {
+  display: flex;
+  min-block-size: 3rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.5rem;
+  color: var(--ds-paper);
+  transition: color var(--ds-fast) ease;
+}
+
+.sk-skill + .sk-skill {
+  border-top: 1px solid rgb(255 255 255 / 0.05);
+}
+
+.sk-skill[data-level="familiar"] {
+  color: var(--ds-paper-dim);
+}
+
+.sk-level {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--ds-face-system);
+  font-size: 0.75rem;
+  color: var(--ds-paper-faint);
+}
+
+.sk-map:has(input[value="core"]:checked) .sk-skill:not([data-level="core"]),
+.sk-map:has(input[value="practical"]:checked) .sk-skill:not([data-level="practical"]),
+.sk-map:has(input[value="familiar"]:checked) .sk-skill:not([data-level="familiar"]) {
+  color: var(--ds-paper-faint);
+}
+
+.sk-map:has(input[value="core"]:checked) .sk-skill:not([data-level="core"]) .sk-mark,
+.sk-map:has(input[value="practical"]:checked) .sk-skill:not([data-level="practical"]) .sk-mark,
+.sk-map:has(input[value="familiar"]:checked) .sk-skill:not([data-level="familiar"]) .sk-mark {
+  border-color: #4a4843;
+  background: none;
+}
+
+.sk-map:has(input[value="core"]:checked) .sk-skill[data-level="core"],
+.sk-map:has(input[value="practical"]:checked) .sk-skill[data-level="practical"],
+.sk-map:has(input[value="familiar"]:checked) .sk-skill[data-level="familiar"] {
+  color: var(--ds-brass-soft);
+}
+
+/* Skills: the stack matrix. A dot means the project's own record lists it. */
+.sk-scroll {
+  /* Positioned, so the visually hidden cell labels (absolute) stay inside the
+     scroll box instead of widening the page. */
+  position: relative;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--sh-line-strong) transparent;
+}
+
+.sk-matrix {
+  inline-size: 100%;
+  min-inline-size: 34rem;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.sk-matrix th,
+.sk-matrix td {
+  border-bottom: 1px solid rgb(255 255 255 / 0.06);
+  padding: 0.55rem 0.5rem;
+  text-align: center;
+  transition: background-color var(--ds-fast) ease;
+}
+
+.sk-matrix tbody th {
+  padding-inline-start: 0;
+  text-align: start;
+  font-family: var(--sh-mono);
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--ds-paper);
+  white-space: nowrap;
+}
+
+html[dir="rtl"] .sk-matrix tbody th {
+  text-align: end;
+}
+
+.sk-matrix thead th {
+  vertical-align: bottom;
+  border-bottom-color: var(--sh-line-strong);
+}
+
+.sk-corner {
+  text-align: start !important;
+  padding-inline-start: 0 !important;
+}
+
+.sk-project {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-block-size: 2.75rem;
+  padding: 0.35rem 0.25rem;
+  border-radius: 0.3rem;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--ds-paper-dim);
+  white-space: nowrap;
+  transition: color var(--ds-fast) ease;
+}
+
+.sk-project:hover {
+  color: var(--ds-paper);
+}
+
+.sk-dot,
+.sk-none {
+  display: inline-block;
+  inline-size: 0.7rem;
+  block-size: 0.7rem;
+  border-radius: 999px;
+  vertical-align: middle;
+}
+
+.sk-dot {
+  background: rgb(var(--tint));
+  box-shadow: 0 0 0 4px rgb(var(--tint) / 0.14);
+}
+
+.sk-none {
+  inline-size: 0.3rem;
+  block-size: 0.3rem;
+  background: #3a3a3f;
+}
+
+.sk-count,
+.sk-count-head {
+  inline-size: 5.5rem;
+  font-family: var(--ds-face-system);
+  font-size: 0.75rem;
+  color: var(--ds-paper-faint);
+  text-align: end !important;
+  white-space: nowrap;
+}
+
+/* Hover a row or a project's column to read it across or down. */
+.sk-matrix tbody tr:hover > * {
+  background: rgb(255 255 255 / 0.03);
+}
+
+.sk-matrix:has(tr > :nth-child(2):hover) tr > :nth-child(2),
+.sk-matrix:has(tr > :nth-child(3):hover) tr > :nth-child(3),
+.sk-matrix:has(tr > :nth-child(4):hover) tr > :nth-child(4),
+.sk-matrix:has(tr > :nth-child(5):hover) tr > :nth-child(5),
+.sk-matrix:has(tr > :nth-child(6):hover) tr > :nth-child(6) {
+  background: rgb(201 167 92 / 0.06);
+}
+
+/* About: four principles as one pipeline. A rail joins the steps; each
+   step's node sits on it and an arrow hands on to the next, in the reading
+   direction. On a phone the rail runs down the inline start. */
+.ab-pipe {
+  display: grid;
+  gap: 2.25rem;
+  border-inline-start: 1px solid var(--sh-line-strong);
+  padding-inline-start: 1.5rem;
+}
+
+.ab-step {
+  position: relative;
+}
+
+.ab-step::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0.35rem;
+  inset-inline-start: calc(-1.5rem - 5px);
+  inline-size: 9px;
+  block-size: 9px;
+  border: 1px solid var(--ds-brass);
+  border-radius: 2px;
+  background: var(--ds-ink);
+}
+
+.ab-step-index {
+  font-family: var(--sh-mono);
+  font-size: 0.8rem;
+  color: var(--ds-brass);
+}
+
+@media (min-width: 64rem) {
+  .ab-pipe {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2.5rem;
+    border-inline-start: 0;
+    border-top: 1px solid var(--sh-line-strong);
+    padding-inline-start: 0;
+    padding-top: 2rem;
+  }
+
+  .ab-step::before {
+    inset-block-start: calc(-2rem - 5px);
+    inset-inline-start: 0;
+  }
+
+  .ab-step:not(:last-child)::after {
+    content: "→";
+    position: absolute;
+    inset-block-start: calc(-2rem - 0.8em);
+    inset-inline-end: -1.6rem;
+    font-family: var(--sh-mono);
+    color: var(--ds-brass);
+  }
+
+  html[dir="rtl"] .ab-step:not(:last-child)::after {
+    content: "←";
+  }
+}
+
+/* Recognition: the year pinned in the margin, the entries on one rail. */
+.ac-year-num {
+  display: block;
+  font-size: clamp(3rem, 2.2rem + 3.6vw, 5.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+@media (min-width: 64rem) {
+  .ac-year {
+    position: sticky;
+    top: calc(var(--stack-top) + 1rem);
+  }
+}
+
+.ac-rail {
+  display: grid;
+  gap: 2.5rem;
+  border-inline-start: 1px solid var(--sh-line-strong);
+  padding-inline-start: 1.5rem;
+}
+
+@media (min-width: 64rem) {
+  .ac-rail {
+    padding-inline-start: 2.5rem;
+  }
+}
+
+.ac-entry {
+  position: relative;
+}
+
+/* The entry's node on the rail. */
+.ac-entry::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0.5rem;
+  inset-inline-start: calc(-1.5rem - 4px);
+  inline-size: 7px;
+  block-size: 7px;
+  border-radius: 999px;
+  background: var(--ds-brass);
+  box-shadow: 0 0 0 4px var(--ds-ink);
+}
+
+@media (min-width: 64rem) {
+  .ac-entry::before {
+    inset-inline-start: calc(-2.5rem - 4px);
+  }
+}
+
+.ac-org {
+  font-family: var(--ds-face-system);
+  font-size: 0.8rem;
+  color: var(--ds-brass);
+}
+
+html[lang="ar"] .ac-org {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* ----------------------------------------------------------- 6 motion */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* `whoami` types itself once (it is decorative and hidden from readers): a
+     cover in the page's ink withdraws a letter at a time. Transform only, so
+     it runs on the compositor and never repaints the line. */
+  .sh-type .sh-typed::after {
+    content: "";
+    position: absolute;
+    inset: -0.15em -0.2em;
+    background: var(--ds-ink);
+    transform-origin: 100% 50%;
+    animation: sh-type 0.42s steps(6, end) 0.12s both;
+  }
+
+  /*
+   * The read-head: a brass caret with a faint trail crosses each line of the
+   * name once, in the reading direction, then fades. The name itself is
+   * painted in its final tone from the first frame (so it counts as the
+   * page's first and largest paint) and is never recoloured, hidden or faded:
+   * the head is a decorative layer moved by transform alone, on the
+   * compositor, with no restyle or repaint per frame.
+   */
+  .sh-decode::after {
+    content: "";
+    position: absolute;
+    inset: 0.12em 0 0.2em;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent 0 80%, rgb(201 167 92 / 0.18) 97%, var(--ds-brass) 97% 100%);
+    transform: translateX(-100%);
+    opacity: 0;
+    animation: sh-read 1.1s cubic-bezier(0.65, 0, 0.35, 1) 0.45s forwards;
+  }
+
+  .sh-decode-soft::after {
+    animation-delay: 0.62s;
+  }
+
+  html[dir="rtl"] .sh-decode::after {
+    background: linear-gradient(270deg, transparent 0 80%, rgb(201 167 92 / 0.18) 97%, var(--ds-brass) 97% 100%);
+    transform: translateX(100%);
+    animation-name: sh-read-rtl;
+  }
+
+  .sh-out,
+  .sh-echo {
+    animation: sh-rise 0.34s var(--ds-ease) both;
+    animation-delay: calc(var(--i, 0) * 38ms);
+  }
+
+  .sh-chips > li {
+    animation: ds-settle 0.7s var(--ds-ease) both;
+    animation-delay: calc(0.85s + var(--i, 0) * 45ms);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stack[data-armed="true"] .stack-card {
+    transform: none !important;
+  }
+
+  .sh-chip,
+  .sh-file,
+  .stack-surface,
+  .sh-cmd,
+  .sh-link,
+  .sh-enter {
+    transition: none;
+  }
+}
+
+/* Windows high contrast: no decoration over the name. */
+@media (forced-colors: active) {
+  .sh-decode::after {
+    display: none;
+  }
+}
+
+@keyframes sh-type {
+  from {
+    transform: scaleX(1);
+  }
+
+  to {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes sh-read {
+  0% {
+    transform: translateX(-100%);
+    opacity: 1;
+  }
+
+  86% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+}
+
+@keyframes sh-read-rtl {
+  0% {
+    transform: translateX(100%);
+    opacity: 1;
+  }
+
+  86% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+}
+
+/* Movement only, like ds-settle: output never fades in. */
+@keyframes sh-rise {
+  from {
+    transform: translate3d(0, 0.3rem, 0);
+  }
+}
